@@ -23,18 +23,12 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {chapter}{\numberline {3}Concept}{3}{chapter.3}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {3.1}\IeC {\"U}bersicht}{3}{section.3.1}% 
-\defcounter {refsection}{0}\relax 
 \contentsline {chapter}{\numberline {4}Implementation}{4}{chapter.4}% 
-\defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {4.1}Spiellogik}{4}{section.4.1}% 
-\defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {4.2}Erkennung des Spielendes}{4}{section.4.2}% 
 \defcounter {refsection}{0}\relax 
 \contentsline {chapter}{\numberline {5}Validation}{5}{chapter.5}% 
 \defcounter {refsection}{0}\relax 
 \contentsline {chapter}{\numberline {6}Conclusion}{6}{chapter.6}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\nonumberline Outlook}{6}{section*.9}% 
+\contentsline {subsubsection}{\nonumberline Outlook}{6}{section*.6}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\nonumberline Bibliography}{i}{chapter*.10}% 
+\contentsline {chapter}{\nonumberline Bibliography}{i}{chapter*.7}% 
