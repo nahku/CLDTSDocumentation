@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2019.10.8)  11 OCT 2019 08:56
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2019.10.8)  18 OCT 2019 23:37
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -2172,7 +2172,13 @@ l.13
       [1
 
 
-]) (./content/GrundlagenUndStandDerTechnik.tex
+]
+Package acronym Info: Label `acro:BNF' newly defined as it shall be overridden
+although it is yet undefined on input line 15.
+Package acronym Info: Label `acro:TPTP' newly defined as it shall be overridden
+
+although it is yet undefined on input line 15.
+) (./content/GrundlagenUndStandDerTechnik.tex
 Overfull \vbox (9.39992pt too high) has occurred while \output is active []
 
 pdfTeX warning (ext4): destination with the same identifier (name{page.2}) has 
@@ -2250,19 +2256,16 @@ Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 148.
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 1.0pt have occurred.
 
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
 Package logreq Info: Writing requests to 'dokumentation.run.xml'.
 \openout1 = `dokumentation.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 49942 strings out of 492616
- 936855 string characters out of 6129481
- 1612074 words of memory out of 5000000
- 52965 multiletter control sequences out of 15000+600000
- 580222 words of font info for 78 fonts, out of 8000000 for 9000
+ 49968 strings out of 492616
+ 937060 string characters out of 6129481
+ 1612356 words of memory out of 5000000
+ 52976 multiletter control sequences out of 15000+600000
+ 580586 words of font info for 82 fonts, out of 8000000 for 9000
  1143 hyphenation exceptions out of 8191
  63i,12n,80p,9111b,2278s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2019/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}</usr/local/
@@ -2270,10 +2273,10 @@ texlive/2019/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></usr/local/texlive/20
 19/texmf-dist/fonts/type1/public/lm/lmr12.pfb></usr/local/texlive/2019/texmf-di
 st/fonts/type1/public/lm/lmro12.pfb></usr/local/texlive/2019/texmf-dist/fonts/t
 ype1/public/lm/lmssbx10.pfb>
-Output written on dokumentation.pdf (14 pages, 162802 bytes).
+Output written on dokumentation.pdf (14 pages, 164712 bytes).
 PDF statistics:
- 177 PDF objects out of 1000 (max. 8388607)
- 152 compressed objects within 2 object streams
- 32 named destinations out of 1000 (max. 500000)
+ 191 PDF objects out of 1000 (max. 8388607)
+ 166 compressed objects within 2 object streams
+ 39 named destinations out of 1000 (max. 500000)
  14991 words of extra memory for PDF output out of 17280 (max. 10000000)
 
