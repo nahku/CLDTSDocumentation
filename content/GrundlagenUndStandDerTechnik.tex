@@ -1,6 +1,35 @@
 %!TEX root = ../dokumentation.tex
 
 \chapter{Background and Theory}\label{cha:Background}
+
 \section{TPTP Language}\label{sec:BackgroundTPTP}
 
-\section{XXX}\label{sec:Websockets}
+\section{\acf{BNF}}\label{sec:BackgroundBNF}
+
+\section{Parser}\label{sec:BackgroundParser}
+
+\subsection{Lex}\label{sec:Back groundLex}
+
+Lexing/lexical analysis: Division of input into units so called tokens [1]\cite{LexYacc.1992}
+
+Input: description of tokens - lex specification, regular expressions [1]\cite{LexYacc.1992}
+Output: routine that identifies those tokens [1]\cite{LexYacc.1992}
+
+\subsection{Yacc}\label{sec:BackgroundYacc}
+
+Parsing: establish relationship among tokens [1]\cite{LexYacc.1992}
+Grammar: list of rules that defines the relationships [1]\cite{LexYacc.1992}
+
+Input: description of grammar [1]\cite{LexYacc.1992}
+Output: parser [1]\cite{LexYacc.1992}
+
+
+\subsection{PLY}\label{sec:BackgroundPLY}
+
+Python implementation of lex and yacc
+[LALR-parsing]
+consists of lex.py and yacc.py
+
+lex.py tokenizes an input string
+
+http://www.dabeaz.com/ply/ply.html
