@@ -26,6 +26,10 @@ Our particular use case is the TPTP syntax for automated theorem proving tools. 
 One approach to this would be to a) select a given non-terminal node as the start symbol for the new grammar and b) block the undesired productions starting at certain non-terminal symbols. The tool can then start at the selected new start symbol and follow all legal transition to collect the remaining reachable grammar. It can also clean-up the resulting grammar by inlining rules for non-terminals with only a single production. An outstanding solution would also heuristically associate comments with grammar productions, and keep the comments referring to the remaining productions in place.
 
 
-The approach is to first build a parser that parses the grammar of the \ac{TPTP} language that is provided in an extend \ac{BNF}. The parser should build a parse tree that represents the grammar rules of the \ac{TPTP} language. This parse tree should be visually presented to the user and the user can then choose which grammar rules should not be included in the desired sub-language. After the user specified the sub-language, the developed application should subtract the sub-language from the \ac{TPTP} language and present the sub-language in the same format as the original \ac{TPTP} syntax. Also comments present in the  \ac{TPTP} syntax should be maintained and associated with the corresponing rules in the reduced syntax.
+The approach is to first build a parser that parses the grammar of the \ac{TPTP} language that is provided in an extended \ac{BNF}.
+The parser should build a parse tree that represents the grammar rules of the \ac{TPTP} language.
+This parse tree should be visually presented to the user and the user can then choose which grammar rules should not be included in the desired sub-language.
+After the user specified the sub-language, the developed application should subtract the sub-language from the \ac{TPTP} language and present the sub-language in the same format as the original \ac{TPTP} syntax.
+Also comments present in the  \ac{TPTP} syntax should be maintained and associated with the corresponing rules in the reduced syntax.
 
 \section{Structure of the Report}\label{sec:Structure}
