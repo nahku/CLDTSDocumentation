@@ -3,29 +3,19 @@
 \chapter{Introduction}\label{cha:Introduction}
 
 \section{Problem Statement and Goals}\label{sec:Aufgabenstellung}
-Programming languages and other formal languages (e.g. data representation languages like JSON) are often described via a context-free formal grammar, e.g. in the Extended Backus–Naur form that can be automatically processed by tools like Yacc and Bison. These languages tend to grow over time, as more features are added and the language covers more application cases. On the one hand, this makes the language more powerful. But on the other hand, this often makes the language harder to understand and harder to implement, increasing the barrier to entry for new developers.
-
-This problem can, of course, be addressed by manually maintaining simplified or partial grammars. However, this creates not only a maintenance overhead, but may also lead to undesired and even unnoticed divergences of the full and the simplified grammar. Instead, we propose to use automatically extraction of self-contained parts of a formal grammar to create simpler sub-languages.
-
-Languages are likely to grow over time as the language is getting more complex to extend its functionality. On
-
-- languages grow
-+ more functionality
-- harder to understand the whole language and to implement it
-- hard for new users to apply
-- therefore, divide language into smaller sub-language that cover everything that is relevant to the specific use case
-- could me made manually, but that is likely to raise errors or divergences from the original grammar
-- our approach is to develop an application that is able to automatically subtract a sub-language from a language
-
-
-Our particular use case is the TPTP syntax for automated theorem proving tools. TPTP defines a family of languages, from pure first-order clause normal form (CNF) and full first order (FOF) via typed first-order (TFF), eventually to typed higher-order logic (THF). The language can be used to write both input problems (i.e. lists of logical formulae), but also derivations (where some of the formulas are input formulas, and the others are justified by reference to existing formulas and some mechanism for deriving the former from the latter. Most of the extensions are modular and even conservative (i.e. FOF is mostly a superset of CNF, and normally FOF is used as shorthand for CNF+FOF), and we are interested in e.g. extracting just a grammar for CNF or CNF+FOF. We are also interested extracting languages that do not allow certain features, e.g. a language in which only the pure input format in specified, not logical derivations. The task of this thesis is the design of a tool that performs this extraction and presents the result in a format that is both machine readable, but also friendly to use for human users.
-
-- in specific, the considered language is the tptp language for automated theorem proving
-- language in bnf
-
-One approach to this would be to a) select a given non-terminal node as the start symbol for the new grammar and b) block the undesired productions starting at certain non-terminal symbols. The tool can then start at the selected new start symbol and follow all legal transition to collect the remaining reachable grammar. It can also clean-up the resulting grammar by inlining rules for non-terminals with only a single production. An outstanding solution would also heuristically associate comments with grammar productions, and keep the comments referring to the remaining productions in place.
-
-
-The approach is to first build a parser that parses the grammar of the \ac{TPTP} language that is provided in an extend \ac{BNF}. The parser should build a parse tree that represents the grammar rules of the \ac{TPTP} language. This parse tree should be visually presented to the user and the user can then choose which grammar rules should not be included in the desired sub-language. After the user specified the sub-language, the developed application should subtract the sub-language from the \ac{TPTP} language and present the sub-language in the same format as the original \ac{TPTP} syntax. Also comments present in the  \ac{TPTP} syntax should be maintained and associated with the corresponing rules in the reduced syntax.
-
+Formal languages are likely to grow over time as they are getting more complex when their functionality is extended and more application cases are covered.
+On the one hand that leads to a more powerful language.
+However, on the other hand it becomes harder to understand the language and to implement it.
+Thus, it becomes harder for new users to use the language.\\
+This problem can be addressed by dividing languages into smaller sub-languages that cover everything relevant to the specific use case. 
+This could me done manually, but using this method is likely to raise errors or divergences from the original grammar.\\
+Therefore, the approach considered in this report is to develop an application that is able to automatically extract sub-languages from a language.
+A sub-language should be specified by the user using the application.\\
+This report focusses on the \acf{TPTP} language for automated theorem proving.
+The grammar of the language is provided in an extended \acf{BNF}.\\
+The first step to divide the \ac{TPTP} language in smaller sub-languages is to build a parser that parses the grammar of the \ac{TPTP} language.
+The parser should build a parse tree that represents the grammar rules of the \ac{TPTP} language.
+This parse tree should be visually presented to the user and the user can then choose which grammar rules should not be included in the desired sub-language.
+After the user specified the sub-language, the developed application should extract the sub-language from the \ac{TPTP} language and present the sub-language in the same format as the original \ac{TPTP} syntax.
+Also, comments present in the \ac{TPTP} syntax should be maintained and associated with the corresponing rules in the reduced syntax.
 \section{Structure of the Report}\label{sec:Structure}

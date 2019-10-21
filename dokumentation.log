@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2019.10.8)  20 OCT 2019 00:33
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2019.10.8)  21 OCT 2019 13:42
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -2167,49 +2167,46 @@ chapter without number
 
 ] (./content/Einleitung.tex
 chapter 1.
-pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has 
-been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.22 
-      [1
-
-
-]
 Package acronym Info: Label `acro:TPTP' newly defined as it shall be overridden
 
-although it is yet undefined on input line 29.
-) (./content/GrundlagenUndStandDerTechnik.tex
-Overfull \vbox (9.39992pt too high) has occurred while \output is active []
-
-pdfTeX warning (ext4): destination with the same identifier (name{page.2}) has 
-been already used, duplicate ignored
+although it is yet undefined on input line 14.
+) (./content/GrundlagenUndStandDerTechnik.texpdfTeX warning (ext4): destination
+ with the same identifier (name{page.1}) has been already used, duplicate ignor
+ed
 <to be read again> 
                    \relax 
 l.3 \chapter
-            {Background and Theory}\label{cha:Background} [2]
+            {Background and Theory}\label{cha:Background} [1
+
+
+]
 chapter 2.
-) (./content/Konzept.tex [3
+) (./content/Konzept.texpdfTeX warning (ext4): destination with the same identi
+fier (name{page.2}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.4 \chapter
+            {Concept}\label{cha:Concept} [2
 
 ]
 Overfull \vbox (9.39992pt too high) has occurred while \output is active []
 
 
-[4]
+[3]
 chapter 3.
-) (./content/Implementierung.tex [5
+) (./content/Implementierung.tex [4
 
 ]
 chapter 4.
-) (./content/Evaluation.tex [6
+) (./content/Evaluation.tex [5
 
 ]
 chapter 5.
-) (./content/Schlussbetrachtung.tex [7
+) (./content/Schlussbetrachtung.tex [6
 
 ]
 chapter 6.
-) [8
+) [7
 
 ]
 chapter without number
@@ -2266,11 +2263,11 @@ Package logreq Info: Writing requests to 'dokumentation.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 50210 strings out of 492616
- 941715 string characters out of 6129481
- 1612620 words of memory out of 5000000
+ 50179 strings out of 492616
+ 941397 string characters out of 6129481
+ 1612650 words of memory out of 5000000
  53188 multiletter control sequences out of 15000+600000
- 591493 words of font info for 95 fonts, out of 8000000 for 9000
+ 590128 words of font info for 80 fonts, out of 8000000 for 9000
  1143 hyphenation exceptions out of 8191
  63i,12n,80p,9111b,2278s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2019/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}</usr/local/
@@ -2280,10 +2277,10 @@ dist/fonts/type1/public/lm/lmr12.pfb></usr/local/texlive/2019/texmf-dist/fonts/
 type1/public/lm/lmri12.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/publ
 ic/lm/lmro12.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/lm/lmss
 bx10.pfb>
-Output written on dokumentation.pdf (15 pages, 206772 bytes).
+Output written on dokumentation.pdf (14 pages, 203048 bytes).
 PDF statistics:
- 227 PDF objects out of 1000 (max. 8388607)
- 199 compressed objects within 2 object streams
- 47 named destinations out of 1000 (max. 500000)
+ 225 PDF objects out of 1000 (max. 8388607)
+ 198 compressed objects within 2 object streams
+ 46 named destinations out of 1000 (max. 500000)
  19607 words of extra memory for PDF output out of 20736 (max. 10000000)
 
