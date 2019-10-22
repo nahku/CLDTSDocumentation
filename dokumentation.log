@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2019.10.8)  21 OCT 2019 13:57
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2019.10.8)  22 OCT 2019 17:20
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -2171,9 +2171,9 @@ Package acronym Info: Label `acro:TPTP' newly defined as it shall be overridden
 
 although it is yet undefined on input line 14.
 Package acronym Info: Label `acro:CNF' newly defined as it shall be overridden
-although it is yet undefined on input line 14.
+although it is yet undefined on input line 15.
 Package acronym Info: Label `acro:FOF' newly defined as it shall be overridden
-although it is yet undefined on input line 14.
+although it is yet undefined on input line 15.
 ) (./content/GrundlagenUndStandDerTechnik.texpdfTeX warning (ext4): destination
  with the same identifier (name{page.1}) has been already used, duplicate ignor
 ed
@@ -2272,7 +2272,7 @@ Package logreq Info: Writing requests to 'dokumentation.run.xml'.
 Here is how much of TeX's memory you used:
  50190 strings out of 492616
  941497 string characters out of 6129481
- 1612761 words of memory out of 5000000
+ 1613761 words of memory out of 5000000
  53196 multiletter control sequences out of 15000+600000
  590128 words of font info for 80 fonts, out of 8000000 for 9000
  1143 hyphenation exceptions out of 8191
@@ -2284,7 +2284,7 @@ dist/fonts/type1/public/lm/lmr12.pfb></usr/local/texlive/2019/texmf-dist/fonts/
 type1/public/lm/lmri12.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/publ
 ic/lm/lmro12.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/lm/lmss
 bx10.pfb>
-Output written on dokumentation.pdf (15 pages, 204527 bytes).
+Output written on dokumentation.pdf (15 pages, 204539 bytes).
 PDF statistics:
  235 PDF objects out of 1000 (max. 8388607)
  206 compressed objects within 3 object streams
