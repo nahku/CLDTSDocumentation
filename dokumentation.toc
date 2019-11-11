@@ -31,7 +31,13 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {chapter}{\numberline {3}Concept}{5}{chapter.3}% 
 \defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {3.1}Overview}{5}{section.3.1}% 
+\defcounter {refsection}{0}\relax 
 \contentsline {chapter}{\numberline {4}Implementation}{6}{chapter.4}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {4.1}Parser}{6}{section.4.1}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {4.2}GUI}{6}{section.4.2}% 
 \defcounter {refsection}{0}\relax 
 \contentsline {chapter}{\numberline {5}Validation}{7}{chapter.5}% 
 \defcounter {refsection}{0}\relax 
