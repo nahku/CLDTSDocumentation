@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018/W32TeX) (preloaded format=pdflatex 2019.3.17)  19 OCT 2019 22:56
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018/W32TeX) (preloaded format=pdflatex 2019.3.17)  2 DEC 2019 13:43
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1948,8 +1948,12 @@ Package biblatex Info: Data encoding 'utf8' specified.
 \openout6 = `dokumentation.bcf'.
 
 Package biblatex Info: Trying to load bibliographic data...
-Package biblatex Info: ... file 'dokumentation.bbl' found.
 
+
+Package biblatex Warning: File 'dokumentation.bbl' is wrong format version - ex
+pected 2.9.
+
+Package biblatex Info: ... file 'dokumentation.bbl' found.
 (./dokumentation.bbl)
 Package biblatex Info: Reference section=0 on input line 22.
 Package biblatex Info: Reference segment=0 on input line 22.
@@ -2110,19 +2114,22 @@ chapter without number
 
 ] (./content/Einleitung.tex
 chapter 1.
-pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has 
-been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.13 
-      [1
-
-
-]
 Package acronym Info: Label `acro:TPTP' newly defined as it shall be overridden
 
+although it is yet undefined on input line 14.
+Package acronym Info: Label `acro:CNF' newly defined as it shall be overridden
 although it is yet undefined on input line 15.
-) (./content/GrundlagenUndStandDerTechnik.tex
+Package acronym Info: Label `acro:FOF' newly defined as it shall be overridden
+although it is yet undefined on input line 15.
+)pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has
+ been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.98 	
+       [1
+
+
+] (./content/GrundlagenUndStandDerTechnik.tex
 Overfull \vbox (9.39992pt too high) has occurred while \output is active []
 
 pdfTeX warning (ext4): destination with the same identifier (name{page.2}) has 
@@ -2135,20 +2142,28 @@ chapter 2.
 ) (./content/Konzept.tex [3
 
 ]
+Overfull \vbox (9.39992pt too high) has occurred while \output is active []
+
+
+[4]
 chapter 3.
-) (./content/Implementierung.tex [4
+) (./content/Implementierung.tex [5
 
 ]
 chapter 4.
-) (./content/Evaluation.tex [5
+[6
 
-]
+]) (./content/Evaluation.tex
+Overfull \vbox (9.39992pt too high) has occurred while \output is active []
+
+
+[7]
 chapter 5.
-) (./content/Schlussbetrachtung.tex [6
+) (./content/Schlussbetrachtung.tex [8
 
 ]
 chapter 6.
-) [7
+) [9
 
 ]
 chapter without number
@@ -2200,34 +2215,28 @@ Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 148.
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 1.0pt have occurred.
 
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
 Package logreq Info: Writing requests to 'dokumentation.run.xml'.
 \openout1 = `dokumentation.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 48206 strings out of 492649
- 906413 string characters out of 6133384
- 1568595 words of memory out of 5000000
- 51165 multiletter control sequences out of 15000+600000
- 588934 words of font info for 88 fonts, out of 8000000 for 9000
+ 48226 strings out of 492649
+ 906703 string characters out of 6133384
+ 1569846 words of memory out of 5000000
+ 51185 multiletter control sequences out of 15000+600000
+ 588608 words of font info for 84 fonts, out of 8000000 for 9000
  1143 hyphenation exceptions out of 8191
  63i,12n,80p,10400b,2267s stack positions out of 5000i,500n,10000p,200000b,80000s
-pdfTeX warning (dest): name{chapter*.2} has been referenced but does not exis
-t, replaced by a fixed one
-
-{c:/texlive/2018/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}<c:/texlive/2018/texmf
--dist/fonts/type1/public/lm/lmbx12.pfb><c:/texlive/2018/texmf-dist/fonts/type1/
-public/lm/lmcsc10.pfb><c:/texlive/2018/texmf-dist/fonts/type1/public/lm/lmr12.p
-fb><c:/texlive/2018/texmf-dist/fonts/type1/public/lm/lmri12.pfb><c:/texlive/201
-8/texmf-dist/fonts/type1/public/lm/lmro12.pfb><c:/texlive/2018/texmf-dist/fonts
-/type1/public/lm/lmssbx10.pfb>
-Output written on dokumentation.pdf (14 pages, 197276 bytes).
+{c:/texlive/2018/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}<c:/texlive/2018/tex
+mf-dist/fonts/type1/public/lm/lmbx12.pfb><c:/texlive/2018/texmf-dist/fonts/type
+1/public/lm/lmcsc10.pfb><c:/texlive/2018/texmf-dist/fonts/type1/public/lm/lmr12
+.pfb><c:/texlive/2018/texmf-dist/fonts/type1/public/lm/lmri12.pfb><c:/texlive/2
+018/texmf-dist/fonts/type1/public/lm/lmro12.pfb><c:/texlive/2018/texmf-dist/fon
+ts/type1/public/lm/lmssbx10.pfb>
+Output written on dokumentation.pdf (16 pages, 210300 bytes).
 PDF statistics:
- 221 PDF objects out of 1000 (max. 8388607)
- 194 compressed objects within 2 object streams
- 46 named destinations out of 1000 (max. 500000)
- 19607 words of extra memory for PDF output out of 20736 (max. 10000000)
+ 259 PDF objects out of 1000 (max. 8388607)
+ 229 compressed objects within 3 object streams
+ 54 named destinations out of 1000 (max. 500000)
+ 19639 words of extra memory for PDF output out of 20736 (max. 10000000)
 
