@@ -2,6 +2,43 @@
 
 
 \chapter{Implementation}\label{cha:Implementation}
+
+\section{Lexer}\label{sec:ImplementationLexer}
+
+-Definition of tokens 
+
+-Tabs and newlines ignored
+
+-Newline would be helpful to identify comments because a comment is a newline followed by the percentage sign, as well as new rules if each rule would be represented in one line
+However, there are rules that cover multiple lines. That is the main reason newlines are ignored. 
+
+-A comment is identified by the lexer as a percentage sign followed by an arbitrary character excluding \dq ]\dq. This is followed by any arbitrary character. A comment can not only be identified by a percentage sign as the percentage sign is also part of the terminal symbols. However, the percentage symbol when used as terminal symbol is embedded in square brackets. 
+
+Tokens:
+LGRAMMAR EXPRESSION:
+
+LTOKEN EXPRESSION:
+
+LSTRICT EXPRESSION:
+
+LMACRO EXPRESSION:
+
+Non terminal symbol:
+
+A non terminal symbol starts with \dq <\dq and ends with \dq >\dq. In between there is any arbitrary sequence of numbers, underscores and small or captial letters.
+
+T SYMBOL:
+
+COMMENT:
+        
+
+OPEN SQUARE BRACKET/CLOSE SQUARE BRACKET, OPEN/CLOSE PARENTHESIS, ALTERNATIVE SYMBOL, REPETITION SYMBOL:
+
+-is recognized and represented by the symbol itself
+
+
+
+
 \section{Parser}\label{sec:ImplementationParser}
 
 \section{GUI}\label{sec:GUI}
