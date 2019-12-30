@@ -1974,14 +1974,18 @@
     <bcf:datasource type="file" datatype="bibtex">bibliographie.bib</bcf:datasource>
   </bcf:bibdata>
   <bcf:section number="0">
-    <bcf:citekey order="1">Sut17</bcf:citekey>
-    <bcf:citekey order="2">LexYacc.1992</bcf:citekey>
+    <bcf:citekey order="1">Mogensen.2017</bcf:citekey>
+    <bcf:citekey order="2">Sut17</bcf:citekey>
     <bcf:citekey order="3">LexYacc.1992</bcf:citekey>
-    <bcf:citekey order="4">LexYacc.1992</bcf:citekey>
-    <bcf:citekey order="5">LexYacc.1992</bcf:citekey>
-    <bcf:citekey order="6">LexYacc.1992</bcf:citekey>
-    <bcf:citekey order="7">LexYacc.1992</bcf:citekey>
-    <bcf:citekey order="8">LexYacc.1992</bcf:citekey>
+    <bcf:citekey order="4">Mogensen.2017</bcf:citekey>
+    <bcf:citekey order="5">Mogensen.2017</bcf:citekey>
+    <bcf:citekey order="6">Mogensen.2017</bcf:citekey>
+    <bcf:citekey order="7">Mogensen.2017</bcf:citekey>
+    <bcf:citekey order="8">Mogensen.2017</bcf:citekey>
+    <bcf:citekey order="9">LexYacc.1992</bcf:citekey>
+    <bcf:citekey order="10">LexYacc.1992</bcf:citekey>
+    <bcf:citekey order="11">LexYacc.1992</bcf:citekey>
+    <bcf:citekey order="12">LexYacc.1992</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="none">

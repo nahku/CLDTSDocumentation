@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018/W32TeX) (preloaded format=pdflatex 2019.3.17)  2 DEC 2019 13:43
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018/W32TeX) (preloaded format=pdflatex 2019.3.17)  30 DEC 2019 13:16
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1948,12 +1948,8 @@ Package biblatex Info: Data encoding 'utf8' specified.
 \openout6 = `dokumentation.bcf'.
 
 Package biblatex Info: Trying to load bibliographic data...
-
-
-Package biblatex Warning: File 'dokumentation.bbl' is wrong format version - ex
-pected 2.9.
-
 Package biblatex Info: ... file 'dokumentation.bbl' found.
+
 (./dokumentation.bbl)
 Package biblatex Info: Reference section=0 on input line 22.
 Package biblatex Info: Reference segment=0 on input line 22.
@@ -2139,9 +2135,9 @@ been already used, duplicate ignored
 l.3 \chapter
             {Background and Theory}\label{cha:Background} [2]
 chapter 2.
-) (./content/Konzept.tex [3
+[3
 
-]
+]) (./content/Konzept.tex
 Overfull \vbox (9.39992pt too high) has occurred while \output is active []
 
 
@@ -2220,11 +2216,11 @@ Package logreq Info: Writing requests to 'dokumentation.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 48226 strings out of 492649
- 906703 string characters out of 6133384
- 1569846 words of memory out of 5000000
- 51185 multiletter control sequences out of 15000+600000
- 588608 words of font info for 84 fonts, out of 8000000 for 9000
+ 48244 strings out of 492649
+ 906985 string characters out of 6133384
+ 1570007 words of memory out of 5000000
+ 51189 multiletter control sequences out of 15000+600000
+ 589192 words of font info for 90 fonts, out of 8000000 for 9000
  1143 hyphenation exceptions out of 8191
  63i,12n,80p,10400b,2267s stack positions out of 5000i,500n,10000p,200000b,80000s
 {c:/texlive/2018/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}<c:/texlive/2018/tex
@@ -2233,10 +2229,10 @@ mf-dist/fonts/type1/public/lm/lmbx12.pfb><c:/texlive/2018/texmf-dist/fonts/type
 .pfb><c:/texlive/2018/texmf-dist/fonts/type1/public/lm/lmri12.pfb><c:/texlive/2
 018/texmf-dist/fonts/type1/public/lm/lmro12.pfb><c:/texlive/2018/texmf-dist/fon
 ts/type1/public/lm/lmssbx10.pfb>
-Output written on dokumentation.pdf (16 pages, 210300 bytes).
+Output written on dokumentation.pdf (16 pages, 214183 bytes).
 PDF statistics:
- 259 PDF objects out of 1000 (max. 8388607)
- 229 compressed objects within 3 object streams
- 54 named destinations out of 1000 (max. 500000)
- 19639 words of extra memory for PDF output out of 20736 (max. 10000000)
+ 270 PDF objects out of 1000 (max. 8388607)
+ 240 compressed objects within 3 object streams
+ 56 named destinations out of 1000 (max. 500000)
+ 19647 words of extra memory for PDF output out of 20736 (max. 10000000)
 

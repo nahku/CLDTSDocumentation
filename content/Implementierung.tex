@@ -15,13 +15,9 @@ However, there are rules that cover multiple lines. That is the main reason newl
 -A comment is identified by the lexer as a percentage sign followed by an arbitrary character excluding \dq ]\dq. This is followed by any arbitrary character. A comment can not only be identified by a percentage sign as the percentage sign is also part of the terminal symbols. However, the percentage symbol when used as terminal symbol is embedded in square brackets. 
 
 Tokens:
-LGRAMMAR EXPRESSION:
+LGRAMMAR/TOKEN/STRICT/MACRO EXPRESSION:
 
-LTOKEN EXPRESSION:
-
-LSTRICT EXPRESSION:
-
-LMACRO EXPRESSION:
+Any arbitrary symbol that is the name of the rule followed by the symbol itself (:==,:::,...)
 
 Non terminal symbol:
 
@@ -37,8 +33,8 @@ OPEN SQUARE BRACKET/CLOSE SQUARE BRACKET, OPEN/CLOSE PARENTHESIS, ALTERNATIVE SY
 -is recognized and represented by the symbol itself
 
 
-
-
 \section{Parser}\label{sec:ImplementationParser}
+
+The parser is taking the tokens from the lexer and matches them to defined production rules.
 
 \section{GUI}\label{sec:GUI}
