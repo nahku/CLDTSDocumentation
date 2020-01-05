@@ -33,6 +33,20 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {section}{\numberline {3.1}Overview}{5}{section.3.1}% 
 \defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {3.2}Tokenizer}{5}{section.3.2}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {3.3}Parser}{5}{section.3.3}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.3.1}Data Structure}{5}{subsection.3.3.1}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {3.4}Generation of the Reduced Grammar}{5}{section.3.4}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {3.5}Selection of blocked Productions}{5}{section.3.5}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {3.6}Determination of the remaining reachable Productions}{5}{section.3.6}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {3.7}Determination of the remaining terminating Productions}{5}{section.3.7}% 
+\defcounter {refsection}{0}\relax 
 \contentsline {chapter}{\numberline {4}Implementation}{6}{chapter.4}% 
 \defcounter {refsection}{0}\relax 
 \contentsline {section}{\numberline {4.1}Parser}{6}{section.4.1}% 
