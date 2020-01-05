@@ -1,15 +1,15 @@
-[0] Config.pm:304> INFO - This is Biber 2.12
-[0] Config.pm:307> INFO - Logfile is 'dokumentation.blg'
-[32] biber-darwin:315> INFO - === So Okt 20, 2019, 00:33:18
-[59] Biber.pm:371> INFO - Reading 'dokumentation.bcf'
-[140] Biber.pm:889> INFO - Found 2 citekeys in bib section 0
-[166] Biber.pm:4093> INFO - Processing section 0
-[179] Biber.pm:4254> INFO - Looking for bibtex format file 'bibliographie.bib' for section 0
-[181] bibtex.pm:1523> INFO - LaTeX decoding ...
-[199] bibtex.pm:1340> INFO - Found BibTeX data source 'bibliographie.bib'
-[232] UCollate.pm:68> INFO - Overriding locale 'en_US' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[232] UCollate.pm:68> INFO - Overriding locale 'en_US' defaults 'variable = shifted' with 'variable = non-ignorable'
-[232] Biber.pm:3921> INFO - Sorting list 'none/global//global/global' of type 'entry' with template 'none' and locale 'en_US'
-[232] Biber.pm:3927> INFO - No sort tailoring available for locale 'en_US'
-[234] bbl.pm:636> INFO - Writing 'dokumentation.bbl' with encoding 'UTF-8'
-[235] bbl.pm:739> INFO - Output to dokumentation.bbl
+[0] Config.pm:302> INFO - This is Biber 2.11
+[0] Config.pm:305> INFO - Logfile is 'dokumentation.blg'
+[74] biber-MSWIN32:313> INFO - === 
+[130] Biber.pm:371> INFO - Reading 'dokumentation.bcf'
+[274] Biber.pm:857> INFO - Found 3 citekeys in bib section 0
+[300] Biber.pm:3976> INFO - Processing section 0
+[334] Biber.pm:4136> INFO - Looking for bibtex format file 'bibliographie.bib' for section 0
+[359] bibtex.pm:1500> INFO - LaTeX decoding ...
+[437] bibtex.pm:1316> INFO - Found BibTeX data source 'bibliographie.bib'
+[568] UCollate.pm:68> INFO - Overriding locale 'en_US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[569] UCollate.pm:68> INFO - Overriding locale 'en_US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[570] Biber.pm:3804> INFO - Sorting list 'none/global//global/global' of type 'entry' with template 'none' and locale 'en_US'
+[571] Biber.pm:3810> INFO - No sort tailoring available for locale 'en_US'
+[577] bbl.pm:617> INFO - Writing 'dokumentation.bbl' with encoding 'UTF-8'
+[581] bbl.pm:720> INFO - Output to dokumentation.bbl
