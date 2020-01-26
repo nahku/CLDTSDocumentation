@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2019.10.8)  6 JAN 2020 11:16
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2019.10.8)  26 JAN 2020 14:06
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -2006,12 +2006,8 @@ Package biblatex Info: Data encoding 'utf8' specified.
 \openout5 = `dokumentation.bcf'.
 
 Package biblatex Info: Trying to load bibliographic data...
-
-
-Package biblatex Warning: File 'dokumentation.bbl' is wrong format version - ex
-pected 3.0.
-
 Package biblatex Info: ... file 'dokumentation.bbl' found.
+
 (./dokumentation.bbl)
 Package biblatex Info: Reference section=0 on input line 22.
 Package biblatex Info: Reference segment=0 on input line 22.
@@ -2095,10 +2091,7 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 (/usr/local/texlive/2019/texmf-dist/tex/latex/microtype/mt-msb.cfg
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
-)
-Package acronym Info: Label `acro:BNF' newly defined as it shall be overridden
-although it is yet undefined on input line 22.
-)
+))
 \tf@toc=\write8
 \openout8 = `dokumentation.toc'.
 
@@ -2178,6 +2171,9 @@ Package acronym Info: Label `acro:CNF' newly defined as it shall be overridden
 although it is yet undefined on input line 15.
 Package acronym Info: Label `acro:FOF' newly defined as it shall be overridden
 although it is yet undefined on input line 15.
+Package acronym Info: Label `acro:EBNF' newly defined as it shall be overridden
+
+although it is yet undefined on input line 16.
 )pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has
  been already used, duplicate ignored
 <to be read again> 
@@ -2196,54 +2192,76 @@ been already used, duplicate ignored
 l.3 \chapter
             {Background and Theory}\label{cha:Background} [2]
 chapter 2.
+Package acronym Info: Label `acro:ATP' newly defined as it shall be overridden
+although it is yet undefined on input line 12.
+
+LaTeX Warning: Citation 'EBNF' on page 3 undefined on input line 15.
+
+Package acronym Info: Label `acro:CFG' newly defined as it shall be overridden
+although it is yet undefined on input line 15.
 [3
 
-]) (./content/Konzept.tex
+]
+Package acronym Info: Label `acro:PLY' newly defined as it shall be overridden
+although it is yet undefined on input line 73.
+) (./content/Konzept.tex
 Overfull \vbox (9.39992pt too high) has occurred while \output is active []
 
 
 [4]
+Overfull \vbox (9.39992pt too high) has occurred while \output is active []
+
+
+[5]
 chapter 3.
-) (./content/Implementierung.tex [5
+
+Overfull \hbox (4.48152pt too wide) in paragraph at lines 22--23
+\T1/lmr/m/n/13 (-20) bei tree build-ing tem-poräres start-sym-bol nutzen (da me
+hrere Start-sym-bole möglich) 
+ []
+
+) (./content/Implementierung.tex [6
 
 ]
+Overfull \vbox (9.39992pt too high) has occurred while \output is active []
+
+
+[7]
 chapter 4.
-[6
+[8
 
 ]) (./content/Evaluation.tex
 Overfull \vbox (9.39992pt too high) has occurred while \output is active []
 
 
-[7]
+[9]
 chapter 5.
-) (./content/Schlussbetrachtung.tex [8
+) (./content/Schlussbetrachtung.tex [10
 
 ]
 chapter 6.
-) [9
+) [11
 
 ]
 chapter without number
 Package microtype Info: Character `029' is missing
 (microtype)             in font `T1/lmr/m/sc/13'.
 (microtype)             Ignoring protrusion settings for this character.
+LaTeX Font Info:    Try loading font information for T1+lmtt on input line 133.
 
-Package biblatex Warning: Type 'online' not found on input line 133.
-
-
-LaTeX Warning: Empty bibliography on input line 133.
-
-
-Package biblatex Warning: Type 'online' not found on input line 133.
+(/usr/local/texlive/2019/texmf-dist/tex/latex/lm/t1lmtt.fd
+File: t1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
+)
+Package microtype Info: Loading generic protrusion settings for font family
+(microtype)             `lmtt' (encoding: T1).
+(microtype)             For optimal results, create family-specific settings.
+(microtype)             See the microtype manual for details.
 
 
 Package biblatex Warning: Keyword 'Gesetz' not found on input line 133.
 
 
 LaTeX Warning: Empty bibliography on input line 133.
-
-
-Package biblatex Warning: Type 'online' not found on input line 134.
 
 
 Package biblatex Warning: Keyword 'Standard' not found on input line 134.
@@ -2272,16 +2290,24 @@ Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 148.
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 1.0pt have occurred.
 
+
+LaTeX Warning: There were undefined references.
+
+
+Package biblatex Warning: Please (re)run Biber on the file:
+(biblatex)                dokumentation
+(biblatex)                and rerun LaTeX afterwards.
+
 Package logreq Info: Writing requests to 'dokumentation.run.xml'.
 \openout1 = `dokumentation.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 50247 strings out of 492616
- 942211 string characters out of 6129481
- 1616112 words of memory out of 5000000
- 53215 multiletter control sequences out of 15000+600000
- 591258 words of font info for 92 fonts, out of 8000000 for 9000
+ 50326 strings out of 492616
+ 943317 string characters out of 6129481
+ 1616488 words of memory out of 5000000
+ 53278 multiletter control sequences out of 15000+600000
+ 591586 words of font info for 93 fonts, out of 8000000 for 9000
  1143 hyphenation exceptions out of 8191
  63i,12n,80p,9111b,2278s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2019/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}</usr/local/
@@ -2290,11 +2316,11 @@ texlive/2019/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></usr/local/texlive/20
 dist/fonts/type1/public/lm/lmr12.pfb></usr/local/texlive/2019/texmf-dist/fonts/
 type1/public/lm/lmri12.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/publ
 ic/lm/lmro12.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/lm/lmss
-bx10.pfb>
-Output written on dokumentation.pdf (16 pages, 215700 bytes).
+bx10.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/lm/lmtt12.pfb>
+Output written on dokumentation.pdf (18 pages, 241388 bytes).
 PDF statistics:
- 303 PDF objects out of 1000 (max. 8388607)
- 273 compressed objects within 3 object streams
- 63 named destinations out of 1000 (max. 500000)
- 19695 words of extra memory for PDF output out of 20736 (max. 10000000)
+ 336 PDF objects out of 1000 (max. 8388607)
+ 302 compressed objects within 4 object streams
+ 74 named destinations out of 1000 (max. 500000)
+ 20207 words of extra memory for PDF output out of 20736 (max. 10000000)
 
