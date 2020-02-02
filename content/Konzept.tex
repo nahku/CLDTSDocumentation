@@ -2,14 +2,43 @@
 
 %TODO: Einleitungen überarbeiten
 \chapter{Concept}\label{cha:Concept}
-This chapter outlines the 
+This chapter outlines the concept and the architecture of the software tool. First, the proposed software architecture is described.
+
+
+
 \section{Overview}\label{sec:ConceptOverview}
+
+\subsection{Proposed Architecture}\label{sec:ConceptProposedArchitecture}
 
 \section{Lexer}
 -deviations from plain ebnf
+The \ac{TPTP} language is specified in an \ac{EBNF}, but is modified for its specific purpose???.
+Therefore there are deviations from standard \ac{EBNF} that need to be analysed to spefify todo elementary tokens and rules for matching tokens.
+The standard \ac{EBNF} uses only only one production symbol ("::="). In the \ac{TPTP} language
+additional production symbols have been added. The following table \ref{tbl:ConceptTPTPProductionSymbols} contains the production symbols used in the \ac{TPTP} language.
+
+
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.1}
+\caption{Total Ingestion Duration for an \ac{SSN} file}
+\begin{tabular}{ll}
+\textbf{Symbol} & \textbf{Rule Type}\\\hline
+::= & Grammar\\
+:== & Strict\\
+::- & Token\\
+::: & Macro\\
+\end{tabular}
+\label{tbl:ConceptTPTPProductionSymbols}
+\end{table}
+
+\cite{VS06}
+
 \section{Parser}
 \subsection{Data Structure}
-to store the \ac{TPTP} Grammar, nested
+The \ac{TPTP} grammar, extracted from the \ac{TPTP} grammar file, needs to be stored in a data structure that allows for modification. A graph representing
+possible transitions within the 
 \section{Generation of the Reduced Grammar}\label{sec:ConceptGenerateReducedGrammar}
 
 \section{Selection of blocked Productions}
@@ -20,4 +49,7 @@ to store the \ac{TPTP} Grammar, nested
 
 
 bei tree building temporäres startsymbol nutzen (da mehrere Startsymbole möglich)
+
+\section{GUI}\label{sec:ConceptGUI}
+
 
