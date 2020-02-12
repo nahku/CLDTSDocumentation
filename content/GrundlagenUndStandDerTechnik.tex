@@ -23,9 +23,30 @@ Compiler: Translate (high-level) programming language into machine language
 
 Different phases for writing a compiler, phases are processed sequently
 
+\section{Grammar}\label{sec:BackgroundGrammar}
+
+Unlike regular expressions, grammars not only describe a language but also define a structure among the words of a language(?)(->additionally defines structure on the strings in the language it defines).
+
+A grammar is a list of rules that defines the relationships among tokens \cite{LexYacc.1992}.
+These rules are also referred to as production rules.
+Given a start symbol, this symbol can be replaced by other symbols using the production rules.
+Using a recursive notation, production rules define derivations for symbols. The derived symbols can then once again be replaced until the derivation is a terminal symbol.  
+Terminal symbols describe symbols that cannot be further derived. The alphabet of the described language build the set of terminal symbols.
+Nonterminal symbols however can be further derived and build  merged with the terminal symbols the vocabulary of a grammar. Nonterminal symbols and terminal symbols are disjoint. 
+
+\subsubsection{Reduced Grammar}
+Grammars are called reduced if each nonterminal symbol is terminating and reachable \cite{Cremers75}.
+ 
+Given the set of terminal symbols $\sum$, a nonterminal symbol $\xi$ is called terminating if there are productions $\xi \underrightarrow{*} z$ so that $\xi$ can be derivated to $z$ and $z \epsilon \sum$*. 
+In other words, a nonterminal symbol $\xi$ is terminating if there exist production rules so that  $\xi$ can be replaced by terminal symbols. \cite{Cremers75}
+
+Given the set of terminal symbols $\sum$ and the start symbol $S$, a nonterminal symbol $\xi$ is called reachable if there are production rules $S \underrightarrow{*} u\xi v$ so that $S$ can be derivated to $u\xi v$ and $u,v \epsilon \sum$*. 
+In other words, a nonterminal symbol $\xi$ is reachable if there exist production rules so that the start symbol can be replaced by a symbol containing $\xi$. \cite{Cremers75}
+
+\subsubsection{Context-free grammar}
+
+
 \section{Lexer}\label{sec:BackgroundLexer}
-
-
 Lexing or a so called lexical analysis is the division of input into units so called tokens \cite{LexYacc.1992}. Tokens are for example variable names or keywords.
 The input is a string containing a sequence of characters, the ouput is a sequence of tokens. 
 Afterwards, the ouput can be used for further processing e.g. \ref{sec:BackgroundYacc}.
@@ -86,29 +107,17 @@ These words consist of a finite sequence of characters that on the other hand de
 Parsing describes the process of establishing a relationship among previously generated tokens \cite{LexYacc.1992}.
 The established relationship is described in a syntax tree \cite{Mogensen.2017}. The leaves of the syntax tree are the tokens \cite{Mogensen.2017}.
 
-Similar to lexers, parsers can be build using parser generators.
-A parser generator takes as input a description of the relationship among tokens in form of a grammar. The output is the generated parser. \cite{LexYacc.1992}
+Similar to lexers, parsers can be generated automatically.
+Therefore a parser generator takes as input a description of the relationship among tokens in form of a grammar. The output is the generated parser. \cite{LexYacc.1992}
+ 
+\subsubsection{Syntax analysis}
 
-\subsubsection{Grammar}
+In this phase a parser will take a string of tokens and form a syntax tree with this construct by finding the matching derivations. The matching derivation can be found by using different approaches for examble random guessing (predictive parsing) or LR parsing.
 
-Unlike regular expressions, grammars not only describe a language but also define a structure among the words of a language(?)(->additionally defines structure on the strings in the language it defines).
-
-A grammar is a list of rules that defines the relationships among tokens \cite{LexYacc.1992}.
-These rules are also referred to as production rules.
-Given a start symbol, this symbol can be replaced by other symbols using the production rules.
-Using a recursive notation, production rules define derivations for symbols. These symbols can then once again be replaced until the symbol is a terminal.  
-Terminals describe symbols that can not be further derivated and consist of all characters in the alphabet of a language.
-Nonterminals however can be further derivated and build  merged with the terminals the vocabulary of a grammar. Nonterminals and terminals are disjoint. 
-
-A nonterminal is called terminating if it can be derivated until it is only made of terminals.
-A nonterminal is called reachable if starting from the start symbol it can be derivated in any way.
-
-check derivated, terminal, formal definitions, until symbol is terminal
-
-
-generate stack automata (LL, LALR parsing)
-
-Context-free:
+-bottom up (LR parsing):
+parser takes inputs and searches for production where input is on the right side of a production rule and then replaces it by the left side
+-top down (predictive parsing):
+parser takes input and searches for production where input is on the left side of a production rule
 
 
 \section{PLY}\label{sec:BackgroundPLY}
