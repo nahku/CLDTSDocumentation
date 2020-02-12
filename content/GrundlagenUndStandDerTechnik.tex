@@ -65,11 +65,11 @@ A regular expression represents a set of strings and describes a formal language
 A formal language defines a set of words belongig to the language.
 These words consist of a finite sequence of characters that on the other hand describe the alphabet of the language.
 
-\subsubsection{Shorthands}
-Shorthands are common to simplify a regular expression.
-For example all alphabetic letters in lower and upper case are combined and represented by [a-zA-Z].
-The same principle can be also be applied to represent a set of numbers.
-However, using not clearly defined intervals e.g. [0-b] is not common as it has different interpretations by different lexer generators and thus can lead to mistakes. \cite{Mogensen.2017}
+%\subsubsection{Shorthands}
+%Shorthands are common to simplify a regular expression.
+%For example all alphabetic letters in lower and upper case are combined and represented by [a-zA-Z].
+%The same principle can be also be applied to represent a set of numbers.
+%However, using not clearly defined intervals e.g. [0-b] is not common as it has different interpretations by different lexer generators and thus can lead to mistakes. \cite{Mogensen.2017}
 
 
 %Input: description of tokens - lex specification, regular expressions]\cite{LexYacc.1992}
@@ -81,21 +81,37 @@ However, using not clearly defined intervals e.g. [0-b] is not common as it has 
 %A lexer takes a string containing a sequence of chararacters as input and divides this input into units so called tokens. 
 
 \section{Parser}\label{sec:BackgroundParser}
-\subsection{Yacc}\label{sec:BackgroundYacc}
+%\subsection{Yacc}\label{sec:BackgroundYacc}
 
-Building a syntax tree out of the generated tokens \cite{Mogensen.2017}
+Parsing describes the process of establishing a relationship among previously generated tokens \cite{LexYacc.1992}.
+The established relationship is described in a syntax tree \cite{Mogensen.2017}. The leaves of the syntax tree are the tokens \cite{Mogensen.2017}.
 
--syntax errors
--parser generation
+Similar to lexers, parsers can be build using parser generators.
+A parser generator takes as input a description of the relationship among tokens in form of a grammar. The output is the generated parser. \cite{LexYacc.1992}
 
-Parsing: establish relationship among tokens \cite{LexYacc.1992}
-Grammar: list of rules that defines the relationships \cite{LexYacc.1992}
+\subsubsection{Grammar}
 
-Input: description of grammar \cite{LexYacc.1992}
-Output: parser \cite{LexYacc.1992}
+Unlike regular expressions, grammars not only describe a language but also define a structure among the words of a language(?)(->additionally defines structure on the strings in the language it defines).
+
+A grammar is a list of rules that defines the relationships among tokens \cite{LexYacc.1992}.
+These rules are also referred to as production rules.
+Given a start symbol, this symbol can be replaced by other symbols using the production rules.
+Using a recursive notation, production rules define derivations for symbols. These symbols can then once again be replaced until the symbol is a terminal.  
+Terminals describe symbols that can not be further derivated and consist of all characters in the alphabet of a language.
+Nonterminals however can be further derivated and build  merged with the terminals the vocabulary of a grammar. Nonterminals and terminals are disjoint. 
+
+A nonterminal is called terminating if it can be derivated until it is only made of terminals.
+A nonterminal is called reachable if starting from the start symbol it can be derivated in any way.
+
+check derivated, terminal, formal definitions, until symbol is terminal
 
 
-\subsection{PLY}\label{sec:BackgroundPLY}
+generate stack automata (LL, LALR parsing)
+
+Context-free:
+
+
+\section{PLY}\label{sec:BackgroundPLY}
 
 \acf{PLY} \cite{PLY} is an implementation of lex and yacc in python.
 [LALR-parsing]
