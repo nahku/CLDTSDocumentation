@@ -1,5 +1,9 @@
 % makeindex style file created by the glossaries package
+<<<<<<< master
 % for document 'dokumentation' on 2020-2-11
+=======
+% for document 'dokumentation' on 2020-2-1
+>>>>>>> branch reconfiguration
 actual '?'
 encap '|'
 level '!'

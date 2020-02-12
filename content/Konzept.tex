@@ -11,18 +11,19 @@ This chapter outlines the concept and the architecture of the software tool. Fir
 \subsection{Proposed Architecture}\label{sec:ConceptProposedArchitecture}
 
 \section{Lexer}
+
+todo In plain \ac{BNF} there are terminal, non terminal and production symbols
+
 -deviations from plain ebnf
 The \ac{TPTP} language is specified in an \ac{EBNF}, but is modified for its specific purpose???.
 Therefore there are deviations from standard \ac{EBNF} that need to be analysed to spefify todo elementary tokens and rules for matching tokens.
 The standard \ac{EBNF} uses only only one production symbol ("::="). In the \ac{TPTP} language
 additional production symbols have been added. The following table \ref{tbl:ConceptTPTPProductionSymbols} contains the production symbols used in the \ac{TPTP} language.
 
-
-
 \begin{table}[H]
 \centering
-\renewcommand{\arraystretch}{1.1}
-\caption{Total Ingestion Duration for an \ac{SSN} file}
+\renewcommand{\arraystretch}{1}
+\caption{\ac{TPTP} language production symbols \cite{VS06}}
 \begin{tabular}{ll}
 \textbf{Symbol} & \textbf{Rule Type}\\\hline
 ::= & Grammar\\
@@ -33,7 +34,7 @@ additional production symbols have been added. The following table \ref{tbl:Conc
 \label{tbl:ConceptTPTPProductionSymbols}
 \end{table}
 
-\cite{VS06}
+
 
 \section{Parser}
 \subsection{Data Structure}
