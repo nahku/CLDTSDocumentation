@@ -12,9 +12,25 @@ Different phases for writing a compiler, phases are processed sequently
 The \acf{TPTP} is a library of problems for \ac{ATP}.
 Problems within the library are described in the \ac{TPTP} language.
 The  \ac{TPTP} language is a formal language and its grammar is specified in an \ac{EBNF}. \cite{Sut17}\\
-The \ac{EBNF} \cite{EBNF} is a todo and is used to describe \acp{CFG}.
 
-%\section{\acf{BNF}}\label{sec:BackgroundBNF}
+\section{\acf{BNF}}\label{sec:BackgroundBNF}
+The  \acf{BNF} is a language to describe context-free grammars.
+In the \acf{BNF} nonterminal symbols are distinguished from terminal symbols by being enclosed by  angle brackets, e. g. <$TPTP\_File$> denotes the nonterminal symbol $TPTP\_File$.
+Productions are described using the $"::="$ symbol and alternatives are specified using the $"|"$ symbol.
+An example for a \ac{BNF} production would be $TPTP\_File$ $::=$ <$TPTP\_Input$> $|$ <$comment$>. \cite{BNF.1964} 
+Using this pattern of notation whole gramars can be specified.\\
+The \ac{EBNF} extends the \ac{BNF} by with following rules:
+
+\begin{itemize}%[noitemsep]
+	\item optional expressions are sorrounded by square brackets.
+	\item repetition is denoted by curly brackets.
+	\item parentheses are used for grouping.
+	\item terminals are enclosed in quotation marks.
+\end{itemize}
+\caption{Test}
+\label{itemize:BackgroundBNF}
+\cite{EBNF.1977}
+
 
 \section{Lexer}\label{sec:BackgroundLexer}
 

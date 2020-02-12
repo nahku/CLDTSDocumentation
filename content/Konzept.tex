@@ -11,13 +11,10 @@ This chapter outlines the concept and the architecture of the software tool. Fir
 \subsection{Proposed Architecture}\label{sec:ConceptProposedArchitecture}
 
 \section{Lexer}
-
-todo In plain \ac{BNF} there are terminal, non terminal and production symbols
-
--deviations from plain ebnf
-The \ac{TPTP} language is specified in an \ac{EBNF}, but is modified for its specific purpose???.
-Therefore there are deviations from standard \ac{EBNF} that need to be analysed to spefify todo elementary tokens and rules for matching tokens.
-The standard \ac{EBNF} uses only only one production symbol ("::="). In the \ac{TPTP} language
+The \ac{TPTP} language is specified in a modified \ac{EBNF}.
+Therefore there are deviations from standard \ac{EBNF} (\ref{sec:BackgroundBNF}) that need to be analysed to specify elementary tokens in the lexer.
+The standard \ac{EBNF} uses only only one production symbol ($"::="$).
+In the \ac{TPTP} language
 additional production symbols have been added. The following table \ref{tbl:ConceptTPTPProductionSymbols} contains the production symbols used in the \ac{TPTP} language.
 
 \begin{table}[H]
@@ -34,6 +31,9 @@ additional production symbols have been added. The following table \ref{tbl:Conc
 \label{tbl:ConceptTPTPProductionSymbols}
 \end{table}
 
+In the \ac{TPTP} language specification square brackets not necessarily denote that an expression is optional.
+In token and macro rules they have the same meaning as in traditional  \ac{EBNF} and in grammar and semantic rules square brackets are terminals.
+Also, there are line comments in the \ac{TPTP} language specification. A comment starts with the $%$ symbol at the beginning of a line and ends at the end of this line.
 
 
 \section{Parser}
