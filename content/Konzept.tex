@@ -2,11 +2,16 @@
 
 %TODO: Einleitungen überarbeiten
 \chapter{Concept}\label{cha:Concept}
-This chapter outlines the concept and the architecture of the software tool. First, the proposed software architecture is described. Then the concept of each component is discussed.
- \section{Overview}\label{sec:ConceptOverview}
-The software tool consists of five main components: the lexer, which extracts tokens from a \ac{TPTP} grammar file. The parser, which analyses the tokens and constructs a data structure representing the \ac{TPTP} grammar. todo
+This chapter outlines the concept and the architecture of the software tool. First, in section \ref{sec:ConceptRequirements}, the requirements the software tool needs to meet are described. Then, in section \ref{sec:ConceptOverview}, the components needed are introduced. Then the proposed software architecture is described. After that the concept of each component is developed.
 
-Figure \ref{fig:ConceptConceptWorkflow} outlines the main activities of the software tool in a 
+\section{Requirements}\label{sec:ConceptRequirements}
+ 
+ 
+\section{todo maybe rename Overview}\label{sec:ConceptOverview}
+
+
+Figure \ref{fig:ConceptConceptWorkflow} outlines the procedure of extracting a sublanguage of the \ac{TPTP} language. The first task is to import the \ac{TPTP} language grammar specification file and extract the tokens using the lexer. The next phase is for the parser to create a data structure from the tokens, also checking if the syntax in the grammar file was correct. Then, a graph representing the imported \ac{TPTP} grammar should be built.\\
+This graph is subject to manipulation by disabling certain transitions or selecting a new start symbol in the following phase. This includes computation of the remaining reachable and terminating grammar. That new graph represents the grammar of the extracted language. To make this grammar usable, lastly the language specification has to printed, based on the new graph, in the same format as the original language specification.
 \begin{figure}[H]
 \tikzstyle{decision} = [ diamond, draw, fill=blue!10, text width=4.5em, text badly centered, node distance=2cm, inner sep-0pt]  
 \tikzstyle{block} = [ rectangle, draw, fill=blue!10, text width=4.5em, text badly centered, rounded corners, minimum height=4em]  
@@ -16,8 +21,8 @@ Figure \ref{fig:ConceptConceptWorkflow} outlines the main activities of the soft
 \begin{center}
 \begin{tikzpicture}[node distance=3cm, auto]  
   %\node [terminator]           (import)  {Import grammar file};  
-  \node [terminator]           (import)  {Import of grammar file};
-  \node [block, right of=import]  (lex)  {Lexing};  
+  %\node [terminator]           (import)  {Import of grammar file};
+  \node [terminator]  (lex)  {Import of grammar file and lexing};  
   \node [block, right of=lex]  (pars) {Parsing};  
   \node [block, right of=pars] (ggg) {Grammar graph generation}; 
   \node [block, right of=ggg] (ggm) {Grammar graph modification}; 
@@ -29,15 +34,23 @@ Figure \ref{fig:ConceptConceptWorkflow} outlines the main activities of the soft
   \path [line] (ggm) -- (go);  
 \end{tikzpicture}
 \end{center}
-\caption{General tool workflow}
-\label{fig:ConceptConceptWorkflow}
+\caption{Procedure of extracting a sublanguage}
+\label{fig:ConceptWorkflow}
 \end{figure}
 
- \section{Requirements}\label{sec:ConceptRequirements}
-
 \subsection{Proposed Architecture}\label{sec:ConceptProposedArchitecture}
+The architecture of the software tool should take the procedure of extracting a sublanguage (section \ref{sec:ConceptOverview}) into consideration.
+From that, five main components can be identified:
+An import module responsible for importing the \ac{TPTP} language specification from a file;
+A lexer for extracting tokens from the language specification; A parser for creating a data structure from the tokens;
+A graph builder and manipulator;
+An export module for exporting the graph in a text representation corresponding to the original language specification.\\
+In addition to the components that provide the main functionality a graphical user interface and a console interface for user convenience is desired.
+
+todo architecture diagram
 
 \section{Lexer}
+
 The \ac{TPTP} language is specified in a modified \ac{EBNF}.
 Therefore there are deviations from standard \ac{EBNF} (\ref{sec:BackgroundBNF}) that need to be analysed to specify elementary tokens in the lexer.
 The standard \ac{EBNF} uses only only one production symbol ($"::="$).
@@ -63,10 +76,13 @@ In token and macro rules they have the same meaning as in traditional  \ac{EBNF}
 Also, there are line comments in the \ac{TPTP} language specification. A comment starts with the $\%$ symbol at the beginning of a line and ends at the end of this line.
 
 
+todo regular expressions
 \section{Parser}
 \subsection{Data Structure}
 The \ac{TPTP} grammar, extracted from the \ac{TPTP} grammar file, needs to be stored in a data structure that allows for modification. A graph representing
 possible transitions within the 
+
+\subsection{Production Rules}
 \section{Generation of the Reduced Grammar}\label{sec:ConceptGenerateReducedGrammar}
 
 \subsection{Selection of blocked Productions}
@@ -77,9 +93,10 @@ possible transitions within the
 
 \section{Maintainig Comments}\label{sec:ConceptMaintaining Comments}
 In the \ac{TPTP} language specification there are comments providing supplemental information about the language and its symbols and rules.
-When genering a  reduced grammar maintaining of comments is desired. This means that comments from the original language specification should be associated with the rule they belong to and if the rule is still present in the reduced grammar, also the comment should be.\\
+When genering a reduced grammar maintaining of comments is desired. This means that comments from the original language specification should be associated with the rule they belong to and if the rule is still present in the reduced grammar, also the comment should be.\\
 Therefore a mechanism has to be designed for the association of comments to grammar rules.
 
+Listing \ref{lst:ConceptComment_tptp} features an example of a comment in the \ac{TPTP} laguage specification.
 \begin{lstlisting}[basicstyle=\scriptsize	,caption= Example of a comment in the \ac{TPTP} language specification,label= lst:ConceptComment_tptp]
 %----Top of Page---------------------------------------------------------------
 %----TFF formulae.
