@@ -48,6 +48,17 @@ To make this grammar usable, lastly the language specification has to printed, b
 \label{fig:ConceptProcessSublanguage}
 \end{figure}
 
+ \section{Requirements}\label{sec:ConceptRequirements}
+The tool should meet the following requirements:\\
+The tool has a GUI that is the interface between the tool and a user. Hence, the user communicates with the tool via the GUI. The user should be able to import a grammar file. After the grammar file is imported, the grammar file should be displayed. 
+This includes displaying by the grammar defined productions as well as comments that are associated with grammar productions.
+The user can select a new start symbol and can select which productions should be blocked. 
+Productions can either be blocked as a whole or partly if the production is a disjunction.
+After the user made his choice, the new reduced grammar should be generated and displayed.
+The tool should also generate a control file listing blocked productions and the start symbol.
+Furthermore, the tool should be able to import a control file and reduce a given grammar based on this control file instead of reducing a grammar based on a users selection of blocked productions.
+The new reduced grammar should be exported to .txt format.
+Also, comments referring to the remaining productions should be kept and comments referring to productions that fell away should not be included in the new grammar.
 \subsection{Proposed Architecture}\label{sec:ConceptProposedArchitecture}
 The architecture of the software tool should take the procedure of extracting a sublanguage (section \ref{sec:ConceptOverview}) into consideration.
 From that, five main components can be identified:
@@ -167,7 +178,15 @@ comments near the rule the refer to
 associate comment with r
 
 bei tree building temporäres startsymbol nutzen (da mehrere Startsymbole möglich)
-\section{Output of reduced Grammar}\label{sec:ConceptOutputGrammar }
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{images/maintainingComments.jpg}
+\caption{Maintaining Comments}
+\label{fig:comments}
+
+\end{figure}
+
 \section{Console Interface}\label{sec:Console Interface}
 
 \section{GUI}\label{sec:ConceptGUI}
