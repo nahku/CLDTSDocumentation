@@ -2,16 +2,26 @@
 
 %TODO: Einleitungen überarbeiten
 \chapter{Concept}\label{cha:Concept}
-This chapter outlines the concept and the architecture of the software tool. First, in section \ref{sec:ConceptRequirements}, the requirements the software tool needs to meet are described. Then, in section \ref{sec:ConceptOverview}, the components needed are introduced. Then the proposed software architecture is described. After that the concept of each component is developed.
+This chapter outlines the concept and the architecture of the software tool.
+First, in section \ref{sec:ConceptRequirements}, the requirements the software tool needs to meet are described.
+Then, in section \ref{sec:ConceptOverview}, the components needed are introduced.
+ Then the proposed software architecture is described. After that the concept of each component is developed.
 
+why python
 \section{Requirements}\label{sec:ConceptRequirements}
  
  
 \section{todo maybe rename Overview}\label{sec:ConceptOverview}
 
 
-Figure \ref{fig:ConceptConceptWorkflow} outlines the procedure of extracting a sublanguage of the \ac{TPTP} language. The first task is to import the \ac{TPTP} language grammar specification file and extract the tokens using the lexer. The next phase is for the parser to create a data structure from the tokens, also checking if the syntax in the grammar file was correct. Then, a graph representing the imported \ac{TPTP} grammar should be built.\\
-This graph is subject to manipulation by disabling certain transitions or selecting a new start symbol in the following phase. This includes computation of the remaining reachable and terminating grammar. That new graph represents the grammar of the extracted language. To make this grammar usable, lastly the language specification has to printed, based on the new graph, in the same format as the original language specification.
+Figure \ref{fig:ConceptProcessSublanguage} outlines the procedure of extracting a sublanguage of the \ac{TPTP} language.
+The first task is to import the \ac{TPTP} language grammar specification file and extract the tokens using the lexer.
+The next phase is for the parser to create a data structure from the tokens, also checking if the syntax in the grammar file was correct.
+Then, a graph representing the imported \ac{TPTP} grammar should be built.\\
+This graph is subject to manipulation by disabling certain transitions or selecting a new start symbol in the following phase.
+This includes computation of the remaining reachable and terminating grammar.
+That new graph represents the grammar of the extracted language.
+To make this grammar usable, lastly the language specification has to printed, based on the new graph, in the same format as the original language specification.
 \begin{figure}[H]
 \tikzstyle{decision} = [ diamond, draw, fill=blue!10, text width=4.5em, text badly centered, node distance=2cm, inner sep-0pt]  
 \tikzstyle{block} = [ rectangle, draw, fill=blue!10, text width=4.5em, text badly centered, rounded corners, minimum height=4em]  
@@ -27,7 +37,7 @@ This graph is subject to manipulation by disabling certain transitions or select
   \node [block, right of=pars] (ggg) {Grammar graph generation}; 
   \node [block, right of=ggg] (ggm) {Grammar graph modification}; 
     \node [block, right of=ggm] (go) {Grammar output};  
-  \path [line] (import)  -- (lex);  
+  %\path [line] (import)  -- (lex);  
   \path [line] (lex)  -- (pars);  
   \path [line] (pars) -- (ggg);  
   \path [line] (ggg) -- (ggm); 
@@ -35,7 +45,7 @@ This graph is subject to manipulation by disabling certain transitions or select
 \end{tikzpicture}
 \end{center}
 \caption{Procedure of extracting a sublanguage}
-\label{fig:ConceptWorkflow}
+\label{fig:ConceptProcessSublanguage}
 \end{figure}
 
 \subsection{Proposed Architecture}\label{sec:ConceptProposedArchitecture}
@@ -49,14 +59,21 @@ In addition to the components that provide the main functionality a graphical us
 
 todo architecture diagram
 
-\section{Lexer}
+\section{Lexer}\label{sec:ConceptLexer}
+The lexer is responsible for extracting the tokens from the \ac{TPTP} language grammar specification file.
+todo why lexer with ply, what does ply help
+\ac{PLY} offers a lexer generator for python (see section \ref{sec:BackgroundPLY}).
+Using \ac{PLY} a lexer can be built by specifying tokens as regular expressions.
 
-The \ac{TPTP} language is specified in a modified \ac{EBNF}.
-Therefore there are deviations from standard \ac{EBNF} (\ref{sec:BackgroundBNF}) that need to be analysed to specify elementary tokens in the lexer.
-The standard \ac{EBNF} uses only only one production symbol ($"::="$).
+Therefore the \ac{TPTP} language grammar specification needs to be analysed in order to find elementary tokens and regular expressions, that precisely describe these tokens.
+\subsection{Elementary Tokens}\label{sec:ConceptElementaryTokens}
+todo check if bnf or ebnf
+
+The grammar of the \ac{TPTP} language is specified in a modified \ac{EBNF} todo source.
+Therefore there are deviations from standard \ac{EBNF} (see \ref{sec:BackgroundBNF}) that need to be analysed to specify elementary tokens.
+The standard \ac{EBNF} only uses one production symbol ($"::="$).
 In the \ac{TPTP} language additional production symbols have been added.
-The following table \ref{tbl:ConceptTPTPProductionSymbols} contains the production symbols used in the \ac{TPTP} language.
-
+The following table \ref{tbl:ConceptTPTPProductionSymbols} contains the production symbols used in the \ac{TPTP} language, that also have to be recognized by the lexer.
 \begin{table}[H]
 \centering
 \renewcommand{\arraystretch}{1}
@@ -71,29 +88,71 @@ The following table \ref{tbl:ConceptTPTPProductionSymbols} contains the producti
 \label{tbl:ConceptTPTPProductionSymbols}
 \end{table}
 
-In the \ac{TPTP} language specification square brackets not necessarily denote that an expression is optional.
-In token and macro rules they have the same meaning as in traditional  \ac{EBNF} and in grammar and semantic rules square brackets are terminals.
-Also, there are line comments in the \ac{TPTP} language specification. A comment starts with the $\%$ symbol at the beginning of a line and ends at the end of this line.
-
+Another deviation from \ac{EBNF} is that repetition is not denoted by surrounding curly brackets, but with a trailing $*$ symbol.\\
+Curly brackets have no special meaning in the \ac{TPTP} laguage grammar specification and can be treated as terminal symbols.\\
+The meaning of the alternative symbol $|$ is unchanged and also parentheses and square brackets can appear as meta symbols.\\
+Also, there are line comments in the \ac{TPTP} language specification.
+A comment starts with the $\%$ symbol at the beginning of a line and ends at the end of that line.\\
+Following standard \ac {BNF}, nonterminal symbols are enclosed by the $<$ and $>$ symbol and terminal symbols are written without any special marking.
 
 todo regular expressions
-\section{Parser}
+ 
+todo explain token nt symbol + production rule bc. of parser
+\subsection{Regular Expressions}\label{sec:ConceptRegularExpressions}
+
+\section{Parser}\label{ConceptParser}
+
+
+In the \ac{TPTP} language specification square brackets not necessarily denote that an expression is optional.
+In token and macro rules they have the same meaning as in traditional \ac{EBNF} and in grammar and semantic rules square brackets are terminals.
 \subsection{Data Structure}
-The \ac{TPTP} grammar, extracted from the \ac{TPTP} grammar file, needs to be stored in a data structure that allows for modification. A graph representing
-possible transitions within the 
+The \ac{TPTP} grammar, extracted from the \ac{TPTP} grammar file, needs to be stored in a data structure that allows for modification.
+A graph representing possible transitions within the 
 
 \subsection{Production Rules}
-\section{Generation of the Reduced Grammar}\label{sec:ConceptGenerateReducedGrammar}
 
+
+The output of the parser is a list of the rules and the comments from the \ac{TPTP} language specification file.
+\section{todo Graph Generation}\label{sec:ConceptGraphGeneration}
+-number rules
+-challenge that one start symbol can have multiple rule types
+-uml NTNode
+\section{Generation of the reduced Grammar}\label{sec:ConceptGenerateReducedGrammar}
+
+\section{Control File}\label{sec:ConceptControlFile}
+A format for specifying the desired start symbol and blocked productions has to be developed.
+Using a file-based format enables the user to store desired configurations and for example a manual selection in the graphical user interface is not necessary.
+It also helps with using the command line interface, because there manual selection is not possible.\\
+The format should be easy to parse and allow to specify all necessary information.
+This includes the desired start symbol and all production rules that should be blocked.\\
+The proposed way to describe this information is to:
+
+\begin{itemize}%[noitemsep]
+	\item define the desired start symbol in the first line.
+	\item define blocked productions grouped by nonterminal symbol and production symbol separating each group by a new line.
+	First defining the nonterminal symbol, then the production symbol and after that the index of the alternatives that should be blocked. 
+\end{itemize}
+\label{itemize:ConceptControlFile}
+Identifying the production symbol is necessary because there may be a nonterminal symbol that has productions with more than one production symbol.\\
+Listing \ref{lst:ConceptControlFile} contains a sample control file. In this file <$TPTP\_File$> is specified as start symbol.
+
+todo further describe control file
+\begin{lstlisting}[caption= Example of a control file,label= lst:ConceptControlFile]
+<TPTP_file>
+<TPTP_input>,::=,1
+<annotated_formula>,::=,0,1,2,5
+\end{lstlisting}
+
+ 
 \subsection{Selection of blocked Productions}
 
 \subsection{Determination of the remaining reachable Productions}
 
-\subsection{Determination of  the remaining terminating Productions}
+\subsection{Determination of the remaining terminating Productions}
 
-\section{Maintainig Comments}\label{sec:ConceptMaintaining Comments}
+\section{Maintainig Comments}\label{sec:ConceptMaintainingComments}
 In the \ac{TPTP} language specification there are comments providing supplemental information about the language and its symbols and rules.
-When genering a reduced grammar maintaining of comments is desired. This means that comments from the original language specification should be associated with the rule they belong to and if the rule is still present in the reduced grammar, also the comment should be.\\
+When generating a reduced grammar maintaining of comments is desired. This means that comments from the original language specification should be associated with the rule they belong to and if the rule is still present in the reduced grammar, also the comment should be.\\
 Therefore a mechanism has to be designed for the association of comments to grammar rules.
 
 Listing \ref{lst:ConceptComment_tptp} features an example of a comment in the \ac{TPTP} laguage specification.
@@ -108,7 +167,7 @@ comments near the rule the refer to
 associate comment with r
 
 bei tree building temporäres startsymbol nutzen (da mehrere Startsymbole möglich)
-
+\section{Output of reduced Grammar}\label{sec:ConceptOutputGrammar }
 \section{Console Interface}\label{sec:Console Interface}
 
 \section{GUI}\label{sec:ConceptGUI}
