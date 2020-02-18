@@ -1,4 +1,4 @@
-%!TEX root = ../dokumentation.tex
+ %!TEX root = ../dokumentation.tex
 
 %TODO: Einleitungen überarbeiten
 \chapter{Concept}\label{cha:Concept}
@@ -132,8 +132,9 @@ The output of the parser is a list of the rules and the comments from the \ac{TP
 
 \section{Control File}\label{sec:ConceptControlFile}
 A format for specifying the desired start symbol and blocked productions has to be developed.
-Using a file-based format enables the user to store desired configurations and for example a manual selection in the graphical user interface is not necessary.
-It also helps with using the command line interface, because there manual selection is not possible.\\
+Using a file-based configuration enables the user to store desired configurations and for example a manual selection in the graphical user interface is not necessary.
+It also helps with using the command line interface, because there manual selection is not possible.
+The file should be human-readable and -editable.\\
 The format should be easy to parse and allow to specify all necessary information.
 This includes the desired start symbol and all production rules that should be blocked.\\
 The proposed way to describe this information is to:
@@ -141,20 +142,22 @@ The proposed way to describe this information is to:
 \begin{itemize}%[noitemsep]
 	\item define the desired start symbol in the first line.
 	\item define blocked productions grouped by nonterminal symbol and production symbol separating each group by a new line.
-	First defining the nonterminal symbol, then the production symbol and after that the index of the alternatives that should be blocked. 
+	First defining the nonterminal symbol, then the production symbol and after that the index of the alternatives that should be blocked (indexing starts at zero). 
 \end{itemize}
 \label{itemize:ConceptControlFile}
 Identifying the production symbol is necessary because there may be a nonterminal symbol that has productions with more than one production symbol.\\
-Listing \ref{lst:ConceptControlFile} contains a sample control file. In this file <$TPTP\_File$> is specified as start symbol.
+Listing \ref{lst:ConceptControlFile} contains a sample control file. In this file in the first line <$TPTP\_File$> is specified as start symbol.
+The second line means, that the second grammar production alternative of the nonterminal symbol <$TPTP\_input$> should be disabled.
+Analogue to that, the first, second, third and fifth grammar production alternative of the nonterminal symbol <$annotated\_formula$> are said to be disabled in line 3.
 
-todo further describe control file
+todo further describe control file, is it understood, which production is disabled? maybe graphical help??
 \begin{lstlisting}[caption= Example of a control file,label= lst:ConceptControlFile]
 <TPTP_file>
 <TPTP_input>,::=,1
 <annotated_formula>,::=,0,1,2,5
 \end{lstlisting}
 
- 
++todo understandable also without software tool
 \subsection{Selection of blocked Productions}
 
 \subsection{Determination of the remaining reachable Productions}
