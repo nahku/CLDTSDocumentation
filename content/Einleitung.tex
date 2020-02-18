@@ -3,19 +3,19 @@
 \chapter{Introduction}\label{cha:Introduction}
 
 \section{Problem Statement and Goals}\label{sec:Aufgabenstellung}
-Formal languages are likely to grow over time as they are getting more complex when their functionality is extended and more application cases are covered.
+Computer languages are likely to grow over time as they are getting more complex when their functionality is extended and more application cases are covered.
 On the one hand that leads to a more powerful language.
 However, on the other hand it becomes harder to understand the language and to implement it.
 Thus, it becomes harder for new users to use the language.\\
-This problem can be addressed by dividing languages into smaller sub-languages that cover everything relevant to the specific use case. 
+This problem can be addressed by extracting smaller sub-languages for particular use cases. 
 This could be done manually, but using this method is likely to raise errors or divergences from the original grammar.\\
 Therefore, the approach considered in this report is to develop an application that is able to automatically extract sub-languages from a language.
 A sub-language should be specified by the user using the application.\\
 This report focusses on the \acf{TPTP} language for automated theorem proving.
 Sub-languages of interest are for example a grammar just for \ac{CNF} or \ac{FOF}
 The grammar of the language is provided in an \acf{EBNF}.\\
-The first step to divide the \ac{TPTP} language in smaller sub-languages is to build a parser that parses the grammar of the \ac{TPTP} language.
-The parser should build a parse tree that represents the grammar rules of the \ac{TPTP} language.
+The first step to extract a sub-language is to build a lexer takes the grammar of the TPTP language as input and generates tokens.
+Subsequently a parser should build a parse tree that represents the grammar rules of the \ac{TPTP} language.
 This parse tree should be visually presented to the user and the user can then choose which grammar rules should not be included in the desired sub-language.
 After the user specified the sub-language, the developed application should extract the sub-language from the \ac{TPTP} language and present the sub-language in the same format as the original \ac{TPTP} syntax.
 Also, comments present in the \ac{TPTP} syntax should be maintained and associated with the corresponing rules in the reduced syntax.
