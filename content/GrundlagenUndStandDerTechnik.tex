@@ -27,7 +27,6 @@ The \ac{EBNF} extends the \ac{BNF} by with following rules:
 	\item parentheses are used for grouping.
 	\item terminals are enclosed in quotation marks.
 \end{itemize}
-\caption{Test}
 \label{itemize:BackgroundBNF}
 \cite{EBNF.1977}
 
@@ -35,8 +34,6 @@ The \ac{EBNF} extends the \ac{BNF} by with following rules:
 Different phases for writing a compiler, phases are processed sequently
 
 \section{Grammar}\label{sec:BackgroundGrammar}
-\section{Lexer}\label{sec:BackgroundLexer}
-
 Unlike regular expressions, grammars not only describe a language but also define a structure among the words of a language(?)(->additionally defines structure on the strings in the language it defines).
 Lexing or a so called lexical analysis is the division of input into units so called tokens \cite{LexYacc.1992}. 
 The input is a string containing a sequence of characters. 
@@ -100,8 +97,6 @@ Per convention the longest input that matches any token is chosen. \cite{Mogense
 %A lexer takes a string containing a sequence of chararacters as input and divides this input into units so called tokens. 
 
 \section{Parser}\label{sec:BackgroundParser}
-\subsection{Yacc}\label{sec:BackgroundYacc}
-
 Building a syntax tree out of the generated tokens \cite{Mogensen.2017}
 
 Similar to lexers, parsers can be generated automatically.
@@ -120,7 +115,6 @@ parser takes inputs and searches for production where input is on the right side
 -top down (predictive parsing):
 parser takes input and searches for production where input is on the left side of a production rule
 
-\subsection{PLY}\label{sec:BackgroundPLY}
 
 \section{PLY}\label{sec:BackgroundPLY}
 
@@ -128,9 +122,6 @@ parser takes input and searches for production where input is on the left side o
 [LALR-parsing]
 consists of lex.py and yacc.py
 
-lex.py tokenizes an input string
-
-
-\subsection{Nondeterministic Finite Automata}\label{sec:BackgroundNDAutomata}
+lex.py tokenizes an input string\label{sec:BackgroundNDAutomata}
 
 \section{Python?}\label{sec:BackgroundPython}
