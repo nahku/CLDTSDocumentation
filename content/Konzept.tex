@@ -1,4 +1,4 @@
-%!TEX root = ../dokumentation.tex
+ %!TEX root = ../dokumentation.tex
 
 %TODO: Einleitungen überarbeiten
 \chapter{Concept}\label{cha:Concept}
@@ -112,19 +112,66 @@ todo explain token nt symbol + production rule bc. of parser
 \subsection{Regular Expressions}\label{sec:ConceptRegularExpressions}
 
 \section{Parser}\label{ConceptParser}
+The goal that the parser component should fulfill is to take the tokens from the lexer as input and create a data structure that represents the structure of the \ac{TPTP} language grammar specification sign.
+To create the parser the \ac{PLY} parser generator is used.
 
+-rules have to be defined
 
 In the \ac{TPTP} language specification square brackets not necessarily denote that an expression is optional.
 In token and macro rules they have the same meaning as in traditional \ac{EBNF} and in grammar and semantic rules square brackets are terminals.
-\subsection{Data Structure}
-The \ac{TPTP} grammar, extracted from the \ac{TPTP} grammar file, needs to be stored in a data structure that allows for modification.
-A graph representing possible transitions within the 
+
+\subsection{Data Structure and Data Types}\label{sec:ConceptParserDataStructure}
+To build the representative data structure, represenations of todo... have to be defined.
+The following section describes the %data structures and
+data types representing the \ac{TPTP} language grammar specification that are being used and created by the parser in the parsing process.
+
+Atomary data types
+
+\subsubsection{Terminal Symbol}
+A terminal symbol has name/value? that is a sequence of characters.
+-Production Property
+
+\subsubsection{Nonterminal Symbol}
+-value
+Composite data types
+
+\subsubsection{Grammar Expression}
+A grammar expression consists of the nonterminal name, a production list and a position.
+The position denotes where in
+\subsubsection{Token Expression}
+Analogue to grammar expression
+\subsubsection{Strict  Expression}
+
+\subsubsection{Macro Expression}
+
+\subsubsection{Comment Block}
+A comment block is a list of consecutive comment lines.
+
+\subsubsection{Production Element}
+
+\subsubsection{Production Property}
+The production property can take one of three values and denotes whether a production is optional, can be repeated any number of times or does not have any special property. In the original \ac{TPTP} language grammar specification file this was represented by square brackets or the repetition symbol.
+
+
+\subsubsection{Production}
+A production is one production alternative specified in any expression. It consists of a list of production elements and has a production property.
+-show example
+ProductionProperty
+\subsubsection{Productions List}
+
+\subsubsection{XOR Productions List}
+
+
+\subsubsection{Grammar List}
+The grammar list is the top level data structure. It contains a list of all elements that were in the \ac{TPTP} language specification file. This includes any type of expression (grammar, token, strict and macro) and comment blocks.
 
 \subsection{Production Rules}
 
 
 The output of the parser is a list of the rules and the comments from the \ac{TPTP} language specification file.
-\section{todo Graph Generation}\label{sec:ConceptGraphGeneration}
+\section{Graph Generation}\label{sec:ConceptGraphGeneration}
+The \ac{TPTP} grammar, extracted from the \ac{TPTP} grammar file, needs to be stored in a data structure that allows for modification.
+A graph representing possible transitions within the 
 -number rules
 -challenge that one start symbol can have multiple rule types
 -uml NTNode
@@ -132,8 +179,9 @@ The output of the parser is a list of the rules and the comments from the \ac{TP
 
 \section{Control File}\label{sec:ConceptControlFile}
 A format for specifying the desired start symbol and blocked productions has to be developed.
-Using a file-based format enables the user to store desired configurations and for example a manual selection in the graphical user interface is not necessary.
-It also helps with using the command line interface, because there manual selection is not possible.\\
+Using a file-based configuration enables the user to store desired configurations and for example a manual selection in the graphical user interface is not necessary.
+It also helps with using the command line interface, because there manual selection is not possible.
+The file should be human-readable and -editable.\\
 The format should be easy to parse and allow to specify all necessary information.
 This includes the desired start symbol and all production rules that should be blocked.\\
 The proposed way to describe this information is to:
@@ -141,20 +189,21 @@ The proposed way to describe this information is to:
 \begin{itemize}%[noitemsep]
 	\item define the desired start symbol in the first line.
 	\item define blocked productions grouped by nonterminal symbol and production symbol separating each group by a new line.
-	First defining the nonterminal symbol, then the production symbol and after that the index of the alternatives that should be blocked. 
+	First defining the nonterminal symbol, then the production symbol and after that the index of the alternatives that should be blocked (indexing starts at zero). 
 \end{itemize}
 \label{itemize:ConceptControlFile}
 Identifying the production symbol is necessary because there may be a nonterminal symbol that has productions with more than one production symbol.\\
-Listing \ref{lst:ConceptControlFile} contains a sample control file. In this file <$TPTP\_File$> is specified as start symbol.
+Listing \ref{lst:ConceptControlFile} contains a sample control file. In this file in the first line <$TPTP\_File$> is specified as start symbol.
+The second line means, that the second grammar production alternative of the nonterminal symbol <$TPTP\_input$> should be disabled.
+Analogue to that, the first, second, third and fifth grammar production alternative of the nonterminal symbol <$annotated\_formula$> are said to be disabled in line 3.
 
-todo further describe control file
+todo further describe control file, is it understood, which production is disabled? maybe graphical help??
 \begin{lstlisting}[caption= Example of a control file,label= lst:ConceptControlFile]
 <TPTP_file>
 <TPTP_input>,::=,1
 <annotated_formula>,::=,0,1,2,5
 \end{lstlisting}
-
- 
+This format is relatively easy to parse and also enables users to specify their desired start symbols and blocked productions without having to use the  GUI.
 \subsection{Selection of blocked Productions}
 
 \subsection{Determination of the remaining reachable Productions}
