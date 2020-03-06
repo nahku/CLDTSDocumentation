@@ -8,11 +8,20 @@ Then, in section \ref{sec:ConceptOverview}, the components needed are introduced
  Then the proposed software architecture is described. After that the concept of each component is developed.
 
 why python
-\section{Requirements}\label{sec:ConceptRequirements}
- 
- 
-\section{todo maybe rename Overview}\label{sec:ConceptOverview}
 
+\section{Requirements}\label{sec:ConceptRequirements}
+The tool should meet the following requirements:\\
+The tool has a GUI that is the interface between the tool and a user. Hence, the user communicates with the tool via the GUI. The user should be able to import a grammar file. After the grammar file is imported, the grammar file should be displayed. 
+This includes displaying by the grammar defined productions as well as comments that are associated with grammar productions.
+The user can select a new start symbol and can select which productions should be blocked. 
+Productions can either be blocked as a whole or partly if the production is a disjunction.
+After the user made his choice, the new reduced grammar should be generated and displayed.
+The tool should also generate a control file listing blocked productions and the start symbol.
+Furthermore, the tool should be able to import a control file and reduce a given grammar based on this control file instead of reducing a grammar based on a users selection of blocked productions.
+The new reduced grammar should be exported to .txt format.
+Also, comments referring to the remaining productions should be kept and comments referring to productions that fell away should not be included in the new grammar.
+
+\section{Overview}\label{sec:ConceptOverview}
 
 Figure \ref{fig:ConceptProcessSublanguage} outlines the procedure of extracting a sublanguage of the \ac{TPTP} language.
 The first task is to import the \ac{TPTP} language grammar specification file and extract the tokens using the lexer.
@@ -48,17 +57,6 @@ To make this grammar usable, lastly the language specification has to printed, b
 \label{fig:ConceptProcessSublanguage}
 \end{figure}
 
- \section{Requirements}\label{sec:ConceptRequirements}
-The tool should meet the following requirements:\\
-The tool has a GUI that is the interface between the tool and a user. Hence, the user communicates with the tool via the GUI. The user should be able to import a grammar file. After the grammar file is imported, the grammar file should be displayed. 
-This includes displaying by the grammar defined productions as well as comments that are associated with grammar productions.
-The user can select a new start symbol and can select which productions should be blocked. 
-Productions can either be blocked as a whole or partly if the production is a disjunction.
-After the user made his choice, the new reduced grammar should be generated and displayed.
-The tool should also generate a control file listing blocked productions and the start symbol.
-Furthermore, the tool should be able to import a control file and reduce a given grammar based on this control file instead of reducing a grammar based on a users selection of blocked productions.
-The new reduced grammar should be exported to .txt format.
-Also, comments referring to the remaining productions should be kept and comments referring to productions that fell away should not be included in the new grammar.
 \subsection{Proposed Architecture}\label{sec:ConceptProposedArchitecture}
 The architecture of the software tool should take the procedure of extracting a sublanguage (section \ref{sec:ConceptOverview}) into consideration.
 From that, five main components can be identified:
@@ -112,7 +110,7 @@ todo explain token nt symbol + production rule bc. of parser
 \subsection{Regular Expressions}\label{sec:ConceptRegularExpressions}
 
 \section{Parser}\label{ConceptParser}
-The goal that the parser component should fulfill is to take the tokens from the lexer as input and create a data structure that represents the structure of the \ac{TPTP} language grammar specification sign.
+The goal that the parser component should fulfil is to take the tokens from the lexer as input and create a data structure that represents the structure of the \ac{TPTP} language grammar specification sign.
 To create the parser the \ac{PLY} parser generator is used.
 
 -rules have to be defined
@@ -121,34 +119,38 @@ In the \ac{TPTP} language specification square brackets not necessarily denote t
 In token and macro rules they have the same meaning as in traditional \ac{EBNF} and in grammar and semantic rules square brackets are terminals.
 
 \subsection{Data Structure and Data Types}\label{sec:ConceptParserDataStructure}
-To build the representative data structure, represenations of todo... have to be defined.
-The following section describes the %data structures and
-data types representing the \ac{TPTP} language grammar specification that are being used and created by the parser in the parsing process.
+To build the representative data structure, data types that represent the data stored in the \ac{TPTP} language grammar specification have to be defined.
+The following section describes the data structure and data types that are being used and created by the parser in the parsing process.
 
 Atomary data types
 
 \subsubsection{Terminal Symbol}
-A terminal symbol has name/value? that is a sequence of characters.
--Production Property
+The terminal symbol data type has one attribute, which is the name of the terminal symbol.
+-todo Production Property
 
 \subsubsection{Nonterminal Symbol}
--value
+Analogue to the terminal symbol data type, the nonterminal symbol also has its name as an attribute
 Composite data types
 
-\subsubsection{Grammar Expression}
-A grammar expression consists of the nonterminal name, a production list and a position.
-The position denotes where in
-\subsubsection{Token Expression}
-Analogue to grammar expression
-\subsubsection{Strict  Expression}
-
-\subsubsection{Macro Expression}
-
+\subsubsection{Expressions}
+%\subsubsection{Grammar Expression}
+An expression consists of the nonterminal symbol name which is produced, a production list and a position.
+The position denotes at which position in the \ac{TPTP} language grammar specification the grammar expression was listed.
+This information is needed to maintain the original order of the expressions when printing the reduced grammar specification (todo reference).\\
+For each production symbol (see table \ref{tbl:ConceptTPTPProductionSymbols}) there is a data type. This means that grammar, token, strict and macro expression data types are introduced.\\
+Listing \ref{lst:ConceptParserGrammarExpression} contains an example of a line in a \ac{TPTP} language grammar specification that is represented by the grammar expression data type.
+\begin{lstlisting}[basicstyle=\scriptsize	,caption= Example of a grammar expression,label= lst:ConceptParserGrammarExpression]
+<tff_formula>          ::= <tff_logic_formula> | <tff_atom_typing
+\end{lstlisting}
+The nonterminal symbol name which is produced is <$tff \textunderscore formula$>.  The production list consists of two productions, as can be seen in the listing.
 \subsubsection{Comment Block}
 A comment block is a list of consecutive comment lines.
 
 \subsubsection{Production Element}
-
+A production ellement is.
+-terminal symbol
+-nonterminal symbol
+-production property
 \subsubsection{Production Property}
 The production property can take one of three values and denotes whether a production is optional, can be repeated any number of times or does not have any special property. In the original \ac{TPTP} language grammar specification file this was represented by square brackets or the repetition symbol.
 
