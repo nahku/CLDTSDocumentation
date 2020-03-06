@@ -183,6 +183,12 @@ A graph representing possible transitions within the
 -uml NTNode
 \section{Generation of the reduced Grammar}\label{sec:ConceptGenerateReducedGrammar}
 
+\subsection{Selection of blocked Productions}
+
+\subsection{Determination of the remaining reachable Productions}
+
+\subsection{Determination of the remaining terminating Productions}
+
 \section{Control File}\label{sec:ConceptControlFile}
 A format for specifying the desired start symbol and blocked productions has to be developed.
 Using a file-based configuration enables the user to store desired configurations and for example a manual selection in the graphical user interface is not necessary.
@@ -209,12 +215,11 @@ todo further describe control file, is it understood, which production is disabl
 <TPTP_input>,::=,1
 <annotated_formula>,::=,0,1,2,5
 \end{lstlisting}
-This format is relatively easy to parse and also enables users to specify their desired start symbols and blocked productions without having to use the  GUI.
-\subsection{Selection of blocked Productions}
+This format is relatively easy to parse and also enables users to specify their desired start symbols and blocked productions without having to use the GUI.
 
-\subsection{Determination of the remaining reachable Productions}
+pro: Specifying which production should be blocked, and not the ones should be kept, typically results in a significantly smaller file.
+Storing the indexes of the productions that should be blocked offers that in case productions are renamed the control file would still be valid. On the other hand if productions are added or deleted from the original \ac{TPTP} language grammar specification, the control file may have to be updated.
 
-\subsection{Determination of the remaining terminating Productions}
 
 \section{Maintainig Comments}\label{sec:ConceptMaintainingComments}
 In the \ac{TPTP} language specification there are comments providing supplemental information about the language and its symbols and rules.
