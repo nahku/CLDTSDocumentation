@@ -56,4 +56,20 @@ This ambiguity is solved because by convention the lexer matches the longest pos
 
 The parser is taking the tokens from the lexer and matches them to defined production rules.
 
+\section{Graph Generation}\label{sec:ImplementationGraphGeneration}
+
+\begin{algorithm}[H]
+\caption{Graph Generation Algorithm}
+\begin{algorithmic}[1] 
+\Require node
+%\ENSURE $y = x^n$
+\State searchProductionsListForNT(node, node.productionslist)
+\If {Node has children}
+	\For{\texttt{Each child}}
+		\State buildGraphRek(child)
+	\EndFor
+\EndIf
+\end{algorithmic}
+\end{algorithm}
+
 \section{GUI}\label{sec:GUI}
