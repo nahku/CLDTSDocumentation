@@ -129,7 +129,8 @@ The terminal symbol data type has one attribute, which is the name of the termin
 -todo Production Property
 
 \subsubsection{Nonterminal Symbol}
-Analogue to the terminal symbol data type, the nonterminal symbol also has its name as an attribute
+Analogue to the terminal symbol data type, the nonterminal symbol also has its name as an attribute.
+
 Composite data types
 
 \subsubsection{Expressions}
@@ -147,7 +148,7 @@ The nonterminal symbol name which is produced is <$tff \textunderscore formula$>
 A comment block is a list of consecutive comment lines.
 
 \subsubsection{Production Element}
-A production ellement is.
+A production element is.
 -terminal symbol
 -nonterminal symbol
 -production property
@@ -158,9 +159,12 @@ The production property can take one of three values and denotes whether a produ
 \subsubsection{Production}
 A production is one production alternative specified in any expression. It consists of a list of production elements and has a production property.
 -show example
-ProductionProperty
+\subsubsection{Production Property}
+-none
+-repetition
+-optional
 \subsubsection{Productions List}
-
+A productions list contains a list of productions where each production is one alternative in the description of an expression.
 \subsubsection{XOR Productions List}
 
 
@@ -235,11 +239,18 @@ bei tree building temporäres startsymbol nutzen (da mehrere Startsymbole mögli
 \includegraphics[width=1\textwidth]{images/maintainingComments.jpg}
 \caption{Maintaining Comments}
 \label{fig:comments}
-
 \end{figure}
 
 \section{Console Interface}\label{sec:Console Interface}
-
+-output reduced grammar with input grammar control file 
 \section{GUI}\label{sec:ConceptGUI}
+-show rules similar to file
+-select start symbol + blocked productions
+-show extracted grammar
+-export exported grammar
+-include + toggle comments
+-import/export control file
+extra:
+-web import
 
 
