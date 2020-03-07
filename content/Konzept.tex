@@ -181,6 +181,32 @@ A graph representing possible transitions within the
 -number rules
 -challenge that one start symbol can have multiple rule types
 -uml NTNode
+
+\begin{figure}
+\begin{tikzpicture}[sibling distance=10em,
+  every node/.style = {shape=rectangle, rounded corners,
+    draw, align=center,
+    top color=white, bottom color=blue!20}]]
+  \node {<alpha\textunderscore numeric>}
+    child { node {<lower\textunderscore alpha>} 
+    	child { node {[a-z]}}}
+    child { node {<upper\textunderscore alpha>}
+      child { node {[A-Z]}}}
+    child { node {<numeric>}
+    	child { node {[0-9]}}}
+    child { node {[\textunderscore]}};
+\end{tikzpicture}
+\caption{Example of parse tree}
+\end{figure}
+
+Circular dependency:
+\begin{lstlisting}[basicstyle=\scriptsize	,caption= Example of a circular dependency,label= lst:GraphGeneration_circular_dependency]
+<disjunction>    ::= <literal> | <disjunction> <vline> <literal>
+\end{lstlisting}
+
+The graph is generated recursive. 
+Idea:  
+
 \section{Generation of the reduced Grammar}\label{sec:ConceptGenerateReducedGrammar}
 
 \subsection{Selection of blocked Productions}
