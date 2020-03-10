@@ -20,7 +20,7 @@ Using this pattern of notation whole grammars can be specified.\\
 The \ac{EBNF} extends the \ac{BNF} by with following rules:
 
 \begin{itemize}%[noitemsep]
-	\item optional expressions are sorrounded by square brackets.
+	\item optional expressions are surrounded by square brackets.
 	\item repetition is denoted by curly brackets.
 	\item parentheses are used for grouping.
 	\item terminals are enclosed in quotation marks.
@@ -113,13 +113,24 @@ parser takes inputs and searches for production where input is on the right side
 -top down (predictive parsing):
 parser takes input and searches for production where input is on the left side of a production rule
 
-
-\section{PLY}\label{sec:BackgroundPLY}
+\section{Python}\label{sec:BackgroundPython}
+\subsection{PLY}\label{sec:BackgroundPythonPLY}
 
 \acf{PLY} \cite{PLY} is an implementation of lex and yacc in python.
 [LALR-parsing]
 consists of lex.py and yacc.py
 
-lex.py tokenizes an input string\label{sec:BackgroundNDAutomata}
+lex.py tokenizes an input string\
+\subsection{PyQt}\label{sec:BackgroundPytonPyQt}
+PyQt is a Python binding for the cross-platform GUI framework Qt \cite{PyQt}.
+It is licensed under the GNU GPL version 3.
 
-\section{Python?}\label{sec:BackgroundPython}
+
+tkinter
+\subsection{argparse}\label{sec:BackgroundArgparse}
+The python module argparse is a module for creating command line interfaces.
+It provides the means to specify input arguments and \cite{argparse} automatically creates help and usage messages.
+It also checks if the given arguments are valid.
+After input arguments are specified, the module will automatically create a parser for the specified arguments.
+
+todo verbessern
