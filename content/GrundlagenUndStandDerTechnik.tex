@@ -6,7 +6,7 @@
 Compiler: Translate (high-level) programming language into machine language
 
 Different phases for writing a compiler, phases are processed sequently
-\section{TPTP Language}\label{sec:BackgroundTPTP}
+\section{TPTP language}\label{sec:BackgroundTPTP}
 The \acf{TPTP} is a library of problems for \ac{ATP}.
 Problems within the library are described in the \ac{TPTP} language.
 The  \ac{TPTP} language is a formal language and its grammar is specified in an \ac{EBNF}. \cite{Sut17}\\
@@ -31,7 +31,7 @@ The \ac{EBNF} extends the \ac{BNF} by with following rules:
 
 Different phases for writing a compiler, phases are processed sequently
 
-\section{Grammar}\label{sec:BackgroundGrammar}
+\section{Formal grammars}\label{sec:BackgroundGrammar}
 Unlike regular expressions, grammars not only describe a language but also define a structure among the words of a language(?)(->additionally defines structure on the strings in the language it defines).
 Lexing or a so called lexical analysis is the division of input into units so called tokens \cite{LexYacc.1992}. 
 The input is a string containing a sequence of characters. 
@@ -54,7 +54,7 @@ Using a recursive notation, production rules define derivations for symbols. The
 Terminal symbols describe symbols that cannot be further derived. The alphabet of the described language build the set of terminal symbols.
 Nonterminal symbols however can be further derived and build  merged with the terminal symbols the vocabulary of a grammar. Nonterminal symbols and terminal symbols are disjoint. 
 
-\subsubsection{Reduced Grammar}
+\subsubsection{Reduced grammars}
 Grammars are called reduced if each nonterminal symbol is terminating and reachable \cite{Cremers75}.
  
 Given the set of terminal symbols $\sum$, a nonterminal symbol $\xi$ is called terminating if there are productions $\xi \underrightarrow{*} z$ so that $\xi$ can be derivated to $z$ and $z \epsilon \sum$*. 

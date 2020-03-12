@@ -200,57 +200,12 @@ todo vor- nachteile
 
 
 The output of the parser is a list of the rules and the comments from the \ac{TPTP} language specification file.
-
 \section{Graph Generation}\label{sec:ConceptGraphGeneration}
-
-The \ac{TPTP} grammar, extracted from the \ac{TPTP} grammar file, needs to be stored in a data structure that allows for modification and traversing.
-The data structure that is used is a graph representing nodes and weighted transitions between nodes. A node is ??
-The node that 'controlls' the transition is the nonterminal symbol on the left side in the \ac{TPTP} grammar. The receiving? end is on the right side of the production rule. In conclusion, if there is a transition between two nodes, the 'controlling' end can be represented by the 'receiving' node. In the example below the nonterminal symbol $<alpha\textunderscore numeric>$ can be reduced to the nonterminal symbol $<lower\textunderscore alpha>$ that again can be reduced to the terminal symbol $[a-z]$. 
-Every node that is a nonterminal symbol has a least one controlling and one receiving transition. The nodes that are terminal symbol are 'leaves'.
-The graph represented in figure \ref{fig:GraphGeneration} has the same appearance as a tree data structure. However, a graph cannot be represented by a tree because circular dependencies exist and those cannot be represented by a tree data structure. An example is given in listing \ref{lst:GraphGeneration_circular_dependency}.
-
-\begin{figure}[H]
-\begin{tikzpicture}[sibling distance=10em,
-  every node/.style = {shape=rectangle, rounded corners,
-    draw, align=center,
-    top color=white, bottom color=blue!20}]]
-  \node {<alpha\textunderscore numeric>}
-    child { node {<lower\textunderscore alpha>} 
-    	child { node {[a-z]}}}
-    child { node {<upper\textunderscore alpha>}
-      child { node {[A-Z]}}}
-    child { node {<numeric>}
-    	child { node {[0-9]}}}
-    child { node {[\textunderscore]}};
-\end{tikzpicture}
-\caption{Example of parse tree}\label{fig:GraphGeneration}
-\end{figure}
-
-\begin{lstlisting}[basicstyle=\scriptsize	,caption= Example of a circular dependency,label= lst:GraphGeneration_circular_dependency]
-<disjunction>    ::= <literal> | <disjunction> <vline> <literal>
-\end{lstlisting}
-
-Another challenge is that the start symbol can have multiple rule types resulting in two start symbols. As it is not possible to have two start symbols, a new start symbol is generated that implies the two original start symbol. In the following example the original start should be $<formula\textunderscore role>$. Because $<formula\textunderscore role>$ has the rule type $Grammar$ as well as the rule type $Strict$, a new start symbol $<start\textunderscore symbol>$ is generated that implies $<formula\textunderscore role>$.
-\\
-\begin{lstlisting}[basicstyle=\scriptsize	,caption= Example of replacing the start symbol,label= lst:GraphGeneration_RaplacingStartsymbol]
-<start_symbol>		   ->  <formula_role>
-<formula_role>         ::= <lower_word>
-<formula_role>         :== axiom | hypothesis | definition | assumption |
-                           lemma | theorem | corollary | conjecture |
-                           negated_conjecture | plain | type |
-                           fi_domain | fi_functors | fi_predicates | unknown
-\end{lstlisting}
-
-\subsubsection{Generating the graph}
-The graph is generated recursive. Starting from the start symbol every nonterminal symbol that is on the right side of a production rule is a so called children of the nonterminal on the left side of the rule. These children again have children. This process repeats itself until all children are a terminal symbols.
-
-\section{Generation of the reduced Grammar}\label{sec:ConceptGenerateReducedGrammar}
-
-\subsection{Selection of blocked Productions}
-
-\subsection{Determination of the remaining reachable Productions}
-
-\subsection{Determination of the remaining terminating Productions}
+The \ac{TPTP} grammar, extracted from the \ac{TPTP} grammar file, needs to be stored in a data structure that allows for modification.
+A graph representing possible transitions within the 
+-number rules
+-challenge that one start symbol can have multiple rule types
+-uml NTNode
 
 \section{Control File}\label{sec:ConceptControlFile}
 A format for specifying the desired start symbol and blocked productions has to be developed.
@@ -272,7 +227,6 @@ Listing \ref{lst:ConceptControlFile} contains a sample control file. In this fil
 The second line means, that the second grammar production alternative of the nonterminal symbol <$TPTP\_input$> should be disabled.
 Analogue to that, the first, second, third and fifth grammar production alternative of the nonterminal symbol <$annotated\_formula$> are said to be disabled in line 3.
 
-todo further describe control file, is it understood, which production is disabled? maybe graphical help??
 \begin{lstlisting}[caption= Example of a control file,label= lst:ConceptControlFile]
 <TPTP_file>
 <TPTP_input>,::=,1
@@ -322,11 +276,11 @@ For that, three steps must be performed:
 \label{enumerate:ConceptGenerateReducedGrammar}
 
 bei tree building temporäres startsymbol nutzen (da mehrere Startsymbole möglich)
-\subsection{Selection of blocked Productions}
+\subsection{Removing of blocked Productions}
 
-\subsection{Determination of the remaining reachable Productions}
-
-\subsection{Determination of the remaining terminating Productions}
+\subsection{Determination of the remaining reachable productions}
+dynamic programming
+\subsection{Determination of the remaining terminating productions}
 
 \section{GUI}\label{sec:ConceptGUI}
 In this section ...
@@ -342,7 +296,7 @@ Selection of a new start symbol and productions that should be possible in the G
 extra:
 -web import
 
-\section{Console Interface}\label{sec:Console Interface}
+\section{Console interface}\label{sec:Console Interface}
 -console interface allows for automation with scripts for repeated tasks
 -basic functionality extract grammar by providing base grammar file and control file, 
 -output reduced grammar with input grammar control file

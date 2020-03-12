@@ -61,7 +61,7 @@ The parser is taking the tokens from the lexer and matches them to defined produ
 
 comment block reimplement equal operator
 
-\subsection{Data Types}\label{sec:ImplementationDataTypes}
+\subsection{Data types}\label{sec:ImplementationDataTypes}
 Figure \ref{fig:ImplementationUMLExpressions} contains the UML modelling of the data types described in section \ref{sec:ConceptParserDataStructure}.
 \begin{figure}[H]
 \centering
@@ -69,7 +69,7 @@ Figure \ref{fig:ImplementationUMLExpressions} contains the UML modelling of the 
 \caption{UML diagram for expressions}
 \label{fig:ImplementationUMLExpressions}
 \end{figure}
-\section{Graph Generation}\label{sec:ImplementationGraphGeneration}
+\section{Graph generation}\label{sec:ImplementationGraphGeneration}
 
 To generate the graph of a given grammar three algorithms are needed that will be explained in the following. 
 
@@ -123,9 +123,81 @@ The goal is to identify the nonterminal symbols. Therefore it is checked if the 
 \end{algorithmic}
 \end{algorithm}
 
+\subsection{Removing of blocked Productions}
+
+Algorithm \ref{sec:remove_blocked_productions}
+\begin{algorithm}[H]
+\caption{Removing blocked productions}
+\begin{algorithmic}[1] 
+\Require control\textunderscore string
+\State lines = control\textunderscore string.splitlines()
+\State start\textunderscore symbol = lines[0]
+\State delete lines[0]
+\ForAll {line in lines}
+	\State data = line.splitBy(",")
+	\State nonterminal\textunderscore name = data[0]
+	\State rule\textunderscore symbol = data[1]
+	\State rule\textunderscore type = determineRuleType(rule\textunderscore symbol)
+	\State delete data[0:2]
+	\State data = parseInteger(data)
+	\State data.sortReverse()
+	\ForAll {index in data}
+		\State node = this.nodes\textunderscore dictionary.get(Node(nonterminal\textunderscore name, rule\textunderscore type))
+		\State delete node.productions\textunderscore list.list[index]
+		\State delete node.children[index]
+	\EndFor
+\EndFor
+\end{algorithmic}
+\label{alg:remove_blocked_productions}
+\end{algorithm}
+
+\subsection{Determination of the remaining reachable productions}
+\subsubsection{Removing non-terminating symbols}
+\begin{algorithm}[H]
+\caption{Removing blocked productions}
+\begin{algorithmic}[1] 
+\Require start\textunderscore node
+\State terminating = new set()
+\State temp\textunderscore terminating = new set()
+\While {True}
+	\State visited = new set()
+	\State this.find\textunderscore non\textunderscore terminating\textunderscore symbols(start\textunderscore node, temp\textunderscore terminating, visited)
+	\If {terminating == temp\textunderscore terminating}
+		\State break
+	\Else
+		\State terminating = temp\textunderscore terminating
+	\EndIf
+\EndWhile
+\State delete\textunderscore non\textunderscore terminating\textunderscore productions\textunderscore (start\textunderscore node, terminating, visited)
+\State delete\textunderscore non\textunderscore terminating\textunderscore nodes(terminating)
+\end{algorithmic}
+\label{alg:remove_non_terminating_symbols}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption{Delete non-terminating productions}
+\begin{algorithmic}[1] 
+\Require start\textunderscore node
+\State terminating = new set()
+\State temp\textunderscore terminating = new set()
+\While {True}
+	\State visited = new set()
+	\State this.find\textunderscore non\textunderscore terminating\textunderscore symbols(start\textunderscore node, temp\textunderscore terminating, visited)
+	\If {terminating == temp\textunderscore terminating}
+		\State break
+	\Else
+		\State terminating = temp\textunderscore terminating
+	\EndIf
+\EndWhile
+\State delete\textunderscore non\textunderscore terminating\textunderscore productions\textunderscore (start\textunderscore node, terminating, visited)
+\State delete\textunderscore non\textunderscore terminating\textunderscore nodes(terminating)
+\end{algorithmic}
+\label{alg:delete_non_terminating_productions}
+\end{algorithm}
+
 
 \section{GUI}\label{sec:GUI}
-\section{Console Interface}\label{sec:Console Interface}
+\section{Console interface}\label{sec:Console Interface}
 -argparse Python offers a library for console interfaces.
 -options for path to grammar and control file
 -option for output path
