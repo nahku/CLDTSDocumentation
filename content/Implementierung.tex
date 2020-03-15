@@ -123,7 +123,7 @@ The goal is to identify the nonterminal symbols. Therefore it is checked if the 
 \end{algorithmic}
 \end{algorithm}
 
-\subsection{Removing of blocked Productions}
+\subsection{Removing of blocked productions}
 
 Algorithm \ref{sec:remove_blocked_productions}
 \begin{algorithm}[H]
@@ -174,30 +174,12 @@ Algorithm \ref{sec:remove_blocked_productions}
 \label{alg:remove_non_terminating_symbols}
 \end{algorithm}
 
-\begin{algorithm}[H]
-\caption{Delete non-terminating productions}
-\begin{algorithmic}[1] 
-\Require start\textunderscore node
-\State terminating = new set()
-\State temp\textunderscore terminating = new set()
-\While {True}
-	\State visited = new set()
-	\State this.find\textunderscore non\textunderscore terminating\textunderscore symbols(start\textunderscore node, temp\textunderscore terminating, visited)
-	\If {terminating == temp\textunderscore terminating}
-		\State break
-	\Else
-		\State terminating = temp\textunderscore terminating
-	\EndIf
-\EndWhile
-\State delete\textunderscore non\textunderscore terminating\textunderscore productions\textunderscore (start\textunderscore node, terminating, visited)
-\State delete\textunderscore non\textunderscore terminating\textunderscore nodes(terminating)
-\end{algorithmic}
-\label{alg:delete_non_terminating_productions}
-\end{algorithm}
-
 
 \section{GUI}\label{sec:GUI}
-\section{Console interface}\label{sec:Console Interface}
--argparse Python offers a library for console interfaces.
+Tkinter and PyQt have been evaluated as a basis for the GUI.
+-pyqt offers checkboxes in treeviews
+\section{Command-line interface}\label{sec:ImplementationCommandLineInterface}
+For the command-line interface (see section \ref{sec:ConceptCommandLineInterface}) the python module argparse is used.
+-argparse Python offers a library for command-line interfaces.
 -options for path to grammar and control file
 -option for output path

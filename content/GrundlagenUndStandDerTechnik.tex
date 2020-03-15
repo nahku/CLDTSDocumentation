@@ -1,35 +1,12 @@
 %!TEX root = ../dokumentation.tex
 
 \chapter{Background and Theory}\label{cha:Background}
+This chapter introduces into the technologies and background that will be utilised in the following chapters. First, an introduction into the \ac{TPTP} language is given. Then, formal grammars and the \ac{BNF} are described. Following that, the foundations of lexing and parsing are outlined. Finally, Python and relevant Python modules that are used in the implementation are presented.
 
-\cite{Mogensen.2017}
-Compiler: Translate (high-level) programming language into machine language
-
-Different phases for writing a compiler, phases are processed sequently
 \section{TPTP language}\label{sec:BackgroundTPTP}
 The \acf{TPTP} is a library of problems for \ac{ATP}.
 Problems within the library are described in the \ac{TPTP} language.
-The  \ac{TPTP} language is a formal language and its grammar is specified in an \ac{EBNF}. \cite{Sut17}\\
-
-\section{\acf{BNF}}\label{sec:BackgroundBNF}
-The  \acf{BNF} is a language to describe context-free grammars.
-In the \acf{BNF} nonterminal symbols are distinguished from terminal symbols by being enclosed by  angle brackets, e. g. <$TPTP\_File$> denotes the nonterminal symbol $TPTP\_File$.
-Productions are described using the $"::="$ symbol and alternatives are specified using the $"|"$ symbol. \cite{BNF.1964} 
-An example for a \ac{BNF} production would be $TPTP\_File$ $::=$ <$TPTP\_Input$> $|$ <$comment$>.
-Using this pattern of notation whole grammars can be specified.\\
-The \ac{EBNF} extends the \ac{BNF} by with following rules:
-
-\begin{itemize}%[noitemsep]
-	\item optional expressions are surrounded by square brackets.
-	\item repetition is denoted by curly brackets.
-	\item parentheses are used for grouping.
-	\item terminals are enclosed in quotation marks.
-\end{itemize}
-\label{itemize:BackgroundBNF}
-\cite{EBNF.1977}
-
-
-Different phases for writing a compiler, phases are processed sequently
+The  \ac{TPTP} language is a formal language and its syntax is specified in an \ac{EBNF}. \cite{Sut17}\\
 
 \section{Formal grammars}\label{sec:BackgroundGrammar}
 Unlike regular expressions, grammars not only describe a language but also define a structure among the words of a language(?)(->additionally defines structure on the strings in the language it defines).
@@ -65,8 +42,24 @@ In other words, a nonterminal symbol $\xi$ is reachable if there exist productio
 
 \subsubsection{Context-free grammar}
 
+\section{\acf{BNF}}\label{sec:BackgroundBNF}
+The  \acf{BNF} is a language to describe context-free grammars.
+In the \acf{BNF} nonterminal symbols are distinguished from terminal symbols by being enclosed by  angle brackets, e. g. <$TPTP\_File$> denotes the nonterminal symbol $TPTP\_File$.
+Productions are described using the $"::="$ symbol and alternatives are specified using the $"|"$ symbol. \cite{BNF.1964} 
+An example for a \ac{BNF} production would be $TPTP\_File$ $::=$ <$TPTP\_Input$> $|$ <$comment$>.
+Using this pattern of notation whole grammars can be specified.\\
+The \ac{EBNF} extends the \ac{BNF} by with following rules:
 
-\section{Lexer}\label{sec:BackgroundLexer}
+\begin{itemize}%[noitemsep]
+	\item optional expressions are surrounded by square brackets.
+	\item repetition is denoted by curly brackets.
+	\item parentheses are used for grouping.
+	\item terminals are enclosed in quotation marks.
+\end{itemize}
+\label{itemize:BackgroundBNF}
+\cite{EBNF.1977}
+
+\section{Lexing}\label{sec:BackgroundLexer}
 Lexing or a so called lexical analysis is the division of input into units so called tokens \cite{LexYacc.1992}. Tokens are for example variable names or keywords.
 The input is a string containing a sequence of characters, the ouput is a sequence of tokens. 
 Afterwards, the ouput can be used for further processing e.g. \ref{sec:BackgroundYacc}.
@@ -94,12 +87,16 @@ Per convention the longest input that matches any token is chosen. \cite{Mogense
 
 %A lexer takes a string containing a sequence of chararacters as input and divides this input into units so called tokens. 
 
-\section{Parser}\label{sec:BackgroundParser}
+\section{Parsing}\label{sec:BackgroundParser}
 Building a syntax tree out of the generated tokens \cite{Mogensen.2017}
 
 Similar to lexers, parsers can be generated automatically.
 Therefore a parser generator takes as input a description of the relationship among tokens in form of a grammar. The output is the generated parser. \cite{LexYacc.1992}
- 
+
+\cite{Mogensen.2017}
+Compiler: Translate (high-level) programming language into machine language
+
+Different phases for writing a compiler, phases are processed sequently 
 \subsubsection{Syntax analysis}
 Parsing: establish relationship among tokens \cite{LexYacc.1992}
 Grammar: list of rules that defines the relationships \cite{LexYacc.1992}
@@ -131,6 +128,4 @@ tkinter
 The python module argparse is a module for creating command line interfaces.
 It provides the means to specify input arguments and \cite{argparse} automatically creates help and usage messages.
 It also checks if the given arguments are valid.
-After input arguments are specified, the module will automatically create a parser for the specified arguments.
-
-todo verbessern
+After specifying input arguments, the module will automatically create a parser for the specified arguments.
