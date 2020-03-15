@@ -2,27 +2,23 @@
 
 \chapter{Introduction}\label{cha:Introduction}
 
-\section{Problem Statement and Goals}\label{sec:Aufgabenstellung}
-Computer languages are likely to grow over time as they are getting more complex when their functionality is extended and more application cases are covered.
-On the one hand that leads to a more powerful language.
-However, on the other hand it becomes harder to understand the language and to implement it.
-Thus, it becomes harder for new users to use the language.\\
-This problem can be addressed by extracting smaller sub-languages for particular use cases. 
-This could be done manually, but using this method is likely to raise errors or divergences from the original grammar.\\
-Therefore, the approach considered in this report is to develop an application that is able to automatically extract sub-languages from a language.
-A sub-language should be specified by the user using the application.\\
-This report focusses on the \acf{TPTP} language for automated theorem proving.
-Sub-languages of interest are for example a grammar just for \ac{CNF} or \ac{FOF}
-The grammar of the language is provided in an \acf{EBNF}.\\
-The first step to extract a sub-language is to build a lexer takes the grammar of the TPTP language as input and generates tokens.
-Subsequently a parser should build a parse tree that represents the grammar rules of the \ac{TPTP} language.
-This parse tree should be visually presented to the user and the user can then choose which grammar rules should not be included in the desired sub-language.
-After the user specified the sub-language, the developed application should extract the sub-language from the \ac{TPTP} language and present the sub-language in the same format as the original \ac{TPTP} syntax.
+\section{Problem statement and goals}\label{sec:Aufgabenstellung}
+Computer languages are likely to grow over time as they are getting more complex when their functionality is extended and more use cases are covered.
+On one hand that leads to a more powerful language.
+On the other hand increased complexity makes a language harder for new users to learn and to use.\\
+The goal is to maintain the advantages of an expressive? language but allow users to extract a sub-syntax from a larger syntax to simplify the language for their particular use case. \\
+Extracting a sub-syntax manually raises errors?may lead to? or divergences from the original grammar.\\
+Therefore, this report describes a tool that is able to automatically extract a sub-syntax that has been specified by the user using the application.\\
+This report focusses on the \acf{TPTP} language for automated theorem proving that has been expanded over time to include various classic logics.
+Sub-syntaxes of interest are for example \ac{CNF} or \ac{FOF}.
+The \ac{TPTP} syntax is provided in an \acf{EBNF}.\\
+??The developed tool processes a given grammar in multiple steps.
+First it parses the formal grammar into a structured internal representation using \ac{PLY}.
+The processed grammar is presented to the user via a GUI. The user can select a start symbol and disable productions that should not be included in the desired sub-syntax.
+Using the users input, the developed application extracts the sub-syntax from the \ac{TPTP} syntax and presents the sub-syntax in the same format as the original \ac{TPTP} syntax.
 Also, comments present in the \ac{TPTP} syntax should be maintained and associated with the corresponing rules in the reduced syntax.
 \section{Structure of the Report}\label{sec:IntroductionStructure}
-This report is structured into six chapters. In the first chapter the research problem and goals of this research are stated.
-Then in chapter 2 the necessary background information for the following chapters 3 and 4 is provided.
-In chapter 3 the concept for the software tool is developed.
-Based on this, the implementation of the application is featured in chapter 4.
-TODO In chapter 5 the results of the TODO reduced grammar is tested on a problem which is presented in a form corresponding to the reduced grammar.
-Chapter 6 sums up the results achieved in this research and offers an outlook for possible future research.
+The report is structured into six chapters. The first chapter introduces the problem of complex computer languages and the goal of this report that is extracting smaller sub-languages.
+The second chapter provides necessary background information including the \ac{TPTP} language, formal grammars, lexing and parsing. By means of the background information, the third chapter outlines the concept of the developed tool.
+Based on this, the implementation of the tool is featured in the fourth chapter.
+The fifth chapter presents an evaluation of the effectiveness? of the tool. Considering the evaluation, the sixth chapter sums up the results of the developed tool, compares the results to the defined goals in first chapter and offers an outlook for possible future research.
