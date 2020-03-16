@@ -1,5 +1,9 @@
 % makeindex style file created by the glossaries package
+<<<<<<< HEAD
 % for document 'dokumentation' on 2020-3-15
+=======
+% for document 'dokumentation' on 2020-3-16
+>>>>>>> nahku
 actual '?'
 encap '|'
 level '!'
