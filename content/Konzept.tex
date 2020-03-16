@@ -65,7 +65,13 @@ A graph builder and manipulator;
 An export module for exporting the graph in a text representation corresponding to the original language specification.\\
 In addition to the components that provide the main functionality a graphical user interface and a console interface for user convenience is desired.
 
-todo architecture diagram and diagram description
+Figure \ref{fig:ConceptArchitectureOverview} contains a high-level UML diagram describing the architecture of the software tool. The user interacts either with the \textit{Console} or \textit{View} class. The \textit{Console} class provides the command-line interface and the \textit{View} class provides the GUI. Both have a reference on \textit{Input} and \textit{Output} for reading from and writing to files. They also have a reference on the \textit{TPTPGraphBuilder} class. This class is responsible for building a grammar graph and extracting sub-syntaxes by graph manipulation. For that, lexing and parsing are necessary. The \textit{TPTPGraphBuilder} uses the \textit{Parser} class for getting a \ac{TPTP} syntax representation and the \textit{Parser} uses the \textit{Lexer} to extract the tokens from a \ac{TPTP} syntax file.
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{images/Concept_UML_Architecture_Overview.pdf}
+\caption{UML diagram of the architecture of the software tool}
+\label{fig:ConceptArchitectureOverview}
+\end{figure}
 \subsection{Implementation language}\label{sec:ConceptImplementationLanguage}
 todo why python
 
