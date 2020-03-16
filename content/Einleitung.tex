@@ -4,15 +4,13 @@
 
 \section{Problem statement and goals}\label{sec:Aufgabenstellung}
 Computer languages are likely to grow over time as they are getting more complex when their functionality is extended and more use cases are covered.
-On one hand that leads to a more powerful language.
-On the other hand increased complexity makes a language harder for new users to learn and to use.\\
-The goal is to maintain the advantages of an expressive? language but allow users to extract a sub-syntax from a larger syntax to simplify the language for their particular use case. \\
-Extracting a sub-syntax manually raises errors?may lead to? or divergences from the original grammar.\\
-Therefore, this report describes a tool that is able to automatically extract a sub-syntax that has been specified by the user using the application.\\
-This report focusses on the \acf{TPTP} language for automated theorem proving that has been expanded over time to include various classic logics.
-Sub-syntaxes of interest are for example \ac{CNF} or \ac{FOF}.
-The \ac{TPTP} syntax is provided in an \acf{EBNF}.\\
-??The developed tool processes a given grammar in multiple steps.
+On the one hand that leads to a more powerful language capable of handling a wide range of use cases.
+On the other hand increased complexity makes a language harder to learn and to use. Especially new users are discouraged to implement tools in that language.\\
+One example of a language that has been expanding is the \ac{TPTP} language for automated theorem proving. Over time
+various forms of classic logics ranging from \ac{CNF} to \ac{TFF} have been included in and extended the \ac{TPTP} language. \\
+In this report, we describe a tool that is able to automatically extract sub-languages from the \ac{TPTP} language. Sub-languages of interest are for example \ac{CNF} or \ac{FOF} and are specified by the user using the application.\\
+The goal is maintaining the expressiveness of the whole \ac{TPTP} language but allowing users to extract a sub-syntax to simplify the language for their particular use case. \\
+Therefore, the developed tool processes a given grammar of a language in multiple steps.
 First it parses the formal grammar into a structured internal representation using \ac{PLY}.
 The processed grammar is presented to the user via a GUI. The user can select a start symbol and disable productions that should not be included in the desired sub-syntax.
 Using the users input, the developed application extracts the sub-syntax from the \ac{TPTP} syntax and presents the sub-syntax in the same format as the original \ac{TPTP} syntax.
