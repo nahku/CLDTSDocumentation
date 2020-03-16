@@ -19,7 +19,7 @@ The tool should also generate a control file listing blocked productions and the
 Furthermore, the tool should be able to import a control file and extract a sub-syntax based on this control file instead of extracting a sub-syntax based on a users selection of blocked productions.
 The new sub-syntax should be exported to .txt format.
 Also, comments referring to the remaining productions should be kept and comments referring to productions that were discarded should not be included in the sub-syntax.
-The tool should also provide a console interface. This interface should accept a \ac{TPTP} syntax file and a control file and output the sub-syntax described in the control file. It should be possible to specify the output file path and name.
+The tool should also provide a console interface. This interface should accept a \ac{TPTP} syntax file and a control file and output the sub-syntax described in the control file. It should be possible to specify the output path and filename.
 \section{Overview}\label{sec:ConceptOverview}
 
 Figure \ref{fig:ConceptProcessSublanguage} outlines the procedure of extracting a sublanguage of the \ac{TPTP} language.
@@ -38,14 +38,11 @@ To make this grammar usable, lastly the syntax has to be output, based on the ne
 \tikzstyle{terminator} = [rectangle, draw, fill=blue!10, text width=4.5em, text badly centered, rounded corners, minimum height=4em]  
 \begin{center}
 \begin{tikzpicture}[node distance=3cm, auto]  
-  %\node [terminator]           (import)  {Import grammar file};  
-  %\node [terminator]           (import)  {Import of grammar file};
   \node [terminator]  (lex)  {Import of syntax file and lexing};  
   \node [block, right of=lex]  (pars) {Parsing};  
   \node [block, right of=pars] (ggg) {Grammar graph generation}; 
   \node [block, right of=ggg] (ggm) {Grammar graph modification}; 
-    \node [block, right of=ggm] (go) {Grammar output};  
-  %\path [line] (import)  -- (lex);  
+   \node [block, right of=ggm] (go) {Grammar output};  
   \path [line] (lex)  -- (pars);  
   \path [line] (pars) -- (ggg);  
   \path [line] (ggg) -- (ggm); 
@@ -242,18 +239,56 @@ This format is relatively easy to parse and also enables users to specify their 
 pro: Specifying which production should be blocked, and not the ones should be kept, typically results in a significantly smaller file.
 Storing the indexes of the productions that should be blocked offers that in case productions are renamed the control file would still be valid. On the other hand if productions are added or deleted from the original \ac{TPTP} syntax, the control file may have to be updated.
 
-
 \section{Maintainig comments}\label{sec:ConceptMaintainingComments}
 In the \ac{TPTP} syntax there are comments providing supplemental information about the language and its symbols and rules.
 When generating a reduced grammar maintaining of comments is desired. This means that comments from the original language specification should be associated with the rule they belong to and if the rule is still present in the reduced grammar, also the comment should be.\\
 Therefore a mechanism has to be designed for the association of comments to grammar rules.
 
-Listing \ref{lst:ConceptComment_tptp} features an example of a comment in a \ac{TPTP} syntax file.
-\begin{lstlisting}[basicstyle=\scriptsize	,caption= Example of a comment in the \ac{TPTP} language specification,label= lst:ConceptComment_tptp]
+Listing \ref{lst:ConceptComment_tptp} features an example of a comment in a \ac{TPTP} syntax file. This comment begins with a \textit{Top of Page} line which, in the HTML version of the \ac{TPTP} syntax, contains a hyperlink which leads to the beginning of the syntax file.
+The next line contains a relevant comment.\\
+\begin{lstlisting}[basicstyle=\scriptsize	,caption= Example of a comment in the \ac{TPTP} syntax,label= lst:ConceptComment_tptp]
 %----Top of Page---------------------------------------------------------------
 %----TFF formulae.
 <tff_formula>          ::= <tff_logic_formula> | <tff_atom_typing> |
                            			  <tff_subtype> | <tfx_sequent>
+\end{lstlisting}
+todo check if listing is handled correctly
+
+The heuristic matching comments to rules takes these \textit{Top of Page} lines into account.
+When there is a \textit{Top of Page} line in between comment lines it generally also splits comments sematically. todo maybe proof
+For example if there is one \textit{Top of Page} line in between multiple comment lines it is highly probable that the first part of the comment lines before the \textit{Top of Page} line refer to the rule before the comments and that the lines after the \textit{Top of Page} line refer to the rule after the comment lines. This scenario can be seen in listing \ref{lst:Comment_split_example}. The \textit{Top of Page} line is in line 28 and the comment lines before refer to the rule before. The comment line after refers to the rule after that line.
+\begin{lstlisting}[language=none, basicstyle=\scriptsize	,caption=Example of comment lines split by a \textit{Top of Page} line in the \ac{TPTP} syntax,label= lst:Comment_split_example]
+<formula_role>         :== axiom | hypothesis | definition | assumption |
+                           lemma | theorem | corollary | conjecture |
+                           negated_conjecture | plain | type |
+                           fi_domain | fi_functors | fi_predicates | unknown
+%----"axiom"s are accepted, without proof. There is no guarantee that the
+%----axioms of a problem are consistent.
+%----"hypothesis"s are assumed to be true for a particular problem, and are
+%----used like "axiom"s.
+%----"definition"s are intended to define symbols. They are either universally
+%----quantified equations, or universally quantified equivalences with an
+%----atomic lefthand side. They can be treated like "axiom"s.
+%----"assumption"s can be used like axioms, but must be discharged before a
+%----derivation is complete.
+%----"lemma"s and "theorem"s have been proven from the "axiom"s. They can be
+%----used like "axiom"s in problems, and a problem containing a non-redundant
+%----"lemma" or theorem" is ill-formed. They can also appear in derivations.
+%----"theorem"s are more important than "lemma"s from the user perspective.
+%----"conjecture"s are to be proven from the "axiom"(-like) formulae. A problem
+%----is solved only when all "conjecture"s are proven.
+%----"negated_conjecture"s are formed from negation of a "conjecture" (usually
+%----in a FOF to CNF conversion).
+%----"plain"s have no specified user semantics.
+%----"fi_domain", "fi_functors", and "fi_predicates" are used to record the
+%----domain, interpretation of functors, and interpretation of predicates, for
+%----a finite interpretation.
+%----"type" defines the type globally for one symbol; treat as $true.
+%----"unknown"s have unknown role, and this is an error situation.
+%----Top of Page---------------------------------------------------------------
+%----THF formulae.
+<thf_formula>          ::= <thf_logic_formula> | <thf_atom_typing> |
+                           <thf_subtype> | <thf_sequent>
 \end{lstlisting}
 heuristic:
 comments near the rule the refer to
@@ -265,14 +300,14 @@ The flow diagram in figure \ref{fig:ConceptMaintainingComments} shows the proces
 todo describe flow diagram 
 \begin{figure}[H]
 \centering
-\includegraphics[width=1\textwidth]{images/maintainingComments.jpg}
+\includegraphics[width=1\textwidth]{images/Concept_maintaining_comments.pdf}
 \caption{Maintaining Comments}
 \label{fig:ConceptMaintainingComments}
 \end{figure}
 
-\section{Generation of the reduced grammar}\label{sec:ConceptGenerateReducedGrammar}
-This section covers the concept of how the the reduced grammar can be computed from the original grammar.
-The original grammar is represented by a grammar graph (see section \ref{sec:ConceptGraphGeneration}) and the information on what part of the grammar should be extracted is specified in the control file.
+\section{Generation of a sub-syntax}\label{sec:ConceptGenerateReducedGrammar}
+This section covers the concept of how a sub-syntax can be computed from the original syntax.
+The original syntax is represented by a grammar graph (see section \ref{sec:ConceptGraphGeneration}) and the information on what part of the grammar should be extracted is specified in the control file.
 For that, three steps must be performed:
 
 \begin{enumerate}%[noitemsep]
@@ -280,12 +315,11 @@ For that, three steps must be performed:
 	\item The remaining reachable part of the grammar must be computed.
 	\item Starting from the still reachable part of the grammar, non terminating productions must be removed.
 \end{enumerate}
-\label{enumerate:ConceptGenerateReducedGrammar}
 
 bei tree building temporäres startsymbol nutzen (da mehrere Startsymbole möglich)
 \subsection{Removing of blocked productions}
 
-\subsection{Determination of the remaining reachable productions}
+\subsection{Determination of the remaining reachable productions}  
 dynamic programming
 \subsection{Determination of the remaining terminating productions}
 
