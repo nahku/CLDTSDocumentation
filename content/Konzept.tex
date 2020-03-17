@@ -74,7 +74,7 @@ The lexer is responsible for extracting tokens from the TPTP language grammar sp
 Therefore the TPTP language grammar specification needs to be analysed in order to find elementary tokens and regular expressions, that precisely describe these
 tokens. 
 
-\subsection{Elementary tokens}\label{sec:ConceptElementaryTokens}
+\subsubsection{Token identification}\label{sec:ConceptElementaryTokens}
 The syntax of the \ac{TPTP} language is specified in a modified \ac{EBNF} \ref{VS06}.
 Therefore there are deviations from standard \ac{EBNF} (see \ref{sec:BackgroundBNF}) that need to be analysed to specify elementary tokens.
 The standard \ac{EBNF} only uses one production symbol ($"::="$).
@@ -105,19 +105,10 @@ Following standard \ac {BNF}, nonterminal symbols are enclosed by the $<$ and $>
  
 %todo explain token nt symbol + production rule bc. of parser
 
-\subsection{Tokens}\label{sec:ConceptTokens}
 
-This section introduces the token, their regular expression are described in chapter \ref{sec:ImplementationLexer}.
 
-It is possible to declare symbols that should be ignored. However, if a symbol is declared as ignored but is specifically mentioned in another token,
-then if the sequence of characters represent that token, the ignored symbol is not ignored. In this project, tabs and white spaces are ignored as they do not have any special meaning other than providing clarity. Also, newlines are generally ignored because as can be seen in listing \ref{lst:Lexer_example_multiline} there are rules that cover multiple lines. 
-
-\begin{lstlisting}[basicstyle=\scriptsize	,caption= Example of a multi line production rule,label= lst:Lexer_example_multiline]
-<annotated_formula>    ::= <thf_annotated> | <tff_annotated> | <tcf_annotated> |
-                           <fof_annotated> | <cnf_annotated> | <tpi_annotated>
-\end{lstlisting}
-
-Apart from the ignored symbols, there are 13 defined tokens.
+%This section introduces the token, their regular expression are described in chapter \ref{sec:ImplementationLexer}.
+The outcome of this are 13 defined tokens that are explained in the following.
 
 \textit{Expressions} can either be of the type grammar, token, strict or macro. 
 It is defined as a nonterminal symbol followed by the production symbol itself (::=,:==,:::,...). 
@@ -196,7 +187,7 @@ This information is needed to maintain the original order of the rules when prin
 For each rule type (see table \ref{tbl:ConceptTPTPProductionSymbols}) there is a data type. This means that grammar, token, strict and macro rule data types are introduced.\\
 Listing \ref{lst:ConceptParserGrammarExpression} contains an example of a line in a \ac{TPTP} syntax file that is represented by the grammar rule data type.
 The nonterminal symbol name which is produced is <$tff \textunderscore formula$>.  The production list consists of two productions, as can be seen in the listing.
-\begin{lstlisting}[basicstyle=\scriptsize	,caption= Example of a grammar expression,label= lst:ConceptParserGrammarExpression]
+\begin{lstlisting}[basicstyle=\scriptsize	,caption= Grammar expression,label= lst:ConceptParserGrammarExpression]
 <tff_formula>          ::= <tff_logic_formula> | <tff_atom_typing
 \end{lstlisting}
 \subsubsection{Comment block}
@@ -282,7 +273,7 @@ Listing \ref{lst:ConceptControlFile} contains a sample control file. In this fil
 The second line means, that the second grammar production alternative of the nonterminal symbol <$TPTP\_input$> should be disabled.
 Analogue to that, the first, second, third and fifth grammar production alternative of the nonterminal symbol <$annotated\_formula$> are said to be disabled in line 3.
 
-\begin{lstlisting}[caption= Example of a control file,label= lst:ConceptControlFile]
+\begin{lstlisting}[caption= Control file,label= lst:ConceptControlFile]
 <TPTP_file>
 <TPTP_input>,::=,1
 <annotated_formula>,::=,0,1,2,5
@@ -299,7 +290,7 @@ Therefore a mechanism has to be designed for the association of comments to gram
 
 Listing \ref{lst:ConceptComment_tptp} features an example of a comment in a \ac{TPTP} syntax file. This comment begins with a \textit{Top of Page} line which, in the HTML version of the \ac{TPTP} syntax, contains a hyperlink which leads to the beginning of the syntax file.
 The next line contains a relevant comment.\\
-\begin{lstlisting}[language=none, basicstyle=\scriptsize	,caption= Example of a comment in the \ac{TPTP} syntax,label= lst:ConceptComment_tptp]
+\begin{lstlisting}[language=none, basicstyle=\scriptsize	,caption= Comment in the \ac{TPTP} syntax,label= lst:ConceptComment_tptp]
 %----Top of Page---------------------------------------------------------------
 %----TFF formulae.
 <tff_formula>          ::= <tff_logic_formula> | <tff_atom_typing> |
@@ -314,7 +305,7 @@ Therefore it would be correct to associate the comment line after the \textit{To
 Also, if there is one \textit{Top of Page} line in between multiple comment lines it is highly probable that the first part of the comment lines before the \textit{Top of Page} line refer to the rule before the comments and that the lines after the \textit{Top of Page} line refer to the rule after the comment lines.
 This scenario can be seen in listing \ref{lst:Comment_split_example}. The \textit{Top of Page} line is in line 28 and the comment lines before refer to the rule before.
 The comment line after refers to the rule after that line.
-\begin{lstlisting}[language=none, basicstyle=\scriptsize	,caption=Example of comment lines split by a \textit{Top of Page} line in the \ac{TPTP} syntax,label= lst:Comment_split_example]
+\begin{lstlisting}[language=none, basicstyle=\scriptsize	,caption=Comment lines split by a \textit{Top of Page} line in the \ac{TPTP} syntax,label= lst:Comment_split_example]
 <formula_role>         :== axiom | hypothesis | definition | assumption |
                            lemma | theorem | corollary | conjecture |
                            negated_conjecture | plain | type |

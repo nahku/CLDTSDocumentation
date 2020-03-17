@@ -12,7 +12,7 @@ It is possible to declare symbols that should be ignored. However, if a symbol i
 of characters represent that token, the ignored symbol is not ignored. In this project, tabs and white spaces are ignored as they do not have any special meaning other than providing clarity.
 Also, newlines are generally ignored because as can be seen in listing \ref{lst:Lexer_example_multiline} there are rules that cover multiple lines.
 
-\begin{lstlisting}[basicstyle=\scriptsize	,caption= Example of a multi line production rule,label= lst:Lexer_example_multiline]
+\begin{lstlisting}[basicstyle=\scriptsize	,caption= Multi line production rule,label= lst:Lexer_example_multiline]
 <annotated_formula>    ::= <thf_annotated> | <tff_annotated> | <tcf_annotated> |
                            <fof_annotated> | <cnf_annotated> | <tpi_annotated>
 \end{lstlisting}
@@ -48,7 +48,7 @@ They are recognized by the symbol itself and have a greater meaning for the pars
 
 The following example could either be matched as one comment token or as comment, grammar expression, non terminal symbol, terminal symbol, non terminal symbol.
 This ambiguity is solved because by convention the lexer matches the longest possible token, the sequence of characters is matched as one comment.
-\begin{lstlisting}[basicstyle=\scriptsize	,caption= Example of a commented out production rule,label= lst:Lexer_example]
+\begin{lstlisting}[basicstyle=\scriptsize	,caption= Commented out production rule,label= lst:Lexer_example]
 %----   <formula_role> ::= <user_role>-<source>
 \end{lstlisting}
 \section{Parser}\label{sec:ImplementationParser}
