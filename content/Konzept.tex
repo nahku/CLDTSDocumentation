@@ -8,18 +8,16 @@ Then, in section \ref{sec:ConceptOverview}, the components needed are introduced
 Then the proposed software architecture is described. After that the concept of each component is developed.
 
 \section{Requirements}\label{sec:ConceptRequirements}
-TODO: Indikativ\\
 The tool should meet the following requirements:\\
-The tool has a GUI that is the interface between the tool and a user. Hence, the user communicates with the tool via the GUI. The user should be able to import a syntax file. After the syntax file is imported, it should be displayed. 
+The tool has a GUI that is the interface between the tool and a user. Hence, the user communicates with the tool via the GUI. The user is able to import a syntax file. After the syntax file is imported, it should is displayed. 
 This includes displaying by the syntax defined productions as well as comments that are associated with these productions.
 The user can select a new start symbol and can select which productions should be blocked. 
-Productions can either be blocked as a whole or partly if the production is a disjunction.
-After the user made his choice, the new sub-syntax should be generated and displayed.
-The tool should also generate a control file listing blocked productions and the start symbol.
-Furthermore, the tool should be able to import a control file and extract a sub-syntax based on this control file instead of extracting a sub-syntax based on a users selection of blocked productions.
-The new sub-syntax should be exported to .txt format.
-Also, comments referring to the remaining productions should be kept and comments referring to productions that were discarded should not be included in the sub-syntax.
-The tool should also provide a console interface. This interface should accept a \ac{TPTP} syntax file and a control file and output the sub-syntax described in the control file. It should be possible to specify the output path and filename.
+After the user made his choice, the new sub-syntax is generated and displayed.
+The tool can also generate a control file listing blocked productions and the start symbol.
+Furthermore, the tool is able to import a control file and extract a sub-syntax based on this control file instead of extracting a sub-syntax based on a users selection of blocked productions.
+The new sub-syntax can be exported to .txt format.
+Also, comments referring to the remaining productions are kept and comments referring to productions that were discarded are not be included in the sub-syntax.
+The tool also provides a console interface. This interface accepts a \ac{TPTP} syntax file and a control file and output the sub-syntax described in the control file. It is possible to specify the output path and filename.
 \section{Overview}\label{sec:ConceptOverview}
 
 Figure \ref{fig:ConceptProcessSublanguage} outlines the procedure of extracting a sublanguage of the \ac{TPTP} language.
@@ -34,7 +32,6 @@ To make this grammar usable, lastly the syntax has to be output, based on the ne
 \tikzstyle{decision} = [ diamond, draw, fill=blue!10, text width=4.5em, text badly centered, node distance=2cm, inner sep-0pt]  
 \tikzstyle{block} = [ rectangle, draw, fill=blue!10, text width=4.5em, text badly centered, rounded corners, minimum height=4em]  
 \tikzstyle{line} = [ draw, -latex']  
-%\tikzstyle{terminator} = [ draw, ellipse, fill=red!20, node distance=3cm, minimum height=2em]
 \tikzstyle{terminator} = [rectangle, draw, fill=blue!10, text width=4.5em, text badly centered, rounded corners, minimum height=4em]  
 \begin{center}
 \begin{tikzpicture}[node distance=3cm, auto]  
@@ -75,7 +72,7 @@ todo why python
 \section{Lexer}\label{sec:ConceptLexer}
 The lexer is responsible for extracting the tokens from the \ac{TPTP} syntax file.
 todo why lexer with ply, what does ply help
-\ac{PLY} offers a lexer generator for python (see section \ref{sec:BackgroundPLY}).
+\ac{PLY} offers a lexer generator for python (see section \ref{sec:BackgroundPythonPLY}).
 Using \ac{PLY} a lexer can be built by specifying tokens as regular expressions.
 
 Therefore the \ac{TPTP} syntax needs to be analysed in order to find elementary tokens and regular expressions, that precisely describe these tokens.
@@ -256,7 +253,11 @@ todo check if listing is handled correctly
 
 The heuristic matching comments to rules takes these \textit{Top of Page} lines into account.
 When there is a \textit{Top of Page} line in between comment lines it generally also splits comments sematically. todo maybe proof
-For example if there is one \textit{Top of Page} line in between multiple comment lines it is highly probable that the first part of the comment lines before the \textit{Top of Page} line refer to the rule before the comments and that the lines after the \textit{Top of Page} line refer to the rule after the comment lines. This scenario can be seen in listing \ref{lst:Comment_split_example}. The \textit{Top of Page} line is in line 28 and the comment lines before refer to the rule before. The comment line after refers to the rule after that line.
+In listing \ref{lst:ConceptComment_tptp} can be seen that the comment in line 2 refers to the rule after.
+Therefore it would be correct to associate the comment line after the \textit{Top of Page} line to the rule after.
+Also, if there is one \textit{Top of Page} line in between multiple comment lines it is highly probable that the first part of the comment lines before the \textit{Top of Page} line refer to the rule before the comments and that the lines after the \textit{Top of Page} line refer to the rule after the comment lines.
+This scenario can be seen in listing \ref{lst:Comment_split_example}. The \textit{Top of Page} line is in line 28 and the comment lines before refer to the rule before.
+The comment line after refers to the rule after that line.
 \begin{lstlisting}[language=none, basicstyle=\scriptsize	,caption=Example of comment lines split by a \textit{Top of Page} line in the \ac{TPTP} syntax,label= lst:Comment_split_example]
 <formula_role>         :== axiom | hypothesis | definition | assumption |
                            lemma | theorem | corollary | conjecture |
@@ -291,13 +292,14 @@ For example if there is one \textit{Top of Page} line in between multiple commen
                            <thf_subtype> | <thf_sequent>
 \end{lstlisting}
 heuristic:
-comments near the rule the refer to
+comments near the rule they refer to
 associate comment with r
 
 
 The flow diagram in figure \ref{fig:ConceptMaintainingComments} shows the process of matching comments to rules.
+First comment blocks, that are consecutive comment lines (see section \ref{sec:ConceptParserDataStructure}) are split into multiple separate comment blocks by using \textit{Top of Page} lines as separators
 
-todo describe flow diagram 
+
 \begin{figure}[H]
 \centering
 \includegraphics[width=1\textwidth]{images/Concept_maintaining_comments.pdf}
