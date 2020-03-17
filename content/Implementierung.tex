@@ -8,9 +8,9 @@ cd ~/%!TEX root = ../dokumentation.tex
 As mentioned in chapter \ref{sec:ConceptLexer} the implementation of the lexer consists of the definition of tokens in form of regular expression. The following paragraph presents defined tokens and their regular expressions.
 
 \subsubsection{Ignored symbols}
-It is possible to declare certain symbol as symbol that should be ignored. However, if a symbol is declared as ignored but is specifically mentioned in another token, then if the sequence of characters represent that token, the ignored symbol is not ignored. 
-In this project, tabs and white spaces are ignored as they don not have any special meaning other than providing clarity. 
-Also, newlines are generally ignored because as can be seen below there are rules that cover multiple lines. If newlines wouldn't be ignored it would be difficult to ??
+It is possible to declare symbols that should be ignored. However, if a symbol is declared as ignored but is specially mentioned in another token, then if the sequence
+of characters represent that token, the ignored symbol is not ignored. In this project, tabs and white spaces are ignored as they do not have any special meaning other than providing clarity.
+Also, newlines are generally ignored because as can be seen in listing \ref{lst:Lexer_example_multiline} there are rules that cover multiple lines.
 
 \begin{lstlisting}[basicstyle=\scriptsize	,caption= Example of a multi line production rule,label= lst:Lexer_example_multiline]
 <annotated_formula>    ::= <thf_annotated> | <tff_annotated> | <tcf_annotated> |
@@ -21,17 +21,16 @@ Apart from the ignored symbols, there are 13 defined tokens:
 
 \subsubsection{Expressions}
 
-Expressions can either grammar, token, strict or macro expression. REFERENCE
-A non terminal symbol followed by the symbol itself (::=,:==,:::,...). The non terminal symbol and the symbol build a single token and are not identified as two tokens to avoid further ambiguity while parsing. Otherwise it would be difficult for the parer to determine whether the non terminal symbol that describes the rule is the start of a new rule or does still belong the previous rule because as mentioned the rules can cover multiple lines.
+Expressions can either be of the type grammar, token, strict or macro. It is defined as a nonterminal symbol followed by the production symbol itself (::=,:==,:::,...). The nonterminal symbol and the production are merged to a single token and are not identified as two tokens to avoid ambiguity while parsing. If not it would be difficult for the parer to determine whether the nonterminal symbol that describes the rule is the start of a new rule or does still belong to the previous rule because as mentioned rules can cover multiple lines.
 
 \textit{Regular expression of grammar expression:}  $'<\backslash w+>[\backslash s]*::='$
 
 $\backslash w+$ matches any alphanumeric and underscore character that can occur more than one time.
 $[\backslash s]*$ matches an arbitrary amount of white spaces.
 
-\subsubsection{Non terminal symbol}
+\subsubsection{Nonterminal symbol}
 
-A non terminal symbol starts with \dq <\dq and ends with \dq >\dq. In between there is any arbitrary sequence of numbers, underscores and small or capital letters.
+A nonterminal symbol starts with \dq <\dq and ends with \dq >\dq. In between there is any arbitrary sequence of numbers, underscores and small or capital letters.
 
 \subsubsection{Terminal symbol}
 
