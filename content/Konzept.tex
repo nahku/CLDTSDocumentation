@@ -220,7 +220,7 @@ The proposed way to describe this information is to:
 	\item define blocked productions grouped by nonterminal symbol and production symbol separating each group by a new line.
 	First defining the nonterminal symbol, then the production symbol and after that the index of the alternatives that should be blocked (indexing starts at zero). 
 \end{itemize}
-\label{itemize:ConceptControlFile}
+
 Identifying the production symbol is necessary because there may be a nonterminal symbol that has productions with more than one production symbol.\\
 Listing \ref{lst:ConceptControlFile} contains a sample control file. In this file in the first line <$TPTP\_file$> is specified as start symbol.
 The second line means, that the second grammar production alternative of the nonterminal symbol <$TPTP\_input$> should be disabled.
@@ -243,11 +243,11 @@ Therefore a mechanism has to be designed for the association of comments to gram
 
 Listing \ref{lst:ConceptComment_tptp} features an example of a comment in a \ac{TPTP} syntax file. This comment begins with a \textit{Top of Page} line which, in the HTML version of the \ac{TPTP} syntax, contains a hyperlink which leads to the beginning of the syntax file.
 The next line contains a relevant comment.\\
-\begin{lstlisting}[basicstyle=\scriptsize	,caption= Example of a comment in the \ac{TPTP} syntax,label= lst:ConceptComment_tptp]
+\begin{lstlisting}[language=none, basicstyle=\scriptsize	,caption= Example of a comment in the \ac{TPTP} syntax,label= lst:ConceptComment_tptp]
 %----Top of Page---------------------------------------------------------------
 %----TFF formulae.
 <tff_formula>          ::= <tff_logic_formula> | <tff_atom_typing> |
-                           			  <tff_subtype> | <tfx_sequent>
+                           <tff_subtype> | <tfx_sequent>
 \end{lstlisting}
 todo check if listing is handled correctly
 
@@ -296,17 +296,33 @@ comments near the rule they refer to
 associate comment with r
 
 
-The flow diagram in figure \ref{fig:ConceptMaintainingComments} shows the process of matching comments to rules.
-First comment blocks, that are consecutive comment lines (see section \ref{sec:ConceptParserDataStructure}) are split into multiple separate comment blocks by using \textit{Top of Page} lines as separators
-
+The flow chart in figure \ref{fig:ConceptMaintainingComments} shows the process of matching comment blocks, that are consecutive comment lines (see section \ref{sec:ConceptParserDataStructure}),  to rules.
+First, the comment block is split into multiple separate comment blocks by using \textit{Top of Page} lines as separators.
+\begin{itemize}%[noitemsep]
+	\item If this results in no comment blocks the comment block consisted only of one line which was a \textit{Top of Page} line.
+	Then no comment block has to be associated to a rule because \textit{Top of Page} lines are not relevant.
+	\item If this results in one comment block, that means that no \textit{Top of Page} line was present in the comment block and the comment block is associated with the rule after, if the comment block is not at the end of the file.
+	If it is at the end of the file it is associated with the rule before. todo why
+	\item If this results in two comment blocks, one \textit{Top of Page} line was present.
+	Then the comment block before the \textit{Top of Page} line is associated with the rule before when possible.
+	If this comment block is at the beginning of the file it is associated with the rule after.
+	The comment block after the \textit{Top of Page} line is associated with the rule after.
+	If it is at the end of the file it is associated with the rule before.
+\end{itemize}
+The case of three or more comment blocks after splitting the original comment block is not featured in the flow chart.
+This case does not occur in the \ac{TPTP} syntax version 7.3.0.
+Therefore it is not particularly relevant.
+Since it might occur in a future version of the \ac{TPTP} syntax it is handled by merging all comment blocks starting from the second and then following the procedure of two comment blocks in the flow chart in figure \ref{fig:ConceptMaintainingComments}.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=1\textwidth]{images/Concept_maintaining_comments.pdf}
-\caption{Maintaining Comments}
+\caption{Maintaining comments flow chart}
 \label{fig:ConceptMaintainingComments}
 \end{figure}
+todo describe split comment block by top of page
 
+todo explain could use content of comment
 \section{Generation of a sub-syntax}\label{sec:ConceptGenerateReducedGrammar}
 This section covers the concept of how a sub-syntax can be computed from the original syntax.
 The original syntax is represented by a grammar graph (see section \ref{sec:ConceptGraphGeneration}) and the information on what part of the grammar should be extracted is specified in the control file.
