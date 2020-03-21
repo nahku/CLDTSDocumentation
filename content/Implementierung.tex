@@ -212,7 +212,7 @@ The goal is to identify the nonterminal symbols. Therefore it is checked if the 
 \end{algorithm}
 
 \subsection{Removing of blocked productions}
-
+The productions that should be blocked are specified in the control file.  
 Algorithm \ref{sec:remove_blocked_productions}
 \begin{algorithm}[H]
 \caption{Removing blocked productions}
@@ -266,8 +266,30 @@ Algorithm \ref{sec:remove_blocked_productions}
 \section{GUI}\label{sec:GUI}
 Tkinter and PyQt have been evaluated as a basis for the GUI.
 -pyqt offers checkboxes in treeviews
+\subsection{Toggle comments}\label{sec:GUIToggleComments}
+\subsection{GUI}\label{sec:GUI}
 \section{Command-line interface}\label{sec:ImplementationCommandLineInterface}
-For the command-line interface (see section \ref{sec:ConceptCommandLineInterface}) the python module argparse is used.
+For the command-line interface (see section \ref{sec:ConceptCom mandLineInterface}) the python module argparse is used.
+todo more, explain and explain why
+
+Table \ac{tbl:ImplementationCommandLineParameters} provides an overview about the needed command-line arguments. The syntax file location and the control file location has to be specified. Specifying an output path and file name is optional, by default the output filename will be \textit{output.txt}.
+
+todo more
+\begin{table}[H]
+\centering
+\caption{Command-line interface parameters}
+\begin{adjustbox}{width=1\textwidth, center=\textwidth}
+\renewcommand{\arraystretch}{2}
+\begin{tabular}{llll}
+\textbf{Label} & \textbf{Short form} & \textbf{Default} & \textbf{Description}\\\hline
+--grammar & -g & None & \ac{TPTP} syntax file path and filename\\
+--control & -c & None &  Control file path and filename\\
+--output & -o & output.txt & Output file path and filename (optional)
+\end{tabular}
+\end{adjustbox}
+\label{tbl:ImplementationCommandLineParameters}
+\end{table}
+
 -argparse Python offers a library for command-line interfaces.
 -options for path to grammar and control file
 -option for output path
