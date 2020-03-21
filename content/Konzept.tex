@@ -265,15 +265,15 @@ Since it is possible for a nonterminal symbol to be on the right side as well as
 
 Furthermore, the start symbol can have multiple rule types resulting in two start symbols. As it is not possible in the application to have two start symbols, a new start symbol is generated that implies the two original start symbols. 
 
-The following example shows a production rule and the resulting list of children belonging to the node. Each production alternative(REFERENCE) has its own list of children. %This is relevant for checking whether a nonterminal is terminating.
-\begin{verbatim}
+The following example \ref{lst:ConceptGraphGeneration} shows a production rule and the resulting list of children belonging to the node. Each production alternative(REFERENCE) has its own list of children. %This is relevant for checking whether a nonterminal is terminating.
+\begin{lstlisting}[caption= Graph generation,label= lst:ConceptGraphGeneration]
 Production rule: 
 <disjunction>  ::=  <literal> | <disjunction><vline><literal> 
 Output:
 node.value: <disjunction>
 node.ruleType: grammar
 node.children: [[<literal>],[<disjunction>,<vline>,<literal>]]
-\end{verbatim}
+\end{lstlisting}
 
 \section{Control file}\label{sec:ConceptControlFile}
 A format for specifying the desired start symbol and blocked productions has to be developed.
