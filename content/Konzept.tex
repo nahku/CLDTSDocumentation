@@ -401,15 +401,24 @@ For that, three steps must be performed:
 	\item The blocked productions specified in the control file must be disabled and therefore the corresponding transitions must be removed from the grammar graph.
 	\item The remaining reachable part of the grammar must be computed.
 	\item Starting from the still reachable part of the grammar, non terminating productions must be removed.
+	todo check order
 \end{enumerate}
 
 bei tree building temporäres startsymbol nutzen (da mehrere Startsymbole möglich)
 \subsection{Removing of blocked productions}
-
-\subsection{Determination of the remaining reachable productions}  
+-delete the productions that are specified in control file
+\subsection{Determination of the remaining reachable symbols}
+-determine which nonterminal symbols are still reachable, without productions specified in control file
+-starting with start symbol traverse grammar graph
+-
 dynamic programming
-\subsection{Determination of the remaining terminating productions}
-
+-reachble means reachable from start symbol
+-remove non reachable productions
+\subsection{Determination of the remaining terminating symbols}
+-determine terminating symbols
+-start with start symbol
+-traverse through graph and compute terminating symbols
+\section{Output generation}\label{sec:ConceptOutputGeneration}
 \section{GUI}\label{sec:ConceptGUI}
 In this section ...
 The graphical user interface should display the grammar similar to the original language grammar specification file.
@@ -428,7 +437,8 @@ extra:
 
 
 \section{Command-line interface}\label{sec:ConceptCommandLineInterface}
-The goal of the command-line interface is to provide means for convenient automation of sub-syntax extraction. It should take a \ac{TPTP} syntax file and a control file as input and output the resulting sub-syntax. Also basic help information should be accessible over the command-line interface. 
+The goal of the command-line interface is to provide means for convenient automation of sub-syntax extraction. It should take a \ac{TPTP} syntax file and a control file as input and output the resulting sub-syntax. Also basic help information should be accessible over the command-line interface.
+
 
 -command-line interface allows for automation with scripts for repeated tasks
 -basic functionality extract sub-syntax by providing base syntax file and control file, 
