@@ -325,7 +325,8 @@ When there is a \textit{Top of Page} line in between comment lines it generally 
 In listing \ref{lst:ConceptComment_tptp} can be seen that the comment in line 2 refers to the rule after.
 Therefore it would be correct to associate the comment line after the \textit{Top of Page} line to the rule after.
 Also, if there is one \textit{Top of Page} line in between multiple comment lines it is highly probable that the first part of the comment lines before the \textit{Top of Page} line refer to the rule before the comments and that the lines after the \textit{Top of Page} line refer to the rule after the comment lines.
-This scenario can be seen in listing \ref{lst:Comment_split_example}. The \textit{Top of Page} line is in line 28 and the comment lines before refer to the rule before.
+This scenario can be seen in listing \ref{lst:Comment_split_example}.
+The \textit{Top of Page} line is in line 28 and the comment lines before refer to the rule before.
 The comment line after refers to the rule after that line.
 \begin{lstlisting}[language=none, basicstyle=\scriptsize	,caption=Comment lines split by a \textit{Top of Page} line in the \ac{TPTP} syntax,label= lst:Comment_split_example]
 <formula_role>         :== axiom | hypothesis | definition | assumption |
@@ -433,11 +434,40 @@ Selection of a new start symbol and productions that should be possible in the G
 extra:
 -web import
 \subsection{Menu}\label{sec:ConceptGUIMenu}
-\subsection{Rules display}\label{sec:ConceptRulesDisplay}
+The menu of the GUI has to provide multiple operations ...:
 
+\subsubsection{Import operations}
+An operation to import a \ac{TPTP} syntax file has to exist.
+The lastest \ac{TPTP} syntax is provided on the \ac{TPTP} project website \cite{TPTP}.
+
+Providing the option of importing the \ac{TPTP} syntax from the project website in addition to importing a \ac{TPTP} syntax file from storage ensures the possibility of getting the latest version of the \ac{TPTP} syntax.
+On the \ac{TPTP} project website the \ac{TPTP} syntax is stored in a HTML format. This file needs to be downloaded and converted to plain text.
+
+-on import start symbol has to be selected
+
+It would also be convenient if it was possible to import a control file, which would set selections in the GUI according to that control file.
+\subsubsection{Export operations}
+-export reduced grammar
+-export selection as control file -> to not always have to select the same selection or to use in command-line interface
+-
+
+-export <comment> part of grammar additionally to make parser generator work
+
+other operations
+-reduce grammar
+-show/hide comments
+\subsection{Display rules}\label{sec:ConceptRulesDisplay}
+The rules from a \ac{TPTP} syntax need to be displayed in order for the user to select a start symbol and productions that should be blocked when generating a sub-syntax.
+
+-display rules from syntax
+-display enabled disabled rule
+-display comment
+-similar to file for intuitive understanding
+-select start symbol and blocked productions in rule
 
 \section{Command-line interface}\label{sec:ConceptCommandLineInterface}
-The goal of the command-line interface is to provide means for convenient automation of sub-syntax extraction. It should take a \ac{TPTP} syntax file and a control file as input and output the resulting sub-syntax. Also basic help information should be accessible over the command-line interface.
+The goal of the command-line interface is to provide means for convenient automation of sub-syntax extraction. It should take a \ac{TPTP} syntax file and a control file as input and output the resulting sub-syntax. Also basic help information should be accessible over the command-line interface.\\
+This allows to use the software tool in scripts and enables automation for repeated tasks.
 
 
 -command-line interface allows for automation with scripts for repeated tasks
@@ -445,3 +475,4 @@ The goal of the command-line interface is to provide means for convenient automa
 -output sub-syntax with input control file
 -provide basic information with help menu
 -more complex actions like control file generation can more comfortably be done by using gui
+-gui package not needed
