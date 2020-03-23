@@ -246,6 +246,11 @@ todo vor- nachteile
 
 The output of the parser is a list of the rules and the comments from the \ac{TPTP} syntax file.
 \section{Graph generation}\label{sec:ConceptGraphGeneration}
+todo nodes dictionary
+
+todo überarbeiten und genauer schreiben
+Furthermore, the start symbol can have multiple rule types resulting in two start symbols. As it is not possible in the application to have two start symbols, a new start symbol is generated that implies the two original start symbols. 
+
 The \ac{TPTP} syntax, extracted from the \ac{TPTP} syntax file, needs to be stored in a data structure that allows for modification and traversing.
 The data structure that is used is a graph consisting of nodes. 
 Every nonterminal symbol that is on the left side of a production in the \ac{TPTP} syntax is represented by a node and instantiates a defined class "Node" that has the following attributes:
@@ -258,12 +263,10 @@ Every nonterminal symbol that is on the left side of a production in the \ac{TPT
 \item children: list containing all children of a node
 TODO A child is ..
 \end{itemize} 
-
+todo mention nodes
 Starting with the start symbol, the graph is generated recursively. Iterating over each nonterminal symbol that is on the right side of a production rule, the corresponding node is identified. These nodes are then appended to the list of children of the nonterminal on the left side of the rule. The identified children may again have children. This process is repeated until a node has no children because there are only terminal symbols on the right side of the production rule.
 
 Since it is possible for a nonterminal symbol to be on the right side as well as on the left side of the same production rule, a node can also be its own child. To avoid revisiting the same node infinitely, it is checked whether a node already has children so that it will not be visited again. This also improves the performance of the tool as a nonterminal symbol that has already been visited wont be visited again independent of circular dependencies.
-
-Furthermore, the start symbol can have multiple rule types resulting in two start symbols. As it is not possible in the application to have two start symbols, a new start symbol is generated that implies the two original start symbols. 
 
 The following example \ref{lst:ConceptGraphGeneration} shows a production rule and the resulting list of children belonging to the node. Each production alternative(REFERENCE) has its own list of children. %This is relevant for checking whether a nonterminal is terminating.
 \begin{lstlisting}[caption= Graph generation,label= lst:ConceptGraphGeneration]
@@ -393,12 +396,13 @@ Since it might occur in a future version of the \ac{TPTP} syntax it is handled b
 todo describe split comment block by top of page
 
 todo explain could use content of comment
-\section{Generation of a sub-syntax}\label{sec:ConceptGenerateReducedGrammar}
+\section{Extraction of a sub-syntax}\label{sec:ConceptExtractReducedGrammar}
 This section covers the concept of how a sub-syntax can be computed from the original syntax.
 The original syntax is represented by a grammar graph (see section \ref{sec:ConceptGraphGeneration}) and the information on what part of the grammar should be extracted is specified in the control file.
-For that, three steps must be performed:
-
+For that, four steps must be performed:
+todo what
 \begin{enumerate}%[noitemsep]
+	\item The control file has to be parsed, in order to get information on the desired start symbol and which productions should be blocked
 	\item The blocked productions specified in the control file must be disabled and therefore the corresponding transitions must be removed from the grammar graph.
 	\item The remaining reachable part of the grammar must be computed.
 	\item Starting from the still reachable part of the grammar, non terminating productions must be removed.
@@ -406,19 +410,46 @@ For that, three steps must be performed:
 \end{enumerate}
 
 bei tree building temporäres startsymbol nutzen (da mehrere Startsymbole möglich)
-\subsection{Removing of blocked productions}
--delete the productions that are specified in control file
-\subsection{Determination of the remaining reachable symbols}
--determine which nonterminal symbols are still reachable, without productions specified in control file
--starting with start symbol traverse grammar graph
--
+\subsection{Parsing control file}\label{sec:ConceptParsingControlFile}
+The control file provides the necessary information for the extraction of a sub-syntax.
+The format of the control file is described in section \ref{sec:ConceptControlFile}.
+The start symbol is list in the first line.
+Every consecutive line contains a nonterminal symbol, the corresponding rule type symbol, and the indexes of the productions that should be blocked separated by comma.
+The start symbol will be relevant in determining the remaining reachable part of the grammar (section \ref{sec:ConceptDerterminingRemainingReachable}) whereas the information on the productions that should be blocked will be needed in the next section.
+\subsection{Removing of blocked productions}\label{sec:ConceptRemovingBlockedProductions}
+The productions that are to be blocked have to be removed from the grammar graph before determining which symbols remain reachable.
+
+-delete the productions that are specified in the control file
+-go through all nodes of which the nonterminal name is in the control file
+-delete the productions that are indexed in the control file
+-(see section before) and delete corresponding children
+\subsection{Determination of the remaining reachable symbols}\label{sec:ConceptDerterminingRemainingReachable}
+After blocking the desired productions it has to be determined which part of the grammar still remains reachable.
+This can be done, by starting at the start symbol, going through all possible productions from there and at the end, removing all symbols, that have not been reached.
+Theses symbols are useless since they can not be reached.\\
+The todo ?easiest way? to compute the remaining reachable grammar is to generate a new grammar graph (see section \ref{sec:ConceptGraphGeneration}). The resulting graph will contain all reachable productions.
+
+-determine which nonterminal symbols are still reachable, after removing productions specified in control file
+-determine remaining reachable by generating new graph
+-generate new graph again starting with temporary start symbol
+
+-resulting graph only includes reachable part of the grammar
+
+dynamic programming
+\subsection{Determination of the remaining terminating symbols}\label{sec:ConceptDerterminingRemainingReachable}
+After all reachable symbols have been determined, teh last step of extracting a sub-syntax is to determine and remove the non-terminating productions and symbols.
+Non-terminating productions are productions in which at least one non-terminal symbol is non-terminating.
+todo check reference
+-after reachable grammar has been determined
+-last step is to remove non terminating symbold
 dynamic programming
 -reachble means reachable from start symbol
 -remove non reachable productions
-\subsection{Determination of the remaining terminating symbols}
 -determine terminating symbols
 -start with start symbol
 -traverse through graph and compute terminating symbols
+
+todo sources
 \section{Output generation}\label{sec:ConceptOutputGeneration}
 \section{GUI}\label{sec:ConceptGUI}
 In this section ...
@@ -465,6 +496,7 @@ The rules from a \ac{TPTP} syntax need to be displayed in order for the user to 
 -similar to file for intuitive understanding
 -select start symbol and blocked productions in rule
 
+-todo mention check
 \section{Command-line interface}\label{sec:ConceptCommandLineInterface}
 The goal of the command-line interface is to provide means for convenient automation of sub-syntax extraction. It should take a \ac{TPTP} syntax file and a control file as input and output the resulting sub-syntax. Also basic help information should be accessible over the command-line interface.\\
 This allows to use the software tool in scripts and enables automation for repeated tasks.
@@ -476,3 +508,9 @@ This allows to use the software tool in scripts and enables automation for repea
 -provide basic information with help menu
 -more complex actions like control file generation can more comfortably be done by using gui
 -gui package not needed
+
+
+
+
+
+todo count rules
