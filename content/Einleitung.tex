@@ -7,16 +7,17 @@ Computer languages are likely to grow over time as they are getting more complex
 On the one hand that leads to a more powerful language capable of handling a wide range of use cases.
 On the other hand increased complexity makes a language harder to learn and to use. Especially new users are discouraged to implement tools in that language.\\
 One example of a language that has been expanding is the \ac{TPTP} language for automated theorem proving. Over time
-various forms of classic logics ranging from \ac{CNF} to \ac{TFF} have been included in and extended the \ac{TPTP} language. \\
-In this report, we describe a tool that is able to automatically extract sub-languages from the \ac{TPTP} language. Sub-languages of interest are for example \ac{CNF} or \ac{FOF} and are specified by the user using the application.\\
+various forms of classical logics ranging from \ac{CNF} to \ac{TFF} have been included in and extended the \ac{TPTP} language. \\
+This report describes a tool that is able to automatically extract sub-languages from the \ac{TPTP} language. Sub-languages of interest are for example \ac{CNF} or \ac{FOF} and are specified by the user using the application.\\
 The goal is maintaining the expressiveness of the whole \ac{TPTP} language but allowing users to extract a sub-syntax to simplify the language for their particular use case. \\
-Therefore, the developed tool processes a given grammar of a language in multiple steps.
+The developed tool processes a given grammar of a language in multiple steps.
 First it parses the formal grammar into a structured internal representation using \ac{PLY}.
 The processed grammar is presented to the user via a GUI. The user can select a start symbol and disable productions that should not be included in the desired sub-syntax.
 Using the users input, the developed application extracts the sub-syntax from the \ac{TPTP} syntax and presents the sub-syntax in the same format as the original \ac{TPTP} syntax.
-Also, comments present in the \ac{TPTP} syntax should be maintained and associated with the corresponing rules in the reduced syntax.
+Also, comments present in the \ac{TPTP} syntax are maintained and associated with the corresponing rules in the reduced syntax.
 \section{Structure of the Report}\label{sec:IntroductionStructure}
-The report is structured into six chapters. The first chapter introduces the problem of complex computer languages and the goal of this report that is extracting smaller sub-languages.
+%The report is structured into six chapters. 
+The first chapter introduces the problem of complex computer languages and the goal of this report that is extracting smaller sub-languages.
 The second chapter provides necessary background information including the \ac{TPTP} language, formal grammars, lexing and parsing. By means of the background information, the third chapter outlines the concept of the developed tool.
 Based on this, the implementation of the tool is featured in the fourth chapter.
 The fifth chapter presents an evaluation of the effectiveness? of the tool. Considering the evaluation, the sixth chapter sums up the results of the developed tool, compares the results to the defined goals in first chapter and offers an outlook for possible future research.

@@ -111,25 +111,20 @@ Following standard \ac {BNF}, nonterminal symbols are enclosed by the $<$ and $>
 The outcome of this are 13 defined tokens that are explained in the following.
 
 \textit{Expressions} can either be of the type grammar, token, strict or macro. 
-It is defined as a nonterminal symbol followed by the production symbol itself (::=,:==,:::,...). 
+They are defined as a nonterminal symbol followed by the production symbol itself (::=,:==,:::,...). 
 The nonterminal symbol and the production are merged to a single token and are not identified as two
 tokens to avoid ambiguity while parsing.
-If not it would be difficult for the parer to determine whether the non terminal symbol that describes the rule is the start of a new rule or does still belong to the previous rule because as mentioned rules can cover multiple lines.
+If not it would be difficult for the parser to determine whether the non terminal symbol that describes the rule is the start of a new rule or does still belong to the previous rule because as mentioned rules can cover multiple lines.
 
 \subsubsection{Nonterminal symbol}
-A \textit{nonterminal} symbol starts with \textless and ends with \textgreater . In between there is any
+A \textit{nonterminal} symbol starts with \textless  and ends with \textgreater . In between there is any
 arbitrary sequence of numbers, underscores and small or capital letters.
 
 \subsubsection{Terminal symbol}
 \textit{terminal symbol}
 
 \subsubsection{Comment}
-A \textit{comment} is identified by the lexer as a start of a new line followed by a percentage
-sign followed by an arbitrary character and ends with a newline.
-Because the
-percentage sign is also part of the terminal symbols, it is necessary to check whether
-the percentage sign is the first character of a newline because the terminal symbol is not because the
-percentage symbol when used as terminal symbol is embedded in square brackets.
+A \textit{comment} is identified by the lexer as a start of a new line followed by a percentage sign followed by an arbitrary character and ends with a newline. Because the percentage sign is also part of the terminal symbols, it is necessary to check whether the percentage sign is the first character of a new line. The percentage symbol when used as terminal symbol is embedded in square brackets and can never be the first character of a new line.
 
 \subsubsection{Meta symbol}
 \textit{Meta symbols} include open and close parentheses "( )", open and close square
