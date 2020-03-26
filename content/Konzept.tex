@@ -18,8 +18,8 @@ Furthermore, the tool is able to import a control file and extract a sub-syntax 
 The new sub-syntax can be exported to .txt format.
 Also, comments referring to the remaining productions are kept and comments referring to productions that were discarded are not be included in the sub-syntax.
 The tool also provides a console interface. This interface accepts a \ac{TPTP} syntax file and a control file and output the sub-syntax described in the control file. It is possible to specify the output path and filename.
-\section{Overview}\label{sec:ConceptOverview}
 
+\section{Overview}\label{sec:ConceptOverview}
 Figure \ref{fig:ConceptProcessSublanguage} outlines the procedure of extracting a sublanguage of the \ac{TPTP} language.
 The first task is to import the \ac{TPTP} syntax file and extract the tokens inside that file using the lexer.
 The next phase is for the parser to create a data structure from the tokens, also checking if the syntax in the syntax file was correct.
@@ -177,6 +177,13 @@ The terminal symbol data type has one attribute, which is the name of the termin
 \subsubsection{Nonterminal symbol}
 Analogue to the terminal symbol data type, the nonterminal symbol also has its name as an attribute.
 
+todo describe diagram
+\begin{figure}[H]
+\centering
+\includegraphics[width=.8\textwidth]{images/Concept_uml_data_types_symbols.pdf}
+\caption{Symbol data type UML class diagram}
+\label{fig:ConceptSymbolsClassDiagram}
+\end{figure}
 %Composite data types
 
 \subsubsection{Rules}
@@ -191,15 +198,47 @@ The nonterminal symbol name which is produced is <$tff \textunderscore formula$>
 \begin{lstlisting}[basicstyle=\scriptsize	,caption= Grammar expression,label= lst:ConceptParserGrammarExpression]
 <tff_formula>          ::= <tff_logic_formula> | <tff_atom_typing
 \end{lstlisting}
+
+
+todo describe diagram
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{images/Concept_uml_data_types_rules.pdf}
+\caption{Rule data type UML class diagram}
+\label{fig:ConceptRulesClassDiagram}
+\end{figure}
+
 \subsubsection{Comment block}
 A comment block is a list of consecutive comment lines.
 
+todo describe diagram
+\begin{figure}[H]
+\centering
+\includegraphics[width=.5\textwidth]{images/Concept_uml_data_types_comment_block.pdf}
+\caption{Comment block data type UML class diagram}
+\label{fig:ConceptCommentBlockClassDiagram}
+\end{figure}
+
 \subsubsection{Production element}
 A production element is either a terminal or nonterminal symbol. Additionally a production symbol has a production property.
+\begin{figure}[H]
+\centering
+\includegraphics[width=.8\textwidth]{images/Concept_uml_data_types_production_element.pdf}
+\caption{Production element data type UML class diagram}
+\label{fig:ConceptProductionElementClassDiagram}
+\end{figure}
 
 \subsubsection{Production property}
 The production property can take one of three values and denotes whether a production is optional, can be repeated any number of times or does not have any special property.
 In the original \ac{TPTP} syntax file this was represented by square brackets or the repetition symbol.
+
+todo describe diagram
+\begin{figure}[H]
+\centering
+\includegraphics[width=.4\textwidth]{images/Concept_uml_data_types_production_property.pdf}
+\caption{Production property data type UML class diagram}
+\label{fig:ConceptProductionPropertyClassDiagram}
+\end{figure}
 
 \subsubsection{Production}
 A production is one production alternative specified in any expression.
@@ -207,17 +246,39 @@ It consists of a list of production elements and has a production property. Prod
 Therefore the list can also contain further productions
 
 -show example
+\begin{figure}[H]
+\centering
+\includegraphics[width=.5\textwidth]{images/Concept_uml_data_types_production.pdf}
+\caption{Production data type UML class diagram}
+\label{fig:ConceptSymbolsClassDiagram}
+\end{figure}
 
 \subsubsection{Productions list}
 A productions list contains a list of productions where each production is one alternative in the description of an expression.
 
+
 \subsubsection{XOR Productions list}
 The XOR productions list represents multiple alternatives enclosed by parentheses. It contains a list of the alternate productions.
  
+ todo describe diagram
+\begin{figure}[H]
+\centering
+\includegraphics[width=.6\textwidth]{images/Concept_uml_data_types_productions_list.pdf}
+\caption{Productions list data type UML class diagram}
+\label{fig:ConceptProductionsListClassDiagram}
+\end{figure}
+
 \subsubsection{Grammar list}
 The grammar list is the top level data structure. It contains a list of all elements that were in the \ac{TPTP} syntax file.
 This includes any type of rules (grammar, token, strict and macro) and comment blocks.
 
+todo describe diagram
+\begin{figure}[H]
+\centering
+\includegraphics[width=.5\textwidth]{images/Concept_uml_data_types_grammar_list.pdf}
+\caption{Grammar list data type UML class diagram}
+\label{fig:ConceptGrammarListClassDiagram}
+\end{figure}
 \subsection{Production rules}
 When using the \ac{PLY} parser generator, production rules have to be defined.
 The rules describe how the tokens are to be processed.
