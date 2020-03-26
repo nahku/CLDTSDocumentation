@@ -12,10 +12,10 @@ TODO more detailed
 
 \section{Formal languages}\label{sec:BackgroundFormalLanguage}
 
-A formal language describes a set of words belonging to a language. These words are built over the alphabet of the language.
+A formal language is a set of words over an alphabet.
 
 An alphabet is a finite, nonempty set of symbols usually represented by $\sum$. An example is the binary alphabet $\sum = \{0,1\}$.
-A string is a finite sequence of symbols from some alphabet. For example the string $101$ is a string from the binary alphabet $\sum = \{0,1\}$.
+A string is a finite sequence of symbols from some alphabet. For example the string $101$ is a string over the binary alphabet $\sum = \{0,1\}$.
 A language is set of strings. If $\sum$ is an alphabet, then    $L(\sum)$ is a language over $\sum$. \cite{AutomataTheory.2007}
 - Vocabulary
 
@@ -29,16 +29,16 @@ A language is set of strings. If $\sum$ is an alphabet, then    $L(\sum)$ is a l
 %The same principle can be also be applied to represent a set of numbers.
 %However, using not clearly defined intervals e.g. [0-b] is not common as it has different interpretations by different lexer generators and thus can lead to mistakes. \cite{Mogensen.2017}
 
-A regular expression is an algebraic description of a regular/formal language. While finite automata also describe languages, automata cannot denote languages. Regular expressions declare strings that are part of the language. \cite{AutomataTheory.2007} 
+A regular expression is an algebraic description of a regular/formal language. Regular expressions declare strings that are part of the language. \cite{AutomataTheory.2007} 
 For example the regular expression \textbf{10+1*} denotes the language consisting of a single 1 followed by a single 0 or any number of 1's. 
 
 
 \subsection{Formal grammars}\label{sec:BackgroundGrammar}
-Unlike regular expressions, grammars not only describe a language but also define a structure among the words of a language.\\
+Unlike regular expressions, grammars not only describe a language but also define a structure of the words of a language.\\
 A grammar is a list of rules that defines the relationships among tokens \cite{LexYacc.1992}.
 These rules are also referred to as production rules.
 Given a start symbol, this symbol can be replaced by other symbols using the production rules.
-Using a recursive notation, production rules define derivations for symbols. The derived symbols can then once again be replaced until the derivation is a terminal symbol.  
+Using a recursive notation, production rules define derivations for words. The derived symbols can then once again be replaced until the derivation is a terminal symbol.  
 Terminal symbols describe symbols that cannot be further derived. The alphabet of the described language is build by the set of terminal symbols.
 Nonterminal symbols however can be further derived and build  merged with the terminal symbols the vocabulary of a grammar. Nonterminal symbols and terminal symbols are disjoint. 
 \\
@@ -48,10 +48,10 @@ Nonterminal symbols however can be further derived and build  merged with the te
 
 \subsubsection{Reduced grammars}
 Grammars are called reduced if each nonterminal symbol is terminating and reachable \cite{Cremers75}. \\
-Given the set of terminal symbols $\sum$, a nonterminal symbol $\xi$ is called terminating if there are productions $\xi \underrightarrow{*} z$ so that $\xi$ can be derivated to $z$ and $z \epsilon \sum$*. \\
-In other words, a nonterminal symbol $\xi$ is terminating if there exist production rules so that  $\xi$ can be replaced by terminal symbols. \cite{Cremers75}\\
+Given the set of terminal symbols $\sum$, a nonterminal symbol $\xi$ is called terminating if there are productions $\xi \underrightarrow{*} z$ so that $z$ can be derived from $\xi$ and $z \epsilon \sum$*. \\
+In other words, a nonterminal symbol $\xi$ is terminating if there exist production rules so that  $\xi$ can be replaced by a string of terminal symbols. \cite{Cremers75}\\
 Given the set of terminal symbols $\sum$ and the start symbol $S$, a nonterminal symbol $\xi$ is called reachable if there are production rules $S \underrightarrow{*} u\xi v$ so that $S$ can be derivated to $u\xi v$ and $u,v \epsilon \sum$*. \\
-In other words, a nonterminal symbol $\xi$ is reachable if there exist production rules so that the start symbol can be replaced by a symbol containing $\xi$. \cite{Cremers75}
+In other words, a nonterminal symbol $\xi$ is reachable if there exist production rules so that the start symbol can be replaced by a word containing $\xi$. \cite{Cremers75}
 
 todo beispiel
 \section{\acf{BNF}}\label{sec:BackgroundBNF}
@@ -72,7 +72,7 @@ The \ac{EBNF} extends the \ac{BNF} by with following rules:
 \cite{EBNF.1977}
 
 \section{Lexing}\label{sec:BackgroundLexer}
-Lexing or a so called lexical analysis is the division of input into units so called tokens \cite{LexYacc.1992}. Tokens are for example variable names or keywords.
+Lexing or a so-called lexical analysis is the division of input into units called tokens \cite{LexYacc.1992}. Tokens are for example variable names or keywords.
 The input is a string containing a sequence of characters, the ouput is a sequence of tokens. 
 Afterwards, the ouput can be used for further processing like parsing.
 A lexer needs to distinguish different types of tokens and furthermore decide which token to use if there are multiple ones that fit the input. \cite{Mogensen.2017}\\
@@ -81,12 +81,12 @@ However, this would be inefficient because in the worst case the input needs to 
 More suitable is building a single automata that tests each token simultaneously.
 This automata can be build by combining all regular expressions by disjunction.
 Each final state from each regular expression is marked to know which token has been identified.\\
-Potentially final states overlap as a consequence of one token being a subset of another token.
-For solving such conflicts a precedence of tokens can be declared. Usually the token that is being defined first has a higher precedence and thus will be chosen if multiple tokens fit the input. \cite{Mogensen.2017}\\
-Furthermore, a lexer is separating the input in order to divide it into tokens.
-Per convention the longest input that matches any token is chosen. \cite{Mogensen.2017}
+Potentially final states overlap as a consequence of one token being a substring of another token. \\
+For solving such conflicts a lexer is separating the input in order to divide it into tokens.
+Per convention the lexer chooses the longest input that matches any token. \cite{Mogensen.2017} \\
+Furthermore, a precedence of tokens can be declared. Usually the token that is being defined first has a higher precedence and thus will be chosen if possible token matches have the same length. \cite{Mogensen.2017}\\
 
-Instead of writing a lexer manually it is often generated by a lexer generator. A lexer generator takes a specification of tokens as input and generates the lexer automatically. 
+Besides of writing a lexer manually it can also be generated by a lexer generator. A lexer generator takes a specification of tokens as input and generates the lexer automatically. 
 The specification is usually written using regular expressions. 
 
 %Input: description of tokens - lex specification, regular expressions]\cite{LexYacc.1992}
@@ -101,7 +101,7 @@ The specification is usually written using regular expressions.
 \section{Parsing}\label{sec:BackgroundParser}
 The aim of parsing is to establish a relationship among tokens generated by a lexer \cite{LexYacc.1992}. For doing so, a parser builds a syntax tree out of the generated tokens \cite{Mogensen.2017}.\\
 Similar to lexers, parsers can be generated automatically.
-Therefore a parser generator takes as input a description of the relationship among tokens in form of a formal grammar (see ). The output is the generated parser. \cite{LexYacc.1992}
+A parser generator takes as input a description of the relationship among tokens in form of a formal grammar (see ). The output is the generated parser. \cite{LexYacc.1992}
 
 During the syntax analysis a parser takes a string of tokens and forms a syntax tree with this construct by finding the matching derivations. The matching derivation can be found by using different approaches for examble random guessing (predictive parsing) or LR parsing.
 Input: description of grammar \cite{LexYacc.1992}
