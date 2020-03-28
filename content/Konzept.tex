@@ -111,20 +111,25 @@ Following standard \ac {BNF}, nonterminal symbols are enclosed by the $<$ and $>
 The outcome of this are 13 defined tokens that are explained in the following.
 
 \textit{Expressions} can either be of the type grammar, token, strict or macro. 
-They are defined as a nonterminal symbol followed by the production symbol itself (::=,:==,:::,...). 
+It is defined as a nonterminal symbol followed by the production symbol itself (::=,:==,:::,...). 
 The nonterminal symbol and the production are merged to a single token and are not identified as two
 tokens to avoid ambiguity while parsing.
-If not it would be difficult for the parser to determine whether the non terminal symbol that describes the rule is the start of a new rule or does still belong to the previous rule because as mentioned rules can cover multiple lines.
+If not it would be difficult for the parer to determine whether the non terminal symbol that describes the rule is the start of a new rule or does still belong to the previous rule because as mentioned rules can cover multiple lines.
 
 \subsubsection{Nonterminal symbol}
-A \textit{nonterminal} symbol starts with \textless  and ends with \textgreater . In between there is any
+A \textit{nonterminal} symbol starts with \textless and ends with \textgreater . In between there is any
 arbitrary sequence of numbers, underscores and small or capital letters.
 
 \subsubsection{Terminal symbol}
 \textit{terminal symbol}
 
 \subsubsection{Comment}
-A \textit{comment} is identified by the lexer as a start of a new line followed by a percentage sign followed by an arbitrary character and ends with a newline. Because the percentage sign is also part of the terminal symbols, it is necessary to check whether the percentage sign is the first character of a new line. The percentage symbol when used as terminal symbol is embedded in square brackets and can never be the first character of a new line.
+A \textit{comment} is identified by the lexer as a start of a new line followed by a percentage
+sign followed by an arbitrary character and ends with a newline.
+Because the
+percentage sign is also part of the terminal symbols, it is necessary to check whether
+the percentage sign is the first character of a newline because the terminal symbol is not because the
+percentage symbol when used as terminal symbol is embedded in square brackets.
 
 \subsubsection{Meta symbol}
 \textit{Meta symbols} include open and close parentheses "( )", open and close square
@@ -443,6 +448,7 @@ Since it might occur in a future version of the \ac{TPTP} syntax it is handled b
 todo describe split comment block by top of page
 
 todo explain could use content of comment
+
 \section{Extraction of a sub-syntax}\label{sec:ConceptExtractReducedGrammar}
 This section covers the concept of how a sub-syntax can be computed from the original syntax.
 The original syntax is represented by a grammar graph (see section \ref{sec:ConceptGraphGeneration}) and the information on what part of the grammar should be extracted is specified in the control file.
@@ -457,47 +463,49 @@ todo what
 \end{enumerate}
 
 bei tree building temporäres startsymbol nutzen (da mehrere Startsymbole möglich)
+
 \subsection{Parsing control file}\label{sec:ConceptParsingControlFile}
 The control file provides the necessary information for the extraction of a sub-syntax.
 The format of the control file is described in section \ref{sec:ConceptControlFile}.
 The start symbol is list in the first line.
 Every consecutive line contains a nonterminal symbol, the corresponding rule type symbol, and the indexes of the productions that should be blocked separated by comma.
 The start symbol will be relevant in determining the remaining reachable part of the grammar (section \ref{sec:ConceptDerterminingRemainingReachable}) whereas the information on the productions that should be blocked will be needed in the next section.
+
 \subsection{Removing of blocked productions}\label{sec:ConceptRemovingBlockedProductions}
 The productions that are to be blocked have to be removed from the grammar graph before determining which symbols remain reachable.
-
+For that, t
+deleting the productions from the productions list and also the corresponding elements from the childrens list.
 -delete the productions that are specified in the control file
 -go through all nodes of which the nonterminal name is in the control file
 -delete the productions that are indexed in the control file
 -(see section before) and delete corresponding children
 \subsection{Determination of the remaining reachable symbols}\label{sec:ConceptDerterminingRemainingReachable}
-After blocking the desired productions it has to be determined which part of the grammar still remains reachable.
-This can be done, by starting at the start symbol, going through all possible productions from there and at the end, removing all symbols, that have not been reached.
-Theses symbols are useless since they can not be reached.\\
-The todo ?easiest way? to compute the remaining reachable grammar is to generate a new grammar graph (see section \ref{sec:ConceptGraphGeneration}). The resulting graph will contain all reachable productions.
-
--determine which nonterminal symbols are still reachable, after removing productions specified in control file
--determine remaining reachable by generating new graph
--generate new graph again starting with temporary start symbol
-
--resulting graph only includes reachable part of the grammar
+After removing the productions specified in the control file it has to be determined which part of the grammar still remains reachable.
+This can be done by generating a new grammar graph starting from desired the start symbol.
+When generating the new grammar graph, starting from the start symbol all reachable parts of the grammar will be added to the grammar graph (see section \ref{sec:ConceptGraphGeneration}). All nodes that are not part of the new grammar graph are not reachable and can be removed.
 
 dynamic programming
+
 \subsection{Determination of the remaining terminating symbols}\label{sec:ConceptDerterminingRemainingReachable}
-After all reachable symbols have been determined, teh last step of extracting a sub-syntax is to determine and remove the non-terminating productions and symbols.
+After all reachable symbols have been determined, the last step of extracting a sub-syntax is to determine and remove the non-terminating productions and symbols.
 Non-terminating productions are productions in which at least one non-terminal symbol is non-terminating.
+
 todo check reference
--after reachable grammar has been determined
--last step is to remove non terminating symbold
+
 dynamic programming
 -reachble means reachable from start symbol
 -remove non reachable productions
 -determine terminating symbols
 -start with start symbol
 -traverse through graph and compute terminating symbols
+- store visited nodes to avoid infinite loops 
 
 todo sources
 \section{Output generation}\label{sec:ConceptOutputGeneration}
+- all grammars are represented by a grammar graph which has been generated
+- iterate over nodes and get strings
+
+-recursively build strings
 \section{GUI}\label{sec:ConceptGUI}
 In this section ...
 The graphical user interface should display the grammar similar to the original language grammar specification file.
