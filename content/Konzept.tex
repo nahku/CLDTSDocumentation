@@ -298,7 +298,7 @@ This format is relatively easy to parse and also enables users to specify their 
 pro: Specifying which production should be blocked, and not the ones should be kept, typically results in a significantly smaller file.
 Storing the indexes of the productions that should be blocked offers that in case productions are renamed the control file would still be valid. On the other hand if productions are added or deleted from the original \ac{TPTP} syntax, the control file may have to be updated.
 
-\section{Maintainig comments}\label{sec:ConceptMaintainingComments}
+\section{Maintaining comments}\label{sec:ConceptMaintainingComments}
 In the \ac{TPTP} syntax there are comments providing supplemental information about the language and its symbols and rules.
 When generating a reduced grammar maintaining comments is desired. This means that comments from the original language specification should be associated with the rule they belong to and if the rule is still present in the reduced grammar, also the comment should be.\\
 Therefore a mechanism has to be designed for the association of comments to grammar rules.
