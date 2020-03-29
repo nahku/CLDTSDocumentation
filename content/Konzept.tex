@@ -18,8 +18,8 @@ Furthermore, the tool is able to import a control file and extract a sub-syntax 
 The new sub-syntax can be exported to .txt format.
 Also, comments referring to the remaining productions are kept and comments referring to productions that were discarded are not be included in the sub-syntax.
 The tool also provides a console interface. This interface accepts a \ac{TPTP} syntax file and a control file and output the sub-syntax described in the control file. It is possible to specify the output path and filename.
-\section{Overview}\label{sec:ConceptOverview}
 
+\section{Overview}\label{sec:ConceptOverview}
 Figure \ref{fig:ConceptProcessSublanguage} outlines the procedure of extracting a sublanguage of the \ac{TPTP} language.
 The first task is to import the \ac{TPTP} syntax file and extract the tokens inside that file using the lexer.
 The next phase is for the parser to create a data structure from the tokens, also checking if the syntax in the syntax file was correct.
@@ -111,20 +111,25 @@ Following standard \ac {BNF}, nonterminal symbols are enclosed by the $<$ and $>
 The outcome of this are 13 defined tokens that are explained in the following.
 
 \textit{Expressions} can either be of the type grammar, token, strict or macro. 
-They are defined as a nonterminal symbol followed by the production symbol itself (::=,:==,:::,...). 
+It is defined as a nonterminal symbol followed by the production symbol itself (::=,:==,:::,...). 
 The nonterminal symbol and the production are merged to a single token and are not identified as two
 tokens to avoid ambiguity while parsing.
-If not it would be difficult for the parser to determine whether the non terminal symbol that describes the rule is the start of a new rule or does still belong to the previous rule because as mentioned rules can cover multiple lines.
+If not it would be difficult for the parer to determine whether the non terminal symbol that describes the rule is the start of a new rule or does still belong to the previous rule because as mentioned rules can cover multiple lines.
 
 \subsubsection{Nonterminal symbol}
-A \textit{nonterminal} symbol starts with \textless  and ends with \textgreater . In between there is any
+A \textit{nonterminal} symbol starts with \textless and ends with \textgreater . In between there is any
 arbitrary sequence of numbers, underscores and small or capital letters.
 
 \subsubsection{Terminal symbol}
 \textit{terminal symbol}
 
 \subsubsection{Comment}
-A \textit{comment} is identified by the lexer as a start of a new line followed by a percentage sign followed by an arbitrary character and ends with a newline. Because the percentage sign is also part of the terminal symbols, it is necessary to check whether the percentage sign is the first character of a new line. The percentage symbol when used as terminal symbol is embedded in square brackets and can never be the first character of a new line.
+A \textit{comment} is identified by the lexer as a start of a new line followed by a percentage
+sign followed by an arbitrary character and ends with a newline.
+Because the
+percentage sign is also part of the terminal symbols, it is necessary to check whether
+the percentage sign is the first character of a newline because the terminal symbol is not because the
+percentage symbol when used as terminal symbol is embedded in square brackets.
 
 \subsubsection{Meta symbol}
 \textit{Meta symbols} include open and close parentheses "( )", open and close square
@@ -177,6 +182,13 @@ The terminal symbol data type has one attribute, which is the name of the termin
 \subsubsection{Nonterminal symbol}
 Analogue to the terminal symbol data type, the nonterminal symbol also has its name as an attribute.
 
+todo describe diagram
+\begin{figure}[H]
+\centering
+\includegraphics[width=.8\textwidth]{images/Concept_uml_data_types_symbols.pdf}
+\caption{Symbol data type UML class diagram}
+\label{fig:ConceptSymbolsClassDiagram}
+\end{figure}
 %Composite data types
 
 \subsubsection{Rules}
@@ -191,15 +203,47 @@ The nonterminal symbol name which is produced is <$tff \textunderscore formula$>
 \begin{lstlisting}[basicstyle=\scriptsize	,caption= Grammar expression,label= lst:ConceptParserGrammarExpression]
 <tff_formula>          ::= <tff_logic_formula> | <tff_atom_typing
 \end{lstlisting}
+
+
+todo describe diagram
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{images/Concept_uml_data_types_rules.pdf}
+\caption{Rule data type UML class diagram}
+\label{fig:ConceptRulesClassDiagram}
+\end{figure}
+
 \subsubsection{Comment block}
 A comment block is a list of consecutive comment lines.
 
+todo describe diagram
+\begin{figure}[H]
+\centering
+\includegraphics[width=.5\textwidth]{images/Concept_uml_data_types_comment_block.pdf}
+\caption{Comment block data type UML class diagram}
+\label{fig:ConceptCommentBlockClassDiagram}
+\end{figure}
+
 \subsubsection{Production element}
 A production element is either a terminal or nonterminal symbol. Additionally a production symbol has a production property.
+\begin{figure}[H]
+\centering
+\includegraphics[width=.8\textwidth]{images/Concept_uml_data_types_production_element.pdf}
+\caption{Production element data type UML class diagram}
+\label{fig:ConceptProductionElementClassDiagram}
+\end{figure}
 
 \subsubsection{Production property}
 The production property can take one of three values and denotes whether a production is optional, can be repeated any number of times or does not have any special property.
 In the original \ac{TPTP} syntax file this was represented by square brackets or the repetition symbol.
+
+todo describe diagram
+\begin{figure}[H]
+\centering
+\includegraphics[width=.4\textwidth]{images/Concept_uml_data_types_production_property.pdf}
+\caption{Production property data type UML class diagram}
+\label{fig:ConceptProductionPropertyClassDiagram}
+\end{figure}
 
 \subsubsection{Production}
 A production is one production alternative specified in any expression.
@@ -207,17 +251,39 @@ It consists of a list of production elements and has a production property. Prod
 Therefore the list can also contain further productions
 
 -show example
+\begin{figure}[H]
+\centering
+\includegraphics[width=.5\textwidth]{images/Concept_uml_data_types_production.pdf}
+\caption{Production data type UML class diagram}
+\label{fig:ConceptSymbolsClassDiagram}
+\end{figure}
 
 \subsubsection{Productions list}
 A productions list contains a list of productions where each production is one alternative in the description of an expression.
 
+
 \subsubsection{XOR Productions list}
 The XOR productions list represents multiple alternatives enclosed by parentheses. It contains a list of the alternate productions.
  
+ todo describe diagram
+\begin{figure}[H]
+\centering
+\includegraphics[width=.6\textwidth]{images/Concept_uml_data_types_productions_list.pdf}
+\caption{Productions list data type UML class diagram}
+\label{fig:ConceptProductionsListClassDiagram}
+\end{figure}
+
 \subsubsection{Grammar list}
 The grammar list is the top level data structure. It contains a list of all elements that were in the \ac{TPTP} syntax file.
 This includes any type of rules (grammar, token, strict and macro) and comment blocks.
 
+todo describe diagram
+\begin{figure}[H]
+\centering
+\includegraphics[width=.5\textwidth]{images/Concept_uml_data_types_grammar_list.pdf}
+\caption{Grammar list data type UML class diagram}
+\label{fig:ConceptGrammarListClassDiagram}
+\end{figure}
 \subsection{Production rules}
 When using the \ac{PLY} parser generator, production rules have to be defined.
 The rules describe how the tokens are to be processed.
@@ -382,6 +448,7 @@ Since it might occur in a future version of the \ac{TPTP} syntax it is handled b
 todo describe split comment block by top of page
 
 todo explain could use content of comment
+
 \section{Extraction of a sub-syntax}\label{sec:ConceptExtractReducedGrammar}
 This section covers the concept of how a sub-syntax can be computed from the original syntax.
 The original syntax is represented by a grammar graph (see section \ref{sec:ConceptGraphGeneration}) and the information on what part of the grammar should be extracted is specified in the control file.
@@ -396,47 +463,49 @@ todo what
 \end{enumerate}
 
 bei tree building temporäres startsymbol nutzen (da mehrere Startsymbole möglich)
+
 \subsection{Parsing control file}\label{sec:ConceptParsingControlFile}
 The control file provides the necessary information for the extraction of a sub-syntax.
 The format of the control file is described in section \ref{sec:ConceptControlFile}.
 The start symbol is list in the first line.
 Every consecutive line contains a nonterminal symbol, the corresponding rule type symbol, and the indexes of the productions that should be blocked separated by comma.
 The start symbol will be relevant in determining the remaining reachable part of the grammar (section \ref{sec:ConceptDerterminingRemainingReachable}) whereas the information on the productions that should be blocked will be needed in the next section.
+
 \subsection{Removing of blocked productions}\label{sec:ConceptRemovingBlockedProductions}
 The productions that are to be blocked have to be removed from the grammar graph before determining which symbols remain reachable.
-
+For that, t
+deleting the productions from the productions list and also the corresponding elements from the childrens list.
 -delete the productions that are specified in the control file
 -go through all nodes of which the nonterminal name is in the control file
 -delete the productions that are indexed in the control file
 -(see section before) and delete corresponding children
 \subsection{Determination of the remaining reachable symbols}\label{sec:ConceptDerterminingRemainingReachable}
-After blocking the desired productions it has to be determined which part of the grammar still remains reachable.
-This can be done, by starting at the start symbol, going through all possible productions from there and at the end, removing all symbols, that have not been reached.
-Theses symbols are useless since they can not be reached.\\
-The todo ?easiest way? to compute the remaining reachable grammar is to generate a new grammar graph (see section \ref{sec:ConceptGraphGeneration}). The resulting graph will contain all reachable productions.
-
--determine which nonterminal symbols are still reachable, after removing productions specified in control file
--determine remaining reachable by generating new graph
--generate new graph again starting with temporary start symbol
-
--resulting graph only includes reachable part of the grammar
+After removing the productions specified in the control file it has to be determined which part of the grammar still remains reachable.
+This can be done by generating a new grammar graph starting from desired the start symbol.
+When generating the new grammar graph, starting from the start symbol all reachable parts of the grammar will be added to the grammar graph (see section \ref{sec:ConceptGraphGeneration}). All nodes that are not part of the new grammar graph are not reachable and can be removed.
 
 dynamic programming
+
 \subsection{Determination of the remaining terminating symbols}\label{sec:ConceptDerterminingRemainingReachable}
-After all reachable symbols have been determined, teh last step of extracting a sub-syntax is to determine and remove the non-terminating productions and symbols.
+After all reachable symbols have been determined, the last step of extracting a sub-syntax is to determine and remove the non-terminating productions and symbols.
 Non-terminating productions are productions in which at least one non-terminal symbol is non-terminating.
+
 todo check reference
--after reachable grammar has been determined
--last step is to remove non terminating symbold
+
 dynamic programming
 -reachble means reachable from start symbol
 -remove non reachable productions
 -determine terminating symbols
 -start with start symbol
 -traverse through graph and compute terminating symbols
+- store visited nodes to avoid infinite loops 
 
 todo sources
 \section{Output generation}\label{sec:ConceptOutputGeneration}
+- all grammars are represented by a grammar graph which has been generated
+- iterate over nodes and get strings
+
+-recursively build strings
 \section{GUI}\label{sec:ConceptGUI}
 In this section ...
 The graphical user interface should display the grammar similar to the original language grammar specification file.
