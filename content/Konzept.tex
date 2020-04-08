@@ -507,51 +507,64 @@ todo sources
 
 -recursively build strings
 \section{GUI}\label{sec:ConceptGUI}
-In this section ...
-The graphical user interface should display the grammar similar to the original language grammar specification file.
-It should also be possible to make selections in the GUI instead of having to use a control file. 
--show rules similar to file
-Selection of a new start symbol and productions that should be possible in the GUI and also with the import of a control file.
+The graphical user interface is built using PyQt. Advantages of PyQT are that it offers a treeview that is used for displaying the grammar. In comparison to the standard Python library Tkinter PyQt offers checkboxes in treeviews \cite{Tkinter} that are used for selecting blocked productions.
 
--show extracted grammar
--export exported grammar
--include + toggle comments -> algorithm
--import/export control file
-extra:
--web import
-\subsection{Menu}\label{sec:ConceptGUIMenu}
-The menu of the GUI has to provide multiple operations ...:
+The menu of the GUI consists of four submenus.
 
-\subsubsection{Import operations}
-An operation to import a \ac{TPTP} syntax file has to exist.
-The lastest \ac{TPTP} syntax is provided on the \ac{TPTP} project website \cite{TPTP}.
+The $Import$ menu that can be seen in figure \ref{fig:import} provides the option to import a TPTP syntax file in txt file format from local storage or to import the latest TPTP syntax version from the TPTP website.
+The TPTP syntax on the TPTP project website is stored in a HTML format.
+This file is downloaded and converted to plain text using the Beautiful Soup Python library \cite{BeautifulSoup}.
 
-Providing the option of importing the \ac{TPTP} syntax from the project website in addition to importing a \ac{TPTP} syntax file from storage ensures the possibility of getting the latest version of the \ac{TPTP} syntax.
-On the \ac{TPTP} project website the \ac{TPTP} syntax is stored in a HTML format. This file needs to be downloaded and converted to plain text.
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{images/import.png}
+\caption{Import menu}
+\label{fig:import}
+\end{figure}
 
--on import start symbol has to be selected
+After selecting a file for import a start symbol needs to be selected.
+Starting with the start symbol a grammar graph is generated and the corresponding text displayed.
+Each rule in the TPTP grammar is a top element of the treeview and can be expanded to show the productions alternatives.
+Right of the nonterminals name the rule type is displayed.
+Comments that have been assigned to a rule are also displayed. An example of the imported TPTP grammar is shown in figure \ref{fig:gui}.
 
-It would also be convenient if it was possible to import a control file, which would set selections in the GUI according to that control file.
-\subsubsection{Export operations}
--export reduced grammar
--export selection as control file -> to not always have to select the same selection or to use in command-line interface
--
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{images/gui.png}
+\caption{GUI}
+\label{fig:gui}
+\end{figure}
 
--export <comment> part of grammar additionally to make parser generator work
+The $View$ menu, shown in figure \ref{fig:view}, provides the possibility to toggle the display of comments to improve readability.
 
-other operations
--reduce grammar
--show/hide comments
-\subsection{Display rules}\label{sec:ConceptRulesDisplay}
-The rules from a \ac{TPTP} syntax need to be displayed in order for the user to select a start symbol and productions that should be blocked when generating a sub-syntax.
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{images/view.png}
+\caption{View menu}
+\label{fig:view}
+\end{figure}
 
--display rules from syntax
--display enabled disabled rule
--display comment
--similar to file for intuitive understanding
--select start symbol and blocked productions in rule
+In order to extract a sub grammar the user has to choose a new start symbol by checking one of the check boxes left of the nonterminal symbols name. By default the start symbol that has been selected after importing the grammar is selected. For selecting blocked productions the user has the choice of on the one hand expanding the rules and uncheck the checkboxes belonging to the productions the user wishes to block. On the other hand the user can import a control file. If the user imports a control file the checkboxes are set accordingly.
 
--todo mention check
+In the $Reduce$ menu that can be seen in figure \ref{fig:reduce} the user can reduce the grammar according to his selections. The grammar is reduced and the reduced grammar is displayed afterwards. The rules maintain the same order as in the original TPTP grammar.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{images/reduce.png}
+\caption{Reduce menu}
+\label{fig:reduce}
+\end{figure}
+
+In the $Save$ menu that is shown in figure \ref{fig:save} the user can reduce the grammar based on his GUI selection or an imported control file. The difference between the reduce option and the save menu is that the save menu saves the generated reduced grammar to local storage and does not display it. If the user wishes that the $\textless comments\textgreater$, which is necessary for using the automated parser generator, production is including in the reduced grammar the user has the option to save the reduced grammar with the $\textless comment\textgreater$ production.
+The $Save$ menu also gives the user the option to generate a control file based on his GUI selection. This is particularly helpful if the users is reducing the same grammar multiple times. This way he can use the import control file option later instead of selecting the blocked productions in the GUI tool.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{images/save.png}
+\caption{Save menu}
+\label{fig:save}
+\end{figure}
+
 \section{Command-line interface}\label{sec:ConceptCommandLineInterface}
 The goal of the command-line interface is to provide means for convenient automation of sub-syntax extraction. It should take a \ac{TPTP} syntax file and a control file as input and output the resulting sub-syntax. Also basic help information should be accessible over the command-line interface.\\
 This allows to use the software tool in scripts and enables automation for repeated tasks.
