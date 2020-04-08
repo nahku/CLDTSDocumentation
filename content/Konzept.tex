@@ -74,16 +74,40 @@ The lexer is responsible for extracting tokens from the TPTP language grammar sp
 Therefore the TPTP language grammar specification needs to be analysed in order to find elementary tokens and regular expressions, that precisely describe these
 tokens. 
 
-\subsubsection{Token identification}\label{sec:ConceptElementaryTokens}
-The syntax of the \ac{TPTP} language is specified in a modified \ac{EBNF} \ref{VS06}.
-Therefore there are deviations from standard \ac{EBNF} (see \ref{sec:BackgroundBNF}) that need to be analysed to specify elementary tokens.
-The standard \ac{EBNF} only uses one production symbol ($"::="$).
-In the \ac{TPTP} syntax additional production symbols have been added.
-The following table \ref{tbl:ConceptTPTPProductionSymbols} contains the production symbols used in the \ac{TPTP} syntax, that also have to be recognized by the lexer.
+%\subsubsection{Token identification}\label{sec:ConceptElementaryTokens}
+%The syntax of the \ac{TPTP} language is specified in a modified \ac{EBNF} \ref{VS06}.
+%Therefore there are deviations from standard \ac{EBNF} (see \ref{sec:BackgroundBNF}) that need to be analysed to specify elementary tokens.
+%The standard \ac{EBNF} only uses one production symbol ($"::="$).
+%In the \ac{TPTP} syntax additional production symbols have been added.
+%The following table \ref{tbl:ConceptTPTPProductionSymbols} contains the production symbols used in the \ac{TPTP} syntax, that also have to be recognized by the lexer.
+%\begin{table}[H]
+%\centering
+%\renewcommand{\arraystretch}{1}
+%\caption{\ac{TPTP} language production symbols \cite{VS06}}
+%\begin{tabular}{ll}
+%\textbf{Symbol} & \textbf{Rule Type}\\\hline
+%::= & Grammar\\
+%:== & Strict\\
+%::- & Token\\
+%::: & Macro\\
+%\end{tabular}
+%\label{tbl:ConceptTPTPProductionSymbols}
+%\end{table}
+%
+%Another deviation from \ac{EBNF} is that repetition is not denoted by surrounding curly brackets, but with a trailing $*$ symbol.\\
+%Curly brackets have no special meaning in the \ac{TPTP} syntax and can be treated as terminal symbols.\\
+%The meaning of the alternative symbol $|$ is unchanged and also parentheses and square brackets can appear as meta symbols.\\
+%Also, there are line comments in the \ac{TPTP} syntax.
+%A comment starts with the $\%$ symbol at the beginning of a line and ends at the end of that line.\\
+%Following standard \ac {BNF}, nonterminal symbols are enclosed by the $<$ and $>$ symbol and terminal symbols are written without any special marking.
+
+The standard extended BNF only uses one production symbol ($"::="$).
+In the TPTP syntax the standard production symbol is used for syntactic rules.
+Additional symbols for semantic, lexical and character-macro rules have been added.
+The following table contains the production symbols for grammar (syntactic rules), strict (semantic rules), token (lexical rules) and macro (character-macro rules) rule types used in the TPTP syntax.
 \begin{table}[H]
 \centering
 \renewcommand{\arraystretch}{1}
-\caption{\ac{TPTP} language production symbols \cite{VS06}}
 \begin{tabular}{ll}
 \textbf{Symbol} & \textbf{Rule Type}\\\hline
 ::= & Grammar\\
@@ -94,47 +118,36 @@ The following table \ref{tbl:ConceptTPTPProductionSymbols} contains the producti
 \label{tbl:ConceptTPTPProductionSymbols}
 \end{table}
 
-Another deviation from \ac{EBNF} is that repetition is not denoted by surrounding curly brackets, but with a trailing $*$ symbol.\\
-Curly brackets have no special meaning in the \ac{TPTP} syntax and can be treated as terminal symbols.\\
-The meaning of the alternative symbol $|$ is unchanged and also parentheses and square brackets can appear as meta symbols.\\
-Also, there are line comments in the \ac{TPTP} syntax.
-A comment starts with the $\%$ symbol at the beginning of a line and ends at the end of that line.\\
-Following standard \ac {BNF}, nonterminal symbols are enclosed by the $<$ and $>$ symbol and terminal symbols are written without any special marking.
 
-%todo regular expressions
- 
-%todo explain token nt symbol + production rule bc. of parser
+%The identified token types will be explained in the following.
+The following paragraph introduces the tokens that are recognized by the lexer. Tokens are written bold.
 
+Following standard BNF, \textbf{nonterminal} symbols are enclosed by the \textless\; and \textgreater \;symbol.
+In between there can be any arbitrary sequence of alphanumerical characters and underscores.
 
+A \textbf{terminal symbol} does not have any special notation and ?is matched if none of the other tokens are matched?.
+%Every sequence of characters that does not start with \textless\; and does not end with \textgreater is a \textit{terminal symbol}.
 
-%This section introduces the token, their regular expression are described in chapter \ref{sec:ImplementationLexer}.
-The outcome of this are 13 defined tokens that are explained in the following.
+There are four \textbf{expression} token types (one for each rule type).
+\textbf{Expressions} are defined as a nonterminal symbol followed by a production symbol (::= for grammar, ::- for token, :== for strict, ::: for macro rule type).
+The nonterminal symbol and the following production symbol are selected to be a single token and are not identified as two separate tokens to clearly identify the start of a new rule and therefore avoid ambiguity while parsing.
+The example below features two tokens, a grammar expression and a nonterminal symbol.
+\begin{verbatim}
+<formula_role>         ::= <lower_word>
+\end{verbatim}
 
-\textit{Expressions} can either be of the type grammar, token, strict or macro. 
-It is defined as a nonterminal symbol followed by the production symbol itself (::=,:==,:::,...). 
-The nonterminal symbol and the production are merged to a single token and are not identified as two
-tokens to avoid ambiguity while parsing.
-If not it would be difficult for the parer to determine whether the non terminal symbol that describes the rule is the start of a new rule or does still belong to the previous rule because as mentioned rules can cover multiple lines.
+A \textbf{comment} is defined as the start of a new line, a percentage sign, arbitrary characters and ends with a newline character.
+The percentage sign when used as terminal symbol is embedded in square brackets and can therefore never be the first character of a new line.
 
-\subsubsection{Nonterminal symbol}
-A \textit{nonterminal} symbol starts with \textless and ends with \textgreater . In between there is any
-arbitrary sequence of numbers, underscores and small or capital letters.
+Additional tokens are the meta-symbols including \textbf{open} $"("$ and \textbf{close parentheses} $")"$, \textbf{open} $"["$ and \textbf{close square brackets} $"]"$, asterisks $"*"$ called \textbf{repetition symbols} and vertical bars $"\mid"$ called \textbf{alternative symbols}.
 
-\subsubsection{Terminal symbol}
-\textit{terminal symbol}
+In PLY it is possible to declare characters that should be ignored. This means that the characters would be ignored in the input stream of the lexer. However, if one of those characters are part of a regular expression they are not ignored and will be used for token matching. In this project tabs, white spaces and newline characters are ignored as they do not have any special meaning other than providing better readability. With exception of the comment token, the information about newline characters is not relevant due to rules being defined over multiple lines, which can be seen in the example below.
+\begin{verbatim}
+<annotated_formula>  ::=    <thf_annotated> | <tff_annotated> |
+                            <tcf_annotated> | <fof_annotated> |
+                            <cnf_annotated> | <tpi_annotated>
+\end{verbatim}
 
-\subsubsection{Comment}
-A \textit{comment} is identified by the lexer as a start of a new line followed by a percentage
-sign followed by an arbitrary character and ends with a newline.
-Because the
-percentage sign is also part of the terminal symbols, it is necessary to check whether
-the percentage sign is the first character of a newline because the terminal symbol is not because the
-percentage symbol when used as terminal symbol is embedded in square brackets.
-
-\subsubsection{Meta symbol}
-\textit{Meta symbols} include open and close parentheses "( )", open and close square
-brackets "[ ]", asterisks "*"and vertical bars "|".
-They are recognized by the symbol itself and have a special meaning for the parser as they impact the to be build data structures.
 
 \section{Parser}\label{sec:ConceptParser}
 The parser takes the tokens from the lexer as input and creates a data structure that represents the structure of the \ac{TPTP} syntax.
@@ -302,37 +315,61 @@ todo vor- nachteile
 
 The output of the parser is a list of the rules and the comments from the \ac{TPTP} syntax file.
 \section{Graph generation}\label{sec:ConceptGraphGeneration}
-todo nodes dictionary
+After parsing the TPTP grammar is stored in a grammar list. The grammar list data structure does not allow traversing which is why a new data structure is introduced that allows for modification and traversing.
+The data structure that is used is a graph representing the grammar.
 
-todo überarbeiten und genauer schreiben
-Furthermore, the start symbol can have multiple rule types resulting in two start symbols. As it is not possible in the application to have two start symbols, a new start symbol is generated that implies the two original start symbols. 
-
-The \ac{TPTP} syntax, extracted from the \ac{TPTP} syntax file, needs to be stored in a data structure that allows for modification and traversing.
-The data structure that is used is a graph consisting of nodes. 
-Every nonterminal symbol that is on the left side of a production in the \ac{TPTP} syntax is represented by a node and instantiates a defined class "Node" that has the following attributes:
+The nonterminal symbols in the TPTP syntax are represented by a node class that has the following attributes:
 \begin{itemize}
 \item value: name of nonterminal symbol
-\item productions list: productions list of nonterminal symbol (REFERENCE)
-\item rule type:  rule type of nonterminal symbol
+\item productions list: productions list of nonterminal symbol (todo created by the parser)
+\item rule type: rule type of nonterminal symbol
 \item comment block: list of comments belonging to the nonterminal symbol
 \item position: position of the production in the input file
-\item children: list containing all children of a node
-TODO A child is ..
-\end{itemize} 
-todo mention nodes
-Starting with the start symbol, the graph is generated recursively. Iterating over each nonterminal symbol that is on the right side of a production rule, the corresponding node is identified. These nodes are then appended to the list of children of the nonterminal on the left side of the rule. The identified children may again have children. This process is repeated until a node has no children because there are only terminal symbols on the right side of the production rule.
+\item children: nested list, containing lists of all nonterminating symbols per production
+\end{itemize}
+
+Before generating the graph, a dictionary is created.
+This dictionary contains nodes constructed from the grammar list output by the parser that contains rules and comments.
+While constructing the dictionary, comments in the grammar list are associated to nodes using a heuristic that is described in section \ref{sec:MaintainingComments}.
+The combination of the nodes' value and rule type form the unique key for each node.
+The dictionary provides an efficient way accessing them in order to build the grammar graph and also during the next step of sub-syntax generation.
+
+Also, a new temporary start symbol is introduced.
+This is necessary because one nonterminal symbol in the TPTP syntax can be mapped to multiple nodes.
+The example below shows the productions for the nonterminal symbol $\textless formula\textunderscore role\textgreater$.
+Since this nonterminal symbol has multiple types of rules one node will be created for each rule type.
+
+\begin{verbatim}
+<formula_role>         ::= <lower_word>
+<formula_role>         :== axiom | hypothesis | definition | assumption |
+                           lemma | theorem | corollary | conjecture |
+                           negated_conjecture | plain | type |
+                           fi_domain | fi_functors | fi_predicates | unknown
+\end{verbatim}
+
+If a nonterminal symbol that has multiple rule types is selected as the desired start symbol multiple nodes would represent that start symbol and therefore it would not be possible to select one node as the starting point of the graph generation.
+To solve this problem, the temporary start symbol is introduced before graph generation.
+This start symbol produces the start symbol that the user specified and is used as a starting point for the graph generation.
+If the before mentioned nonterminal symbol $\textless formula\textunderscore role\textgreater$ would be selected as start symbol by the user a temporary start symbol representing the rule
+\begin{verbatim}
+<start_symbol>         ::= <formula_role>
+\end{verbatim}
+would be introduced.
+This ensures that only one node is representing the start symbol, that is used for graph generation.
+
+Starting with the temporary start symbol, the graph is generated recursively. Iterating over each nonterminal symbol in the productions list of the start symbol, the corresponding nodes are identified. These nodes are then appended to the list of children of the start symbol. The identified children may again have children. This process is repeated until a node has no children because there are only terminal symbols in the productions list of a nonterminal symbol.
 
 Since it is possible for a nonterminal symbol to be on the right side as well as on the left side of the same production rule, a node can also be its own child. To avoid revisiting the same node infinitely, it is checked whether a node already has children so that it will not be visited again. This also improves the performance of the tool as a nonterminal symbol that has already been visited wont be visited again independent of circular dependencies.
 
-The following example \ref{lst:ConceptGraphGeneration} shows a production rule and the resulting list of children belonging to the node. Each production alternative(REFERENCE) has its own list of children. %This is relevant for checking whether a nonterminal is terminating.
-\begin{lstlisting}[caption= Graph generation,label= lst:ConceptGraphGeneration]
-Production rule: 
-<disjunction>  ::=  <literal> | <disjunction><vline><literal> 
+The following example shows a production rule and the resulting list of children belonging to the node. Each production alternative has its own list of children. %This is relevant for checking whether a nonterminal is terminating.
+\begin{verbatim}
+Production rule:
+<disjunction>  ::=  <literal> | <disjunction><vline><literal>
 Output:
 node.value: <disjunction>
 node.ruleType: grammar
 node.children: [[<literal>],[<disjunction>,<vline>,<literal>]]
-\end{lstlisting}
+\end{verbatim}
 
 \section{Control file}\label{sec:ConceptControlFile}
 In the following section a format for specifying the desired start symbol and blocked productions is described.
