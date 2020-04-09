@@ -1,4 +1,4 @@
- %!TEX root = ../dokumentation.tex
+%!TEX root = ../dokumentation.tex
 
 %TODO: Einleitungen überarbeiten
 \chapter{Concept}\label{cha:Concept}
@@ -487,64 +487,74 @@ todo describe split comment block by top of page
 todo explain could use content of comment
 
 \section{Extraction of a sub-syntax}\label{sec:ConceptExtractReducedGrammar}
-This section covers the concept of how a sub-syntax can be computed from the original syntax.
-The original syntax is represented by a grammar graph (see section \ref{sec:ConceptGraphGeneration}) and the information on what part of the grammar should be extracted is specified in the control file.
-For that, four steps must be performed:
-todo what
+This section covers the concept of how a sub-syntax is computed from the original syntax.
+The original syntax is represented by a grammar graph (see section \ref{sec:ConceptGraphGeneration}) and the information on what part of the syntax to extract is described in a control file.
+To extract a sub-syntax from the original grammar graph, four steps must be performed:
 \begin{enumerate}%[noitemsep]
 	\item The control file has to be parsed, in order to get information on the desired start symbol and which productions should be blocked
 	\item The blocked productions specified in the control file must be disabled and therefore the corresponding transitions must be removed from the grammar graph.
 	\item The remaining reachable part of the grammar must be computed.
 	\item Starting from the still reachable part of the grammar, non terminating productions must be removed.
-	todo check order
 \end{enumerate}
-
-bei tree building temporäres startsymbol nutzen (da mehrere Startsymbole möglich)
-
-\subsection{Parsing control file}\label{sec:ConceptParsingControlFile}
+\subsection{Parsing a control file}\label{sec:ConceptParsingControlFile}
 The control file provides the necessary information for the extraction of a sub-syntax.
-The format of the control file is described in section \ref{sec:ConceptControlFile}.
-The start symbol is list in the first line.
+The format of the control file is described in section \ref{sec:ConceptControlFile}. 
+The start symbol is listed in the first line.
 Every consecutive line contains a nonterminal symbol, the corresponding rule type symbol, and the indexes of the productions that should be blocked separated by comma.
 The start symbol will be relevant in determining the remaining reachable part of the grammar (section \ref{sec:ConceptDerterminingRemainingReachable}) whereas the information on the productions that should be blocked will be needed in the next section.
 
 \subsection{Removing of blocked productions}\label{sec:ConceptRemovingBlockedProductions}
-The productions that are to be blocked have to be removed from the grammar graph before determining which symbols remain reachable.
-For that, t
-deleting the productions from the productions list and also the corresponding elements from the childrens list.
--delete the productions that are specified in the control file
--go through all nodes of which the nonterminal name is in the control file
--delete the productions that are indexed in the control file
--(see section before) and delete corresponding children
+In the control file, for each nonterminal symbol, whose productions should be modified, its name, rule type and the indexes of the productions that should be blocked are listed.
+From all nodes, that are adressed (by nonterminal symbol name and rule type), the indexed productions are removed.
+This includes deleting the corresponding element from the productions list and from the children list.
+
 \subsection{Determination of the remaining reachable symbols}\label{sec:ConceptDerterminingRemainingReachable}
 After removing the productions specified in the control file it has to be determined which part of the grammar still remains reachable.
-This can be done by generating a new grammar graph starting from desired the start symbol.
-When generating the new grammar graph, starting from the start symbol all reachable parts of the grammar will be added to the grammar graph (see section \ref{sec:ConceptGraphGeneration}). All nodes that are not part of the new grammar graph are not reachable and can be removed.
-
-dynamic programming
+This is done by generating a new grammar graph starting from desired the start symbol.
+When generating the new grammar graph, all from the start symbol reachable parts of the grammar will be added to the new grammar graph (see section \ref{sec:ConceptGraphGeneration}).
+All nodes that are not part of the new grammar graph are not reachable and can therefore be removed.
 
 \subsection{Determination of the remaining terminating symbols}\label{sec:ConceptDerterminingRemainingReachable}
 After all reachable symbols have been determined, the last step of extracting a sub-syntax is to determine and remove the non-terminating productions and symbols.
-Non-terminating productions are productions in which at least one non-terminal symbol is non-terminating.
+Non-terminating productions are productions in which at least one nonterminal symbol is non-terminating.\\
 
-todo check reference
+The terminating symbols can be determined recursively using dynamic programming techniques.
+The goal is to determine for each nonterminal symbol if it derives a terminating symbol. Only then it is a useful symbol since it is reachable and derives a terminating symbol todo reference
+Starting at the start symbol, the grammar graph is traversed. 
 
-dynamic programming
--reachble means reachable from start symbol
--remove non reachable productions
--determine terminating symbols
 -start with start symbol
 -traverse through graph and compute terminating symbols
-- store visited nodes to avoid infinite loops 
+- store visited nodes to avoid infinite loops
 
-todo sources
 \section{Output generation}\label{sec:ConceptOutputGeneration}
+-create output string from grammar graph
 - all grammars are represented by a grammar graph which has been generated
 - iterate over nodes and get strings
-
 -recursively build strings
+-maintain order of rules
+
+
+
+-automated parser generator 
+-comment part of grammar not reachable
+-parser generation will result in error when comment definition not there
+-solution:
+
+1 -to be tested -make comment reachable
+2 -provide option to add comment part to grammar output, even though it is not reachable
 \section{GUI}\label{sec:ConceptGUI}
 The graphical user interface is built using PyQt. Advantages of PyQT are that it offers a treeview that is used for displaying the grammar. In comparison to the standard Python library Tkinter PyQt offers checkboxes in treeviews \cite{Tkinter} that are used for selecting blocked productions.
+
+todo
+In this section ...
+ 
+-Tkinter and PyQt have been evaluated
+-Tikinter does not offer a kind of table view with checkboxes
+-which PyQt offers natively
+The graphical user interface should display the grammar similar to the original language grammar specification file.
+It should also be possible to make selections in the GUI instead of having to use a control file. 
+-show rules similar to file
+Selection of a new start symbol and productions that should be possible in the GUI and also with the import of a control file.
 
 The menu of the GUI consists of four submenus.
 
@@ -603,19 +613,33 @@ The $Save$ menu also gives the user the option to generate a control file based 
 \end{figure}
 
 \section{Command-line interface}\label{sec:ConceptCommandLineInterface}
-The goal of the command-line interface is to provide means for convenient automation of sub-syntax extraction. It should take a \ac{TPTP} syntax file and a control file as input and output the resulting sub-syntax. Also basic help information should be accessible over the command-line interface.\\
-This allows to use the software tool in scripts and enables automation for repeated tasks.
+The goal of the command-line interface is to provide the means for convenient automation of sub-syntax extraction.
+It takes a \ac{TPTP} syntax file and a control file as input and outputs the resulting sub-syntax.
+Also basic help information is also accessible over the command-line interface.\\
+Table \ref{tbl:ImplementationCommandLineParameters} provides an overview about the command-line arguments.
+The syntax file location and the control file location has to be specified.
+Specifying an output path and file name is optional, by default the output filename will be \textit{output.txt}.
+Additionally, the help description can be opend by using the \textit{-h} option.
+\begin{table}[H]
+\centering
+\caption{Command-line interface parameters}
+\begin{adjustbox}{width=1\textwidth, center=\textwidth}
+\renewcommand{\arraystretch}{2}
+\begin{tabular}{llll}
+\textbf{Name} & \textbf{Short form} & \textbf{Default} & \textbf{Description}\\\hline
+-{}-grammar & -g & None & \ac{TPTP} syntax file path and filename\\
+-{}-control & -c & None &  Control file path and filename\\
+-{}-output & -o & output.txt & Output file path and filename (optional)
+\end{tabular}
+\end{adjustbox}
+\label{tbl:ImplementationCommandLineParameters}
+\end{table}
+
+The implementation of the command-line interface is described in section \ref{sec:sec:ImplementationCommandLineInterface}
 
 
--command-line interface allows for automation with scripts for repeated tasks
--basic functionality extract sub-syntax by providing base syntax file and control file, 
--output sub-syntax with input control file
--provide basic information with help menu
+ 
 -more complex actions like control file generation can more comfortably be done by using gui
 -gui package not needed
-
-
-
-
 
 todo count rules

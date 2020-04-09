@@ -426,6 +426,9 @@ rekursion
 \EndFor
 \end{algorithmic}
 \end{algorithm}
+
+\section{Output generation}\label{sec:ConceptOutputGeneration}
+
 \section{GUI}\label{sec:ImplementationGUI}
 Tkinter and PyQt have been evaluated as a basis for the GUI.
 -pyqt offers checkboxes in treeviews
@@ -442,32 +445,10 @@ Tkinter and PyQt have been evaluated as a basis for the GUI.
 \subsection{Import control file}\label{sec:ImplementationGUIImportControlFile}
 \subsection{Import \ac{TPTP} syntax from the internet}\label{sec:GUI}
 \section{Command-line interface}\label{sec:ImplementationCommandLineInterface}
-For the command-line interface (see section \ref{sec:ConceptCommandLineInterface}) the python module argparse is used.
-todo more, explain and explain why
-
-Table \ref{tbl:ImplementationCommandLineParameters} provides an overview about the needed command-line arguments.
-The syntax file location and the control file location has to be specified.
-Specifying an output path and file name is optional, by default the output filename will be \textit{output.txt}.\\
-Additionally, the help description can be opend by using the \textit{-h} option
-\begin{table}[H]
-\centering
-\caption{Command-line interface parameters}
-\begin{adjustbox}{width=1\textwidth, center=\textwidth}
-\renewcommand{\arraystretch}{2}
-\begin{tabular}{llll}
-\textbf{Name} & \textbf{Short form} & \textbf{Default} & \textbf{Description}\\\hline
--{}-grammar & -g & None & \ac{TPTP} syntax file path and filename\\
--{}-control & -c & None &  Control file path and filename\\
--{}-output & -o & output.txt & Output file path and filename (optional)
-\end{tabular}
-\end{adjustbox}
-\label{tbl:ImplementationCommandLineParameters}
-\end{table}
-
 With the argparse module a command-line parser object can be created and parameters can be added to that object.
-In the first line of \ref{lst:ImplementationArgparseParserConfiguration} the command-line parser object is created with a description.
-Lines two to four contatin the specification of the accepted arguments.
-In addition to the name and short form of the name, the type, a help message, and wether the parameter is optional or not can be specified.
+In the first line of listing \ref{lst:ImplementationArgparseParserConfiguration} the command-line parser object is created with a description.
+Lines two to four contain the specification of the accepted arguments.
+In addition to the name and short form of the name, the type, a help message, and whether the parameter is optional or not can be specified.
 Default values for arguments can also be specified.
 If no default value is specified and if the argument is not passed it will have the value \textit{None}.
 Argparse automatically checks the given conditions, for example if a required argument is not given and displays an error message if that is the case.
@@ -481,7 +462,6 @@ self.argument_parser.add_argument('-o', '--output', metavar='', type=str, requir
 Argparse will also automatically create the help output by using the descriptions provided when configuring the argument parser.
 
 
--argparse Python offers a library for command-line interfaces.
 -options for path to grammar and control file
 -option for output path
 
