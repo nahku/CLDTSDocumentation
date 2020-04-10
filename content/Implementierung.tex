@@ -124,14 +124,12 @@ The four expressions are the expression token followed by their productions list
 \end{align*}
 
 Productions list and xor productions list imply either a production or a productions list alternative symbol production.
-
 \begin{align*}
-	productions\;list\; \rightarrow\; &production \\
-               &\mid productions\;list\;\;\textbf{alternative symbol} \;production \\ \\                   
-	xor\;productions\;list\; \rightarrow\; &production \\
-               &\mid xor\;productions\;list\;\;\textbf{alternative symbol}\;production 
+        productions\;list\; \rightarrow\; &production \\
+               &\mid productions\;list\;\;\textbf{alternative symbol} \;production \\ \\                  
+        xor\;productions\;list\; \rightarrow\; &production \\
+               &\mid xor\;productions\;list\;\;\textbf{alternative symbol}\;production
 \end{align*}
-
 T symbol production is either a t symbol or a t symbol/repetition symbol/ alternative symbol embedded in square brackets.
 
 \begin{align*}
@@ -452,11 +450,14 @@ In addition to the name and short form of the name, the type, a help message, an
 Default values for arguments can also be specified.
 If no default value is specified and if the argument is not passed it will have the value \textit{None}.
 Argparse automatically checks the given conditions, for example if a required argument is not given and displays an error message if that is the case.
+
+todo listing describe last argument
 \begin{lstlisting}[language=Python, basicstyle=\scriptsize	,caption= Argparse command-line parser configuration,label= lst:ImplementationArgparseParserConfiguration]
 self.argument_parser = argparse.ArgumentParser(description='Extract sub-syntax using TPTP syntax file and a control file')
 self.argument_parser.add_argument('-g', '--grammar', metavar='', type=str, required=True, help='path of the TPTP syntax file')
 self.argument_parser.add_argument('-c', '--control', metavar='', type=str, required=True, help='path of the control file')
 self.argument_parser.add_argument('-o', '--output', metavar='', type=str, required=False, help='optional output file name (default output.txt)', default= "output.txt")
+self.argument_parser.add_argument('-ec', action='store_true', help="flag - include external comment syntax")
 \end{lstlisting}
 
 Argparse will also automatically create the help output by using the descriptions provided when configuring the argument parser.

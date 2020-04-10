@@ -111,8 +111,21 @@ Output: parser \cite{LexYacc.1992}
 parser takes inputs and searches for production where input is on the right side of a production rule and then replaces it by the left side
 -top down (predictive parsing):
 parser takes input and searches for production where input is on the left side of a production rule
+\section{Lex and Yacc}\label{sec:BackgroundLexYacc}
+Lex
+-specify lexer by regular expressions
+-Lex compiler generates code from input in file lex.yy.c
+(p.140)
+Yacc
+-transforms yacc specification to c file y.tab.c
+-y.tab.c represens LALR parser
+(p. 287)
+\cite{Aho.2007}
 
+-automated parser generator creates lex and yacc specifications and generated files from \ac{TPTP} syntax
 \section{Python}\label{sec:BackgroundPython}
+todo why python
+
 \subsection{PLY}\label{sec:BackgroundPythonPLY}
 
 \acf{PLY} \cite{PLY} is an implementation of lex and yacc in python.
