@@ -527,13 +527,44 @@ Starting at the start symbol, the grammar graph is traversed.
 - store visited nodes to avoid infinite loops
 
 \section{Output generation}\label{sec:ConceptOutputGeneration}
--create output string from grammar graph
-- all grammars are represented by a grammar graph which has been generated
-- iterate over nodes and get strings
--recursively build strings
--maintain order of rules
-\subsection{Create output from grammar graph}\label{sec:ConceptOutputGrammarGraph}
+Internally in the software tool a syntax is represented by a grammar graph.
+To make sub-syntaxes represented by a grammar graph usable they have to be converted to the original form of a \ac{TPTP} syntax file. This process is described in the following subsection.
 
+\subsection{Create output from grammar graph}\label{sec:ConceptOutputGrammarGraph}
+There are three steps necessary in order for 
+\begin{figure}[H]
+\tikzstyle{decision} = [ diamond, draw, fill=blue!10, text width=4.5em, text badly centered, node distance=2cm, inner sep-0pt]  
+\tikzstyle{block} = [ rectangle, draw, fill=blue!10, text width=10em, text badly centered, rounded corners, minimum height=4em]  
+\tikzstyle{line} = [ draw, -latex']  
+\tikzstyle{terminator} = [rectangle, draw, fill=blue!10, text width=10em, text badly centered, rounded corners, minimum height=4em]  
+\begin{center}
+\begin{tikzpicture}[node distance=5.5cm, auto]  
+  \node [terminator]  (traverse)  {Traverse grammar graph and get nodes strings and positions};  
+  \node [block, right of=traverse]  (order) {Order nodes strings by positions};  
+  \node [terminator, right of=order] (store) {Store ordered nodes strings in file}; 
+
+  \path [line] (traverse)  -- (order);  
+  \path [line] (order) -- (store);  
+\end{tikzpicture}
+\end{center}
+\caption{Procedure of generating a Syntax string representation from the grammar graph}
+\label{fig:ConceptOutputGrammarGraphProcedure}
+\end{figure}
+- iterate over nodes and get string representation of nodes with node position
+- store node string with position
+- order node strings by position
+
+
+- print to file
+-recursive
+
+- each node represents rule of certain rule type with possibly multiple production alternatives
+
+-recursively build strings
+
+-maintain order of rules
+
+-temporary start symbol pos -1 to not print
 
 \subsection{Automated parser generator compatibility}\label{sec:ConceptAutomatedParserGenerator}
 

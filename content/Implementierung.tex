@@ -426,7 +426,33 @@ rekursion
 \end{algorithm}
 
 \section{Output generation}\label{sec:ConceptOutputGeneration}
+\subsection{Create output from grammar graph}\label{sec:ConceptOutputGrammarGraph}
 
+\subsection{Traverse graph to create string representations of objects}\label{sec:ConceptOutputGrammarGraphTraverse}
+
+\subsection{Create string representations of objects}\label{sec:ConceptOutputGrammarGraphStringRepresentations}
+
+- python has string class \url{https://docs.python.org/3/library/stdtypes.html#str}
+- returns string version of the passed object
+- it returns object.\textunderscore \textunderscore str \textunderscore \textunderscore () when object has the method
+- following classes implement str method:
+
+COMMENT\textunderscore  BLOCK
+-lines from lines list with newline
+
+PRODUCTION\textunderscore ELEMENT
+
+PRODUCTION
+-order
+
+NTNODE
+
+\subsection{Maintain original order}\label{sec:ConceptOutputGrammarGraphMaintainOrder}
+- use tuple of position and node string
+
+
+\subsection{Automated parser generator compatibility}\label{sec:ConceptAutomatedParserGenerator}
+-append option
 \section{GUI}\label{sec:ImplementationGUI}
 Tkinter and PyQt have been evaluated as a basis for the GUI.
 -pyqt offers checkboxes in treeviews
