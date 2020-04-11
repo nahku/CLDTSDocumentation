@@ -439,11 +439,32 @@ Tkinter and PyQt have been evaluated as a basis for the GUI.
 \label{fig:ImplementationViewClassDiagram}
 \end{figure}
 -todo uml diagram View
+
+\subsection{Init GUI}\label{sec:ImplementationGUIInit}
+- set up menu, shortcuts and trigger that triggers functions once menu button is pressed \\
+- init treeview, create new QTreeWidget, set Header labels (Nonterminal, production type, production) \\
+
+\subsection{Init TreeView}\label{sec:ImplementationGUIInitTreeView}
+- get all values of nodes dictionary, sort them based on their position \\
+- for every node generate QTreeWidgetItem, print node.value and rule type, set check state to unchecked, set background to grey \\
+	- for every production in nodes production list, create new QTreeWidgetItem, set setCheckState to checked, add created childItem to node item \\
+	- add comment block as toplevelitem, set flags of comment item \\
+
 \subsection{Display rules}\label{sec:ImplementationGUIDisplayRules}
 
 \subsection{Toggle comments}\label{sec:ImplementationGUIToggleComments}
+
+- new status is determined: opposite of class member comment status \\
+- loop through every item in treeview \\
+- item has flags (bit values) including ItemIsUserCheckable,
+bitwise AND ItemIsUserCheckable \& flags, if false item is not usercheckable -> if item is not user checkable, setHidden is set to the new status (either true or false) \\
+- comment status is set to new status \\
+
+
 \subsection{Import control file}\label{sec:ImplementationGUIImportControlFile}
-\subsection{Import \ac{TPTP} syntax from the internet}\label{sec:GUI}
+
+\subsection{Import \ac{TPTP} syntax from the internet}\label{sec:ImplementationGUIImportInternet}
+
 \section{Command-line interface}\label{sec:ImplementationCommandLineInterface}
 With the argparse module a command-line parser object can be created and parameters can be added to that object.
 In the first line of listing \ref{lst:ImplementationArgparseParserConfiguration} the command-line parser object is created with a description.
