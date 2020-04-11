@@ -1,5 +1,9 @@
 % makeindex style file created by the glossaries package
+<<<<<<< master
 % for document 'dokumentation' on 2020-4-11
+=======
+% for document 'dokumentation' on 2020-4-10
+>>>>>>> Implementation gui
 actual '?'
 encap '|'
 level '!'
