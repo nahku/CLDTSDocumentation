@@ -1,9 +1,13 @@
 % makeindex style file created by the glossaries package
+<<<<<<< HEAD
 <<<<<<< master
 % for document 'dokumentation' on 2020-4-11
 =======
 % for document 'dokumentation' on 2020-4-10
 >>>>>>> Implementation gui
+=======
+% for document 'dokumentation' on 2020-4-10
+>>>>>>> hanna
 actual '?'
 encap '|'
 level '!'
