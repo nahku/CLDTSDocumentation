@@ -276,28 +276,29 @@ The goal is to identify the nonterminal symbols. Therefore it is checked if the 
 
 \section{Extraction of a sub-syntax}\label{sec:ImplementationExtractReducedGrammar}
 The following sections describe the algorithms for the extraction of a sub-syntax based on the concept outlined in section \ref{sec:ConceptExtractReducedGrammar}
-\subsection{Removing of blocked productions}
-Algorithm \ref{sec:remove_blocked_productions} takes the text of the control file as an input argument and removes the desired blocked productions from the nodes.
 
--input text from controlfile
--split controlfile by lines
--save first line string as start symbol
--delete first line
--iterate through rest of the lines
--split line by comments
--first element is nonterminal symbol name
--rule type production symbol second element
--convert to corresponding rule type enum 
--convert rest of list to integer and sort reverse
--get node from node dictonary
--delete production and corresponding children from node
--reverse sort of indexes necessary because of deleting from list in reverse order does not change position of lower indexes
+\subsection{Removal of blocked productions}
+Algorithm \ref{alg:remove_blocked_productions} takes the text of the control file as an input argument (control file format description can be found in section \ref{sec:ConceptControlFile}) and removes the productions, that should be blocked, from the nodes.  
+The control file string is split into a list of the lines (line 1).
+The first line of the control file string, which describes the start symbol, is deleted from the list (line 2) because this information is not needed at this step.\\
+Then the following lines are iterated:\\
+For each line the content is split by the comma symbol, which produces a list of strings.
+The first element of that list is the nonterminal symbol name of the symbol of which productions should be disabled.
+The second element is the corresponding rule type symbol.
+The nonterminal symbol name and the rule type, that is determined from the rules symbol (line 7), are stored in separate variables.
+Then these elements are removed from the list and the remaining elements are converted to integer.
+They are the indexes of the productions that should be removed.
+The elements are ordered in a descending order (line 10).
+Ordering the indexes in that order has the advantage that, when the list of indexes is iterated to delete productions, the indexes of other productions that should be deleted are not changed by the deletion of productions before. ?todo verständlich?
+To delete the productions from the specified node, the node object has to be obtained.
+This is done by addressing the node in the \textit{nodes\textunderscore dictionary} with its key consisting of the nonterminal symbol name and the rule type.
+From the node, in a loop, the elements of the \textit{productions\textunderscore list} and the \textit{children} list corresponding to the indexes in the control file are deleted.
+
 \begin{algorithm}[H]
 \caption{Removing blocked productions}
 \begin{algorithmic}[1] 
 \Require control\textunderscore string
 \State lines = control\textunderscore string.splitlines()
-\State start\textunderscore symbol = lines[0]
 \State delete lines[0]
 \ForAll {line in lines}
 	\State data = line.splitBy(",")
@@ -307,7 +308,7 @@ Algorithm \ref{sec:remove_blocked_productions} takes the text of the control fil
 	\State delete data[0:2]
 	\State data = parseInteger(data)
 	\State data.sortReverse()
-	\State node = this.nodes\textunderscore dictionary.get(Node(nonterminal\textunderscore name, rule\textunderscore type))
+	\State node = this.nodes\textunderscore dictionary.get(Node\textunderscore Key(nonterminal\textunderscore name, rule\textunderscore type))
 	\ForAll {index in data}
 		\State delete node.productions\textunderscore list.list[index]
 		\State delete node.children[index]
@@ -317,14 +318,24 @@ Algorithm \ref{sec:remove_blocked_productions} takes the text of the control fil
 \label{alg:remove_blocked_productions}
 \end{algorithm}
 
-\subsection{Determination of the remaining reachable ?productions?}
-As mentioned in section \ref{sec:ConceptRemovingBlockedProductions} todo check reference the determination of the remaining reachable is done by creating a new grammar graph, with the desired start symbol from the control file. The nodes dictionary also is reduced to contain only the reachable nodes. 
-
-\subsection{Removing non-terminating symbols}
--already: grammar graph without productions that have been blocked and non-reachable symbols.
-
+\subsection{Determination of the remaining terminating symbols}
+-already: grammar graph without productions that have been blocked
 -now removal of part of the grammar that is not terminating
+Algorithm \ref{alg:remove_non_terminating_symbols} shows the procedure of how to remove nonterminating symbols.
+To remove nonterminating symbols, first it has to be determined which symbols are terminating and which are nonterminating.
 
+-one way: starting from terminal symbol, find nonterminal symbol that derives terminal symbol, then find nonterminal symbol that only produces terminating symbols
+
+-graph data structure can only be traversed top down not bottom up
+-therefore start at start node, traverse graph, and find terminating symbols
+
+-store known terminating symbols
+
+-add known terminating symbols
+-repeat process with updating known terminating symbols
+-when no new terminating symbols are found all terminating symbols have been found
+-then remove productions that contain non-terminating symbols
+-after that delete nodes that are non-terminating
 
 \begin{algorithm}[H]
 \caption{Removing non terminating symbols}
@@ -341,15 +352,23 @@ As mentioned in section \ref{sec:ConceptRemovingBlockedProductions} todo check r
 		\State terminating = temp\textunderscore terminating
 	\EndIf
 \EndWhile
+\State visited = new set() 
 \State delete\textunderscore non\textunderscore terminating\textunderscore productions(start\textunderscore node, terminating, visited)
 \State delete\textunderscore non\textunderscore terminating\textunderscore nodes(terminating)
 \end{algorithmic}
 \label{alg:remove_non_terminating_symbols}
 \end{algorithm}
--recursively add known terminating symbols
--when no new terminating symbols are found all terminating symbols have been found
--then remove productions that contain non-terminating symbols
--after that delete nodes that are non-terminating
+
+
+Algorithm \ref{alg:find_non_terminating_symbols} 
+recursive
+-check if node visited before
+-if not, then add to visited
+for each children list in node.children
+-if len list 0, only terminal symbols in productions, that means node certainly terminating
+-else: check if all childs in children list are terminating, by recursive call
+-if after that node not in terminating then not known that it is terminating
+-if terminating add to known terminating symbols
 
 \begin{algorithm}[H]
 \caption{Find non terminating symbols}
@@ -357,13 +376,13 @@ As mentioned in section \ref{sec:ConceptRemovingBlockedProductions} todo check r
 \Require node, terminating\textunderscore set, visited\textunderscore set
 \State node\textunderscore key = Node\textunderscore Key(node.value, node.rule\textunderscore type)
 \If {node\textunderscore key not in visited\textunderscore set}
-	\State visited\textunderscore .add(node\textunderscore key)
+	\State visited\textunderscore set.add(node\textunderscore key)
 	\ForAll {children\textunderscore list in node.children}
 		\If{len(children\textunderscore list) == 0}
 			\State terminating\textunderscore set.add(node\textunderscore key)
 		\Else
 			\State terminating\textunderscore flag = True
-			\ForAll child in children\textunderscore list
+			\ForAll {child in children\textunderscore list}
 				\State find\textunderscore non\textunderscore terminating\textunderscore symbols(child, terminating\textunderscore set, visited\textunderscore set)		
 				\If {not value\textunderscore in\textunderscore terminating(child.value, terminating\textunderscore set)}
 					\State terminating\textunderscore set = False
@@ -385,6 +404,8 @@ As mentioned in section \ref{sec:ConceptRemovingBlockedProductions} todo check r
 
 -then delete non-terminating nodes
 rekursion
+
+Algorithm \ref{alg:delete_non_terminating_productions}
 \begin{algorithm}[H]
 \caption{Delete non terminating productions}
 \begin{algorithmic}[1] 
@@ -412,6 +433,8 @@ rekursion
 \label{alg:delete_non_terminating_productions}
 \end{algorithm}
 
+
+Algorithm \ref{alg:delete_non_terminating_nodes}
 \begin{algorithm}[H]
 \caption{Delete non terminating nodes}
 \begin{algorithmic}[1] 
@@ -423,14 +446,20 @@ rekursion
 	\State this.nodes\textunderscore dictionary = temporary\textunderscore dictionary
 \EndFor
 \end{algorithmic}
+\label{alg:delete_non_terminating_nodes}
 \end{algorithm}
 
-\section{Output generation}\label{sec:ConceptOutputGeneration}
-\subsection{Create output from grammar graph}\label{sec:ConceptOutputGrammarGraph}
 
-\subsection{Traverse graph to create string representations of objects}\label{sec:ConceptOutputGrammarGraphTraverse}
 
-\subsection{Create string representations of objects}\label{sec:ConceptOutputGrammarGraphStringRepresentations}
+\subsection{Determination of the remaining reachable ?productions?}
+As mentioned in section \ref{sec:ConceptRemovingBlockedProductions} todo check reference the determination of the remaining reachable is done by creating a new grammar graph, with the desired start symbol from the control file. The nodes dictionary also is reduced to contain only the reachable nodes. 
+
+\section{Output generation}\label{sec:ImplementationOutputGeneration}
+\subsection{Create output from grammar graph}\label{sec:ImplementationOutputGrammarGraph}
+
+\subsection{Traverse graph to create string representations of objects}\label{sec:ImpolementationOutputGrammarGraphTraverse}
+
+\subsection{Create string representations of objects}\label{sec:ImplementationOutputGrammarGraphStringRepresentations}
 
 - python has string class \url{https://docs.python.org/3/library/stdtypes.html#str}
 - returns string version of the passed object
@@ -447,11 +476,11 @@ PRODUCTION
 
 NTNODE
 
-\subsection{Maintain original order}\label{sec:ConceptOutputGrammarGraphMaintainOrder}
+\subsection{Maintain original order}\label{sec:ImplementationOutputGrammarGraphMaintainOrder}
 - use tuple of position and node string
 
 
-\subsection{Automated parser generator compatibility}\label{sec:ConceptAutomatedParserGenerator}
+\subsection{Automated parser generator compatibility}\label{sec:ImplementationAutomatedParserGenerator}
 -append option
 \section{GUI}\label{sec:ImplementationGUI}
 Tkinter and PyQt have been evaluated as a basis for the GUI.

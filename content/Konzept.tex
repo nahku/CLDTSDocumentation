@@ -503,18 +503,12 @@ The start symbol is listed in the first line.
 Every consecutive line contains a nonterminal symbol, the corresponding rule type symbol, and the indexes of the productions that should be blocked separated by comma.
 The start symbol will be relevant in determining the remaining reachable part of the grammar (section \ref{sec:ConceptDerterminingRemainingReachable}) whereas the information on the productions that should be blocked will be needed in the next section.
 
-\subsection{Removing of blocked productions}\label{sec:ConceptRemovingBlockedProductions}
+\subsection{Removal of blocked productions}\label{sec:ConceptRemovingBlockedProductions}
 In the control file, for each nonterminal symbol, whose productions should be modified, its name, rule type and the indexes of the productions that should be blocked are listed.
 From all nodes, that are adressed (by nonterminal symbol name and rule type), the indexed productions are removed.
 This includes deleting the corresponding element from the productions list and from the children list.
 
-\subsection{Determination of the remaining reachable symbols}\label{sec:ConceptDerterminingRemainingReachable}
-After removing the productions specified in the control file it has to be determined which part of the grammar still remains reachable.
-This is done by generating a new grammar graph starting from desired the start symbol.
-When generating the new grammar graph, all from the start symbol reachable parts of the grammar will be added to the new grammar graph (see section \ref{sec:ConceptGraphGeneration}).
-All nodes that are not part of the new grammar graph are not reachable and can therefore be removed.
-
-\subsection{Determination of the remaining terminating symbols}\label{sec:ConceptDerterminingRemainingReachable}
+\subsection{Determination of the remaining terminating symbols}\label{sec:ConceptDerterminingRemainingTerminating}
 After all reachable symbols have been determined, the last step of extracting a sub-syntax is to determine and remove the non-terminating productions and symbols.
 Non-terminating productions are productions in which at least one nonterminal symbol is non-terminating.\\
 
@@ -525,6 +519,12 @@ Starting at the start symbol, the grammar graph is traversed.
 -start with start symbol
 -traverse through graph and compute terminating symbols
 - store visited nodes to avoid infinite loops
+
+\subsection{Determination of the remaining reachable symbols}\label{sec:ConceptDerterminingRemainingReachable}
+After removing the productions specified in the control file it has to be determined which part of the grammar still remains reachable.
+This is done by generating a new grammar graph starting from desired the start symbol.
+When generating the new grammar graph, all from the start symbol reachable parts of the grammar will be added to the new grammar graph (see section \ref{sec:ConceptGraphGeneration}).
+All nodes that are not part of the new grammar graph are not reachable and can therefore be removed.
 
 \section{Output generation}\label{sec:ConceptOutputGeneration}
 Internally in the software tool a syntax is represented by a grammar graph.
