@@ -486,10 +486,40 @@ import_tptp_file_action.triggered.connect(self.load_tptp_syntax_file)
 
 
 \subsubsection{Init TreeView}\label{sec:ImplementationGUIInitTreeView}
-A new tree view is defined using QTreeWidget with the header labels "Nonterminal", "Production Type" and "Production".
+A new tree view is defined using QTreeWidget with the header labels "Nonterminal", "Production Type" and "Production" (line 1 and 2 in listing \ref{lst:ImplementationInitTreeView}.
+All nodes of the nodes dictionary of the GraphBuilder instance are extracted and sorted based on their position in the original \ac{TPTP} syntax file (line 3 and 4 in listing \ref{lst:ImplementationInitTreeView}. 
+Algorithm \ref{alg:initTreeView} shows the algorithm used for filling the created treeView. For every node a new QTreeWidgetItem is generated. The item consists of the nodes (node.value) and its rule type. Also a new checkbox is defined that is displayed next to the item whose initial value is unchecked. The background colour to set to grey.
+For every production in the nodes production list, a new QTreeWidgetItem and checkbox are created as well. However, the default value of the checkbox is set to unchecked. The generated item is then added as a child to the node item. A potential comment block is added to the treeView and the item is added to the treeView as well.
 
-All node names of the nodes dictionary of the GraphBuilder instance are extracted and sorted based on their position in the original \ac{TPTP} syntax file. For every node a new QTreeWidgetItem is generated with the node.value and rule type. Also a new checkbox is defined whose initial value is unchecked. The background to set to grey.
-For every production in the nodes production list, also a new QTreeWidgetItem and Checkbox are created, However, the default value is set un unchecked. The generated item is then added as a child to the previous? item. A comment block is set as toplevelitem and flags of the item are set accordingly.
+\begin{lstlisting}[language=Python, basicstyle=\scriptsize	,caption= Init Tree View,label= lst:ImplementationInitTreeView]
+self.treeView = QTreeWidget()
+self.treeView.setHeaderLabels(['Non Terminal', 'Production Type', 'Production'])
+nodes_list = list(self.graphBuilder.nodes_dictionary.values())
+nodes_list.sort(key=lambda x: x.position)
+\end{lstlisting}
+
+\begin{algorithm}[H]
+\caption{GUI Algorithm: init\textunderscore tree\textunderscore view}
+\label{alg:initTreeView}
+\begin{algorithmic}[1] 
+\ForAll {nodes in nodes\textunderscore list}
+	\State rule\textunderscore type = node.rule\textunderscore type
+	\State item = new QTreeWidgetItem
+    \State Uncheck checkbox of item 
+    \State Set background to grey
+	\ForAll {productions in node.productions\textunderscore list}
+		\State child\textunderscore item = new QTreeWidgetItem
+		\State Check checkbox of child item
+		\State Add child\textunderscore item to item
+	\EndFor    
+	\If {node.comment\textunderscore block exists}
+		\State comment\textunderscore item = new QTreeWidgetItem
+		\State Add comment\textunderscore item to treeView
+	\EndIf
+	\State Add item to treeView
+\EndFor
+\end{algorithmic}
+\end{algorithm}
 	
 \subsubsection{Check start symbol}\label{sec:ImplementationGUIStartsymbol}
 
@@ -519,6 +549,16 @@ The View class attribute $commentStatus$ indicates whether comments are displaye
 \end{algorithmic}
 \end{algorithm}
 
+\subsubsection{Reduce \ac{TPTP} syntax with selection}\label{sec:ImplementationGUIReduceWithSelection}
+
+For reducing the \ac{TPTP} syntax based on the users selection in the GUI a control file is produced (see Produce Control file). If no grammar has been imported or no start symbol or multiple start symbol have been selected an error raises. The error is displayed using a QMessageBox. With the produced control file, the Graphbuilder disables blocked productions, treeView is initialized  and the start symbol is checked (see listing \ref{lst:ImplementationGUIReduceTPTPSelection}). 
+
+\begin{lstlisting}[language=Python, basicstyle=\scriptsize	,caption= Reduce TPTP syntax with selection,label= lst:ImplementationGUIReduceTPTPSelection]
+control_string, start_symbol = self.produce_control_file()
+self.graphBuilder.disable_rules(control_string)
+self.init_tree_view()
+self.check_start_symbol(start_symbol)
+\end{lstlisting}
 
 \subsection{Import control file}\label{sec:ImplementationGUIImportControlFile}
 - open control file via QFileDialog \\
@@ -526,9 +566,56 @@ The View class attribute $commentStatus$ indicates whether comments are displaye
 - read first line in control file, set start symbol accordingly  \\
 - for each following line, read nt name and ruletype and search item and uncheck it
 
-\subsubsection{Import \ac{TPTP} syntax from the internet}\label{sec:ImplementationGUIImportInternet}
+\subsubsection{Produce control file}\label{sec:ImplementationGUIProduceControlFile}
+
+Algorithm \ref{alg:produceControlfile} shows how the control file is produced. A tuple made of a value and a rule type is defined. An empty list for listing the start symbol and an entry dictionary is created. The dictionary is used for collecting all blocked productions. Looping through every item of treeView it is checked, if the item has parents and its checkbox is unchecked. If so, the rule type of the parent is identified and a new tuple is defined. The index of the item in the parents item list? is identified as well. If the tuple is not already in the dictionary, a new dictionary item is created with the tuple as key and the index of the item as value. If the tuple is already in the dictionary, the index of the item is added to the existing indices. \\
+However, if the item is checked and has no parents, the name of the item is appended to the list of start symbols. 
+
+- raise no imported grammar error
+- if multiple start symbols are selected raise error
+- if no start symbol is selected raise error
+- control string is made: 
+- first line start symbol
+- for every entry in entry dictionary
+- add name of key, rule type and index of children seperated by comma
+
+\begin{algorithm}[H]
+\caption{GUI Algorithm: produce\textunderscore controlfile}
+\label{alg:produceControlfile}
+\begin{algorithmic}[1] 
+\State Define new tuple Entry("Entry", ["value", "rule\textunderscore type"])
+\State Create empty dictionary
+\State Create empty list $start\textunderscore symbol$
+\ForAll {items in treeView}
+	\State Get parent of item
+	\If {item has parent and is unchecked}
+		\State Get rule type of parent
+		\State Create entry tuple with name of parent and its rule type
+		\State Get index of child from parent
+		\If{entry tuple is not in dictionary}
+			\State Create new dictionary entry with entry tuple as key and list containing the index of the child as value
+		\Else
+			\State Append index of child to list
+		\EndIf
+	\ElsIf {item has no parent and is checked}
+		\State Append item name to start symbol list
+	\EndIf
+\EndFor
+\State control\textunderscore string = first entry of start symbol list
+\State Append all entries of dictionary to control\textunderscore string
+\end{algorithmic}
+\end{algorithm} 
+
+\subsubsection{Import \ac{TPTP} syntax file}\label{sec:ImplementationGUIImportFile}
+
+The \ac{TPTP} syntax file is imported using QFileDialog which is returning the filename. If the filename is not empty, the application opens a dialog window where the user has to specify a desired start symbol. The method $red\textunderscore text\textunderscore from\textunderscore file$ returns the text of the file belonging to the filename. With the textfile and the start symbol, the method $create\textunderscore tptp\textunderscore view$ is called.
+
+\subsubsection{Import \ac{TPTP} syntax from the \ac{TPTP} website}\label{sec:ImplementationGUIImportInternet}
 
 The \ac{TPTP} syntax file is extracted from the \ac{TPTP} website using the Input method $import\textunderscore tptp\textunderscore syntax\textunderscore from\textunderscore web$ (see chapter REF). This method returns a textfile. The application opens a dialog window where the user has to specify a desired start symbol. With the textfile and the start symbol, the method $create\textunderscore tptp\textunderscore view$ is called.
+
+$create\textunderscore tptp\textunderscore view$ \\
+The method creates a new instance of the $TPTPGraphBuilder$, calls $graphBuilder.run$, $init\textunderscore tree\textunderscore view$ and $check\textunderscore start\textunderscore symbol$.
 
 \section{Command-line interface}\label{sec:ImplementationCommandLineInterface}
 With the argparse module a command-line parser object can be created and parameters can be added to that object.
