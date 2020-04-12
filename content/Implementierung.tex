@@ -453,21 +453,83 @@ NTNODE
 
 \subsection{Automated parser generator compatibility}\label{sec:ConceptAutomatedParserGenerator}
 -append option
+
+\section{Input/Output}\label{sec:ImplementationInOut}
+
 \section{GUI}\label{sec:ImplementationGUI}
-Tkinter and PyQt have been evaluated as a basis for the GUI.
--pyqt offers checkboxes in treeviews
+The GUI consists of the class View that can be seen in Figure \ref{fig:ImplementationViewClassDiagram}. The class has the attributes $treeView$ which is an instance of the PyQt QTreeWidget, $graphBuilder$ which is an instance of the TPTPGraphBuilder and the boolean value $commentStatus$. The class functions are described in the following.
+
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.6\textwidth]{images/Implementation_view_class_diagramm.pdf}
+\includegraphics[width=0.8\textwidth]{images/Implementation_view_class_diagramm.pdf}
 \caption{View UML class diagram}
 \label{fig:ImplementationViewClassDiagram}
 \end{figure}
--todo uml diagram View
+
+\subsubsection{Init GUI}\label{sec:ImplementationGUIInit}
+
+The function $init\textunderscore gui$ sets up the menu bar in the main application window. The menu bar consists of the sub-menus "Import syntax", "Save syntax", "Reduce", "Control file" and "View". To each sub-menu menu actions that have been described in chapter \ref{sec:ConceptGUI} are added and implemented using QActions. The following listing \ref{lst:ImplementationInitGUI} shows the Python code for adding a menu bar and menu actions for example for the "Import syntax" menu bar.
+
+\begin{lstlisting}[language=Python, basicstyle=\scriptsize	,caption= Implementation of menu bar,label= lst:ImplementationInitGUI]
+import_menu = menubar.addMenu("Import syntax")
+import_menu.addAction(import_tptp_file_action)
+import_menu.addAction(import_tptp_file_from_web_action)
+\end{lstlisting}
+
+Besides a name, a short cut for executing the menu action is defined. Also triggers have been defined that triggers functions once menu button is pressed. Listing \ref{lst:ImplementationInitGUI2} shows how a short cut and a trigger have been defined for the action $Import TPTP syntax file$.
+
+\begin{lstlisting}[language=Python, basicstyle=\scriptsize	,caption= Implementation of menu actions,label= lst:ImplementationInitGUI2]
+import_tptp_file_action = QAction('&Import TPTP syntax file', self)
+import_tptp_file_action.setShortcut('Ctrl+O')
+import_tptp_file_action.triggered.connect(self.load_tptp_syntax_file)
+\end{lstlisting}
+
+
+\subsubsection{Init TreeView}\label{sec:ImplementationGUIInitTreeView}
+A new tree view is defined using QTreeWidget with the header labels "Nonterminal", "Production Type" and "Production".
+
+All node names of the nodes dictionary of the GraphBuilder instance are extracted and sorted based on their position in the original \ac{TPTP} syntax file. For every node a new QTreeWidgetItem is generated with the node.value and rule type. Also a new checkbox is defined whose initial value is unchecked. The background to set to grey.
+For every production in the nodes production list, also a new QTreeWidgetItem and Checkbox are created, However, the default value is set un unchecked. The generated item is then added as a child to the previous? item. A comment block is set as toplevelitem and flags of the item are set accordingly.
+	
+\subsubsection{Check start symbol}\label{sec:ImplementationGUIStartsymbol}
+
+This function checks the checkbox of the defined start symbol. The QTreeView method $findItem(string\; itemName)$ is used that returns all items that match the item name. 
+The found items are than checked.
+
 \subsection{Display rules}\label{sec:ImplementationGUIDisplayRules}
 
-\subsection{Toggle comments}\label{sec:ImplementationGUIToggleComments}
+\subsubsection{Toggle comments}\label{sec:ImplementationGUIToggleComments}
+
+Algorithm \ref{alg:toggleComments} shows the algorithm used for toggling comments.
+The View class attribute $commentStatus$ indicates whether comments are displayed (true) or not (false). For toggling comments, a new status is set that is the opposite of commentStatus. While looping through every item in $treeView$, comment items can be found by checking whether the item is checkable because by default a comment is not checkable by the user. A QTreeWidgetItem has flags including a flag "ItemIsUserCheckable" that is used for determining whether the item is checkable. The QTreeWidgetItem function $setHidden(bool\;hide)$ is applied on every comment with the value of the new status. CommentStatus is set to the new status. 
+
+-flag(), bitweises AND 
+
+\begin{algorithm}[H]
+\caption{GUI Algorithm: toggle\textunderscore comments}
+\label{alg:toggleComments}
+\begin{algorithmic}[1] 
+\State newStatus = not commentStatus
+\ForAll {items in treeView}
+	\If {item is not checkable}
+		\State item.setHidden(newStatus)
+	\EndIf
+\EndFor
+\State commentStatus = newStatus
+\end{algorithmic}
+\end{algorithm}
+
+
 \subsection{Import control file}\label{sec:ImplementationGUIImportControlFile}
-\subsection{Import \ac{TPTP} syntax from the internet}\label{sec:GUI}
+- open control file via QFileDialog \\
+- uncheck all left symbols, check all right symbols, separate via has item parents \\
+- read first line in control file, set start symbol accordingly  \\
+- for each following line, read nt name and ruletype and search item and uncheck it
+
+\subsubsection{Import \ac{TPTP} syntax from the internet}\label{sec:ImplementationGUIImportInternet}
+
+The \ac{TPTP} syntax file is extracted from the \ac{TPTP} website using the Input method $import\textunderscore tptp\textunderscore syntax\textunderscore from\textunderscore web$ (see chapter REF). This method returns a textfile. The application opens a dialog window where the user has to specify a desired start symbol. With the textfile and the start symbol, the method $create\textunderscore tptp\textunderscore view$ is called.
+
 \section{Command-line interface}\label{sec:ImplementationCommandLineInterface}
 With the argparse module a command-line parser object can be created and parameters can be added to that object.
 In the first line of listing \ref{lst:ImplementationArgparseParserConfiguration} the command-line parser object is created with a description.
