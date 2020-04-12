@@ -529,6 +529,7 @@ Starting at the start symbol, the grammar graph is traversed.
 \section{Output generation}\label{sec:ConceptOutputGeneration}
 Internally in the software tool a syntax is represented by a grammar graph.
 To make sub-syntaxes represented by a grammar graph usable they have to be converted to the original form of a \ac{TPTP} syntax file. This process is described in the following subsection.
+After that measures to provide compatibility with the automated parser generator are discussed in section \ref{ec:ConceptAutomatedParserGenerator}.
 
 \subsection{Create output from grammar graph}\label{sec:ConceptOutputGrammarGraph}
 There are three steps necessary in order for 
@@ -593,13 +594,11 @@ If the \textit{<comment>} nonterminal symbol is made reachable in the \ac{TPTP} 
 To add the comment syntax to the output if the is \textit{<comment>} nonterminal symbol is not reachable is done by using an external configuration file that contains the syntax from listing \ref{lst:ConceptAutomatedParserGeneratorComment}.
 From the syntax in this configuration file a separate grammar graph is generated. The output string that can be generated from this grammar graph is added to the output of the tool when outputting a generated sub-syntax.
 
-
-
 -Menu option
 
 -comment symbol in lex
 
-1 -to be tested -make comment reachable
+-make comment reachableto be tested
 \section{GUI}\label{sec:ConceptGUI}
 The graphical user interface is built using PyQt. Advantages of PyQT are that it offers a treeview that is used for displaying the grammar. In comparison to the standard Python library Tkinter PyQt offers checkboxes in treeviews \cite{Tkinter} that are used for selecting blocked productions.
 
@@ -622,7 +621,7 @@ This file is downloaded and converted to plain text using the Beautiful Soup Pyt
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=1\textwidth]{images/import.png}
+\includegraphics[width=.7\textwidth]{images/import.png}
 \caption{Import menu}
 \label{fig:import}
 \end{figure}
@@ -644,7 +643,7 @@ The $View$ menu, shown in figure \ref{fig:view}, provides the possibility to tog
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=1\textwidth]{images/view.png}
+\includegraphics[width=.7\textwidth]{images/view.png}
 \caption{View menu}
 \label{fig:view}
 \end{figure}
@@ -655,7 +654,7 @@ In the $Reduce$ menu that can be seen in figure \ref{fig:reduce} the user can re
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=1\textwidth]{images/reduce.png}
+\includegraphics[width=.7\textwidth]{images/reduce.png}
 \caption{Reduce menu}
 \label{fig:reduce}
 \end{figure}
@@ -665,9 +664,17 @@ The $Save$ menu also gives the user the option to generate a control file based 
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=1\textwidth]{images/save.png}
+\includegraphics[width=.7\textwidth]{images/save.png}
 \caption{Save menu}
 \label{fig:save}
+\end{figure}
+
+todo
+\begin{figure}[H]
+\centering
+\includegraphics[width=.7\textwidth]{images/control_file_menu.png}
+\caption{Control file menu}
+\label{fig:ControlFileMenu}
 \end{figure}
 
 \section{Command-line interface}\label{sec:ConceptCommandLineInterface}
