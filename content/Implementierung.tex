@@ -23,20 +23,27 @@ Apart from the ignored symbols, there are 13 defined tokens:
 
 Expressions can either be of the type grammar, token, strict or macro. It is defined as a nonterminal symbol followed by the production symbol itself (::=,:==,:::,...). The nonterminal symbol and the production are merged to a single token and are not identified as two tokens to avoid ambiguity while parsing. If not it would be difficult for the parer to determine whether the nonterminal symbol that describes the rule is the start of a new rule or does still belong to the previous rule because as mentioned rules can cover multiple lines.
 
-\textit{Regular expression of grammar expression:}  $'<\backslash w+>[\backslash s]*::='$
+\textit{Regular expression of grammar expression:}  $<\backslash w+>[\backslash s]*::=$
 
 $\backslash w+$ matches any alphanumeric and underscore character that can occur more than one time.
-$[\backslash s]*$ matches an arbitrary amount of white spaces.
+$[\backslash s]*$ matches an arbitrary amount of white spaces. $::=$ matches the symbol for grammar expression and can be substituted  by any other symbol for the other expressions.
 
 \subsubsection{Nonterminal symbol}
 
-A nonterminal symbol starts with \dq <\dq and ends with \dq >\dq. In between there is any arbitrary sequence of numbers, underscores and small or capital letters.
+A nonterminal symbol starts with \dq <\dq\; and ends with \dq >\dq. In between there is any arbitrary sequence of numbers, underscores and small or capital letters which can be represented by $\backslash w+$ in a regular expression.
+
+\textit{Regular expression of nonterminal symbol:}  $<\backslash w+>$
 
 \subsubsection{Terminal symbol}
+
+%\textit{Regular expression of grammar expression:}  $'[$\backslash '\backslash \backslash \backslash .,a-zA-Z\backslash \textunderscore 0-9\backslash 0-9-\backslash -<>&@!:{}~?^+=/"!^^/@/+-/%;][a-zA-Z\_0-9\-/"!?/@/+-/*/%;\->&+=$\'\\\.,]*'$
 
 \subsubsection{Comment}
 
 A comment is identified by the lexer as a start of a new line followed by a percentage sign followed by an arbitrary character and ends with a newline. Because the percentage sign is also part of the terminal symbols, it is necessary to check whether the percentage sign is in a newline because the terminal symbol is not because the percentage symbol when used as terminal symbol is embedded in square brackets.    
+
+\textit{Regular expression of comment:}  $\textasciicircum \%.*\textdollar $
+%$'^%.*\textdollar '$
 
 \subsubsection{Meta-Symbols}
 
@@ -524,7 +531,7 @@ import_tptp_file_action.triggered.connect(self.load_tptp_syntax_file)
 
 
 \subsubsection{Init TreeView}\label{sec:ImplementationGUIInitTreeView}
-A new tree view is defined using QTreeWidget with the header labels "Nonterminal", "Production Type" and "Production" (line 1 and 2 in listing \ref{lst:ImplementationInitTreeView}.
+A new tree view is defined using QTreeWidget with the header labels "Nonterminal", "Production Type" and "Production" (line 1 and 2 in listing \ref{lst:ImplementationInitTreeView}).
 All nodes of the nodes dictionary of the GraphBuilder instance are extracted and sorted based on their position in the original \ac{TPTP} syntax file (line 3 and 4 in listing \ref{lst:ImplementationInitTreeView}. 
 Algorithm \ref{alg:initTreeView} shows the algorithm used for filling the created treeView. For every node a new QTreeWidgetItem is generated. The item consists of the nodes (node.value) and its rule type. Also a new checkbox is defined that is displayed next to the item whose initial value is unchecked. The background colour to set to grey.
 For every production in the nodes production list, a new QTreeWidgetItem and checkbox are created as well. However, the default value of the checkbox is set to unchecked. The generated item is then added as a child to the node item. A potential comment block is added to the treeView and the item is added to the treeView as well.
