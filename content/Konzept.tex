@@ -105,9 +105,11 @@ The standard extended BNF only uses one production symbol ($"::="$).
 In the TPTP syntax the standard production symbol is used for syntactic rules.
 Additional symbols for semantic, lexical and character-macro rules have been added.
 The following table contains the production symbols for grammar (syntactic rules), strict (semantic rules), token (lexical rules) and macro (character-macro rules) rule types used in the TPTP syntax.
+
 \begin{table}[H]
 \centering
 \renewcommand{\arraystretch}{1}
+\caption{\ac{TPTP} language rule types \cite{VS06}}
 \begin{tabular}{ll}
 \textbf{Symbol} & \textbf{Rule Type}\\\hline
 ::= & Grammar\\
@@ -268,7 +270,7 @@ Therefore the list can also contain further productions
 \centering
 \includegraphics[width=.5\textwidth]{images/Concept_uml_data_types_production.pdf}
 \caption{Production data type UML class diagram}
-\label{fig:ConceptSymbolsClassDiagram}
+\label{fig:ConceptProductionClassDiagram}
 \end{figure}
 
 \subsubsection{Productions list}
@@ -529,7 +531,7 @@ All nodes that are not part of the new grammar graph are not reachable and can t
 \section{Output generation}\label{sec:ConceptOutputGeneration}
 Internally in the software tool a syntax is represented by a grammar graph.
 To make sub-syntaxes represented by a grammar graph usable they have to be converted to the original form of a \ac{TPTP} syntax file. This process is described in the following subsection.
-After that measures to provide compatibility with the automated parser generator are discussed in section \ref{ec:ConceptAutomatedParserGenerator}.
+After that measures to provide compatibility with the automated parser generator are discussed in section \ref{sec:ConceptAutomatedParserGenerator}.
 
 \subsection{Create output from grammar graph}\label{sec:ConceptOutputGrammarGraph}
 There are three steps necessary in order for 

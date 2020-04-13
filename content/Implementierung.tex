@@ -319,23 +319,20 @@ From the node, in a loop, the elements of the \textit{productions\textunderscore
 \end{algorithm}
 
 \subsection{Determination of the remaining terminating symbols}
--already: grammar graph without productions that have been blocked
--now removal of part of the grammar that is not terminating
-Algorithm \ref{alg:remove_non_terminating_symbols} shows the procedure of how to remove nonterminating symbols.
-To remove nonterminating symbols, first it has to be determined which symbols are terminating and which are nonterminating.
+After the desired productions have been deleted from the grammar graph, the next step is to remove the nonterminating symbols from the grammar graph. Algorithm \ref{alg:remove_non_terminating_symbols} shows the procedure of how to remove nonterminating symbols.
+First it has to be determined which symbols are terminating and which are nonterminating.
 
 -one way: starting from terminal symbol, find nonterminal symbol that derives terminal symbol, then find nonterminal symbol that only produces terminating symbols
-
--graph data structure can only be traversed top down not bottom up
+-graph data structure can only be traversed top down not bottom up.
 -therefore start at start node, traverse graph, and find terminating symbols
-
+-initialise visited set
 -store known terminating symbols
 
--add known terminating symbols
--repeat process with updating known terminating symbols
--when no new terminating symbols are found all terminating symbols have been found
--then remove productions that contain non-terminating symbols
--after that delete nodes that are non-terminating
+A set of terminating nodes and a temporary set of terminating nodes are initialized.
+In the while loop the recursive algorithm find\textunderscore non\textunderscore terminating\textunderscore symbols(start\textunderscore node, temp\textunderscore terminating, visited) finds terminating nodes with the start\textunderscore node, and an initialized set of known terminating symbols and a set of already visited nodes.
+This algorithm is called with the ?updated? set of terminating symbols until the set does not differ from the run before.
+When that is the case all terminating nodes have been found.\\
+After all terminating nodes have been found, the productions that contain nonterminating symbols are deleted from the nodes and after that nodes representing nonterminating symbols are removed.
 
 \begin{algorithm}[H]
 \caption{Removing non terminating symbols}
@@ -361,9 +358,12 @@ To remove nonterminating symbols, first it has to be determined which symbols ar
 
 
 Algorithm \ref{alg:find_non_terminating_symbols} 
+determines whether a node can be identified as terminating by recursive checking
+
+The input are a set of already known terminating nodes and nodes that already have been visited.
 recursive
--check if node visited before
--if not, then add to visited
+If the node has been not been visited before it is added to the visited set and...
+If it has been visited before, the method ?todo? ends to prevent infinite loops
 for each children list in node.children
 -if len list 0, only terminal symbols in productions, that means node certainly terminating
 -else: check if all childs in children list are terminating, by recursive call
@@ -397,15 +397,23 @@ for each children list in node.children
 \end{algorithmic}
 \label{alg:find_non_terminating_symbols}
 \end{algorithm}
+
+-recursive
+-if not visited
+-add to visited
+-index to end
+For each child the algorithm is called recursively. If the child node does not correspond to a terminating symbol, set nonterminating flag to ture
+If the nontermiating flag is true, delete production -> delete children entry and productions list entry.
 -value in terminating checks if any ?rule type? is terminating
 
+-call for each child in children list
+-if child not in terminating, set not terminating flag
+-if not terminating, delete corresponding children list and prouctions list
 
--first delete productions in nodes that contain non-terminating symbols
 
--then delete non-terminating nodes
-rekursion
+-todo check children list, ist was wenn symbol mehrere nodes hat?
 
-Algorithm \ref{alg:delete_non_terminating_productions}
+Algorithm \ref{alg:delete_non_terminating_productions} 
 \begin{algorithm}[H]
 \caption{Delete non terminating productions}
 \begin{algorithmic}[1] 
@@ -434,7 +442,8 @@ Algorithm \ref{alg:delete_non_terminating_productions}
 \end{algorithm}
 
 
-Algorithm \ref{alg:delete_non_terminating_nodes}
+Algorithm \ref{alg:delete_non_terminating_nodes} removes the nonterminating nodes from the \textit{nodes\textunderscore dictionary}. It takes a set of \textit{Node\textunderscore Keys}s as input, that specifies all terminating nodes as input.
+To remove the nonterminating nodes, in a for-loop, all terminating nodes that are addressed by the \textit{Node\textunderscore Key}s are stored in a temporary dictionary. This dictionary replaces the original \textit{nodes\textunderscore dictionary} of the \textit{TPTPGraphBuilder}.
 \begin{algorithm}[H]
 \caption{Delete non terminating nodes}
 \begin{algorithmic}[1] 
@@ -443,8 +452,8 @@ Algorithm \ref{alg:delete_non_terminating_nodes}
 \ForAll{node\textunderscore key in terminating\textunderscore set}
 	\State value = this.nodes\textunderscore dictionary.get(node\textunderscore key, None)
 	\State temporary\textunderscore dictionary.update({node\textunderscore key: value})
-	\State this.nodes\textunderscore dictionary = temporary\textunderscore dictionary
 \EndFor
+\State this.nodes\textunderscore dictionary = temporary\textunderscore dictionary
 \end{algorithmic}
 \label{alg:delete_non_terminating_nodes}
 \end{algorithm}
@@ -452,7 +461,7 @@ Algorithm \ref{alg:delete_non_terminating_nodes}
 
 
 \subsection{Determination of the remaining reachable ?productions?}
-As mentioned in section \ref{sec:ConceptRemovingBlockedProductions} todo check reference the determination of the remaining reachable is done by creating a new grammar graph, with the desired start symbol from the control file. The nodes dictionary also is reduced to contain only the reachable nodes. 
+As mentioned in section \ref{sec:ConceptRemovingBlockedProductions} todo check reference the determination of the remaining reachable is done by creating a new grammar graph, with the desired start symbol from the control file. The nodes dictionary is also reduced to contain only the reachable nodes. 
 
 \section{Output generation}\label{sec:ImplementationOutputGeneration}
 \subsection{Create output from grammar graph}\label{sec:ImplementationOutputGrammarGraph}
