@@ -44,7 +44,7 @@ To extract the \ac{CNF} sub-syntax using the control file content from listing \
 The generated sub-syntax is input to the automated parser generator.
 The automated parser generates generates  a lex and yacc file, and also the corresponding c files from that.
 
-\subsubsection{\ac{CNF} clause counter implementation}\label{sec:ValidationAutomatedParserGenerationBuildingBasicParserGenerateFiles}
+\subsubsection{\ac{CNF} clause counter implementation}\label{sec:ValidationAutomatedParserGenerationBuildingBasicParserClauseCounter}
 To count the \ac{CNF} clauses the counter $cnf\textunderscore counter$ has been added to the parser.
 Also a main function is added, that can be seen in listing \ref{lst:ValidationParserMainFunction}.
 Using this function, either a file can be passed to the parser, or the input can be provided via the command-line.
