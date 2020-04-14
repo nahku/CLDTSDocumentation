@@ -364,18 +364,18 @@ After all terminating nodes have been found, the productions that contain nonter
 \end{algorithm}
 
 
-Algorithm \ref{alg:find_non_terminating_symbols} 
-determines whether a node can be identified as terminating by recursive checking
-
+Algorithm \ref{alg:find_non_terminating_symbols}  recursively determines whether a node can be identified as terminating.
 The input are a set of already known terminating nodes and nodes that already have been visited.
-recursive
-If the node has been not been visited before it is added to the visited set and...
-If it has been visited before, the method ?todo? ends to prevent infinite loops
+If the node has been not been visited before it is added to the visited set.
+If it has been visited before, the method ends to prevent infinite recursion.
+If it has not been visited, the \textit{children} list of the node is iterated. (todo children list contains list of nonterminal symbols per production)
 for each children list in node.children
--if len list 0, only terminal symbols in productions, that means node certainly terminating
--else: check if all childs in children list are terminating, by recursive call
--if after that node not in terminating then not known that it is terminating
--if terminating add to known terminating symbols
+If a \textit{children\textunderscore list} is empty, this means that in a production there are no nonterminal symbols and the production only consists of terminal symbols. If that is the case the node is certainly terminating.\\
+If it is not the case, the node is terminating if all nodes in the \textit{children\textunderscore list} represent a terminating nonterminal symbol.
+To check that, the algorithm is called recursively for all nodes in the \textit{children\textunderscore list}.
+If a nonterminal symbol has multiple rule types it is represented by multiple nodes. Also if a nonterminal symbol with multiple rule types is in featured in a production, all nodes representing that nonterminal symbol are in the children list corresponding to this production. Only one of the nodes needs to be terminating in order for the nonterminal symbol to be terminating.
+This is considered in the procedure of checking if a node represents a terminating symbol (line 11), which is described in figure \ref{fig:ImplementationCheckIfValueInTerminating}.
+If every node in the \textit{children\textunderscore list} represents a terminating symbol, the node is added to the known terminating nodes.
 
 \begin{algorithm}[H]
 \caption{Find non terminating symbols}
@@ -404,6 +404,19 @@ for each children list in node.children
 \end{algorithmic}
 \label{alg:find_non_terminating_symbols}
 \end{algorithm}
+
+The flow diagram in figure \ref{fig:ImplementationCheckIfValueInTerminating} shows the procedure to check whether a nonterminal symbol, described by its name, is in the set that contains information on which nodes are known to be terminating.
+There can be up to four nodes representing a nonterminal symbol, because it can have up to four rule type (and a node represents the combination of nonterminal symbol name and rule type).\\
+In the \textit{terminating\textunderscore set} the \textit{NodeKey}s of known terminating nodes are stored.
+A nonterminal symbol is known to be terminating when any node representing that nonterminal symbol is known to be terminating.
+If a \textit{NodeKey} of any rule type and  with the nonterminal name is in the \textit{terminating\textunderscore set} then the symbol is terminating and True is returned, otherwise False is returned.
+\begin{figure}[H]
+\centering
+\includegraphics[width=.9\textwidth]{images/Implementation_value_in_terminating.pdf}
+\caption{Check if node value is in terminating set}
+\label{fig:ImplementationCheckIfValueInTerminating}
+\end{figure}
+
 
 -recursive
 -if not visited
@@ -466,8 +479,7 @@ To remove the nonterminating nodes, in a for-loop, all terminating nodes that ar
 \end{algorithm}
 
 
-
-\subsection{Determination of the remaining reachable ?productions?}
+\subsection{Determination of the remaining reachable symbols}
 As mentioned in section \ref{sec:ConceptRemovingBlockedProductions} todo check reference the determination of the remaining reachable is done by creating a new grammar graph, with the desired start symbol from the control file. The nodes dictionary is also reduced to contain only the reachable nodes. 
 
 \section{Output generation}\label{sec:ImplementationOutputGeneration}
