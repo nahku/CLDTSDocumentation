@@ -620,14 +620,15 @@ self.check_start_symbol(start_symbol)
 \end{lstlisting}
 
 \subsubsection{Import control file}\label{sec:ImplementationGUIImportControlFile}
-- open control file via QFileDialog \\
-- check if not none
-- uncheck all left symbols, check all right symbols, separate via has item parents \\
-- read first line in control file, set start symbol accordingly  \\
-- for each following line, read nt name and ruletype and search item and uncheck it
+
+If a control file is imported, checkboxes have to be set accordingly. The pseudo code in \ref{alg:importControlfile} shows the process. 
+The name of the control file is read in using a QFileDialog. The file itself is imported using the method $Input.read\textunderscore text\textunderscore from\textunderscore file$ (see chapter REF). If the file exists and if a tree view thus a grammar has been imported exists, all nodes are unchecked and all leaves/productions are checked. The items can be distinguished by looking for whether an item has parents and if note if it is checkable. The checkboxes are set this way? because default mode?.  
+After setting the checkboxes in the default mode, the first line of the control string is read and the start symbol is set accordingly. If there are multiple start symbols, every single one is checked?
+Iterating every line of the control string, the nt\textunderscore name which is the first element of a line is saved and the rule\textunderscore type which is the second element and search item and uncheck it
+- find rule type
 
 \begin{algorithm}[H]
-\caption{GUI Algorithm: load\textunderscore controlfile}
+\caption{GUI Pseudo Code: load\textunderscore controlfile}
 \label{alg:importControlfile}
 \begin{algorithmic}[1] 
 \State Import Control File
