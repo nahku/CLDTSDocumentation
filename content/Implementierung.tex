@@ -543,9 +543,11 @@ import_tptp_file_action.triggered.connect(self.load_tptp_syntax_file)
 
 
 \subsubsection{Init TreeView}\label{sec:ImplementationGUIInitTreeView}
+Init TreeView is used for displaying a grammar in the main application window. The method is called after importing or reducing a grammar. The grammar is stored in a nodes dictionary whose values (the nodes) are then converted to a list. This list is displayed by transforming it into a tree view. A tree view can be used for displaying nested lists and allowing a user to navigate through them. The tree view consists of all nodes whose leaves are the productions in their (nested) productions list. The nodes can be expanded to see their productions which are then displayed indented and underneath the node.
+
 A new tree view is defined using QTreeWidget with the header labels "Nonterminal", "Production Type" and "Production" (line 1 and 2 in listing \ref{lst:ImplementationInitTreeView}).
 All nodes of the nodes dictionary of the GraphBuilder instance are extracted and sorted based on their position in the original \ac{TPTP} syntax file (line 3 and 4 in listing \ref{lst:ImplementationInitTreeView}. 
-Algorithm \ref{alg:initTreeView} shows the algorithm used for filling the created treeView. For every node a new QTreeWidgetItem is generated. The item consists of the nodes (node.value) and its rule type. Also a new checkbox is defined that is displayed next to the item whose initial value is unchecked. The background colour to set to grey.
+The pseudo code in \ref{alg:initTreeView} shows the code used for filling the created treeView. For every node a new QTreeWidgetItem is generated. The item consists of the nodes (node.value) and its rule type. Also a new checkbox is defined that is displayed next to the item whose initial value is unchecked. The background colour to set to grey.
 For every production in the nodes production list, a new QTreeWidgetItem and checkbox are created as well. However, the default value of the checkbox is set to unchecked. The generated item is then added as a child to the node item. A potential comment block is added to the treeView and the item is added to the treeView as well.
 
 \begin{lstlisting}[language=Python, basicstyle=\scriptsize	,caption= Init Tree View,label= lst:ImplementationInitTreeView]
@@ -556,7 +558,7 @@ nodes_list.sort(key=lambda x: x.position)
 \end{lstlisting}
 
 \begin{algorithm}[H]
-\caption{GUI Algorithm: init\textunderscore tree\textunderscore view}
+\caption{GUI Pseudo Code: init\textunderscore tree\textunderscore view}
 \label{alg:initTreeView}
 \begin{algorithmic}[1] 
 \ForAll {nodes in nodes\textunderscore list}
@@ -587,7 +589,7 @@ The found items are than checked.
 
 \subsubsection{Toggle comments}\label{sec:ImplementationGUIToggleComments}
 
-Algorithm \ref{alg:toggleComments} shows the algorithm used for toggling comments.
+Algorithm \ref{alg:toggleComments} shows the algorithm used for toggling comments. The algorithm should either show or hide the comments based on the current state. 
 The View class attribute $commentStatus$ indicates whether comments are displayed (true) or not (false). For toggling comments, a new status is set that is the opposite of commentStatus. While looping through every item in $treeView$, comment items can be found by checking whether the item is checkable because by default a comment is not checkable by the user. A QTreeWidgetItem has flags including a flag "ItemIsUserCheckable" that is used for determining whether the item is checkable. The QTreeWidgetItem function $setHidden(bool\;hide)$ is applied on every comment with the value of the new status. CommentStatus is set to the new status. 
 
 -flag(), bitweises AND 
@@ -617,24 +619,56 @@ self.init_tree_view()
 self.check_start_symbol(start_symbol)
 \end{lstlisting}
 
-\subsection{Import control file}\label{sec:ImplementationGUIImportControlFile}
+\subsubsection{Import control file}\label{sec:ImplementationGUIImportControlFile}
 - open control file via QFileDialog \\
+- check if not none
 - uncheck all left symbols, check all right symbols, separate via has item parents \\
 - read first line in control file, set start symbol accordingly  \\
 - for each following line, read nt name and ruletype and search item and uncheck it
 
+\begin{algorithm}[H]
+\caption{GUI Algorithm: load\textunderscore controlfile}
+\label{alg:importControlfile}
+\begin{algorithmic}[1] 
+\State Import Control File
+\If {Control File exists}
+\ForAll {items in tree view}
+	\If {parent of item is None}
+		\If {item is not a comment}
+			\State Uncheck item
+		\EndIf
+	\Else
+		\State Check item 
+	\EndIf
+\EndFor
+\State Get first line of control file
+\State Search item that represents start symbol 
+\State Check item
+\ForAll {lines in control file}
+	\State Split line by comma
+	\State nt\textunderscore name = first element of split
+	\State rule\textunderscore type = second element of split
+	\State Search nt\textunderscore name node in tree view
+	\If{ parent is None and rule\textunderscore type matches rule\textunderscore type}
+		\ForAll {indices in line}
+			\If {child exists}
+				\State Uncheck child
+			\EndIf
+		\EndFor
+	\EndIf 
+\EndFor
+\EndIf
+\end{algorithmic}
+\end{algorithm} 
+
 \subsubsection{Produce control file}\label{sec:ImplementationGUIProduceControlFile}
 
-Algorithm \ref{alg:produceControlfile} shows how the control file is produced. A tuple made of a value and a rule type is defined. An empty list for listing the start symbol and an entry dictionary is created. The dictionary is used for collecting all blocked productions. Looping through every item of treeView it is checked, if the item has parents and its checkbox is unchecked. If so, the rule type of the parent is identified and a new tuple is defined. The index of the item in the parents item list? is identified as well. If the tuple is not already in the dictionary, a new dictionary item is created with the tuple as key and the index of the item as value. If the tuple is already in the dictionary, the index of the item is added to the existing indices. \\
-However, if the item is checked and has no parents, the name of the item is appended to the list of start symbols. 
-
-- raise no imported grammar error
-- if multiple start symbols are selected raise error
-- if no start symbol is selected raise error
-- control string is made: 
-- first line start symbol
-- for every entry in entry dictionary
-- add name of key, rule type and index of children seperated by comma
+Algorithm \ref{alg:produceControlfile} shows how the control file used for reducing the \ac{TPTP} syntax is produced. The index of productions that have been blocked by the user in the GUI are identified and stored in a dictionary until further processing. The key of the dictionary is a tuple made of a value and a rule type that has to be defined alongside the dictionary. Besides the blocked productions, the start symbol is featured in the control file as well, therefore an empty list for listing possibly multiple start symbols is created. Multiple start symbols can occur when the nonterminal symbol has multiple rule types or if the users makes an invalid input. The dictionary is used for collecting all blocked productions. Looping through every node of the tree view it is checked, if the item has parents and its checkbox is unchecked. If so, the rule type of the parent is identified and a new tuple is defined. The index of the production in the parents productions list is identified as well. If the tuple is not already in the dictionary, a new dictionary entry is created with the tuple as key and the index of the item as value. If the tuple is already in the dictionary, the index of the item is added to the existing indices. \\
+However, if the item is checked and has no parents, the name of the item is appended to the list of start symbols. \\
+If there are multiple start symbols in the list that have not he same nonterminal value or no start symbol at all, the user made an invalid input and an error is raised. 
+The final control string is made up of first entry of the start symbol list. The first entry is sufficient because the control file only specifies the start symbols name and not the rule type. If there multiple start symbols, they have the same nonterminal name. 
+Each in a new line, the nonterminal symbol name, rule type and indices of blocked productions are appended to the control string. Within the line, the name, rule type and indices are separated by a comma.
+Moreover, an error is risen if there is no imported grammar, for example the user presses the Reduce grammar button in the GUI without importing a grammar.
 
 \begin{algorithm}[H]
 \caption{GUI Algorithm: produce\textunderscore controlfile}
