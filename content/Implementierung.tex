@@ -309,7 +309,7 @@ From the node, in a loop, the elements of the \textit{productions\textunderscore
 \State delete lines[0]
 \ForAll {line in lines}
 	\State data = line.splitBy(",")
-	\State nonterminal\textunderscore name = data[0]
+	\State nonterminal\textunderscore name = data[0] 
 	\State rule\textunderscore symbol = data[1]
 	\State rule\textunderscore type = determineRuleType(rule\textunderscore symbol)
 	\State delete data[0:2]
@@ -418,28 +418,19 @@ If a \textit{NodeKey} of any rule type and  with the nonterminal name is in the 
 \label{fig:ImplementationCheckIfValueInTerminating}
 \end{figure}
 
-After the terminating symbols have been determined, productions that contain a nonterminating symbol have to be removed from the grammar graph.
+After the terminating symbols have been determined, productions that contain a nonterminating symbol have to be removed from the nodes of the grammar graph because some nonterminal symbols might have productions that contain nonterminating symbols, but also other productions that only contain terminating symbols. Only the productions containing nonterminating symbols have to be removed.\\
 Algorithm \ref{alg:delete_non_terminating_productions}  describes how productions that include nonterminating symbols are removed from the grammar graph.
--Input
-
-If the node has not been visited before it is added to the set of visited nodes.
-The \textit{children} list is iterated and for each nested list:
-for each node the algorithm is called recursively.
+The start node of the graph, the set of known terminating nodes and an empty set of already visited nodes are input at the first call of the algorithm.
+If the input node has been visited before it is not visited again, and the algorithm ends. If it has not been visited before the corresponding \textit{Node\textunderscore Key} is added to the set of visited nodes.
+Then the \textit{children} list of the node is iterated (line 5).
+The index created in line 4 corresponds to the current element of the \textit{children} list, that is iterated. It is needed to delete the \textit{children} list and the corresponding \textit{productions\textunderscore list}, if a production contains nonterminating symbols. The \textit{children} list is iterated in reverse, because, if a \textit{children} list and \textit{productions\textunderscore list} is deleted this will not effect the indexing of the next \textit{children} list to analyse.
+The \textit{children} list contains lists of nodes for each production (todo reference). Each list, nested in the \textit{children} list, is iterated and for each node the algorithm is called recursively (line 7 and 8).\\
 If a node represent a nonterminating symbol the \textit{not\textunderscore terminating} flag is set to true.
-If this flag is true after iteration of one element of the \textit{children} list, it means that the production corresponding to the \textit{children} list element contains at least one nonterminating symbol. Then, the corresponding element of the \textit{children} list and of the \textit{productions\textunderscore list} are removed from the node.
+If this flag is true after iteration of one element of the \textit{children} list, it means that the production corresponding to the \textit{children} list element contains at least one nonterminating symbol. If that is the case, the corresponding element of the \textit{children} list and of the \textit{productions\textunderscore list} are removed from the node.
 This is repeated for all elements of the \textit{children} list.
--The \textit{children} list is iterated from the end to the beginning in 
--index variable
--index to end
-For each child the algorithm is called recursively. If the child node does not correspond to a terminating symbol, set nonterminating flag to true
-If the nontermiating flag is true, delete production -> delete children entry and productions list entry.
--value in terminating checks if any ?rule type? is terminating
 
--call for each child in children list
--if child not in terminating, set not terminating flag
--if not terminating, delete corresponding children list and prouctions list
+As a result of this algorithm, all productions that contained nonterminal symbols have been removed from the grammar graph.
 
--todo check children list, ist was wenn symbol mehrere nodes hat?
 \begin{algorithm}[H]
 \caption{Delete non terminating productions}
 \begin{algorithmic}[1] 
@@ -467,7 +458,8 @@ If the nontermiating flag is true, delete production -> delete children entry an
 \label{alg:delete_non_terminating_productions}
 \end{algorithm}
 
-Algorithm \ref{alg:delete_non_terminating_nodes} removes the nonterminating nodes from the \textit{nodes\textunderscore dictionary}. It takes a set of \textit{Node\textunderscore Keys}s as input, that specifies all terminating nodes as input.
+After the productions containing nonterminating symbols have been removed from the grammar graph, the nodes that represet nonterminating symbols can also be removed from the \textit{nodes\textunderscore dictionary}.
+Algorithm \ref{alg:delete_non_terminating_nodes} is responsible for this. It takes the set of \textit{Node\textunderscore Key}s as input, that specifies all terminating nodes.
 To remove the nonterminating nodes, in a for-loop, all terminating nodes that are addressed by the \textit{Node\textunderscore Key}s are stored in a temporary dictionary. This dictionary replaces the original \textit{nodes\textunderscore dictionary} of the \textit{TPTPGraphBuilder}.
 \begin{algorithm}[H]
 \caption{Delete non terminating nodes}
@@ -484,8 +476,9 @@ To remove the nonterminating nodes, in a for-loop, all terminating nodes that ar
 \end{algorithm}
 
 \subsection{Determination of the remaining reachable symbols}
-As mentioned in section \ref{sec:ConceptRemovingBlockedProductions} todo check reference the determination of the remaining reachable is done by creating a new grammar graph, with the desired start symbol from the control file. The nodes dictionary is also reduced to contain only the reachable nodes. 
-
+Now, that nonterminating symbols have been removed from the grammar graph, the remaining reachable symbols have to be determined.
+As described in section \ref{sec:ConceptRemovingBlockedProductions} the determination of the remaining reachable is done by creating a new grammar graph, with the desired start symbol from the control file.
+The new grammar graph will only contain the reachable symbols (as described in section \ref{sec:ConceptDerterminingRemainingReachable}). 
 \section{Output generation}\label{sec:ImplementationOutputGeneration}
 \subsection{Create output from grammar graph}\label{sec:ImplementationOutputGrammarGraph}
 
