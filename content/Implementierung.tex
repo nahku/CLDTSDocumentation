@@ -614,6 +614,7 @@ The View class attribute $commentStatus$ indicates whether comments are displaye
 
 \subsubsection{Reduce \ac{TPTP} syntax with selection}\label{sec:ImplementationGUIReduceWithSelection}
 
+The method reduce \ac{TPTP} syntax with selection reduces the syntax and displays the resulting syntax in the GUI. 
 For reducing the \ac{TPTP} syntax based on the users selection in the GUI a control file is produced (see Produce Control file). If no grammar has been imported or no start symbol or multiple start symbol have been selected an error raises. The error is displayed using a QMessageBox. With the produced control file, the Graphbuilder disables blocked productions, treeView is initialized  and the start symbol is checked (see listing \ref{lst:ImplementationGUIReduceTPTPSelection}). 
 
 \begin{lstlisting}[language=Python, basicstyle=\scriptsize	,caption= Reduce TPTP syntax with selection,label= lst:ImplementationGUIReduceTPTPSelection]
@@ -623,13 +624,31 @@ self.init_tree_view()
 self.check_start_symbol(start_symbol)
 \end{lstlisting}
 
+\subsubsection{Create \ac{TPTP} syntax file from selection}\label{sec:ImplementationGUIImportControlFile}
+
+Figure \ref{fig:ImplementationGUIReduceandSave} shows a flow diagram of the process of reducing and saving a \ac{TPTP} syntax file from a users selection.
+The input of this method is a boolean value $with\textunderscore comments$ that describes if the syntax should be saved with or without comments for the automatic parser generator (see chapter \ref{sec:ValidationAutomatedParserGeneration}). 
+First, the filename is import using a $QFileDialog$.
+If the import is successful, meaning a filename has been selected, a control file based on users selection is produced. If the import is not successful, the method terminates. \\
+In comparison to \textit{Reduce \ac{TPTP} syntax with selection} the reduced syntax is not displayed in the GUI but only saved to local storage and the GUI displays still the full syntax. If the user wishes to display the reduced syntax in the GUI and save it, he can use the button \textit{Reduce \ac{TPTP} syntax with selection} and then use the button \textit{Reduce and save \ac{TPTP} syntax with selection}.
+Because the full syntax is still displayed, the graphBuilder object storing the syntax cannot be modified. Therefore, the old graphBuilder is copied to a new graphBuilder object. Because the old object should not change, the new object should have copies of all objects that are part of the graphBuilder rather than references.
+To copy the graphBuilder object which is a compound object it is necessary to use $copy.deepcopy$ instead of $copy.copy$. Deepcopy creates a new object and inserts copies of all objects that are part of to be copied object. Copy however, creates a new object and inserts references to the to be copied objects. 
+The new graphBuilder is initialised with the start symbol that has been provided by the generated control file and rules that include blocked productions are disabled. During the initialisation the new start symbol $<start\textunderscore symbol>$ has been added (see chapter \ref{sec:ConceptGraphGeneration} for explanation). This start symbol is searched in the reduced syntax. If it can be found, the syntax is saved with or without comments based on the input parameter. However, if the start symbol cannot be found in the syntax no part of the grammar is terminating. In this case the saved file is empty. To save the grammar the method $Output.save\textunderscore ordered\textunderscore rules\textunderscore from\textunderscore graph(\textunderscore with\textunderscore comments)$ is used.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{images/implementation_reduce_and_save_tptp_syntax.pdf}
+\caption{Reduce and save \ac{TPTP} syntax}
+\label{fig:ImplementationGUIReduceandSave}
+\end{figure}
+
+
 \subsubsection{Import control file}\label{sec:ImplementationGUIImportControlFile}
 
 If a control file is imported, checkboxes have to be set accordingly. The pseudo code in \ref{alg:importControlfile} shows the process. 
-The name of the control file is read in using a QFileDialog. The file itself is imported using the method $Input.read\textunderscore text\textunderscore from\textunderscore file$ (see chapter REF). If the file exists and if a tree view thus a grammar has been imported exists, all nodes are unchecked and all leaves/productions are checked. The items can be distinguished by looking for whether an item has parents and if note if it is checkable. The checkboxes are set this way? because default mode?.  
-After setting the checkboxes in the default mode, the first line of the control string is read and the start symbol is set accordingly. If there are multiple start symbols, every single one is checked?
-Iterating every line of the control string, the nt\textunderscore name which is the first element of a line is saved and the rule\textunderscore type which is the second element and search item and uncheck it
-- find rule type
+The name of the control file is read in using a QFileDialog. The file itself is imported using the method $Input.read\textunderscore text\textunderscore from\textunderscore file$ (see chapter REF). If the file exists and if a tree view exists thus a grammar has been imported, all nodes are unchecked and all leaves/productions are checked. The items can be distinguished by looking for whether an item has parents and if not if it is checkable. The checkboxes are set this way because the default mode is that all nodes are unchecked and all productions are checked.  
+After setting the checkboxes to the default mode, the first line of the control string is read and the start symbol is set accordingly. If there are multiple start symbols, every start symbol is checked.
+Iterating every line of the control string, the nt\textunderscore name which is the first element of a line is saved and the rule\textunderscore type which is the second element as well. The item that belongs to nt\textunderscore name is then searched and every production whose index is listed in the control file is unchecked.
 
 \begin{algorithm}[H]
 \caption{GUI Pseudo Code: load\textunderscore controlfile}
