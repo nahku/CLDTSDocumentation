@@ -580,9 +580,7 @@ nodes_list.sort(key=lambda x: x.position)
 \subsubsection{Check start symbol}\label{sec:ImplementationGUIStartsymbol}
 
 This function checks the checkbox of the defined start symbol. The QTreeView method $findItem(string\; itemName)$ is used that returns all items that match the item name. 
-The found items are than checked.
-
-\subsection{Display rules}\label{sec:ImplementationGUIDisplayRules}
+The found items are then checked.
 
 \subsubsection{Toggle comments}\label{sec:ImplementationGUIToggleComments}
 
@@ -617,7 +615,7 @@ self.init_tree_view()
 self.check_start_symbol(start_symbol)
 \end{lstlisting}
 
-\subsubsection{Create \ac{TPTP} syntax file from selection}\label{sec:ImplementationGUIImportControlFile}
+\subsubsection{Create \ac{TPTP} syntax file from selection}\label{sec:ImplementationGUICreateTPTPFromSelection}
 
 Figure \ref{fig:ImplementationGUIReduceandSave} shows a flow diagram of the process of reducing and saving a \ac{TPTP} syntax file from a users selection.
 The input of this method is a boolean value $with\textunderscore comments$ that describes if the syntax should be saved with or without comments for the automatic parser generator (see chapter \ref{sec:ValidationAutomatedParserGeneration}). 
@@ -629,12 +627,27 @@ To copy the graphBuilder object which is a compound object it is necessary to us
 The new graphBuilder is initialised with the start symbol that has been provided by the generated control file and rules that include blocked productions are disabled. During the initialisation the new start symbol $<start\textunderscore symbol>$ has been added (see chapter \ref{sec:ConceptGraphGeneration} for explanation). This start symbol is searched in the reduced syntax. If it can be found, the syntax is saved with or without comments based on the input parameter. However, if the start symbol cannot be found in the syntax no part of the grammar is terminating. In this case the saved file is empty. To save the grammar the method $Output.save\textunderscore ordered\textunderscore rules\textunderscore from\textunderscore graph(\textunderscore with\textunderscore comments)$ is used.
 
 \begin{figure}[H]
-\centering
-\includegraphics[width=1\textwidth]{images/implementation_reduce_and_save_tptp_syntax.pdf}
+%\centering
+\includegraphics[width=1.05\textwidth]{images/implementation_reduce_and_save_tptp_syntax.pdf}
 \caption{Reduce and save \ac{TPTP} syntax}
 \label{fig:ImplementationGUIReduceandSave}
 \end{figure}
 
+Each button in the sub-menu has an associated action. This action is triggered once the button is pressed. In the GUI there are two options of reducing and saving the \ac{TPTP} syntax namely \textit{Reduce and save \ac{TPTP} syntax with selection} and \textit{Reduce and save \ac{TPTP} syntax from selection with external comments}. These two options both call the function described above and in figure \ref{fig:ImplementationGUIReduceandSave}. However, one calls it and passes $with\textunderscore comments$ as true and the other as false. Because each button in the GUI needs it own designated function to call, the functions $create\textunderscore tptp\textunderscore syntax file\textunderscore from\textunderscore selection\textunderscore with\textunderscore comments$ and $create\textunderscore tptp\textunderscore syntax file\textunderscore from\textunderscore selection\textunderscore without\textunderscore comments$ are introduced. They simply set the parameter $with\textunderscore comments$ accordingly and call the function \textit{Create \ac{TPTP} syntax file from selection}.
+
+\subsubsection{Create \ac{TPTP} syntax file from control file}\label{sec:ImplementationGUICreateTPTPFromControlfile}
+
+The previous section explained how a \ac{TPTP} syntax is reduced and saved based on a users selection in the GUI. The described function in this section also reduces and saves a \ac{TPTP} syntax but this time based on an imported control file. The function is similar to the previous function \textit{Create \ac{TPTP} syntax file from selection}. Figure \ref{fig:ImplementationGUIReduceandSaveControl} shows the same flow diagram as figure \ref{fig:ImplementationGUIReduceandSave} but highlights applied changes in red. Changes are that besides importing a filename, a name for the control file has to be imported as well. Instead of producing a control file based on the users selection, the specified control  file is read and the grammar graph is initialised with the start symbol that is specified in the first line of the control file.
+
+Also similar to the previous section, the functions \\ $create\textunderscore tptp\textunderscore syntax\textunderscore from\textunderscore control\textunderscore file\textunderscore with\textunderscore comments$ and \\
+$create\textunderscore tptp\textunderscore syntax\textunderscore from\textunderscore control\textunderscore file\textunderscore without\textunderscore comments$ are introduced that set the parameter $with\textunderscore comments$ accordingly and call the function \textit{Create \ac{TPTP} syntax file from control file}.
+
+\begin{figure}[H]
+%\centering
+\includegraphics[width=1.05\textwidth]{images/implementation_reduce_and_save_tptp_syntax_control.pdf}
+\caption{Reduce and save \ac{TPTP} syntax from control file}
+\label{fig:ImplementationGUIReduceandSaveControl}
+\end{figure}
 
 \subsubsection{Import control file}\label{sec:ImplementationGUIImportControlFile}
 
@@ -714,6 +727,11 @@ Moreover, an error is risen if there is no imported grammar, for example the use
 \end{algorithmic}
 \end{algorithm} 
 
+\subsubsection{Output control file}\label{sec:ImplementationGUIOutput control file}
+
+Output control file saves a control file to local storage. 
+First, a control file is produced based using the method \textit{Produce control file}. A filename under which the control file is stored is input using a QFileDialog window. The control file is then stored using $Output.save\textunderscore text\textunderscore to\textunderscore file$.
+
 \subsubsection{Import \ac{TPTP} syntax file}\label{sec:ImplementationGUIImportFile}
 
 The \ac{TPTP} syntax file is imported using QFileDialog which is returning the filename. If the filename is not empty, the application opens a dialog window where the user has to specify a desired start symbol. The method $red\textunderscore text\textunderscore from\textunderscore file$ returns the text of the file belonging to the filename. With the textfile and the start symbol, the method $create\textunderscore tptp\textunderscore view$ is called.
@@ -724,6 +742,8 @@ The \ac{TPTP} syntax file is extracted from the \ac{TPTP} website using the Inpu
 
 $create\textunderscore tptp\textunderscore view$ \\
 The method creates a new instance of the $TPTPGraphBuilder$, calls $graphBuilder.run$, $init\textunderscore tree\textunderscore view$ and $check\textunderscore start\textunderscore symbol$.
+
+\subsection{Exception handling}\label{sec:ImplementationGUIExeptionHandling}
 
 \section{Command-line interface}\label{sec:ImplementationCommandLineInterface}
 With the argparse module a command-line parser object can be created and parameters can be added to that object.
