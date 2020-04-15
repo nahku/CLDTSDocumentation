@@ -225,14 +225,29 @@ The resulting parse tree can be seen in figure \ref{fig:ImplementationParsing}.
 \label{fig:ImplementationParsing}
 \end{figure}
                 
-                
+\subsection{Disambiguation}\label{sec:ImplementationParserDisambiguation}
                 
 \section{Graph generation}\label{sec:ImplementationGraphGeneration}
+todo
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{images/uml_data_types_NTNode.pdf}
+\caption{NTNode UML diagram}
+\label{fig:ImplementationNTNodeUML}
+\end{figure}
 
-To generate the graph of a given grammar three algorithms are needed that will be explained in the following. 
+\begin{figure}[H]
+\centering
+\includegraphics[width=.7\textwidth]{images/uml_data_types_rule_type.pdf}
+\caption{RuleType UML diagram}
+\label{fig:ImplementationRuleTypeUML}
+\end{figure}
 
-The algorithm $buildGraphRek$ calls the function $searchProductionsListForNT$ that appends children of a node to the nodes list of children. The algorithm is first called with the start symbol. 
-After the children of a node have been appended to the node, every child calls the algorithm resulting in appending their own children to their children's list. 
+To generate the graph of a given grammar three algorithms are needed that will be explained in the following.
+
+The algorithm $buildGraphRek$ calls the function $searchProductionsListForNT$ that appends children of a node to the nodes list of children.
+The algorithm is first called with the start symbol.
+After the children of a node have been appended to the node, every child calls the algorithm resulting in appending their own children to their children's list.
 
 \begin{algorithm}[H]
 \caption{Graph Generation Algorithm: buildGraphRek}
@@ -248,7 +263,10 @@ After the children of a node have been appended to the node, every child calls t
 \end{algorithmic}
 \end{algorithm}
 
-The right side of a production rule is stored in a productions list. For identifying the nonterminal or terminal symbols in the productions lists, a loop iterates through all elements of the productions list. Each element is a production and calls the function $searchProductionForNT$. This function identifies the children of the given element who are then appended to the node.
+The right side of a production rule is stored in a productions list.
+For identifying the nonterminal or terminal symbols in the productions lists, a loop iterates through all elements of the productions list.
+Each element is a production and calls the function $searchProductionForNT$.
+This function identifies the children of the given element who are then appended to the node.
 
 \begin{algorithm}[H]
 \caption{Algorithm for extracting productions from productions list: searchProductionsListForNT}
@@ -262,7 +280,12 @@ The right side of a production rule is stored in a productions list. For identif
 \end{algorithmic}
 \end{algorithm}
 
-The goal is to identify the nonterminal symbols. Therefore it is checked if the production is a nested production and if so, the same function is called again. If the production is a XOR production list the function $searchProductionsListForNT$ is called to break down the productions list. If the production element is a nonterminal symbol the element is searched in the node dictionary to get the node where the element is on the left side. This element is then appended to a list of children. It is possible that an element appears multiple times on the left side if it is presented by multiple expressions. In this case each element is appended to the list of children.
+The goal is to identify the nonterminal symbols.
+Therefore it is checked if the production is a nested production and if so, the same function is called again.
+If the production is a XOR production list the function $searchProductionsListForNT$ is called to break down the productions list.
+If the production element is a nonterminal symbol the element is searched in the node dictionary to get the node where the element is on the left side.
+This element is then appended to a list of children. It is possible that an element appears multiple times on the left side if it is presented by multiple expressions.
+In this case each element is appended to the list of children.
 
 \begin{algorithm}[H]
 \caption{Algorithm for appending children to node: searchProductionForNT}
@@ -279,6 +302,73 @@ The goal is to identify the nonterminal symbols. Therefore it is checked if the 
 	\EndIf
 \EndFor
 \end{algorithmic}
+\end{algorithm}
+\section{Maintaining comments}\label{sec:ConceptMaintainingComments}
+-follows concept
+-comment is associated NTNode (NTNode UML diagram see figure \ref{fig:ImplementationNTNodeUML})
+-associate with node, so if graph is reduced, comments still associate with node and can be printed
+-explain extend comment block method of NTNode
+
+-assign comments to rule in graph builder
+-executed assign comments to rule after building nodes dictionary
+-follows procedure described in section \ref{sec:ConceptMaintainingComments}
+
+-parser creates \textit{rules\textunderscore list}
+-in \textit{rules\textunderscore list} rules, and comment blocks are present
+when comment block occurs
+split comment block by top of page method of graph builder
+
+\begin{algorithm}[H]
+\small
+\caption{Assign comments to rules}
+\begin{algorithmic}[1]
+\algrenewcommand\algorithmicindent{0.4em}
+\Require rules\textunderscore list
+\ForAll {index, expression in rules\textunderscore list.list}
+	\If {expression is COMMENT\textunderscore BLOCK}
+		\State {comment\textunderscore block\textunderscore list = this.split\textunderscore comment\textunderscore block\textunderscore by\textunderscore top\textunderscore of\textunderscore page( expression)}
+		\If{length(comment\textunderscore block\textunderscore list) == 1}
+			\If{index < length(rules\textunderscore list.list) - 1}
+				\State {next\textunderscore expression = rules\textunderscore list.list[index + 1]}
+				\State rule\textunderscore type = this.find\textunderscore rule\textunderscore type\textunderscore for\textunderscore expression(next\textunderscore expression)
+				\State {node\textunderscore key = Node\textunderscore Key(next\textunderscore expression.name, rule\textunderscore type)}
+				\State this.nodes\textunderscore dictionary[node\textunderscore key].extend\textunderscore comment\textunderscore block( comment\textunderscore block\textunderscore list[0])
+				\Else
+					\State previous\textunderscore expression = rules\textunderscore list.list[index - 1]
+					\State rule\textunderscore type = this.find\textunderscore rule\textunderscore type\textunderscore for\textunderscore expression(previous\textunderscore expression)
+					\State node\textunderscore key = Node\textunderscore Key(previous\textunderscore expression.name, rule\textunderscore type)
+				\State this.nodes\textunderscore dictionary[node\textunderscore key].extend\textunderscore comment\textunderscore block( comment\textunderscore block\textunderscore list[0])
+			\EndIf
+		\ElsIf {length(comment\textunderscore block\textunderscore list) == 2}
+			\If{index != 0}
+				\State previous\textunderscore expression = rules\textunderscore list.list[index - 1]
+				\State rule\textunderscore type = this.find\textunderscore rule\textunderscore type\textunderscore for\textunderscore expression(previous\textunderscore expression)
+				\State node\textunderscore key = Node\textunderscore Key(previous\textunderscore expression.name, rule\textunderscore type)
+				\State this.nodes\textunderscore dictionary[node\textunderscore key].extend\textunderscore comment\textunderscore block( comment\textunderscore block\textunderscore list[0])
+			\Else
+				\State {next\textunderscore expression = rules\textunderscore list.list[index + 1]}
+				\State rule\textunderscore type = this.find\textunderscore rule\textunderscore type\textunderscore for\textunderscore expression(next\textunderscore expression)
+				\State {node\textunderscore key = Node\textunderscore Key(next\textunderscore expression.name, rule\textunderscore type)}
+				\State this.nodes\textunderscore dictionary[node\textunderscore key].extend\textunderscore comment\textunderscore block( comment\textunderscore block\textunderscore list[0])
+			\EndIf
+			\If{index < length(rules\textunderscore list.list) - 1)}
+				\State {next\textunderscore expression = rules\textunderscore list.list[index + 1]}
+				\State rule\textunderscore type = this.find\textunderscore rule\textunderscore type\textunderscore for\textunderscore expression(next\textunderscore expression)
+				\State {node\textunderscore key = Node\textunderscore Key(next\textunderscore expression.name, rule\textunderscore type)}
+				\State this.nodes\textunderscore dictionary[node\textunderscore key].extend\textunderscore comment\textunderscore block( comment\textunderscore block\textunderscore list[1])
+			\Else
+				\State previous\textunderscore expression = rules\textunderscore list.list[index - 1]
+				\State rule\textunderscore type = this.find\textunderscore rule\textunderscore type\textunderscore for\textunderscore expression(previous\textunderscore expression)
+				\State node\textunderscore key = Node\textunderscore Key(previous\textunderscore expression.name, rule\textunderscore type)
+				\State this.nodes\textunderscore dictionary[node\textunderscore key].extend\textunderscore comment\textunderscore block( comment\textunderscore block\textunderscore list[1])
+			\EndIf
+		\ElsIf{length(comment\textunderscore block\textunderscore list) > 2}
+		\State \%excluded
+		\EndIf
+	\EndIf
+\EndFor
+\end{algorithmic}
+\label{alg:assign_comments_to_rule}
 \end{algorithm}
 
 \section{Extraction of a sub-syntax}\label{sec:ImplementationExtractReducedGrammar}
@@ -480,8 +570,10 @@ Now, that nonterminating symbols have been removed from the grammar graph, the r
 As described in section \ref{sec:ConceptRemovingBlockedProductions} the determination of the remaining reachable is done by creating a new grammar graph, with the desired start symbol from the control file.
 The new grammar graph will only contain the reachable symbols (as described in section \ref{sec:ConceptDerterminingRemainingReachable}). 
 \section{Output generation}\label{sec:ImplementationOutputGeneration}
-\subsection{Create output from grammar graph}\label{sec:ImplementationOutputGrammarGraph}
 
+\subsection{Create output from grammar graph}\label{sec:ImplementationOutputGrammarGraph}
+-to generate output from node:
+traverse graph and create string represenations of nodes
 \subsection{Traverse graph to create string representations of objects}\label{sec:ImpolementationOutputGrammarGraphTraverse}
 
 \subsection{Create string representations of objects}\label{sec:ImplementationOutputGrammarGraphStringRepresentations}
