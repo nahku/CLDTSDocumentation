@@ -332,7 +332,7 @@ The nonterminal symbols in the TPTP syntax are represented by a node class that 
 
 Before generating the graph, a dictionary is created.
 This dictionary contains nodes constructed from the grammar list output by the parser that contains rules and comments.
-While constructing the dictionary, comments in the grammar list are associated to nodes using a heuristic that is described in section \ref{sec:MaintainingComments}.
+While constructing the dictionary, comments in the grammar list are associated to nodes using a heuristic that is described in section \ref{sec:ConceptMaintainingComments}.
 The combination of the nodes' value and rule type form the unique key for each node.
 The dictionary provides an efficient way accessing them in order to build the grammar graph and also during the next step of sub-syntax generation.
 
