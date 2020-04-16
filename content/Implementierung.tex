@@ -228,7 +228,11 @@ The resulting parse tree can be seen in figure \ref{fig:ImplementationParsing}.
 \subsection{Disambiguation}\label{sec:ImplementationParserDisambiguation}
                 
 \section{Graph generation}\label{sec:ImplementationGraphGeneration}
-todo
+
+- before generating graph node dictionary consisting of nodes is built \\
+- Figure \ref{fig:ImplementationNTNodeUML} shows the class NTNode that has already been introduced in chapter \ref{sec:ConceptGraphGeneration}. \\
+- Rule Type is Enumeration and can either have the value grammar, token, strict or macro.
+
 \begin{figure}[H]
 \centering
 \includegraphics[width=1\textwidth]{images/uml_data_types_NTNode.pdf}
@@ -242,6 +246,22 @@ todo
 \caption{RuleType UML diagram}
 \label{fig:ImplementationRuleTypeUML}
 \end{figure}
+
+Algorithm \ref{alg:buildNodesDictionary} shows how the nodes dictionary is build. Iterating the rules list that the parser outputs if the rule is not a comment block a new dictionary item is created that consists of the node key rule name and rule type and the NTNode as value. After iterating, comments are assigned (see chapter REF ).
+
+\begin{algorithm}[H]
+\caption{Graph Generation Algorithm: buildNodesDictionary}\label{alg:buildNodesDictionary}
+\begin{algorithmic}[1] 
+\Require rules\textunderscore list
+\ForAll {rules in rules\textunderscore list} 
+	\If {rules is not a comment block}
+		\State Find rule type for expression
+		\State nodes\textunderscore dictionary.update({Node\textunderscore Key(rule.name, rule\textunderscore type):NTNode(rule.name, rules.productions\textunderscore list, rule\textunderscore type, None, rule.position)})
+	\EndIf
+\EndFor
+\State Assign comments to rules
+\end{algorithmic}
+\end{algorithm}
 
 To generate the graph of a given grammar three algorithms are needed that will be explained in the following.
 
@@ -603,7 +623,7 @@ NTNODE
 \section{Input/Output}\label{sec:ImplementationInOut}
 
 \section{GUI}\label{sec:ImplementationGUI}
-The GUI consists of the class View that can be seen in Figure \ref{fig:ImplementationViewClassDiagram}. The class has the attributes $treeView$ which is an instance of the PyQt QTreeWidget, $graphBuilder$ which is an instance of the TPTPGraphBuilder and the boolean value $commentStatus$. The class functions are described in the following.
+The GUI consists of the class View that can be seen in Figure \ref{fig:ImplementationViewClassDiagram}. The class has the attributes $treeView$ which is an instance of the PyQt QTreeWidget, $graphBuilder$ which is an instance of the TPTPGraphBuilder and the boolean value $commentStatus$. The class functions and their implementation are described in the following sections based on the five sub-menus.
 
 \begin{figure}[H]
 \centering
@@ -611,6 +631,8 @@ The GUI consists of the class View that can be seen in Figure \ref{fig:Implement
 \caption{View UML class diagram}
 \label{fig:ImplementationViewClassDiagram}
 \end{figure}
+
+\subsection{Main application window}\label{sec:ImplementationGUIMainAppli}
 
 \subsubsection{Init GUI}\label{sec:ImplementationGUIInit}
 
@@ -668,12 +690,25 @@ nodes_list.sort(key=lambda x: x.position)
 \EndFor
 \end{algorithmic}
 \end{algorithm}
-	
+
+\subsection{Import menu}\label{sec:ImplementationGUIImportMenu}	
+\subsubsection{Import \ac{TPTP} syntax file}\label{sec:ImplementationGUIImportFile}
+
+The \ac{TPTP} syntax file is imported using QFileDialog which is returning the filename. If the filename is not empty, the application opens a dialog window where the user has to specify a desired start symbol. The method $red\textunderscore text\textunderscore from\textunderscore file$ returns the text of the file belonging to the filename. With the textfile and the start symbol, the method $create\textunderscore tptp\textunderscore view$ is called.
+
+\subsubsection{Import \ac{TPTP} syntax from the \ac{TPTP} website}\label{sec:ImplementationGUIImportInternet}
+
+The \ac{TPTP} syntax file is extracted from the \ac{TPTP} website using the Input method $import\textunderscore tptp\textunderscore syntax\textunderscore from\textunderscore web$ (see chapter REF). This method returns a textfile. The application opens a dialog window where the user has to specify a desired start symbol. With the textfile and the start symbol, the method $create\textunderscore tptp\textunderscore view$ is called.
+
+$create\textunderscore tptp\textunderscore view$ \\
+The method creates a new instance of the $TPTPGraphBuilder$, calls $graphBuilder.run$, $init\textunderscore tree\textunderscore view$ and $check\textunderscore start\textunderscore symbol$.
+
 \subsubsection{Check start symbol}\label{sec:ImplementationGUIStartsymbol}
 
 This function checks the checkbox of the defined start symbol. The QTreeView method $findItem(string\; itemName)$ is used that returns all items that match the item name. 
 The found items are then checked.
 
+\subsection{View menu}\label{sec:ImplementationGUIViewMenu}
 \subsubsection{Toggle comments}\label{sec:ImplementationGUIToggleComments}
 
 Algorithm \ref{alg:toggleComments} shows the algorithm used for toggling comments. The algorithm should either show or hide the comments based on the current state. 
@@ -695,6 +730,7 @@ The View class attribute $commentStatus$ indicates whether comments are displaye
 \end{algorithmic}
 \end{algorithm}
 
+\subsection{Reduce menu}\label{sec:ImplementationGUIReduceMenu}
 \subsubsection{Reduce \ac{TPTP} syntax with selection}\label{sec:ImplementationGUIReduceWithSelection}
 
 The method reduce \ac{TPTP} syntax with selection reduces the syntax and displays the resulting syntax in the GUI. 
@@ -706,7 +742,7 @@ self.graphBuilder.disable_rules(control_string)
 self.init_tree_view()
 self.check_start_symbol(start_symbol)
 \end{lstlisting}
-
+\subsection{Save syntax menu}\label{sec:ImplementationGUISaveSyntaxMenu}
 \subsubsection{Create \ac{TPTP} syntax file from selection}\label{sec:ImplementationGUICreateTPTPFromSelection}
 
 Figure \ref{fig:ImplementationGUIReduceandSave} shows a flow diagram of the process of reducing and saving a \ac{TPTP} syntax file from a users selection.
@@ -741,6 +777,7 @@ $create\textunderscore tptp\textunderscore syntax\textunderscore from\textunders
 \label{fig:ImplementationGUIReduceandSaveControl}
 \end{figure}
 
+\subsection{Control file menu}\label{sec:ImplementationGUIControlFileMenu}
 \subsubsection{Import control file}\label{sec:ImplementationGUIImportControlFile}
 
 If a control file is imported, checkboxes have to be set accordingly. The pseudo code in \ref{alg:importControlfile} shows the process. 
@@ -824,18 +861,17 @@ Moreover, an error is risen if there is no imported grammar, for example the use
 Output control file saves a control file to local storage. 
 First, a control file is produced based using the method \textit{Produce control file}. A filename under which the control file is stored is input using a QFileDialog window. The control file is then stored using $Output.save\textunderscore text\textunderscore to\textunderscore file$.
 
-\subsubsection{Import \ac{TPTP} syntax file}\label{sec:ImplementationGUIImportFile}
+\subsection{Exception handling}\label{sec:ImplementationGUIExceptionHandling}
 
-The \ac{TPTP} syntax file is imported using QFileDialog which is returning the filename. If the filename is not empty, the application opens a dialog window where the user has to specify a desired start symbol. The method $red\textunderscore text\textunderscore from\textunderscore file$ returns the text of the file belonging to the filename. With the textfile and the start symbol, the method $create\textunderscore tptp\textunderscore view$ is called.
+Exceptions are used to handle wrong input from the user. There are three exceptions that are raised whenever the user makes a wrong input: 
 
-\subsubsection{Import \ac{TPTP} syntax from the \ac{TPTP} website}\label{sec:ImplementationGUIImportInternet}
+\begin{itemize}
+\item Multiple start symbols
+\item No start symbol
+\item No imported grammar
+\end{itemize}
 
-The \ac{TPTP} syntax file is extracted from the \ac{TPTP} website using the Input method $import\textunderscore tptp\textunderscore syntax\textunderscore from\textunderscore web$ (see chapter REF). This method returns a textfile. The application opens a dialog window where the user has to specify a desired start symbol. With the textfile and the start symbol, the method $create\textunderscore tptp\textunderscore view$ is called.
-
-$create\textunderscore tptp\textunderscore view$ \\
-The method creates a new instance of the $TPTPGraphBuilder$, calls $graphBuilder.run$, $init\textunderscore tree\textunderscore view$ and $check\textunderscore start\textunderscore symbol$.
-
-\subsection{Exception handling}\label{sec:ImplementationGUIExeptionHandling}
+The exception \textit{multiple start symbols} is raised if the user selects multiple start symbols in the GUI and presses any Reduce button. On the contrary the exception \textit{no start symbol} is raised if the user selects no start symbol in the GUI and presses any Reduce button. The exception \textit{no imported grammar} is raised if the user starts the application and does not import a grammar but presses a button that requires a grammar for example in the Reduce, View or Control File menu.
 
 \section{Command-line interface}\label{sec:ImplementationCommandLineInterface}
 With the argparse module a command-line parser object can be created and parameters can be added to that object.
