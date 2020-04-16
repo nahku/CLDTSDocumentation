@@ -617,6 +617,8 @@ Selection of a new start symbol and productions that should be possible in the G
 
 The menu of the GUI consists of four submenus.
 
+\subsection{Import Menu}\label{sec:ConceptGUIImportMenu}
+
 The $Import$ menu that can be seen in figure \ref{fig:import} provides the option to import a TPTP syntax file in txt file format from local storage or to import the latest TPTP syntax version from the TPTP website.
 The TPTP syntax on the TPTP project website is stored in a HTML format.
 This file is downloaded and converted to plain text using the Beautiful Soup Python library \cite{BeautifulSoup}.
@@ -641,6 +643,8 @@ Comments that have been assigned to a rule are also displayed. An example of the
 \label{fig:gui}
 \end{figure}
 
+\subsection{View Menu}\label{sec:ConceptGUIViewMenu}
+
 The $View$ menu, shown in figure \ref{fig:view}, provides the possibility to toggle the display of comments to improve readability.
 
 \begin{figure}[H]
@@ -652,6 +656,8 @@ The $View$ menu, shown in figure \ref{fig:view}, provides the possibility to tog
 
 In order to extract a sub grammar the user has to choose a new start symbol by checking one of the check boxes left of the nonterminal symbols name. By default the start symbol that has been selected after importing the grammar is selected. For selecting blocked productions the user has the choice of on the one hand expanding the rules and uncheck the checkboxes belonging to the productions the user wishes to block. On the other hand the user can import a control file. If the user imports a control file the checkboxes are set accordingly.
 
+\subsection{Reduce Menu}\label{sec:ConceptGUIReduceMenu}
+
 In the $Reduce$ menu that can be seen in figure \ref{fig:reduce} the user can reduce the grammar according to his selections. The grammar is reduced and the reduced grammar is displayed afterwards. The rules maintain the same order as in the original TPTP grammar.
 
 \begin{figure}[H]
@@ -661,8 +667,9 @@ In the $Reduce$ menu that can be seen in figure \ref{fig:reduce} the user can re
 \label{fig:reduce}
 \end{figure}
 
-In the $Save$ menu that is shown in figure \ref{fig:save} the user can reduce the grammar based on his GUI selection or an imported control file. The difference between the reduce option and the save menu is that the save menu saves the generated reduced grammar to local storage and does not display it. If the user wishes that the $\textless comments\textgreater$, which is necessary for using the automated parser generator, production is including in the reduced grammar the user has the option to save the reduced grammar with the $\textless comment\textgreater$ production.
-The $Save$ menu also gives the user the option to generate a control file based on his GUI selection. This is particularly helpful if the users is reducing the same grammar multiple times. This way he can use the import control file option later instead of selecting the blocked productions in the GUI tool.
+\subsection{Save syntax Menu}\label{sec:ConceptGUISaveSyntaxMenu}
+
+In the $Save syntax$ menu that is shown in figure \ref{fig:save} the user can reduce the grammar based on his GUI selection or an imported control file. The difference between the reduce option and the save menu is that the save menu saves the generated reduced grammar to local storage and does not display it. If the user wishes that the $\textless comments\textgreater$, which is necessary for using the automated parser generator, production is including in the reduced grammar the user has the option to save the reduced grammar with the $\textless comment\textgreater$ production.
 
 \begin{figure}[H]
 \centering
@@ -671,7 +678,11 @@ The $Save$ menu also gives the user the option to generate a control file based 
 \label{fig:save}
 \end{figure}
 
-todo
+\subsection{Control file Menu}\label{sec:ConceptGUIControlFileMenu}
+
+The $Control file$ menu shown in figure \ref{fig:ControlFileMenu} gives the user the option to import a control file instead of blocking productions manually. If the user imports a control file the checkboxes are set accordingly.
+The user also has the option of generating a control file based on his GUI selection. This is particularly helpful if the users is reducing the same grammar multiple times. This way he can use the import control file option later instead of selecting the blocked productions in the GUI tool.
+
 \begin{figure}[H]
 \centering
 \includegraphics[width=.7\textwidth]{images/control_file_menu.png}
