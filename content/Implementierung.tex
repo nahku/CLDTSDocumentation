@@ -394,37 +394,25 @@ split comment block by top of page method of graph builder
 		\If{length(comment\textunderscore block\textunderscore list) == 1}
 			\If{index < length(rules\textunderscore list.list) - 1}
 				\State {next\textunderscore rule = rules\textunderscore list.list[index + 1]}
-				\State rule\textunderscore type = this.find\textunderscore rule\textunderscore type\textunderscore for\textunderscore rule(next\textunderscore rule)
-				\State {node\textunderscore key = Node\textunderscore Key(next\textunderscore rule.name, rule\textunderscore type)}
-				\State this.nodes\textunderscore dictionary[node\textunderscore key].extend\textunderscore comment\textunderscore block(comment\textunderscore block\textunderscore list[0])
+				\State this.append\textunderscore comments\textunderscore to\textunderscore node(next\textunderscore rule, comment\textunderscore block\textunderscore list[0])
 				\Else
 					\State previous\textunderscore rule = rules\textunderscore list.list[index - 1]
-					\State rule\textunderscore type = this.find\textunderscore rule\textunderscore type\textunderscore for\textunderscore rule(previous\textunderscore rule)
-					\State node\textunderscore key = Node\textunderscore Key(previous\textunderscore rule.name, rule\textunderscore type)
-				\State this.nodes\textunderscore dictionary[node\textunderscore key].extend\textunderscore comment\textunderscore block(comment\textunderscore block\textunderscore list[0])
+					\State this.append\textunderscore comments\textunderscore to\textunderscore node(previous\textunderscore rule, comment\textunderscore block\textunderscore list[0])
 			\EndIf
 		\ElsIf {length(comment\textunderscore block\textunderscore list) == 2}
 			\If{index != 0}
 				\State previous\textunderscore rule = rules\textunderscore list.list[index - 1]
-				\State rule\textunderscore type = this.find\textunderscore rule\textunderscore type\textunderscore for\textunderscore rule(previous\textunderscore rule)
-				\State node\textunderscore key = Node\textunderscore Key(previous\textunderscore rule.name, rule\textunderscore type)
-				\State this.nodes\textunderscore dictionary[node\textunderscore key].extend\textunderscore comment\textunderscore block(comment\textunderscore block\textunderscore list[0])
+				\State this.append\textunderscore comments\textunderscore to\textunderscore node(previous\textunderscore rule, comment\textunderscore block\textunderscore list[0])
 			\Else
 				\State {next\textunderscore rule = rules\textunderscore list.list[index + 1]}
-				\State rule\textunderscore type = this.find\textunderscore rule\textunderscore type\textunderscore for\textunderscore rule(next\textunderscore rule)
-				\State {node\textunderscore key = Node\textunderscore Key(next\textunderscore rule.name, rule\textunderscore type)}
-				\State this.nodes\textunderscore dictionary[node\textunderscore key].extend\textunderscore comment\textunderscore block(comment\textunderscore block\textunderscore list[0])
+				\State this.append\textunderscore comments\textunderscore to\textunderscore node(next\textunderscore rule, comment\textunderscore block\textunderscore list[0])
 			\EndIf
 			\If{index < length(rules\textunderscore list.list) - 1)}
 				\State {next\textunderscore rule = rules\textunderscore list.list[index + 1]}
-				\State rule\textunderscore type = this.find\textunderscore rule\textunderscore type\textunderscore for\textunderscore rule(next\textunderscore rule)
-				\State {node\textunderscore key = Node\textunderscore Key(next\textunderscore rule.name, rule\textunderscore type)}
-				\State this.nodes\textunderscore dictionary[node\textunderscore key].extend\textunderscore comment\textunderscore block(comment\textunderscore block\textunderscore list[1])
+				\State this.append\textunderscore comments\textunderscore to\textunderscore node(next\textunderscore rule, comment\textunderscore block\textunderscore list[1])
 			\Else
 				\State previous\textunderscore rule = rules\textunderscore list.list[index - 1]
-				\State rule\textunderscore type = this.find\textunderscore rule\textunderscore type\textunderscore for\textunderscore rule(previous\textunderscore rule)
-				\State node\textunderscore key = Node\textunderscore Key(previous\textunderscore rule.name, rule\textunderscore type)
-				\State this.nodes\textunderscore dictionary[node\textunderscore key].extend\textunderscore comment\textunderscore block(comment\textunderscore block\textunderscore list[1])
+				\State this.append\textunderscore comments\textunderscore to\textunderscore node(previous\textunderscore rule, comment\textunderscore block\textunderscore list[1])
 			\EndIf
 		\ElsIf{length(comment\textunderscore block\textunderscore list) > 2}
 		\State \%excluded
