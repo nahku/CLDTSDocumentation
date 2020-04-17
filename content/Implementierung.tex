@@ -68,12 +68,15 @@ The parser is taking the tokens from the lexer and matches them to defined produ
 comment block reimplement equal operator
 
 \subsection{Data types}\label{sec:ImplementationDataTypes}
+
 Figure \ref{fig:ImplementationUMLExpressions} contains the UML modelling of the data types described in section \ref{sec:ConceptParserDataStructure}.
+
+-todo update figure rule instead of expression
 \begin{figure}[H]
 \centering
 \includegraphics[width=1\textwidth]{images/uml_data_types_expressions.pdf}
-\caption{UML diagram for expressions}
-\label{fig:ImplementationUMLExpressions}
+\caption{UML diagram for rules}
+\label{fig:ImplementationUMLRule}
 \end{figure}
 
 
@@ -228,7 +231,9 @@ The resulting parse tree can be seen in figure \ref{fig:ImplementationParsing}.
 \subsection{Disambiguation}\label{sec:ImplementationParserDisambiguation}
                 
 \section{Graph generation}\label{sec:ImplementationGraphGeneration}
-todo
+todo TPTPGraphBuilder class diagram
+
+
 \begin{figure}[H]
 \centering
 \includegraphics[width=1\textwidth]{images/uml_data_types_NTNode.pdf}
@@ -303,64 +308,102 @@ In this case each element is appended to the list of children.
 \EndFor
 \end{algorithmic}
 \end{algorithm}
-\section{Maintaining comments}\label{sec:ConceptMaintainingComments}
--follows concept
--comment is associated NTNode (NTNode UML diagram see figure \ref{fig:ImplementationNTNodeUML})
--associate with node, so if graph is reduced, comments still associate with node and can be printed
+\section{Maintaining comments}\label{sec:ImplementationMaintainingComments}
+This section describes the implementation of associating comments with rules, to maintain comments in a generated sub-syntax.
+The implementation follows the concept outlined in section \ref{sec:ConceptMaintainingComments}.
+Comments are associated after the grammar graph has been generated.
+They are associated to the node, that represents the rule they belong to.
+For that, the \textit{NTNode} class has a \textit{COMMENT\textunderscore BLOCK} attribute (see \textit{NTNode} UML diagram in figure \ref{fig:ImplementationNTNodeUML}).\\
+Associating comments with nodes has the advantage, that when the grammar graph is reduced, only the comments associated with the rules that are part of the sub-syntax are maintained and can also be printed when outputting the sub-syntax.\\
+
+\subsection{Splitting comment blocks}\label{sec:ImplementationMaintainingCommentsSplitByTOP}
+
+-todo describe split comment block by top of page
+
+\subsection{Associating comments with grammar graph nodes}\label{sec:ImplementationMaintainingCommentsAssociateWithNodes}
+
+Algorithm \ref{alg:assign_comments_to_rule} describes the procedure of matching comments to nodes.
+-It is used within the \textit{TPTPGraphBuilder} after generating the grammar graph.
+
+The input is the \textit{grammar\textunderscore list}, that the parser created from parsing the \ac{TPTP} syntax file.
+The \textit{grammar\textunderscore list} contains rules and comment blocks in the order they appeared in the original \ac{TPTP} syntax file.
+The \textit{grammar\textunderscore list} is iterated (line 1).\\
+If the current element of the \textit{rules\textunderscore list} is a \textit{COMMENT\textunderscore BLOCK} it is split by top of page lines (line 3).
+The procedure of splitting a comment block by top of page lines is described in todo REF.
+It returns a list of \textit{COMMENT\textunderscore BLOCK}s.\\
+In the following if-clause it is checked, how many \textit{COMMENT\textunderscore BLOCK} are returned.\\
+In the first case of one comment block, this \textit{COMMENT\textunderscore BLOCK} should associated with the rule after by default, if that is not possible, because the \textit{COMMENT\textunderscore BLOCK} is at the end of the syntax file, it should be associated with the rule before.
+In line 5 it is checked if the \textit{COMMENT\textunderscore BLOCK} is not at the end of the syntax file. This means it should be associated with the rule after.\\
+For that the next rule is obtained, by indexing the next element of the \textit{rules\textunderscore list}.
+To associate the \textit{COMMENT\textunderscore BLOCK} with the node representing the rule, the node needs to be obtained.
+It is more efficient, to use the, on graph generation, created \textit{nodes\textunderscore dictionary} to access the desired nodes, instead of traversing the grammar graph for each wanted node.\\
+In the \textit{nodes\textunderscore dictionary}, the key for each node is the nonterminal symbol name and \textit{RuleType} (todo check see section \ref{sec:ImplementationGraphGeneration}).
+The rule type of the rules in the \textit{rules\textunderscore list} are indicated by the type of the rule object (see class diagram in figure \ref{fig:ImplementationUMLRule}).
+To index the node in the \textit{nodes\textunderscore dictionary} the \textit{RuleType} corresponding to the type of the rule object is needed.
+The \textit{find\textunderscore rule\textunderscore type\textunderscore for\textunderscore rule} method determines and returns the \textit{RuleType} corresponding to the rule object type.\\
+Using the determined \textit{RuleType} and the nonterminal name, which is stored in the rule, the key for the \textit{Nodes\textunderscore Dictionary} can be constructed (line 8).
+Then, the node, to which the \textit{COMMENT\textunderscore BLOCK} should be added is addressed in the \textit{Nodes\textunderscore Dictionary} and the \textit{extend\textunderscore comment\textunderscore block} method of the node called, with the \textit{COMMENT\textunderscore BLOCK} as argument.
+The \textit{extend\textunderscore comment\textunderscore block} method is described in section todo REF.
+It appends the \textit{COMMENT\textunderscore BLOCK} to the \textit{COMMENT\textunderscore BLOCK} attribute of the node object.\\
+If the \textit{COMMENT\textunderscore BLOCK} is at the end of the syntax file, it has to be associated with the rule before.
+This case is handled in the else-branch (line 10).
+The procedure of adding the \textit{COMMENT\textunderscore BLOCK} to the desired node is essentially the same as described before. The difference lies in that 
+
+ it is checked, whether 
 -explain extend comment block method of NTNode
 
 -assign comments to rule in graph builder
 -executed assign comments to rule after building nodes dictionary
 -follows procedure described in section \ref{sec:ConceptMaintainingComments}
 
--parser creates \textit{rules\textunderscore list}
+-rules list never two comment blocks in a row
+
 -in \textit{rules\textunderscore list} rules, and comment blocks are present
 when comment block occurs
 split comment block by top of page method of graph builder
-
 \begin{algorithm}[H]
 \small
 \caption{Assign comments to rules}
 \begin{algorithmic}[1]
 \algrenewcommand\algorithmicindent{0.4em}
-\Require rules\textunderscore list
+\Require grammar\textunderscore list
 \ForAll {index, expression in rules\textunderscore list.list}
 	\If {expression is COMMENT\textunderscore BLOCK}
-		\State {comment\textunderscore block\textunderscore list = this.split\textunderscore comment\textunderscore block\textunderscore by\textunderscore top\textunderscore of\textunderscore page( expression)}
+		\State {comment\textunderscore block\textunderscore list = this.split\textunderscore comment\textunderscore block\textunderscore by\textunderscore top\textunderscore of\textunderscore page(expression)}
 		\If{length(comment\textunderscore block\textunderscore list) == 1}
 			\If{index < length(rules\textunderscore list.list) - 1}
-				\State {next\textunderscore expression = rules\textunderscore list.list[index + 1]}
-				\State rule\textunderscore type = this.find\textunderscore rule\textunderscore type\textunderscore for\textunderscore expression(next\textunderscore expression)
-				\State {node\textunderscore key = Node\textunderscore Key(next\textunderscore expression.name, rule\textunderscore type)}
-				\State this.nodes\textunderscore dictionary[node\textunderscore key].extend\textunderscore comment\textunderscore block( comment\textunderscore block\textunderscore list[0])
+				\State {next\textunderscore rule = rules\textunderscore list.list[index + 1]}
+				\State rule\textunderscore type = this.find\textunderscore rule\textunderscore type\textunderscore for\textunderscore rule(next\textunderscore rule)
+				\State {node\textunderscore key = Node\textunderscore Key(next\textunderscore rule.name, rule\textunderscore type)}
+				\State this.nodes\textunderscore dictionary[node\textunderscore key].extend\textunderscore comment\textunderscore block(comment\textunderscore block\textunderscore list[0])
 				\Else
-					\State previous\textunderscore expression = rules\textunderscore list.list[index - 1]
-					\State rule\textunderscore type = this.find\textunderscore rule\textunderscore type\textunderscore for\textunderscore expression(previous\textunderscore expression)
-					\State node\textunderscore key = Node\textunderscore Key(previous\textunderscore expression.name, rule\textunderscore type)
-				\State this.nodes\textunderscore dictionary[node\textunderscore key].extend\textunderscore comment\textunderscore block( comment\textunderscore block\textunderscore list[0])
+					\State previous\textunderscore rule = rules\textunderscore list.list[index - 1]
+					\State rule\textunderscore type = this.find\textunderscore rule\textunderscore type\textunderscore for\textunderscore rule(previous\textunderscore rule)
+					\State node\textunderscore key = Node\textunderscore Key(previous\textunderscore rule.name, rule\textunderscore type)
+				\State this.nodes\textunderscore dictionary[node\textunderscore key].extend\textunderscore comment\textunderscore block(comment\textunderscore block\textunderscore list[0])
 			\EndIf
 		\ElsIf {length(comment\textunderscore block\textunderscore list) == 2}
 			\If{index != 0}
-				\State previous\textunderscore expression = rules\textunderscore list.list[index - 1]
-				\State rule\textunderscore type = this.find\textunderscore rule\textunderscore type\textunderscore for\textunderscore expression(previous\textunderscore expression)
-				\State node\textunderscore key = Node\textunderscore Key(previous\textunderscore expression.name, rule\textunderscore type)
-				\State this.nodes\textunderscore dictionary[node\textunderscore key].extend\textunderscore comment\textunderscore block( comment\textunderscore block\textunderscore list[0])
+				\State previous\textunderscore rule = rules\textunderscore list.list[index - 1]
+				\State rule\textunderscore type = this.find\textunderscore rule\textunderscore type\textunderscore for\textunderscore rule(previous\textunderscore rule)
+				\State node\textunderscore key = Node\textunderscore Key(previous\textunderscore rule.name, rule\textunderscore type)
+				\State this.nodes\textunderscore dictionary[node\textunderscore key].extend\textunderscore comment\textunderscore block(comment\textunderscore block\textunderscore list[0])
 			\Else
-				\State {next\textunderscore expression = rules\textunderscore list.list[index + 1]}
-				\State rule\textunderscore type = this.find\textunderscore rule\textunderscore type\textunderscore for\textunderscore expression(next\textunderscore expression)
-				\State {node\textunderscore key = Node\textunderscore Key(next\textunderscore expression.name, rule\textunderscore type)}
-				\State this.nodes\textunderscore dictionary[node\textunderscore key].extend\textunderscore comment\textunderscore block( comment\textunderscore block\textunderscore list[0])
+				\State {next\textunderscore rule = rules\textunderscore list.list[index + 1]}
+				\State rule\textunderscore type = this.find\textunderscore rule\textunderscore type\textunderscore for\textunderscore rule(next\textunderscore rule)
+				\State {node\textunderscore key = Node\textunderscore Key(next\textunderscore rule.name, rule\textunderscore type)}
+				\State this.nodes\textunderscore dictionary[node\textunderscore key].extend\textunderscore comment\textunderscore block(comment\textunderscore block\textunderscore list[0])
 			\EndIf
 			\If{index < length(rules\textunderscore list.list) - 1)}
-				\State {next\textunderscore expression = rules\textunderscore list.list[index + 1]}
-				\State rule\textunderscore type = this.find\textunderscore rule\textunderscore type\textunderscore for\textunderscore expression(next\textunderscore expression)
-				\State {node\textunderscore key = Node\textunderscore Key(next\textunderscore expression.name, rule\textunderscore type)}
-				\State this.nodes\textunderscore dictionary[node\textunderscore key].extend\textunderscore comment\textunderscore block( comment\textunderscore block\textunderscore list[1])
+				\State {next\textunderscore rule = rules\textunderscore list.list[index + 1]}
+				\State rule\textunderscore type = this.find\textunderscore rule\textunderscore type\textunderscore for\textunderscore rule(next\textunderscore rule)
+				\State {node\textunderscore key = Node\textunderscore Key(next\textunderscore rule.name, rule\textunderscore type)}
+				\State this.nodes\textunderscore dictionary[node\textunderscore key].extend\textunderscore comment\textunderscore block(comment\textunderscore block\textunderscore list[1])
 			\Else
-				\State previous\textunderscore expression = rules\textunderscore list.list[index - 1]
-				\State rule\textunderscore type = this.find\textunderscore rule\textunderscore type\textunderscore for\textunderscore expression(previous\textunderscore expression)
-				\State node\textunderscore key = Node\textunderscore Key(previous\textunderscore expression.name, rule\textunderscore type)
-				\State this.nodes\textunderscore dictionary[node\textunderscore key].extend\textunderscore comment\textunderscore block( comment\textunderscore block\textunderscore list[1])
+				\State previous\textunderscore rule = rules\textunderscore list.list[index - 1]
+				\State rule\textunderscore type = this.find\textunderscore rule\textunderscore type\textunderscore for\textunderscore rule(previous\textunderscore rule)
+				\State node\textunderscore key = Node\textunderscore Key(previous\textunderscore rule.name, rule\textunderscore type)
+				\State this.nodes\textunderscore dictionary[node\textunderscore key].extend\textunderscore comment\textunderscore block(comment\textunderscore block\textunderscore list[1])
 			\EndIf
 		\ElsIf{length(comment\textunderscore block\textunderscore list) > 2}
 		\State \%excluded
@@ -369,6 +412,36 @@ split comment block by top of page method of graph builder
 \EndFor
 \end{algorithmic}
 \label{alg:assign_comments_to_rule}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\small
+\caption{Append comments to node}
+\begin{algorithmic}[1]
+\algrenewcommand\algorithmicindent{0.4em}
+\Require rule, comment\textunderscore list
+\State rule\textunderscore type = find\textunderscore rule\textunderscore type\textunderscore for\textunderscore rule(rule)
+\State node\textunderscore key = Node\textunderscore Key(rule.name,rule\textunderscore type)
+\State this.nodes\textunderscore dictionary[node\textunderscore key].extend\textunderscore comment\textunderscore block(comment\textunderscore block)
+\end{algorithmic}
+\label{alg:append_comment_to_node}
+\end{algorithm}
+
+-todo explain extend comment block
+-comment block extend appends lines to lines already there
+\begin{algorithm}[H]
+\small
+\caption{Extend comment block}
+\begin{algorithmic}[1]
+\algrenewcommand\algorithmicindent{0.4em}
+\Require comment\textunderscore block
+\If this.comment\textunderscore block is None
+	\State this.comment\textunderscore block = comment\textunderscore block
+\Else
+	\State this.comment\textunderscore block.extend(comment\textunderscore block.comment\textunderscore lines)
+\EndIf
+\end{algorithmic}
+\label{alg:extend_comment_block}
 \end{algorithm}
 
 \section{Extraction of a sub-syntax}\label{sec:ImplementationExtractReducedGrammar}
