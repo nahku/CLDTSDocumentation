@@ -329,6 +329,7 @@ In this case each element is appended to the list of children.
 \EndFor
 \end{algorithmic}
 \end{algorithm}
+
 \section{Maintaining comments}\label{sec:ImplementationMaintainingComments}
 This section describes the implementation of associating comments with rules, to maintain comments in a generated sub-syntax.
 The implementation follows the concept outlined in section \ref{sec:ConceptMaintainingComments}.
@@ -337,9 +338,18 @@ They are associated to the node, that represents the rule they belong to.
 For that, the \textit{NTNode} class has a \textit{COMMENT\textunderscore BLOCK} attribute (see \textit{NTNode} UML diagram in figure \ref{fig:ImplementationNTNodeUML}).\\
 Associating comments with nodes has the advantage, that when the grammar graph is reduced, only the comments associated with the rules that are part of the sub-syntax are maintained and can also be printed when outputting the sub-syntax.\\
 
-\subsection{Splitting comment blocks}\label{sec:ImplementationMaintainingCommentsSplitByTOP}
+\subsection{Splitting comment blocks}\label{sec:ImplementationMaintainingCommentsSplitByTop}
 
 -todo describe split comment block by top of page
+-todo make nicer
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{images/Implementation_split_comment_by_top_of_page.pdf}
+\caption{Split comment block by top of page line}
+\label{fig:ImplementationMaintainingCommentSplitBTopOfPage}
+\end{figure}
+
 
 \subsection{Associating comments with grammar graph nodes}\label{sec:ImplementationMaintainingCommentsAssociateWithNodes}
 
@@ -351,24 +361,16 @@ The \textit{grammar\textunderscore list} contains rules and comment blocks in th
 The \textit{grammar\textunderscore list} is iterated (line 1).\\
 If the current element of the \textit{rules\textunderscore list} is a \textit{COMMENT\textunderscore BLOCK} it is split by top of page lines (line 3).
 The procedure of splitting a comment block by top of page lines is described in todo REF.
-It returns a list of \textit{COMMENT\textunderscore BLOCK}s.\\
-In the following if-clause it is checked, how many \textit{COMMENT\textunderscore BLOCK} are returned.\\
+It returns a list of \textit{COMMENT\textunderscore BLOCK} objects.\\
+In the following if-clause it is checked, how many \textit{COMMENT\textunderscore BLOCK} object are returned.\\
 In the first case of one comment block, this \textit{COMMENT\textunderscore BLOCK} should associated with the rule after by default, if that is not possible, because the \textit{COMMENT\textunderscore BLOCK} is at the end of the syntax file, it should be associated with the rule before.
-In line 5 it is checked if the \textit{COMMENT\textunderscore BLOCK} is not at the end of the syntax file. This means it should be associated with the rule after.\\
-For that the next rule is obtained, by indexing the next element of the \textit{rules\textunderscore list}.
-To associate the \textit{COMMENT\textunderscore BLOCK} with the node representing the rule, the node needs to be obtained.
-It is more efficient, to use the, on graph generation, created \textit{nodes\textunderscore dictionary} to access the desired nodes, instead of traversing the grammar graph for each wanted node.\\
-In the \textit{nodes\textunderscore dictionary}, the key for each node is the nonterminal symbol name and \textit{RuleType} (todo check see section \ref{sec:ImplementationGraphGeneration}).
-The rule type of the rules in the \textit{rules\textunderscore list} are indicated by the type of the rule object (see class diagram in figure \ref{fig:ImplementationUMLRule}).
-To index the node in the \textit{nodes\textunderscore dictionary} the \textit{RuleType} corresponding to the type of the rule object is needed.
-The \textit{find\textunderscore rule\textunderscore type\textunderscore for\textunderscore rule} method determines and returns the \textit{RuleType} corresponding to the rule object type.\\
-Using the determined \textit{RuleType} and the nonterminal name, which is stored in the rule, the key for the \textit{Nodes\textunderscore Dictionary} can be constructed (line 8).
-Then, the node, to which the \textit{COMMENT\textunderscore BLOCK} should be added is addressed in the \textit{Nodes\textunderscore Dictionary} and the \textit{extend\textunderscore comment\textunderscore block} method of the node called, with the \textit{COMMENT\textunderscore BLOCK} as argument.
-The \textit{extend\textunderscore comment\textunderscore block} method is described in section todo REF.
-It appends the \textit{COMMENT\textunderscore BLOCK} to the \textit{COMMENT\textunderscore BLOCK} attribute of the node object.\\
+In line 5 it is checked if the \textit{COMMENT\textunderscore BLOCK} is not at the end of the syntax file. If that is the case it should be associated with the rule after.\\
+For that the next rule (rule after the \textit{COMMENT\textunderscore BLOCK}) is obtained, by indexing the next element of the \textit{rules\textunderscore list}.
+Then, the \textit{COMMENT\textunderscore BLOCK} is appended to the node, specified by the rule, using the \textit{append\textunderscore comments\textunderscore to\textunderscore node} method. This method is described in the following ?todo?.\\
 If the \textit{COMMENT\textunderscore BLOCK} is at the end of the syntax file, it has to be associated with the rule before.
-This case is handled in the else-branch (line 10).
-The procedure of adding the \textit{COMMENT\textunderscore BLOCK} to the desired node is essentially the same as described before. The difference lies in that 
+This case is handled in the else-branch (line 8).
+The procedure of adding the \textit{COMMENT\textunderscore BLOCK} to the desired node is essentially the same as described before. The difference lies in that the previous rule is adressed (line 9).\\
+If splitting the original \textit{COMMENT\textunderscore BLOCK} by top of page lines results in two \textit{COMMENT\textunderscore BLOCK}s the first is associated with the rule before and the second with the rule after (lines 14 - 15, 21 - 22).
 
  it is checked, whether 
 -explain extend comment block method of NTNode
@@ -386,11 +388,11 @@ split comment block by top of page method of graph builder
 \small
 \caption{Assign comments to rules}
 \begin{algorithmic}[1]
-\algrenewcommand\algorithmicindent{0.4em}
+\algrenewcommand\algorithmicindent{0.7em}
 \Require grammar\textunderscore list
 \ForAll {index, expression in rules\textunderscore list.list}
 	\If {expression is COMMENT\textunderscore BLOCK}
-		\State {comment\textunderscore block\textunderscore list = this.split\textunderscore comment\textunderscore block\textunderscore by\textunderscore top\textunderscore of\textunderscore page(expression)}
+		\State {comment\textunderscore block\textunderscore list = expression.split\textunderscore comment\textunderscore block\textunderscore by\textunderscore top\textunderscore of\textunderscore page()}
 		\If{length(comment\textunderscore block\textunderscore list) == 1}
 			\If{index < length(rules\textunderscore list.list) - 1}
 				\State {next\textunderscore rule = rules\textunderscore list.list[index + 1]}
@@ -423,12 +425,23 @@ split comment block by top of page method of graph builder
 \label{alg:assign_comments_to_rule}
 \end{algorithm}
 
+In Algorithm \ref{alg:append_comment_to_node} it is described, how a comment block is appended to a node from the grammar graph, using information from the original rule created by the parser to address the node.\\
+To associate the \textit{COMMENT\textunderscore BLOCK} with the node representing the rule, the node needs to be obtained.
+It is more efficient, to use the, on graph generation, created \textit{nodes\textunderscore dictionary} to access the desired nodes, instead of traversing the grammar graph for each wanted node.\\
+In the \textit{nodes\textunderscore dictionary}, the key for each node consists of the nonterminal symbol name and \textit{RuleType} (todo check ref see section \ref{sec:ImplementationGraphGeneration}).\\
+The rule type of the input rule is indicated by the type of the \textit{rule} object (see class diagram in figure \ref{fig:ImplementationUMLRule}).
+To index the node in the \textit{nodes\textunderscore dictionary} the \textit{RuleType} corresponding to the type of the rule object is needed.
+The \textit{find\textunderscore rule\textunderscore type\textunderscore for\textunderscore rule} method determines and returns the \textit{RuleType} corresponding to the \textit{rule} object type.\\
+Using the determined \textit{RuleType} and the nonterminal name, which is stored in the \textit{rule}, the key for the \textit{Nodes\textunderscore Dictionary} can be constructed (line 8).
+Then, the node, to which the \textit{COMMENT\textunderscore BLOCK} should be added is addressed in the \textit{Nodes\textunderscore Dictionary} and the \textit{extend\textunderscore comment\textunderscore block} method of the node called, with the \textit{COMMENT\textunderscore BLOCK} as argument.
+The \textit{extend\textunderscore comment\textunderscore block} method is described in algorithm \ref{alg:extend_comment_block}.
+It appends the \textit{COMMENT\textunderscore BLOCK} to the \textit{COMMENT\textunderscore BLOCK} attribute of the node object.
 \begin{algorithm}[H]
 \small
 \caption{Append comments to node}
 \begin{algorithmic}[1]
 \algrenewcommand\algorithmicindent{0.4em}
-\Require rule, comment\textunderscore list
+\Require rule, comment\textunderscore block
 \State rule\textunderscore type = find\textunderscore rule\textunderscore type\textunderscore for\textunderscore rule(rule)
 \State node\textunderscore key = Node\textunderscore Key(rule.name,rule\textunderscore type)
 \State this.nodes\textunderscore dictionary[node\textunderscore key].extend\textunderscore comment\textunderscore block(comment\textunderscore block)
@@ -436,15 +449,20 @@ split comment block by top of page method of graph builder
 \label{alg:append_comment_to_node}
 \end{algorithm}
 
--todo explain extend comment block
--comment block extend appends lines to lines already there
+Algorithm \ref{alg:extend_comment_block} shows the procedure, that is used in the \textit{extend\textunderscore comment\textunderscore block} method of the \textit{NTNode} class.
+If no \textit{comment\textunderscore block} has not been associated with the node before, the input \textit{comment\textunderscore block} is associated with the node.
+If the node has already has a \textit{comment\textunderscore block}, this \textit{comment\textunderscore block} is extended, with the comments lines from the input \textit{comment\textunderscore block}.\\
+This procedure is needed because it is possible that multiple comment blocks, that have been generated on splitting comment blocks, have to be associated with the same node. todo refine
+
+-todo explain comment block extend.
+
 \begin{algorithm}[H]
 \small
 \caption{Extend comment block}
 \begin{algorithmic}[1]
 \algrenewcommand\algorithmicindent{0.4em}
 \Require comment\textunderscore block
-\If this.comment\textunderscore block is None
+\If {this.comment\textunderscore block is None}‚
 	\State this.comment\textunderscore block = comment\textunderscore block
 \Else
 	\State this.comment\textunderscore block.extend(comment\textunderscore block.comment\textunderscore lines)
