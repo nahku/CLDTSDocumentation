@@ -229,15 +229,23 @@ The resulting parse tree can be seen in figure \ref{fig:ImplementationParsing}.
 \end{figure}
                 
 \subsection{Disambiguation}\label{sec:ImplementationParserDisambiguation}
+
+\section{Graph Builder}\label{sec:ImplementationGraphBuilder}
+
+The class $TPTPGraphBuilder$ that can be seen in figure \ref{fig:ImplementationGraphbuilderUML} has an instance of the TPTPParser that has been introduced in chapter \ref{sec:ImplementationParser}. With the output of the parser, a grammar list, the graph builder builds a nodes dictionary and a graph. This is done by calling the $run$ method that calls $init\textunderscore tree$ for building the graph.
+The methods highlighted in blue are used for building a graph and are described in chapter \ref{sec:ImplementationGraphGeneration}. The graph builder is also responsible for reducing the \ac{TPTP} grammar, the methods used for that are highlighted in turquoise and introduced in chapter \ref{sec:ImplementationExtractReducedGrammar}. Moreover, with the graph builder, comments are assigned to rules and nodes. Belonging methods are highlighted in green and described in chapter \ref{sec:ImplementationMaintainingComments}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1 \textwidth]{images/uml_graphbuilder.png}
+\caption{Graphbuilder UML diagram}
+\label{fig:ImplementationGraphbuilderUML}
+\end{figure}                
                 
 \section{Graph generation}\label{sec:ImplementationGraphGeneration}
-todo TPTPGraphBuilder class diagram
 
-
-
-- before generating graph node dictionary consisting of nodes is built \\
-- Figure \ref{fig:ImplementationNTNodeUML} shows the class NTNode that has already been introduced in chapter \ref{sec:ConceptGraphGeneration}. \\
-- Rule Type is Enumeration and can either have the value grammar, token, strict or macro.
+Before generating a graph a node dictionary consisting of nodes is built. Figure \ref{fig:ImplementationNTNodeUML} shows the class NTNode that has already been introduced in chapter\ref{sec:ConceptGraphGeneration}. Besides the class attributes that have also been introduced in chapter \ref{sec:ConceptGraphGeneration} the class has three class methods:
+$Add\textunderscore children$ adds a list of children to the existing nodes children list. $Extend\textunderscore comment\textunderscore block$ appends a comment block to he existing comment block of a node. $str$?? 
 
 \begin{figure}[H]
 \centering
@@ -245,6 +253,8 @@ todo TPTPGraphBuilder class diagram
 \caption{NTNode UML diagram}
 \label{fig:ImplementationNTNodeUML}
 \end{figure}
+
+The rule type of a node is either grammar, token, strict or macro and is implemented as an enumeration that can be seen in figure \ref{fig:ImplementationRuleTypeUML}. 
 
 \begin{figure}[H]
 \centering
