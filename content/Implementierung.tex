@@ -712,6 +712,34 @@ NTNODE
 
 \section{Input/Output}\label{sec:ImplementationInOut}
 
+\subsection{Input}\label{sec:ImplementationInput}
+
+There are two methods performing input operations that are explained in the following. 
+
+\subsubsection{Import\textunderscore tptp\textunderscore syntax\textunderscore from\textunderscore web}
+The method $import\textunderscore tptp\textunderscore syntax\textunderscore from\textunderscore web$ shown in listing \ref{lst:ImplementationInputWeb} is used get a text from a website. \\
+For opening a \ac{URL}, the library urllib is used. $Urllib.request$ opens a specified \ac{URL} and sends an HTTP request. $Urlopen$ returns a response object for the initiated request. The response is a file-like object that can be read using $.read()$. \cite{urllib} \\
+The file can then be converted from html to text format using BeautifulSoup's html parser.
+The header from the file is deleted because it does not belong to the \ac{TPTP} syntax but is appended by urllib. The header is deleted by splitting the grammar file at ever new line and joining all lines excluding the first one. \\
+
+\begin{lstlisting}[language=Python, basicstyle=\scriptsize	,caption= Import TPTP syntax from web,label= lst:ImplementationInputWeb]
+with urllib.request.urlopen("http://www.tptp.org/TPTP/SyntaxBNF.html") as url:
+        html_doc = url.read()
+soup = BeautifulSoup(html_doc, 'html.parser')
+tptp_grammar = soup.get_text()
+# Delete Header
+tptp_grammar = '\n'.join(tptp_grammar.split('\n')[1:])
+\end{lstlisting}
+
+\subsubsection{Read\textunderscore text\textunderscore from\textunderscore file}
+
+$Read\textunderscore text\textunderscore from\textunderscore file$ in listing \ref{lst:ImplementationInputText} uses the build-in function $open$ to read a text file. \\
+
+\begin{lstlisting}[language=Python, basicstyle=\scriptsize	,caption= Read text from file,label= lst:ImplementationInputText]
+with open(filename, 'r') as text_file:
+        text = text_file.read()
+\end{lstlisting} 
+
 \section{GUI}\label{sec:ImplementationGUI}
 The GUI consists of the class View that can be seen in Figure \ref{fig:ImplementationViewClassDiagram}. The class has the attributes $treeView$ which is an instance of the PyQt QTreeWidget, $graphBuilder$ which is an instance of the TPTPGraphBuilder and the boolean value $commentStatus$. The class functions and their implementation are described in the following sections based on the five sub-menus.
 
