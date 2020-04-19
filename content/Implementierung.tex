@@ -349,51 +349,59 @@ For that, the \textit{NTNode} class has a \textit{COMMENT\textunderscore BLOCK} 
 Associating comments with nodes has the advantage, that when the grammar graph is reduced, only the comments associated with the rules that are part of the sub-syntax are maintained and can also be printed when outputting the sub-syntax.\\
 
 \subsection{Splitting comment blocks}\label{sec:ImplementationMaintainingCommentsSplitByTop}
-
--todo describe split comment block by top of page
--todo make nicer
+The flow chart in figure \ref{fig:ImplementationMaintainingCommentSplitByTopOfPage} shows how a comment block is split into multiple comment blocks separating it by top of page lines (todo REF to concept).\\
+First the indexes of the top of page lines are obtained in a list (using method of \textit{COMMENT\textunderscore BLOCK}).
+After that the \textit{comment\textunderscore block\textunderscore list}, which will contain the generated \textit{COMMENT\textunderscore BLOCK}s, is initialized.
+If the list of top of page line indexes is empty, the original comment block is added to the \textit{comment\textunderscore block\textunderscore list}, because the comment block does not need to be split into multiple comment blocks because no top of page line is present.
+Then the \textit{comment\textunderscore block\textunderscore list} is returned.\\
+If the list of top of page line indexes is not empty the first top of page line index is obtained from the top of page indexes list.
+It is checked whether the first top of page index is unequal zero.\\
+If that is the case, the first top of page index is not the first line of the original comment block, and a comment block can be constructed from the line(s) before.
+In this case the leading comment block can be constructed from the comment lines of the original comment block from index zero to the first top of page index.
+This comment block is added to the \textit{comment\textunderscore block\textunderscore list}.\\
+Then the \textit{index} variable, which represents an index on the \textit{top\textunderscore of\textunderscore page\textunderscore indexes} list, is initialized.
+The \textit{index} is used to obtain the corresponding element of the \textit{top\textunderscore of\textunderscore page\textunderscore indexes} list.\\
+Then it is checked if top of page line that corresponds to top of page line index is the last line of the original comment block.
+In that case no new comment block needs to be added to the \textit{comment\textunderscore block\textunderscore list} and the \textit{comment\textunderscore block\textunderscore list} is returned.\\
+todo ?Otherwise? the start index of next comment block is computed as the current \textit{top\textunderscore of\textunderscore page\textunderscore index} incremented by one (line after the top of page line).
+There are two cases that have to be considered when determining the end index of the comment block.
+Either there is another top of page line, in which case the comment block ends before that, or the currently indexed top of page line was the last one, in which case the end index is the end of the original comment block.
+Then the new commend block is constructed with the before determined \textit{start} and \textit{end}.
+This comment block is added to the \textit{comment\textunderscore block\textunderscore list}.
+If the \textit{index} is at the end of the \textit{top\textunderscore of\textunderscore page\textunderscore index} list, the \textit{comment\textunderscore block\textunderscore list} is returned, if not, the \textit{index} variable is incremented and the process is repeated with the next top of page index.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=1\textwidth]{images/Implementation_split_comment_by_top_of_page.pdf}
-\caption{Split comment block by top of page line}
-\label{fig:ImplementationMaintainingCommentSplitBTopOfPage}
+\caption{Split comment block by top of page line flow chart}
+\label{fig:ImplementationMaintainingCommentSplitByTopOfPage}
 \end{figure}
-
 
 \subsection{Associating comments with grammar graph nodes}\label{sec:ImplementationMaintainingCommentsAssociateWithNodes}
 
-Algorithm \ref{alg:assign_comments_to_rule} describes the procedure of matching comments to nodes.
--It is used within the \textit{TPTPGraphBuilder} after generating the grammar graph.
-
+Algorithm \ref{alg:assign_comments_to_rule} describes the procedure of matching comments to nodes. It follows procedure described in section \ref{sec:ConceptMaintainingComments} and is used within the \textit{TPTPGraphBuilder} after generating the grammar graph.\\
 The input is the \textit{grammar\textunderscore list}, that the parser created from parsing the \ac{TPTP} syntax file.
 The \textit{grammar\textunderscore list} contains rules and comment blocks in the order they appeared in the original \ac{TPTP} syntax file.
 The \textit{grammar\textunderscore list} is iterated (line 1).\\
 If the current element of the \textit{rules\textunderscore list} is a \textit{COMMENT\textunderscore BLOCK} it is split by top of page lines (line 3).
-The procedure of splitting a comment block by top of page lines is described in todo REF.
-It returns a list of \textit{COMMENT\textunderscore BLOCK} objects.\\
-In the following if-clause it is checked, how many \textit{COMMENT\textunderscore BLOCK} object are returned.\\
-In the first case of one comment block, this \textit{COMMENT\textunderscore BLOCK} should associated with the rule after by default, if that is not possible, because the \textit{COMMENT\textunderscore BLOCK} is at the end of the syntax file, it should be associated with the rule before.
-In line 5 it is checked if the \textit{COMMENT\textunderscore BLOCK} is not at the end of the syntax file. If that is the case it should be associated with the rule after.\\
-For that the next rule (rule after the \textit{COMMENT\textunderscore BLOCK}) is obtained, by indexing the next element of the \textit{rules\textunderscore list}.
-Then, the \textit{COMMENT\textunderscore BLOCK} is appended to the node, specified by the rule, using the \textit{append\textunderscore comments\textunderscore to\textunderscore node} method. This method is described in the following ?todo?.\\
-If the \textit{COMMENT\textunderscore BLOCK} is at the end of the syntax file, it has to be associated with the rule before.
+The procedure of splitting a comment block by top of page lines is described in section \ref{sec:ImplementationMaintainingCommentsSplitByTop}.
+It returns a list of comment block objects.\\
+In the following if-clause it is checked, how many comment block objects are returned.\\
+In the first case of one comment block, this comment block should associated with the rule after by default. If that is not possible, because the comment block is at the end of the syntax file, it should be associated with the rule before.
+In line 5 it is checked if the comment block is not at the end of the syntax file. To associated with the rule after, the next rule (rule after the comment block) is obtained, by indexing the next element of the \textit{rules\textunderscore list}.
+Then, the comment block is appended to the node, specified by the rule, using the \textit{append\textunderscore comments\textunderscore to\textunderscore node} method. This method is described in the following subsection.\\
+If the comment block is at the end of the syntax file, it has to be associated with the rule before.
 This case is handled in the else-branch (line 8).
-The procedure of adding the \textit{COMMENT\textunderscore BLOCK} to the desired node is essentially the same as described before. The difference lies in that the previous rule is adressed (line 9).\\
-If splitting the original \textit{COMMENT\textunderscore BLOCK} by top of page lines results in two \textit{COMMENT\textunderscore BLOCK}s the first is associated with the rule before and the second with the rule after (lines 14 - 15, 21 - 22).
+The procedure of adding the comment block to the desired node is essentially the same as described before. The difference lies in that the previous rule is addressed (line 9).\\
+If splitting the original comment block by top of page lines results in two comment blocks the first is associated with the rule before and the second with the rule after if the original comment block was neither at the end or the beginning of the syntax file (lines 14, 15, 21, 22).\\
+If the original comment block was at the beginning of the syntax file, the first comment block is appended to the rule 
+after too (lines 17, 18).\\
+If the original comment block was at the end of the syntax file, the second comment block is associated with the rule before.\\
+The case of two or more top of page lines does not occur in the \ac{TPTP} syntax version 7.3.0. and is not included in the pseudo-code.\\
+This hypothetical case is handled, by using the same procedure as in the case of two comment blocks but treating all comment blocks after the second comment block like the second. This means that all comment blocks from the second on would be associated with the rule after, except the case that the original comment block was at the end of the syntax file. In that case all comment blocks would be appended to the rule before.
 
- it is checked, whether 
--explain extend comment block method of NTNode
+The algorithm relies on that in the \textit{rules\textunderscore list} there are never two or more comment blocks in a row (meaning they are always seperated by at least one rule). This is ensured by the parser, because all consecutive comment lines in the syntax file are included into one comment block. Therefore consecutive comment block objects do not occur in the \textit{rules\textunderscore list}.
 
--assign comments to rule in graph builder
--executed assign comments to rule after building nodes dictionary
--follows procedure described in section \ref{sec:ConceptMaintainingComments}
-
--rules list never two comment blocks in a row
-
--in \textit{rules\textunderscore list} rules, and comment blocks are present
-when comment block occurs
-split comment block by top of page method of graph builder
 \begin{algorithm}[H]
 \small
 \caption{Assign comments to rules}
@@ -435,6 +443,8 @@ split comment block by top of page method of graph builder
 \label{alg:assign_comments_to_rule}
 \end{algorithm}
 
+\subsubsection{Appending a comment block to a node}\label{sec:ImplementationMaintainingCommentBlockWithNodes}
+
 In Algorithm \ref{alg:append_comment_to_node} it is described, how a comment block is appended to a node from the grammar graph, using information from the original rule created by the parser to address the node.\\
 To associate the \textit{COMMENT\textunderscore BLOCK} with the node representing the rule, the node needs to be obtained.
 It is more efficient, to use the, on graph generation, created \textit{nodes\textunderscore dictionary} to access the desired nodes, instead of traversing the grammar graph for each wanted node.\\
@@ -459,6 +469,8 @@ It appends the \textit{COMMENT\textunderscore BLOCK} to the \textit{COMMENT\text
 \label{alg:append_comment_to_node}
 \end{algorithm}
 
+\subsubsection{Extending a comment block of a node}\label{sec:ImplementationMaintainingExtendCommentBlock}
+
 Algorithm \ref{alg:extend_comment_block} shows the procedure, that is used in the \textit{extend\textunderscore comment\textunderscore block} method of the \textit{NTNode} class.
 If no \textit{comment\textunderscore block} has not been associated with the node before, the input \textit{comment\textunderscore block} is associated with the node.
 If the node has already has a \textit{comment\textunderscore block}, this \textit{comment\textunderscore block} is extended, with the comments lines from the input \textit{comment\textunderscore block}.\\
@@ -468,7 +480,7 @@ This procedure is needed because it is possible that multiple comment blocks, th
 
 \begin{algorithm}[H]
 \small
-\caption{Extend comment block}
+\caption{Extend node comment block}
 \begin{algorithmic}[1]
 \algrenewcommand\algorithmicindent{0.4em}
 \Require comment\textunderscore block
