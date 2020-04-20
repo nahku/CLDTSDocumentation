@@ -3,9 +3,48 @@ cd ~/%!TEX root = ../dokumentation.tex
 
 \chapter{Implementation}\label{cha:Implementation}
 
+Based on the previous introduction to the concept of the application, this chapter describes the implementation of the application in detail.
+
 \section{Lexer}\label{sec:ImplementationLexer}
 
 As mentioned in chapter \ref{sec:ConceptLexer} the implementation of the lexer consists of the definition of tokens in form of regular expression. The following paragraph presents defined tokens and their regular expressions.
+
+- input text using input() method
+- repeatingly call token()
+
+\subsection{Token}\label{sec:ImplementationLexerToken}
+
+Tokens are given names that indicate what they represent. All tokens that have been defined are combined to a token list.   A tokens list is always required when writing a lexer using \ac{PLY} \cite{PLY}. The list of tokens is also used by the parser to identify terminal symbols \cite{PLY}. Listing \ref{lst:Lexer_tokens} shows the tokens list of the implemented lexer.
+
+-  tok.type, tok.value, tok.lineno, and tok.lexpos \\
+
+\begin{lstlisting}[language=Python,basicstyle=\scriptsize	,caption= Lexer tokens,label= lst:Lexer_tokens]
+# List of token names
+tokens = (
+    'LGRAMMAR_EXPRESSION',
+    'LTOKEN_EXPRESSION',
+    'LSTRICT_EXPRESSION',
+    'LMACRO_EXPRESSION',
+    'NT_SYMBOL',
+    'COMMENT',
+    'OPEN_PARENTHESIS',
+    'CLOSE_PARENTHESIS',
+    'OPEN_SQUARE_BRACKET',
+    'CLOSE_SQUARE_BRACKET',
+    'ALTERNATIVE_SYMBOL',
+    'REPETITION_SYMBOL',
+    'T_SYMBOL'
+)
+\end{lstlisting}
+
+\subsection{Regular expression}\label{sec:ImplementationLexerRegularExpression}
+
+- token specified by regular expression 
+- expressions are marked by adding a prefix t\textunderscore that indicates the definition of a token
+- token rule can be defined as a function
+- regular expression is specified in the function
+- lexeme can be modified, resulting token is returned
+- without return token is dismissed and next token is read
 
 \subsubsection{Ignored symbols}
 It is possible to declare symbols that should be ignored. However, if a symbol is declared as ignored but is specially mentioned in another token, then if the sequence
