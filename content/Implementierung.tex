@@ -740,7 +740,7 @@ The new grammar graph will only contain the reachable symbols (as described in s
 \subsection{Create output from grammar graph}\label{sec:ImplementationOutputGrammarGraph}
 
 For saving the grammar graph in a text file, the graph needs to be traversed and converted to a string format that can be saved to a text document. The grammar graph is converted to a string format by converting every rule to a string and coheres them. Every rule is represented by a node and the nodes children list. Therefore the graph is traversed and string representation of the nodes are created.
-The final output is stored in a $print\textunderscore list$. A $print\textunderscore list$ is a list of $print\textunderscore list\textunderscore entries$ that can be seen in listing\ref{lst:ImplementationOutputPrintListEntry}. A $print\textunderscore list\textunderscore entry$ is a string consisting of the position of the rule that is represented by the node in the original \ac{TPTP} grammar and a string version of the rule or rather the node and its children list. \\
+The final output is stored in a $print\textunderscore list$. A $print\textunderscore list$ is a list of $print\textunderscore list\textunderscore entries$ that can be seen in listing\ref{lst:ImplementationOutputPrintListEntry}. A $print\textunderscore list\textunderscore entry$ is a string consisting of the position of the rule that is represented by the node in the original \ac{TPTP} grammar and a string version of the rule or rather the node and its children list.
 
 \begin{lstlisting}[language=Python, basicstyle=\scriptsize	,caption= Print List Entry,label= lst:ImplementationOutputPrintListEntry]
 PrintListEntry = namedtuple("PrintListEntry", ["position", "string"])
@@ -833,14 +833,13 @@ The \textit{COMMENT\textunderscore BLOCK} class has a list of comment lines as a
 -comment block \textunderscore \textunderscore str \textunderscore \textunderscore method creates string
 
 \subsubsection{\textit{PRODUCTIONS\textunderscore LIST} string representation creation}
--list of productions
--productions are separated by " | "
--and str of individual productions called
--reference to uml
+The \textit{PRODUCTIONS\textunderscore LIST} class contains a list of production alternatives of a rule. The production alternatives are separated by " | " in the original \ac{TPTP} syntax.
 
-Algorithm \ref{alg:OutputCreateProductionsListString}
+-listing example
 
--counter to check last production and do not print alternative symbol after
+Algorithm \ref{alg:OutputCreateProductionsListString} shows the process of creating the string representation of a \textit{PRODUCTIONS\textunderscore LIST}. The productions in \textit{PRODUCTIONS\textunderscore LIST} are iterated and the string representation of every production is created (described in ...) and the productions are separated by the " | " string. The counter is used to identify the last production and not print alternative symbol after.
+
+-no alternative symbol after last production
 
 \begin{algorithm}[H]
 \caption{\textit{PRODUCTIONS\textunderscore LIST}  string creation}\label{alg:OutputCreateProductionsListString}
