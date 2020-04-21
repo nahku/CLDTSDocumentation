@@ -511,7 +511,7 @@ This includes deleting the corresponding element from the productions list and f
 
 \subsection{Determination of the remaining terminating symbols}\label{sec:ConceptDerterminingRemainingTerminating}
 After all reachable symbols have been determined, the last step of extracting a sub-syntax is to determine and remove the non-terminating productions and symbols.
-Non-terminating productions are productions in which at least one nonterminal symbol is non-terminating.\\
+Non-terminating productions are productions in which at least one nonterminal symbol is non-terminating.
 
 The terminating symbols can be determined recursively using dynamic programming techniques.
 The goal is to determine for each nonterminal symbol if it derives a terminating symbol. Only then it is a useful symbol since it is reachable and derives a terminating symbol todo reference
@@ -556,7 +556,6 @@ There are three steps necessary in order for
 - store node string with position
 - order node strings by position
 
-
 - print to file
 -recursive
 
@@ -567,6 +566,12 @@ There are three steps necessary in order for
 -maintain order of rules
 
 -temporary start symbol pos -1 to not print
+
+Python has string class \url{https://docs.python.org/3/library/stdtypes.html#str}.
+It creates a string version of the object passed to the constructor.
+To do that it calls the \textit{\textunderscore \textunderscore str \textunderscore \textunderscore ()} of the passed object, if the object provides that method.
+
+-this ?pythonic? way is used to create the string object representations
 
 \subsection{Automated parser generator compatibility}\label{sec:ConceptAutomatedParserGenerator}
 The automated parser generator for the \ac{TPTP} syntax \cite{VS06} takes a \ac{TPTP} syntax file as input and creates a lex and yacc file corresponding to the specification in the input syntax.\\
