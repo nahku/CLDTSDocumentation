@@ -695,33 +695,17 @@ The new grammar graph will only contain the reachable symbols (as described in s
 
 \section{Output generation}\label{sec:ImplementationOutputGeneration}
 
-- creating print list \\
+- creating print list\\ 
 - saving print list to file
-
-
 
 \subsection{Create output from grammar graph}\label{sec:ImplementationOutputGrammarGraph}
 
 For saving the grammar graph in a text file, the graph needs to be traversed and converted to a string format that can be saved to a text document. The grammar graph is converted to a string format by converting every rule to a string and coheres them. Every rule is represented by a node and the nodes children list. Therefore the graph is traversed and string representation of the nodes are created.
-The final output is stored in a $print\textunderscore string$ which is a string representation of the $print\textunderscore list$. A $print\textunderscore list$ is a list of $print\textunderscore list\textunderscore entries$ that can be seen in listing\ref{lst:ImplementationOutputPrintListEntry}. A $print\textunderscore list\textunderscore entry$ is a string consisting of the position of the rule that is represented by the node in the original \ac{TPTP} grammar and a string version of the rule or rather the node and its children list. \\
+The final output is stored in a $print\textunderscore list$. A $print\textunderscore list$ is a list of $print\textunderscore list\textunderscore entries$ that can be seen in listing\ref{lst:ImplementationOutputPrintListEntry}. A $print\textunderscore list\textunderscore entry$ is a string consisting of the position of the rule that is represented by the node in the original \ac{TPTP} grammar and a string version of the rule or rather the node and its children list. \\
 
 \begin{lstlisting}[language=Python, basicstyle=\scriptsize	,caption= Print List Entry,label= lst:ImplementationOutputPrintListEntry]
 PrintListEntry = namedtuple("PrintListEntry", ["position", "string"])
 \end{lstlisting}
-
-The detailed process of saving a grammar graph in a text file is described in the following sections.
-
-\subsubsection{Saving string representation of graph in text file}\label{sec:ImplementationOutputSaveGrammarGraphStringRepresentations}
-
-In order to create the $print\textunderscore string$ the $print\textunderscore list$ is generated. For generating the $print\textunderscore list$, an empty set $visited$ is created that is used for memorising which nodes have already been visited. Moreover, an empty $print\textunderscore list$ and $print\textunderscore string$ are created. The set $visited$ and the empty $print\textunderscore list$ are used for calling the function $create\textunderscore print\textunderscore list$ (see following section) which returns the final $print\textunderscore list$. Because the rules in the $print\textunderscore list$ are not in the same order as the rules in the original \ac{TPTP} syntax, the $print\textunderscore list$ is sorted based on the rule's position that is stored in the first element of the $PrintListEntry$ tuple. For converting the $print\textunderscore list$ to one string, the $print\textunderscore string$, the $print\textunderscore list$ is iterated. Except for the first element of the list, every element of the list is added to the $print\textunderscore string$. This is done by adding the strings that are stored in the second element of the $PrintListEntry$ tuple and separating them by a new line. The first element is not added because it represents the general start symbol that has been added to the grammar (see chapter \ref{sec:ConceptGraphGeneration} but is not a part of the \ac{TPTP} grammar. A text document with a filename that has been selected by the user is then opened and the $print\textunderscore string$ is written to the file.
-The simplified process can be seen in the flow diagram in figure \ref{fig:ImplementationOutputSaveOrderedRules}.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.4\textwidth]{images/Implementation_saveorderedrules.pdf}
-\caption{Save ordered rules from graph}
-\label{fig:ImplementationOutputSaveOrderedRules}
-\end{figure}
 
 
 \subsubsection{Traverse graph to create string representations of objects}\label{sec:ImpolementationOutputGrammarGraphTraverse}
@@ -733,9 +717,7 @@ Recursively all children in the nodes children list are traversed. Because a chi
 \begin{algorithm}[H]
 \caption{Output Algorithm: create\textunderscore print\textunderscore list}\label{alg:OutputCreatePrintList}
 \begin{algorithmic}[1] 
-\Require node
-\Require visited
-\Require print\textunderscore list
+\Require node, visited, print\textunderscore list
 \State Create PrintListEntry with node.position and str(node)
 \State Append PrintListEntry to print\textunderscore list
 \State Add node to visited
@@ -752,22 +734,160 @@ Recursively all children in the nodes children list are traversed. Because a chi
 \end{algorithm}
 
 \subsubsection{Create string representations of objects}\label{sec:ImplementationOutputGrammarGraphStringRepresentations}
+-create str from node
+-node creates str represenation of attributes internally
+-following classes implement str method:
+-maybe examples from syntax file
 
-- python has string class \url{https://docs.python.org/3/library/stdtypes.html#str}
-- returns string version of the passed object
-- it returns object.\textunderscore \textunderscore str \textunderscore \textunderscore () when object has the method
-- following classes implement str method:
+\subsubsection{\textit{NTNode} string representation creation}
+-goal is to create string with comment and rule, the same way like in the original syntax
 
-COMMENT\textunderscore  BLOCK \\
--lines from lines list with newline
+NTNODE (UML diagram)
+-node represents rule and comment block associated with node
+-consists of comment block
+-rule type table ref
 
-PRODUCTION\textunderscore ELEMENT \\
-- production element symbol with production property 
+called here:
+-create string representation of comment block
+-also create string represent
 
-PRODUCTION
+\begin{algorithm}[H]
+\caption{\textit{NTNode} string creation}\label{alg:OutputCreateNodeString}
+\begin{algorithmic}[1] 
+\If {this.comment\textunderscore block is not None}
+	\State node\textunderscore string += str(this.comment\textunderscore block)
+\EndIf
+\State node\textunderscore string += this.value
+\State todo create string offset
+\If{this.rule\textunderscore type == RuleType.GRAMMAR}
+	\State node\textunderscore string += " ::= "
+\ElsIf{this.rule\textunderscore type == RuleType.TOKEN}
+	\State node\textunderscore string += " ::- "
+\ElsIf{this.rule\textunderscore type == RuleType.STRICT}
+	\State node\textunderscore string += " :== "
+\ElsIf{this.rule\textunderscore type == RuleType.MACRO}
+	\State node\textunderscore string += " ::: "
+\EndIf
+\State node\textunderscore string += str(this.productions\textunderscore list)
+\Return node\textunderscore string
+\end{algorithmic}
+\end{algorithm}
+
+\subsubsection{\textit{COMMENT\textunderscore BLOCK} string representation creation}
+The \textit{COMMENT\textunderscore BLOCK} class has a list of comment lines as an attribute (see UML diagram in figure \ref{fig:ConceptCommentBlockClassDiagram}). The string representation of the \textit{COMMENT\textunderscore BLOCK} objects is created by concatenating the comment lines, separating them by newline characters.
+-comment block \textunderscore \textunderscore str \textunderscore \textunderscore method creates string
+
+\subsubsection{\textit{PRODUCTIONS\textunderscore LIST} string representation creation}
+-list of productions
+-productions are separated by " | "
+-and str of individual productions called
+-reference to uml
+
+Algorithm \ref{alg:OutputCreateProductionsListString}
+
+-counter to check last production and do not print alternative symbol after
+
+\begin{algorithm}[H]
+\caption{\textit{PRODUCTIONS\textunderscore LIST}  string creation}\label{alg:OutputCreateProductionsListString}
+\begin{algorithmic}[1]
+\State productions\textunderscore list\textunderscore string = ""
+\State length = length(this.list)
+\State counter = 1
+\ForAll{production in this.list}
+	\State productions\textunderscore list\textunderscore string += str (production)
+	\If{counter < length}
+		\State productions\textunderscore list\textunderscore string += " | "
+	\EndIf
+	\State index += 1
+\EndFor
+\State Return \State productions\textunderscore list\textunderscore string
+\end{algorithmic}
+\end{algorithm}
+
+\subsubsection{\textit{PRODUCTION} string representation creation}
 -order
+-production list consists of production, xor productions list or production element
 
-NTNODE
+-else case (for production element and xor productions list)
+
+\begin{algorithm}[H]
+\caption{\textit{PRODUCTION}  string creation}
+\label{alg:OutputCreateProductionString}
+\begin{algorithmic}[1]
+\State production\textunderscore string = ""
+\ForAll{element in this.list}
+	\If {element is a PRODUCTION}
+		\If {element.productionProperty == ProductionProperty.NONE}
+			\State production\textunderscore string += str(element)
+		\ElsIf {element.productionProperty == ProductionProperty.REPETITION}	
+			\State production\textunderscore string += "("
+			\State production\textunderscore string += str(element)
+			\State production\textunderscore string += ")"
+			\State production\textunderscore string += "*"
+		\ElsIf {element.productionProperty == ProductionProperty.OPTIONAL}	
+			\State production\textunderscore string += "["
+			\State production\textunderscore string += str(element)
+			\State production\textunderscore string += "]"
+		\EndIf
+	\Else
+		\State production\textunderscore string += str(element)
+	\EndIf
+\EndFor
+\State Return production\textunderscore string
+\end{algorithmic}
+\end{algorithm}
+
+\subsubsection{\textit{XOR\textunderscore PRODUCTIONS\textunderscore LIST} string representation creation}
+
+\subsubsection{\textit{PRODUCTION\textunderscore ELEMENT} string representation creation}
+
+-production element symbol with production property 
+
+\begin{algorithm}[H]
+\caption{\textit{PRODUCTION\textunderscore ELEMENT}  string creation}
+\label{alg:OutputCreateProductionElementString}
+\begin{algorithmic}[1]
+\State production\textunderscore element\textunderscore string = ""
+	\If {element.productionProperty == ProductionProperty.NONE}
+		\State production\textunderscore string += str(this.symbol)
+	\ElsIf {element.productionProperty == ProductionProperty.REPETITION}	
+		\State production\textunderscore string += "("
+		\State production\textunderscore string += str(this.symbol)
+		\State production\textunderscore string += ")"
+		\State production\textunderscore string += "*"
+	\ElsIf {element.productionProperty == ProductionProperty.OPTIONAL}	
+		\State production\textunderscore string += "["
+		\State production\textunderscore string += str(this.symbol)
+		\State production\textunderscore string += "]"
+	\EndIf
+\State production\textunderscore element\textunderscore string
+\end{algorithmic}
+\end{algorithm}
+
+\subsubsection{Symbol string representation creation}
+-nt, terminal symbol
+-check t symbol str
+
+\subsubsection{Saving string representation of graph in text file}\label{sec:ImplementationOutputSaveGrammarGraphStringRepresentations}
+
+- rules are in string format and cohered 
+- create one string out of cohered strings
+- save string to local storage
+
+- initialise visited 
+- create empty print list and empty print string
+- generate print list using create print list
+- print list is not in the same order as the orginal tptp grammar, based on the position that has been stored in each print list entry, the print list is sorted
+- every element of the print list except of the first one which is the general start symbol that has been added but is not a part of the tptp grammar is added to the print string separated by a new line
+- a text document with the filename is opened and the print string is written to the file
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.3\textwidth]{images/Implementation_saveorderedrules.pdf}
+\caption{Save ordered rules from graph}
+\label{fig:ImplementationOutputSaveOrderedRules}
+\end{figure}
+
 
 \subsection{Maintain original order}\label{sec:ImplementationOutputGrammarGraphMaintainOrder}
 - use tuple of position and node string
