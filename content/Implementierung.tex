@@ -747,6 +747,22 @@ PrintListEntry = namedtuple("PrintListEntry", ["position", "string"])
 \end{lstlisting}
 
 
+The detailed process of saving a grammar graph in a text file is described in the following sections.
+
+\subsubsection{Saving string representation of graph in text file}\label{sec:ImplementationOutputSaveGrammarGraphStringRepresentations}
+
+In order to create the $print\textunderscore string$ the $print\textunderscore list$ is generated. For generating the $print\textunderscore list$, an empty set $visited$ is created that is used for memorising which nodes have already been visited. Moreover, an empty $print\textunderscore list$ and $print\textunderscore string$ are created. The set $visited$ and the empty $print\textunderscore list$ are used for calling the function $create\textunderscore print\textunderscore list$ (see following section) which returns the final $print\textunderscore list$. Because the rules in the $print\textunderscore list$ are not in the same order as the rules in the original \ac{TPTP} syntax, the $print\textunderscore list$ is sorted based on the rule's position that is stored in the first element of the $PrintListEntry$ tuple. For converting the $print\textunderscore list$ to one string, the $print\textunderscore string$, the $print\textunderscore list$ is iterated. Except for the first element of the list, every element of the list is added to the $print\textunderscore string$. This is done by adding the strings that are stored in the second element of the $PrintListEntry$ tuple and separating them by a new line. The first element is not added because it represents the general start symbol that has been added to the grammar (see chapter \ref{sec:ConceptGraphGeneration} but is not a part of the \ac{TPTP} grammar. A text document with a filename that has been selected by the user is then opened and the $print\textunderscore string$ is written to the file.
+The simplified process can be seen in the flow diagram in figure \ref{fig:ImplementationOutputSaveOrderedRules}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.4\textwidth]{images/Implementation_saveorderedrules.pdf}
+\caption{Save ordered rules from graph}
+\label{fig:ImplementationOutputSaveOrderedRules}
+\end{figure}
+
+
+
 \subsubsection{Traverse graph to create string representations of objects}\label{sec:ImpolementationOutputGrammarGraphTraverse}
 
 The graph is traversed using the function $create\textunderscore print\textunderscore list$. For every node a new $print\textunderscore list\textunderscore entry$ is created. The str function that is called to create the $print\textunderscore list\textunderscore entry$ is described in section \ref{sec:ImplementationOutputGrammarGraphStringRepresentations}. 
@@ -906,27 +922,6 @@ Algorithm \ref{alg:OutputCreateProductionsListString}
 \subsubsection{Symbol string representation creation}
 -nt, terminal symbol
 -check t symbol str
-
-\subsubsection{Saving string representation of graph in text file}\label{sec:ImplementationOutputSaveGrammarGraphStringRepresentations}
-
-- rules are in string format and cohered 
-- create one string out of cohered strings
-- save string to local storage
-
-- initialise visited 
-- create empty print list and empty print string
-- generate print list using create print list
-- print list is not in the same order as the orginal tptp grammar, based on the position that has been stored in each print list entry, the print list is sorted
-- every element of the print list except of the first one which is the general start symbol that has been added but is not a part of the tptp grammar is added to the print string separated by a new line
-- a text document with the filename is opened and the print string is written to the file
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.3\textwidth]{images/Implementation_saveorderedrules.pdf}
-\caption{Save ordered rules from graph}
-\label{fig:ImplementationOutputSaveOrderedRules}
-\end{figure}
-
 
 \subsection{Maintain original order}\label{sec:ImplementationOutputGrammarGraphMaintainOrder}
 - use tuple of position and node string
