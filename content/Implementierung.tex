@@ -326,13 +326,8 @@ The rule type of a node is either grammar, token, strict or macro and is impleme
 \label{fig:ImplementationRuleTypeUML}
 \end{figure}
 
-Algorithm \ref{alg:buildNodesDictionary} shows how the nodes dictionary is build. Iterating the rules list that the parser outputs, if the rule is not a comment block, a new dictionary item is created that consists of the node key rule name and rule type and the NTNode as value.
-
-todo
--multiple rules can correspond to one node, example
--to not overwrite node, check if key already exists
--in that case append productions list
--keep first position
+Algorithm \ref{alg:buildNodesDictionary} shows how the nodes dictionary is build. Iterating the rules list, a new dictionary item is created that consists of the node key rule name and rule type and the NTNode as value. This is only the case if the rule is not a comment block. 
+Listing \ref{lst:ImplementationMultipleSameRules} shows that multiple rules exists that corresponds to the same node.
 
 \begin{lstlisting}[language=None, basicstyle=\scriptsize	,caption= Multiple rules with the same left-hand side of the rule,label= lst:ImplementationMultipleSameRules]
 <defined_proposition>  :== <defined_predicate>
@@ -345,6 +340,7 @@ todo
                            $dia_P | $dia_i | $dia_int | $dia
 \end{lstlisting}
 
+If that is not taken into consideration, the second rule would create a new node and replace the existing on in the dictionary because their dictionary keys are the same. To not overwrite the node, the algorithm checks whether the key already exists in the dictionary. If the key already exists, the productions lists of the two rules are merged into one productions list that is appended to the node. 
 After iterating, comments are assigned (see section \ref{sec:ImplementationMaintainingComments}).
 
 \begin{algorithm}[H]
