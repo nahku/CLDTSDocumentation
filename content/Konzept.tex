@@ -528,12 +528,24 @@ When generating the new grammar graph, all from the start symbol reachable parts
 All nodes that are not part of the new grammar graph are not reachable and can therefore be removed.
 
 \section{Output generation}\label{sec:ConceptOutputGeneration}
-Internally in the software tool a syntax is represented by a grammar graph.
-To make sub-syntaxes represented by a grammar graph usable they have to be converted to the original form of a \ac{TPTP} syntax file. This process is described in the following subsection.
-After that measures to provide compatibility with the automated parser generator are discussed in section \ref{sec:ConceptAutomatedParserGenerator}.
+Within the software tool a syntax is represented by a grammar graph.
+To export sub-syntaxes that have been extracted from a grammar graph they have to be converted to the original form of a \ac{TPTP} syntax file. This process is described in the following subsection.
+After that, measures to provide compatibility with the automated parser generator are discussed in section \ref{sec:ConceptAutomatedParserGenerator}.
 
 \subsection{Create output from grammar graph}\label{sec:ConceptOutputGrammarGraph}
-There are three steps necessary in order for 
+There are three steps necessary that are displayed in figure \ref{fig:ConceptOutputGrammarGraphProcedure} in order to convert a syntax represented by a grammar graph to the original \ac{TPTP} syntax file form.
+
+The first step is to traverse the grammar graph by iterating all nodes and getting a string representation of the nodes.
+For creating the string representation, the Python string class is used (\url{https://docs.python.org/3/library/stdtypes.html#str}). The string class creates a string version of the object passed to the constructor.
+To do that it calls the \textit{\textunderscore \textunderscore str \textunderscore \textunderscore ()} of the passed object, if the object provides that method.
+
+In order to maintain the same order that rules have in the \ac{TPTP} syntax, the position of the nodes is saved alongside the node string. 
+After generating all string, in the second step all nodes are ordered based on their position. 
+
+The ordered list of nodes strings is then in the third step written to a file and exported.
+The node that represents the temporary start symbol is not printed as it does not belong to the \ac{TPTP} syntax. 
+
+ 
 \begin{figure}[H]
 \tikzstyle{decision} = [ diamond, draw, fill=blue!10, text width=4.5em, text badly centered, node distance=2cm, inner sep-0pt]  
 \tikzstyle{block} = [ rectangle, draw, fill=blue!10, text width=10em, text badly centered, rounded corners, minimum height=4em]  
@@ -552,26 +564,6 @@ There are three steps necessary in order for
 \caption{Procedure of generating a Syntax string representation from the grammar graph}
 \label{fig:ConceptOutputGrammarGraphProcedure}
 \end{figure}
-- iterate over nodes and get string representation of nodes with node position
-- store node string with position
-- order node strings by position
-
-- print to file
--recursive
-
-- each node represents rule of certain rule type with possibly multiple production alternatives
-
--recursively build strings
-
--maintain order of rules
-
--temporary start symbol pos -1 to not print
-
-Python has string class \url{https://docs.python.org/3/library/stdtypes.html#str}.
-It creates a string version of the object passed to the constructor.
-To do that it calls the \textit{\textunderscore \textunderscore str \textunderscore \textunderscore ()} of the passed object, if the object provides that method.
-
--this ?pythonic? way is used to create the string object representations
 
 \subsection{Automated parser generator compatibility}\label{sec:ConceptAutomatedParserGenerator}
 The automated parser generator for the \ac{TPTP} syntax \cite{VS06} takes a \ac{TPTP} syntax file as input and creates a lex and yacc file corresponding to the specification in the input syntax.\\
