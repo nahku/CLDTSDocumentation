@@ -283,7 +283,7 @@ The methods highlighted in blue are used for building a graph and are described 
                 
 \section{Graph generation}\label{sec:ImplementationGraphGeneration}
 
-Before generating a graph a node dictionary consisting of nodes is built. Figure \ref{fig:ImplementationNTNodeUML} shows the class NTNode that has already been introduced in chapter\ref{sec:ConceptGraphGeneration}. Besides the class attributes that have also been introduced in chapter \ref{sec:ConceptGraphGeneration} the class has three class methods:
+Before generating a graph a node dictionary consisting of nodes is built. Figure \ref{fig:ImplementationNTNodeUML} shows the class NTNode that has already been introduced in chapter\ref{sec:ConceptGraphGeneration}. The class has three class methods:
 $Add\textunderscore children$ adds a list of children to the existing nodes children list. $Extend\textunderscore comment\textunderscore block$ appends a comment block to he existing comment block of a node. $str$?? 
 
 \begin{figure}[H]
@@ -302,16 +302,42 @@ The rule type of a node is either grammar, token, strict or macro and is impleme
 \label{fig:ImplementationRuleTypeUML}
 \end{figure}
 
-Algorithm \ref{alg:buildNodesDictionary} shows how the nodes dictionary is build. Iterating the rules list that the parser outputs if the rule is not a comment block a new dictionary item is created that consists of the node key rule name and rule type and the NTNode as value. After iterating, comments are assigned (see chapter REF ).
+Algorithm \ref{alg:buildNodesDictionary} shows how the nodes dictionary is build. Iterating the rules list that the parser outputs, if the rule is not a comment block, a new dictionary item is created that consists of the node key rule name and rule type and the NTNode as value.
+
+todo
+-multiple rules can correspond to one node, example
+-to not overwrite node, check if key already exists
+-in that case append productions list
+-keep first position
+
+\begin{lstlisting}[language=None, basicstyle=\scriptsize	,caption= Multiple rules with the same left-hand side of the rule,label= lst:ImplementationMultipleSameRules]
+<defined_proposition>  :== <defined_predicate>
+<defined_proposition>  :== $true | $false
+<defined_predicate>    :== <atomic_defined_word>
+<defined_predicate>    :== $distinct |
+                           $less | $lesseq | $greater | $greatereq |
+                           $is_int | $is_rat |
+                           $box_P | $box_i | $box_int | $box |
+                           $dia_P | $dia_i | $dia_int | $dia
+\end{lstlisting}
+
+After iterating, comments are assigned (see section \ref{sec:ImplementationMaintainingComments}).
 
 \begin{algorithm}[H]
 \caption{Graph Generation Algorithm: buildNodesDictionary}\label{alg:buildNodesDictionary}
 \begin{algorithmic}[1] 
 \Require rules\textunderscore list
-\ForAll {rules in rules\textunderscore list} 
-	\If {rules is not a comment block}
-		\State Find rule type for expression
-		\State nodes\textunderscore dictionary.update({Node\textunderscore Key(rule.name, rule\textunderscore type):NTNode(rule.name, rules.productions\textunderscore list, rule\textunderscore type, None, rule.position)})
+\ForAll {rule in rules\textunderscore list} 
+	\If {rule is not a comment block}
+		\State rule\textunderscore type = this.find\textunderscore rule\textunderscore type\textunderscore for\textunderscore rule(rule)
+		\State node\textunderscore key = Node\textunderscore Key(rule.name, rule\textunderscore type)
+		\If {node\textunderscore key is not in this.nodes\textunderscore dictionary}
+			\State node = NTNode(rule.name, rule.productions\textunderscore list, rule\textunderscore type, None, rule.position)
+			\State this.nodes\textunderscore dictionary.update({node\textunderscore key:node})
+		\Else
+			\State node = this.nodes\textunderscore dictionary[node\textunderscore key]
+			\State node.productions\textunderscore list.list.extend(rule.productions\textunderscore list.list)
+		\EndIf
 	\EndIf
 \EndFor
 \State Assign comments to rules
@@ -737,7 +763,8 @@ The new grammar graph will only contain the reachable symbols (as described in s
 There are two methods performing input operations that are explained in the following. 
 
 \subsubsection{Import\textunderscore tptp\textunderscore syntax\textunderscore from\textunderscore web}
-The method $import\textunderscore tptp\textunderscore syntax\textunderscore from\textunderscore web$ shown in listing \ref{lst:ImplementationInputWeb} is used get a text from a website. \\
+The method $import\textunderscore tptp\textunderscore syntax\textunderscore from\textunderscore web$ shown in listing \ref{
+:ImplementationInputWeb} is used get a text from a website. \\
 For opening a \ac{URL}, the library urllib is used. $Urllib.request$ opens a specified \ac{URL} and sends an HTTP request. $Urlopen$ returns a response object for the initiated request. The response is a file-like object that can be read using $.read()$. \cite{urllib} \\
 The file can then be converted from html to text format using BeautifulSoup's html parser.
 The header from the file is deleted because it does not belong to the \ac{TPTP} syntax but is appended by urllib. The header is deleted by splitting the grammar file at ever new line and joining all lines excluding the first one. \\
