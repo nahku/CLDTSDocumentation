@@ -9,14 +9,11 @@ Based on the previous introduction to the concept of the application, this chapt
 
 As mentioned in chapter \ref{sec:ConceptLexer} the implementation of the lexer consists of the definition of tokens in form of regular expression. The following paragraph presents defined tokens and their regular expressions.
 
-- input text using input() method
-- repeatingly call token()
+In order to build the lexer, the function $lex.lex()$ is used. After the lexer has been created, the function $lex.token()$ returns matched tokens. The function $lex.token()$ is called until it returns a token of the type None that marks the end of the input stream. 
 
 \subsection{Token}\label{sec:ImplementationLexerToken}
 
-Tokens are given names that indicate what they represent. All tokens that have been defined are combined to a token list.   A tokens list is always required when writing a lexer using \ac{PLY} \cite{PLY}. The list of tokens is also used by the parser to identify terminal symbols \cite{PLY}. Listing \ref{lst:Lexer_tokens} shows the tokens list of the implemented lexer.
-
--  tok.type, tok.value, tok.lineno, and tok.lexpos \\
+Tokens are given names that indicate what they represent. All tokens that have been defined are combined to a token list.   A tokens list is always required when writing a lexer using \ac{PLY} \cite{PLY}. The list of tokens is also used by the parser to identify terminal symbols \cite{PLY}. Listing \ref{lst:Lexer_tokens} shows the tokens list of the implemented lexer. \\
 
 \begin{lstlisting}[language=Python,basicstyle=\scriptsize	,caption= Lexer tokens,label= lst:Lexer_tokens]
 # List of token names
@@ -39,64 +36,91 @@ tokens = (
 
 \subsection{Regular expression}\label{sec:ImplementationLexerRegularExpression}
 
-- token specified by regular expression 
-- expressions are marked by adding a prefix t\textunderscore that indicates the definition of a token
-- token rule can be defined as a function
-- regular expression is specified in the function
-- lexeme can be modified, resulting token is returned
-- without return token is dismissed and next token is read
+Tokens are specified by regular expressions. Regular expressions can be defined in a function. The name of the function is the name of one token in the tokens list with the prefix t\textunderscore . Inside a function it is possible to modify the value of the generated LexToken object and then return it. If not modified, the value of the object is not modified and remains the actual text that has been matched. The regular expression is specified as a string in the beginning of a function. An extract of all functions can be seen in listing \ref{lst:Lexer_regex}. The function for the token $COMMENT$ consists of the comments regular expression that has already been described in chapter \ref{sec:ConceptLexer} and return the LexToken object unmodified. The functions of $OPEN\textunderscore SQUARE\textunderscore BRACKET$, $NT\textunderscore SYMBOL$ and $T\textunderscore SYMBOL$ (and the other tokens in the tokens list) are implemented similar to $COMMENT$. However, the function of $LGRAMMAR\textunderscore EXPRESSION$ and the functions of the other expressions modify the value of the LexToken object. Instead of the value being the actual text matched, the last three characters are removed. The Python method $rstrip()$ removes all white spaced from the value. Thus, the function returns a LexToken object with the value of the text belonging to the nonterminal symbol the expression represent. The rule symbol is removed because the rule type already arises from the token type. \\
 
-\subsubsection{Ignored symbols}
-It is possible to declare symbols that should be ignored. However, if a symbol is declared as ignored but is specially mentioned in another token, then if the sequence
-of characters represent that token, the ignored symbol is not ignored. In this project, tabs and white spaces are ignored as they do not have any special meaning other than providing clarity.
-Also, newlines are generally ignored because as can be seen in listing \ref{lst:Lexer_example_multiline} there are rules that cover multiple lines.
+\begin{lstlisting}[language=Python,basicstyle=\scriptsize	,caption= Lexer regular expressions,label= lst:Lexer_regex]
+def t_COMMENT(self, t):
+    r'^%.*$'
+    return t
 
-\begin{lstlisting}[basicstyle=\scriptsize	,caption= Multi line production rule,label= lst:Lexer_example_multiline]
-<annotated_formula>    ::= <thf_annotated> | <tff_annotated> | <tcf_annotated> |
-                           <fof_annotated> | <cnf_annotated> | <tpi_annotated>
+def t_OPEN_SQUARE_BRACKET(self, t):
+     r'\['
+     return t
+
+def t_LGRAMMAR_EXPRESSION(self, t):
+     r'<\w+>[\s]*::='
+     t.value = t.value[:-3]
+     t.value = t.value.rstrip()
+     return t
+
+def t_NT_SYMBOL(self, t):
+     r'<\w+>'
+     return t
+
+def t_T_SYMBOL(self, t):
+     r'[$\'\\\.,a-zA-Z\_0-9\0-9-\-<>&@!:{}~?^+=/"!^^/@/+-/%;][a-zA-Z\_0-9\-/"!?/@/+-/*/%;\->&+=$\'\\\.,]*'
+     return t
+)
 \end{lstlisting}
 
-Apart from the ignored symbols, there are 13 defined tokens:
+The function $t\textunderscore ignore$ is used for declaring characters that should be ignored in the input stream. In this project, white spaced and new lines are ignored (see chapter \ref{ConceptLexer}.
 
-\subsubsection{Expressions}
+The function $t\textunderscore error$ is called when an error occurs during lexing. The defined error function shown in listing \ref{lst:Lexer_error} prints the value of the illegal character and skips the character. \\
 
-Expressions can either be of the type grammar, token, strict or macro. It is defined as a nonterminal symbol followed by the production symbol itself (::=,:==,:::,...). The nonterminal symbol and the production are merged to a single token and are not identified as two tokens to avoid ambiguity while parsing. If not it would be difficult for the parer to determine whether the nonterminal symbol that describes the rule is the start of a new rule or does still belong to the previous rule because as mentioned rules can cover multiple lines.
-
-\textit{Regular expression of grammar expression:}  $<\backslash w+>[\backslash s]*::=$
-
-$\backslash w+$ matches any alphanumeric and underscore character that can occur more than one time.
-$[\backslash s]*$ matches an arbitrary amount of white spaces. $::=$ matches the symbol for grammar expression and can be substituted  by any other symbol for the other expressions.
-
-\subsubsection{Nonterminal symbol}
-
-A nonterminal symbol starts with \dq <\dq\; and ends with \dq >\dq. In between there is any arbitrary sequence of numbers, underscores and small or capital letters which can be represented by $\backslash w+$ in a regular expression.
-
-\textit{Regular expression of nonterminal symbol:}  $<\backslash w+>$
-
-\subsubsection{Terminal symbol}
-
-%\textit{Regular expression of grammar expression:}  $'[$\backslash '\backslash \backslash \backslash .,a-zA-Z\backslash \textunderscore 0-9\backslash 0-9-\backslash -<>&@!:{}~?^+=/"!^^/@/+-/%;][a-zA-Z\_0-9\-/"!?/@/+-/*/%;\->&+=$\'\\\.,]*'$
-
-\subsubsection{Comment}
-
-A comment is identified by the lexer as a start of a new line followed by a percentage sign followed by an arbitrary character and ends with a newline. Because the percentage sign is also part of the terminal symbols, it is necessary to check whether the percentage sign is in a newline because the terminal symbol is not because the percentage symbol when used as terminal symbol is embedded in square brackets.    
-
-\textit{Regular expression of comment:}  $\textasciicircum \%.*\textdollar $
-%$'^%.*\textdollar '$
-
-\subsubsection{Meta-Symbols}
-
-Meta-Symbols include open and close parentheses \dq( )\dq, open and close square brackets \dq[ ]\dq, asterisks \dq *\dq and vertical bars \dq |\dq.
-
-They are recognized by the symbol itself and have a greater meaning for the parser as they impact the to be build data structures. 
-
-\subsubsection{Ambiguity}
-
-The following example could either be matched as one comment token or as comment, grammar expression, non terminal symbol, terminal symbol, non terminal symbol.
-This ambiguity is solved because by convention the lexer matches the longest possible token, the sequence of characters is matched as one comment.
-\begin{lstlisting}[basicstyle=\scriptsize	,caption= Commented out production rule,label= lst:Lexer_example]
-%----   <formula_role> ::= <user_role>-<source>
+\begin{lstlisting}[language=Python,basicstyle=\scriptsize	,caption= Lexer error function,label= lst:Lexer_error]
+def t_error(self, t):
+    print("Illegal character '%s'" % t.value[0])
+    t.lexer.skip(1)
+)
 \end{lstlisting}
+
+
+%
+%\subsubsection{Ignored symbols}
+%It is possible to declare symbols that should be ignored. However, if a symbol is declared as ignored but is specially mentioned in another token, then if the sequence
+%of characters represent that token, the ignored symbol is not ignored. In this project, tabs and white spaces are ignored as they do not have any special meaning other than providing clarity.
+%Also, newlines are generally ignored because as can be seen in listing \ref{lst:Lexer_example_multiline} there are rules that cover multiple lines.
+%
+%\begin{lstlisting}[basicstyle=\scriptsize	,caption= Multi line production rule,label= lst:Lexer_example_multiline]
+%<annotated_formula>    ::= <thf_annotated> | <tff_annotated> | <tcf_annotated> |
+%                           <fof_annotated> | <cnf_annotated> | <tpi_annotated>
+%\end{lstlisting}
+%
+%Apart from the ignored symbols, there are 13 defined tokens:
+%
+%\subsubsection{Expressions}
+%
+%Expressions can either be of the type grammar, token, strict or macro. It is defined as a nonterminal symbol followed by the production symbol itself (::=,:==,:::,...). The nonterminal symbol and the production are merged to a single token and are not identified as two tokens to avoid ambiguity while parsing. If not it would be difficult for the parer to determine whether the nonterminal symbol that describes the rule is the start of a new rule or does still belong to the previous rule because as mentioned rules can cover multiple lines.
+%
+%\textit{Regular expression of grammar expression:}  $<\backslash w+>[\backslash s]*::=$
+%
+%$\backslash w+$ matches any alphanumeric and underscore character that can occur more than one time.
+%$[\backslash s]*$ matches an arbitrary amount of white spaces. $::=$ matches the symbol for grammar expression and can be substituted  by any other symbol for the other expressions.
+%
+%\subsubsection{Nonterminal symbol}
+%
+%A nonterminal symbol starts with \dq <\dq\; and ends with \dq >\dq. In between there is any arbitrary sequence of numbers, underscores and small or capital letters which can be represented by $\backslash w+$ in a regular expression.
+%
+%\textit{Regular expression of nonterminal symbol:}  $<\backslash w+>$
+%
+%\subsubsection{Terminal symbol}
+%
+%%\textit{Regular expression of grammar expression:}  $'[$\backslash '\backslash \backslash \backslash .,a-zA-Z\backslash \textunderscore 0-9\backslash 0-9-\backslash -<>&@!:{}~?^+=/"!^^/@/+-/%;][a-zA-Z\_0-9\-/"!?/@/+-/*/%;\->&+=$\'\\\.,]*'$
+%
+%\subsubsection{Comment}
+%
+%A comment is identified by the lexer as a start of a new line followed by a percentage sign followed by an arbitrary character and ends with a newline. Because the percentage sign is also part of the terminal symbols, it is necessary to check whether the percentage sign is in a newline because the terminal symbol is not because the percentage symbol when used as terminal symbol is embedded in square brackets.    
+%
+%\textit{Regular expression of comment:}  $\textasciicircum \%.*\textdollar $
+%%$'^%.*\textdollar '$
+%
+%\subsubsection{Meta-Symbols}
+%
+%Meta-Symbols include open and close parentheses \dq( )\dq, open and close square brackets \dq[ ]\dq, asterisks \dq *\dq and vertical bars \dq |\dq.
+%
+%They are recognized by the symbol itself and have a greater meaning for the parser as they impact the to be build data structures. 
+
+
 \section{Parser}\label{sec:ImplementationParser}
 
 The parser is taking the tokens from the lexer and matches them to defined production rules.
@@ -645,7 +669,7 @@ If every node in the \textit{children\textunderscore list} represents a terminat
 			\ForAll {child in children\textunderscore list}
 				\State find\textunderscore non\textunderscore terminating\textunderscore symbols(child, terminating\textunderscore set, visited\textunderscore set)		
 				\If {not value\textunderscore in\textunderscore terminating(child.value, terminating\textunderscore set)}
-					\State terminating\textunderscore set = False
+					\State terminating\textunderscore flag = False
 				\EndIf
 			\EndFor
 			\If {terminating\textunderscore flag}
