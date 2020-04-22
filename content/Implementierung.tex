@@ -732,6 +732,34 @@ Now, that nonterminating symbols have been removed from the grammar graph, the r
 As described in section \ref{sec:ConceptRemovingBlockedProductions} the determination of the remaining reachable is done by creating a new grammar graph, with the desired start symbol from the control file.
 The new grammar graph will only contain the reachable symbols (as described in section \ref{sec:ConceptDerterminingRemainingReachable}). 
 
+\section{Input}\label{sec:ImplementationInput}
+
+There are two methods performing input operations that are explained in the following. 
+
+\subsubsection{Import\textunderscore tptp\textunderscore syntax\textunderscore from\textunderscore web}
+The method $import\textunderscore tptp\textunderscore syntax\textunderscore from\textunderscore web$ shown in listing \ref{lst:ImplementationInputWeb} is used get a text from a website. \\
+For opening a \ac{URL}, the library urllib is used. $Urllib.request$ opens a specified \ac{URL} and sends an HTTP request. $Urlopen$ returns a response object for the initiated request. The response is a file-like object that can be read using $.read()$. \cite{urllib} \\
+The file can then be converted from html to text format using BeautifulSoup's html parser.
+The header from the file is deleted because it does not belong to the \ac{TPTP} syntax but is appended by urllib. The header is deleted by splitting the grammar file at ever new line and joining all lines excluding the first one. \\
+
+\begin{lstlisting}[language=Python, basicstyle=\scriptsize	,caption= Import TPTP syntax from web,label= lst:ImplementationInputWeb]
+with urllib.request.urlopen("http://www.tptp.org/TPTP/SyntaxBNF.html") as url:
+        html_doc = url.read()
+soup = BeautifulSoup(html_doc, 'html.parser')
+tptp_grammar = soup.get_text()
+# Delete Header
+tptp_grammar = '\n'.join(tptp_grammar.split('\n')[1:])
+\end{lstlisting}
+
+\subsubsection{Read\textunderscore text\textunderscore from\textunderscore file}
+
+$Read\textunderscore text\textunderscore from\textunderscore file$ in listing \ref{lst:ImplementationInputText} uses the build-in function $open$ to read a text file. \\
+
+\begin{lstlisting}[language=Python, basicstyle=\scriptsize	,caption= Read text from file,label= lst:ImplementationInputText]
+with open(filename, 'r') as text_file:
+        text = text_file.read()
+\end{lstlisting}
+
 \section{Output generation}\label{sec:ImplementationOutputGeneration}
 
 - creating print list\\ 
@@ -746,7 +774,6 @@ The final output is stored in a $print\textunderscore list$. A $print\textunders
 PrintListEntry = namedtuple("PrintListEntry", ["position", "string"])
 \end{lstlisting}
 
-
 The detailed process of saving a grammar graph in a text file is described in the following sections.
 
 \subsubsection{Saving string representation of graph in text file}\label{sec:ImplementationOutputSaveGrammarGraphStringRepresentations}
@@ -760,8 +787,6 @@ The simplified process can be seen in the flow diagram in figure \ref{fig:Implem
 \caption{Save ordered rules from graph}
 \label{fig:ImplementationOutputSaveOrderedRules}
 \end{figure}
-
-
 
 \subsubsection{Traverse graph to create string representations of objects}\label{sec:ImpolementationOutputGrammarGraphTraverse}
 
@@ -830,19 +855,16 @@ called here:
 
 \subsubsection{\textit{COMMENT\textunderscore BLOCK} string representation creation}
 The \textit{COMMENT\textunderscore BLOCK} class has a list of comment lines as an attribute (see UML diagram in figure \ref{fig:ConceptCommentBlockClassDiagram}). The string representation of the \textit{COMMENT\textunderscore BLOCK} objects is created by concatenating the comment lines, separating them by newline characters.
--comment block \textunderscore \textunderscore str \textunderscore \textunderscore method creates string
 
 \subsubsection{\textit{PRODUCTIONS\textunderscore LIST} string representation creation}
-The \textit{PRODUCTIONS\textunderscore LIST} class contains a list of production alternatives of a rule. The production alternatives are separated by " | " in the original \ac{TPTP} syntax.
+The \textit{PRODUCTIONS\textunderscore LIST} class contains a list of production alternatives of a rule (the right-hand side of a rule). The production alternatives are separated by " | " in the original \ac{TPTP} syntax.
 
 -listing example
 
-Algorithm \ref{alg:OutputCreateProductionsListString} shows the process of creating the string representation of a \textit{PRODUCTIONS\textunderscore LIST}. The productions in \textit{PRODUCTIONS\textunderscore LIST} are iterated and the string representation of every production is created (described in ...) and the productions are separated by the " | " string. The counter is used to identify the last production and not print alternative symbol after.
-
--no alternative symbol after last production
+Algorithm \ref{alg:OutputCreateProductionsListString} shows the process of creating the string representation of a \textit{PRODUCTIONS\textunderscore LIST}. The productions in \textit{PRODUCTIONS\textunderscore LIST} are iterated and the string representation of every production is created (described in ...) and the productions are separated by the " | " string. The counter is used to identify the last production and not print alternative symbol after that production.
 
 \begin{algorithm}[H]
-\caption{\textit{PRODUCTIONS\textunderscore LIST}  string creation}\label{alg:OutputCreateProductionsListString}
+\caption{\textit{PRODUCTIONS\textunderscore LIST} string creation}\label{alg:OutputCreateProductionsListString}
 \begin{algorithmic}[1]
 \State productions\textunderscore list\textunderscore string = ""
 \State length = length(this.list)
@@ -859,40 +881,45 @@ Algorithm \ref{alg:OutputCreateProductionsListString} shows the process of creat
 \end{algorithm}
 
 \subsubsection{\textit{PRODUCTION} string representation creation}
--order
--production list consists of production, xor productions list or production element
 
--else case (for production element and xor productions list)
+The \textit{PRODUCTION} class has a \textit{list} of element and a \textit{ProductionProperty} as an attribute (see UML diagram in figure \ref{fig:ConceptProductionClassDiagram}).
+The elements of the list of a \textit{PRODUCTION} can be of type \textit{PRODUCTION}, \textit{PRODUCTION_ELEMENT}, and \textit{XOR_PRODUCTIONS_LIST}.\\
+Algorithm \ref{alg:OutputCreateProductionString} describes the procedure of creating the string representation of a \textit{PRODUCTION}.
+First, the \textit{production\textunderscore string} is initialised.
+Then, depending on the \textit{ProductionProperty} ?symbols? are added to the \textit{production\textunderscore string}.
+If the \textit{ProductionProperty} is \textit{NONE} no special symbols need to be added.
+In case of the \textit{ProductionProperty} \textit{REPETITION}, the open parenthesis character "(" is added to the \textit{production\textunderscore string} in order to enclose the \textit{list} elements.
+In case of the \textit{ProductionProperty} \textit{OPTIONAL}, the elements have to be enclosed in square brackets. Therefore the "[" character is added to the \textit{production\textunderscore string} in that case.\\
+After that, the \textit{list} is iterated and the string representation of each element is created and added to the \textit{production\textunderscore string}.\\
+Again depending on the \textit{ProductionProperty} additional characters might have to be added.
+In case of the \textit{ProductionProperty} \textit{REPETITION} the open parenthesis is closed with the close parenthesis and the repetition symbol is added to denote the repetition property.
+In case of the \textit{ProductionProperty} \textit{OPTIONAL} the open square bracket is closed.
+Then the created \textit{production\textunderscore string} is returned.
 
 \begin{algorithm}[H]
-\caption{\textit{PRODUCTION}  string creation}
+\caption{\textit{PRODUCTION} string creation}
 \label{alg:OutputCreateProductionString}
 \begin{algorithmic}[1]
 \State production\textunderscore string = ""
+\If{self.productionProperty == ProductionProperty.REPETITION}
+	\State production\textunderscore string += "("
+\ElsIf {element.productionProperty == ProductionProperty.OPTIONAL}	
+	\State production\textunderscore string += "["
+\EndIf
 \ForAll{element in this.list}
-	\If {element is a PRODUCTION}
-		\If {element.productionProperty == ProductionProperty.NONE}
-			\State production\textunderscore string += str(element)
-		\ElsIf {element.productionProperty == ProductionProperty.REPETITION}	
-			\State production\textunderscore string += "("
-			\State production\textunderscore string += str(element)
-			\State production\textunderscore string += ")"
-			\State production\textunderscore string += "*"
-		\ElsIf {element.productionProperty == ProductionProperty.OPTIONAL}	
-			\State production\textunderscore string += "["
-			\State production\textunderscore string += str(element)
-			\State production\textunderscore string += "]"
-		\EndIf
-	\Else
 		\State production\textunderscore string += str(element)
-	\EndIf
 \EndFor
+\If{self.productionProperty == ProductionProperty.REPETITION}
+	\State production\textunderscore string += ")*"
+\ElsIf {element.productionProperty == ProductionProperty.OPTIONAL}	
+	\State production\textunderscore string += "]"
+\EndIf
 \State Return production\textunderscore string
 \end{algorithmic}
 \end{algorithm}
 
 \subsubsection{\textit{XOR\textunderscore PRODUCTIONS\textunderscore LIST} string representation creation}
-
+The procedure to create the string representation of the \textit{XOR\textunderscore PRODUCTIONS\textunderscore LIST} class is equivalent to the \textit{PRODUCTIONS\textunderscore LIST} process described in algorithm \ref{alg:OutputCreateProductionsListString} with the difference that generated string is enclosed by parentheses.
 \subsubsection{\textit{PRODUCTION\textunderscore ELEMENT} string representation creation}
 
 -production element symbol with production property 
@@ -919,6 +946,7 @@ Algorithm \ref{alg:OutputCreateProductionsListString} shows the process of creat
 \end{algorithm}
 
 \subsubsection{Symbol string representation creation}
+-The nonterminal symbol value can be returned as is
 -nt, terminal symbol
 -check t symbol str
 
@@ -928,36 +956,6 @@ Algorithm \ref{alg:OutputCreateProductionsListString} shows the process of creat
 
 \subsection{Automated parser generator compatibility}\label{sec:ImplementationAutomatedParserGenerator}
 -append option
-
-\section{Input/Output}\label{sec:ImplementationInOut}
-
-\subsection{Input}\label{sec:ImplementationInput}
-
-There are two methods performing input operations that are explained in the following. 
-
-\subsubsection{Import\textunderscore tptp\textunderscore syntax\textunderscore from\textunderscore web}
-The method $import\textunderscore tptp\textunderscore syntax\textunderscore from\textunderscore web$ shown in listing \ref{lst:ImplementationInputWeb} is used get a text from a website. \\
-For opening a \ac{URL}, the library urllib is used. $Urllib.request$ opens a specified \ac{URL} and sends an HTTP request. $Urlopen$ returns a response object for the initiated request. The response is a file-like object that can be read using $.read()$. \cite{urllib} \\
-The file can then be converted from html to text format using BeautifulSoup's html parser.
-The header from the file is deleted because it does not belong to the \ac{TPTP} syntax but is appended by urllib. The header is deleted by splitting the grammar file at ever new line and joining all lines excluding the first one. \\
-
-\begin{lstlisting}[language=Python, basicstyle=\scriptsize	,caption= Import TPTP syntax from web,label= lst:ImplementationInputWeb]
-with urllib.request.urlopen("http://www.tptp.org/TPTP/SyntaxBNF.html") as url:
-        html_doc = url.read()
-soup = BeautifulSoup(html_doc, 'html.parser')
-tptp_grammar = soup.get_text()
-# Delete Header
-tptp_grammar = '\n'.join(tptp_grammar.split('\n')[1:])
-\end{lstlisting}
-
-\subsubsection{Read\textunderscore text\textunderscore from\textunderscore file}
-
-$Read\textunderscore text\textunderscore from\textunderscore file$ in listing \ref{lst:ImplementationInputText} uses the build-in function $open$ to read a text file. \\
-
-\begin{lstlisting}[language=Python, basicstyle=\scriptsize	,caption= Read text from file,label= lst:ImplementationInputText]
-with open(filename, 'r') as text_file:
-        text = text_file.read()
-\end{lstlisting} 
 
 \section{GUI}\label{sec:ImplementationGUI}
 The GUI consists of the class View that can be seen in Figure \ref{fig:ImplementationViewClassDiagram}. The class has the attributes $treeView$ which is an instance of the PyQt QTreeWidget, $graphBuilder$ which is an instance of the TPTPGraphBuilder and the boolean value $commentStatus$. The class functions and their implementation are described in the following sections based on the five sub-menus.
