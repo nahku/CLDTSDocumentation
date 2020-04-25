@@ -123,14 +123,22 @@ def t_error(self, t):
 
 \section{Parser}\label{sec:ImplementationParser}
 
-The parser is taking the tokens from the lexer and matches them to defined production rules.
+The parser is taking the tokens from the lexer and matches them based on a specified context free grammar.
 
+- Output is abstract syntax tree.
+- each grammar rule is defined by a python function
+- docstring contrains context free grammar specification of function
+- function contains semantic actions of rule
+- function accepts one argument: list of grammar  symbols
+- first rule determines start symbol
+- parser stops when no more input and start symbol reached, final value is p[0] from start symbol
 
-
+- to build parser yacc.yacc(), constructs parser from specified grammar, to run parser parse()
 
 comment block reimplement equal operator
 
 \subsection{Data types}\label{sec:ImplementationDataTypes}
+
 
 Figure \ref{fig:ImplementationUMLExpressions} contains the UML modelling of the data types described in section \ref{sec:ConceptParserDataStructure}.
 
