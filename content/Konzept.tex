@@ -2,32 +2,61 @@
 
 %TODO: Einleitungen überarbeiten
 \chapter{Concept}\label{cha:Concept}
-This chapter outlines the concept and the architecture of the software tool.
-First, in section \ref{sec:ConceptRequirements}, the requirements the software tool needs to meet are described.
+This chapter outlines the concept and the architecture of \ac{Synplifier}.
+First, in section \ref{sec:ConceptRequirements}, the requirements \ac{Synplifier} needs to meet are described.
 Then, in section \ref{sec:ConceptOverview}, the components needed are introduced.
 Then the proposed software architecture is described. After that the concept of each component is developed.
 
 \section{Requirements}\label{sec:ConceptRequirements}
 
-The capitalized keyword are to be interpredet as described in \cite{Bradner.1997}.
-The tool should meet the following requirements:\\
+The capitalized keyword are to be interpreted as described in \cite{Bradner.1997}.
+\ac{Synplifier} should meet the following requirements:\\
 \subsubsection{[R1]}\label{R1}
+
+
+\ac{Synplifier} MUST provide a GUI with the following functionalities:
 \subsubsection{[R2]}\label{R2}
-The user is able to import a \ac{TPTP} syntax file.
-\subsubsection{[R3]}\label{R2}
-The tool MUST be able to display \ac{TPTP} syntax file.
+\ac{Synplifier} MUST provide the possibility for the user to import a \ac{TPTP} syntax file into the GUI by specifying a \ac{TPTP} syntax file path and a desired start symbol. The imported syntax MUST be displayed in the GUI. This includes displaying by the syntax defined productions as well as comments that are associated with these productions.
+
+\subsubsection{[G1]}\label{G1}
+\ac{Synplifier} MUST provide the functionality for the user to import a \ac{TPTP} syntax file into the GUI by specifying a \ac{TPTP} syntax file path and a desired start symbol. The imported syntax MUST be displayed in the GUI.
+\subsubsection{[G2]}\label{G2}
+The user MUST be able to select a new start symbol after a \ac{TPTP} syntax file has been imported (G1)
+\subsubsection{[G3]}\label{G3}
+The user MUST be able to select which productions should be blocked after a \ac{TPTP} syntax file has been imported (G1). 
+\subsubsection{[G4]}\label{G4}
+The user MUST be able to export a control file based on the users start symbol selection (G2) and blocked productions selection (G3) in a .txt-format.
+
++export control file
+\subsubsection{[G5]}\label{G5}
+\ac{Synplifier} MUST provide the functionality to display a generated sub-syntax in the GUI.
+\subsubsection{[G6]}\label{G6}
+\ac{Synplifier} MUST provide the functionality for the user to import a control file into the GUI by specifying a control file path. Selections in the GUI are set according to the control file content.
+
+\subsubsection{[G7]}\label{G7}
+\ac{Synplifier} MUST provide the functionality in the GUI for the user to export a generated sub-syntax to .txt format by specifying a file path.
+
 \subsubsection{[R3]}\label{R3}
-\subsubsection{[R4]}\label{R4}
-\subsubsection{[R5]}\label{R5}
-The tool has a GUI that is the interface between the tool and a user. Hence, the user communicates with the tool via the GUI. The user is able to import a syntax file. After the syntax file is imported, it should is displayed. 
-This includes displaying by the syntax defined productions as well as comments that are associated with these productions.
-The user can select a new start symbol and can select which productions should be blocked. 
-After the user made his choice, the new sub-syntax is generated and displayed.
-The tool can also generate a control file listing blocked productions and the start symbol.
-Furthermore, the tool is able to import a control file and extract a sub-syntax based on this control file instead of extracting a sub-syntax based on a users selection of blocked productions.
-The new sub-syntax can be exported to .txt format.
+
+\subsubsection{[C1]}\label{C1}
+console interface help menu
+
+-extract sub-syntax
+
+R
+\ac{Synplifier} MUST provide the functionality to generate a sub-syntax based on a control file.
+
+nonfunctional requirements
+\ac{Synplifier} has a GUI that is the interface between \ac{Synplifier} and a user. Hence, the user communicates with \ac{Synplifier} via the GUI.
+%The user is able to import a syntax file. After the syntax file is imported, it should is displayed. 
+%This includes displaying by the syntax defined productions as well as comments that are associated with these productions.
+%The user can select a new start symbol and can select which productions should be blocked. 
+%After the user made his choice, the new sub-syntax is generated and displayed.
+%\ac{Synplifier} can also generate a control file listing blocked productions and the start symbol.
+Furthermore, \ac{Synplifier} is able to import a control file and extract a sub-syntax based on this control file instead of extracting a sub-syntax based on a users selection of blocked productions.
+%The new sub-syntax can be exported to .txt format.
 Also, comments referring to the remaining productions are kept and comments referring to productions that were discarded are not be included in the sub-syntax.
-The tool also provides a console interface. This interface accepts a \ac{TPTP} syntax file and a control file and output the sub-syntax described in the control file. It is possible to specify the output path and filename.
+\ac{Synplifier} also provides a console interface. This interface accepts a \ac{TPTP} syntax file and a control file and output the sub-syntax described in the control file. It is possible to specify the output path and filename.
 
 \section{Overview}\label{sec:ConceptOverview}
 Figure \ref{fig:ConceptProcessSublanguage} outlines the procedure of extracting a sublanguage of the \ac{TPTP} language.
@@ -61,7 +90,7 @@ To make this grammar usable, lastly the syntax has to be output, based on the ne
 \end{figure}
 
 \subsection{Proposed architecture}\label{sec:ConceptProposedArchitecture}
-The architecture of the software tool should take the procedure of extracting a sublanguage (section \ref{sec:ConceptOverview}) into consideration.
+The architecture of the \ac{Synplifier} should take the procedure of extracting a sublanguage (section \ref{sec:ConceptOverview}) into consideration.
 From that, five main components can be identified:
 An import module responsible for importing the \ac{TPTP} syntax from a file;
 A lexer for extracting tokens from the language specification; A parser for creating a data structure from the tokens;
@@ -69,11 +98,11 @@ A graph builder and manipulator;
 An export module for exporting the graph in a text representation corresponding to the original language specification.\\
 In addition to the components that provide the main functionality a graphical user interface and a console interface for user convenience is desired.
 
-Figure \ref{fig:ConceptArchitectureOverview} contains a high-level UML diagram describing the architecture of the software tool. The user interacts either with the \textit{Console} or \textit{View} class. The \textit{Console} class provides the command-line interface and the \textit{View} class provides the GUI. Both have a reference on \textit{Input} and \textit{Output} for reading from and writing to files. They also have a reference on the \textit{TPTPGraphBuilder} class. This class is responsible for building a grammar graph and extracting sub-syntaxes by graph manipulation. For that, lexing and parsing are necessary. The \textit{TPTPGraphBuilder} uses the \textit{Parser} class for getting a \ac{TPTP} syntax representation and the \textit{Parser} uses the \textit{Lexer} to extract the tokens from a \ac{TPTP} syntax file.
+Figure \ref{fig:ConceptArchitectureOverview} contains a high-level UML diagram describing the architecture of \ac{Synplifier}. The user interacts either with the \textit{Console} or \textit{View} class. The \textit{Console} class provides the command-line interface and the \textit{View} class provides the GUI. Both have a reference on \textit{Input} and \textit{Output} for reading from and writing to files. They also have a reference on the \textit{TPTPGraphBuilder} class. This class is responsible for building a grammar graph and extracting sub-syntaxes by graph manipulation. For that, lexing and parsing are necessary. The \textit{TPTPGraphBuilder} uses the \textit{Parser} class for getting a \ac{TPTP} syntax representation and the \textit{Parser} uses the \textit{Lexer} to extract the tokens from a \ac{TPTP} syntax file.
 \begin{figure}[H]
 \centering
 \includegraphics[width=1\textwidth]{images/Concept_UML_Architecture_Overview.pdf}
-\caption{UML diagram of the architecture of the software tool}
+\caption{UML diagram of the architecture of \ac{Synplifier}}
 \label{fig:ConceptArchitectureOverview}
 \end{figure}
 \subsection{Implementation language}\label{sec:ConceptImplementationLanguage}
@@ -470,7 +499,7 @@ This ensures that only one node is representing the start symbol, that is used f
 
 Starting with the temporary start symbol, the graph is generated recursively. Iterating over each nonterminal symbol in the productions list of the start symbol, the corresponding nodes are identified. These nodes are then appended to the list of children of the start symbol. The identified children may again have children. This process is repeated until a node has no children because there are only terminal symbols in the productions list of a nonterminal symbol.
 
-Since it is possible for a nonterminal symbol to be on the right side as well as on the left side of the same production rule, a node can also be its own child. To avoid revisiting the same node infinitely, it is checked whether a node already has children so that it will not be visited again. This also improves the performance of the tool as a nonterminal symbol that has already been visited wont be visited again independent of circular dependencies.
+Since it is possible for a nonterminal symbol to be on the right side as well as on the left side of the same production rule, a node can also be its own child. To avoid revisiting the same node infinitely, it is checked whether a node already has children so that it will not be visited again. This also improves the performance of \ac{Synplifier} as a nonterminal symbol that has already been visited wont be visited again independent of circular dependencies.
 
 The following example shows a production rule and the resulting list of children belonging to the node. Each production alternative has its own list of children. %This is relevant for checking whether a nonterminal is terminating.
 \begin{verbatim}
@@ -638,7 +667,7 @@ When generating the new grammar graph, all from the start symbol reachable parts
 All nodes that are not part of the new grammar graph are not reachable and can therefore be removed.
 
 \section{Output generation}\label{sec:ConceptOutputGeneration}
-Within the software tool a syntax is represented by a grammar graph.
+Within \ac{Synplifier} a syntax is represented by a grammar graph.
 To export sub-syntaxes that have been extracted from a grammar graph they have to be converted to the original form of a \ac{TPTP} syntax file. This process is described in the following subsection.
 After that, measures to provide compatibility with the automated parser generator are discussed in section \ref{sec:ConceptAutomatedParserGenerator}.
 
@@ -689,7 +718,7 @@ In the \ac{TPTP} syntax version 7.3.0 there is a definition of the syntax of com
 However this part of the syntax is not reachable from any other symbol.
 When constructing the grammar graph this part of the syntax is therefore removed.\\
 Using a syntax file, in which the comment syntax is not present, with the automated parser generator results in an error because the comment symbol is not present in the lex specification but is referred to in a yacc rule ?todo check this?.\\
-There are two ways to include the comment syntax in the output from the tool in order to be accepted by the automated parser generator.
+There are two ways to include the comment syntax in the output of \ac{Synplifier} in order to be accepted by the automated parser generator.
 Either making the \textit{<comment>} nonterminal symbol reachable by for example by adding it as an alternative to \textit{<TPTP\textunderscore input>} which can be seen in listing \ref{lst:ConceptAutomatedParserGeneratorCommentReachable}.
 Or maintaining the comment syntax separately and adding it to the output syntax even though it is not reachable.
 \begin{lstlisting}[language=none, basicstyle=\scriptsize, caption=Making the comment syntax reachable, label= lst:ConceptAutomatedParserGeneratorCommentReachable]
@@ -697,10 +726,10 @@ Or maintaining the comment syntax separately and adding it to the output syntax 
 <TPTP_input>           ::= <annotated_formula> | <include> | <comment>
 \end{lstlisting}
 
-Both ways are supported by the tool.\\
-If the \textit{<comment>} nonterminal symbol is made reachable in the \ac{TPTP} syntax, the grammar graph generated by the tool contains the comment syntax and no further action is necessary.\\
+Both ways are supported by \ac{Synplifier}.\\
+If the \textit{<comment>} nonterminal symbol is made reachable in the \ac{TPTP} syntax, the grammar graph generated by \ac{Synplifier} contains the comment syntax and no further action is necessary.\\
 To add the comment syntax to the output if the is \textit{<comment>} nonterminal symbol is not reachable is done by using an external configuration file that contains the syntax from listing \ref{lst:ConceptAutomatedParserGeneratorComment}.
-From the syntax in this configuration file a separate grammar graph is generated. The output string that can be generated from this grammar graph is added to the output of the tool when outputting a generated sub-syntax.
+From the syntax in this configuration file a separate grammar graph is generated. The output string that can be generated from this grammar graph is added to the output of \ac{Synplifier} when outputting a generated sub-syntax.
 
 -Menu option
 
@@ -787,7 +816,7 @@ In the $Save syntax$ menu that is shown in figure \ref{fig:save} the user can re
 \subsection{Control file Menu}\label{sec:ConceptGUIControlFileMenu}
 
 The $Control file$ menu shown in figure \ref{fig:ControlFileMenu} gives the user the option to import a control file instead of blocking productions manually. If the user imports a control file the checkboxes are set accordingly.
-The user also has the option of generating a control file based on his GUI selection. This is particularly helpful if the users is reducing the same grammar multiple times. This way he can use the import control file option later instead of selecting the blocked productions in the GUI tool.
+The user also has the option of generating a control file based on his GUI selection. This is particularly helpful if the users is reducing the same grammar multiple times. This way the user can use the import control file option later instead of selecting the blocked productions in the GUI.
 
 \begin{figure}[H]
 \centering
