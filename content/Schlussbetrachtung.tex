@@ -1,31 +1,36 @@
 %!TEX root = ../dokumentation.tex
 
 \chapter{Conclusion}\label{cha:Conclusion}
+This paper has described a software tool that automatically extracts sub-syntaxes from the TPTP syntax. 
+The tool includes lexing and parsing the TPTP syntax, building 
+a graph that represents the syntax and extracting a sub-syntax based on the graph. The user can interact with the tool using a command-line interface or a GUI.
+The functionality of the tool has been demonstrated by extracting the CNF sub-syntax and creating a parser based on that syntax, which has been successfully tested with a number of TPTP problems.
 
-The aim of this research was to create a tool that automatically extracts sub-syntaxes of the \ac{TPTP} syntax. ?to reduce entry barrier to new users and also maintain consistency with original grammar  ?..
+The tool reduces the entry barrier of new users to use the TPTP language because desired sub-syntaxes of the TPTP syntax can be extracted while maintaining consistency with the original TPTP syntax.
 
-\ac{Synplifier} enables users to consistently, conveniently, and automatically extract sub-languages from the \ac{TPTP} syntax, turning this one language into a family of languages, coming from a single source, but optimized for particular use cases.
-
-This research included:
-The analysis of the \ac{TPTP} syntax and the lexer and parser creation.
-The conception and successful implementation of a sub-syntax extraction process.
-The development of a format to describe what part of syntaxes to extract (control file format).
--Heuristic for comment association has been developed, to maintain comments from the original syntax in sub-syntaxes
--Sub-syntax generation
--Command-line interface, in which main operations can be performed without the necessity of using the GUI or ?installing? the package necessary for the GUI
--GUI which provides a graphical overview and aids the user in the process of sub-syntax extraction and control file generation.
-
-The functionality of \ac{Synplifier} was demonstrated by extracting \ac{CNF} sub-syntax and creating a parser based on that syntax, which has been successfully tested with ?a number? of \ac{TPTP} problems.
-
-All requirements (section \ref{sec:ConceptRequirements}) have been fulfilled, and in addition useful functions like ?(importing a \ac{TPTP} syntax file from the \ac{TPTP} website)? also have been implemented. Therefore the goals of this research have been achieved.
+In short, the developed software tool enables users to consistently, conveniently, and automatically extract sub-languages from the TPTP syntax, turning this one language into a family of languages, coming from a single source, but optimized for particular use cases.
+%The aim of this research was to create a tool that automatically extracts sub-syntaxes of the \ac{TPTP} syntax. ?to reduce entry barrier to new users and also maintain consistency with original grammar  ?..
+%
+%\ac{Synplifier} enables users to consistently, conveniently, and automatically extract sub-languages from the \ac{TPTP} syntax, turning this one language into a family of languages, coming from a single source, but optimized for particular use cases.
+%
+%This research included:
+%The analysis of the \ac{TPTP} syntax and the lexer and parser creation.
+%The conception and successful implementation of a sub-syntax extraction process.
+%The development of a format to describe what part of syntaxes to extract (control file format).
+%-Heuristic for comment association has been developed, to maintain comments from the original syntax in sub-syntaxes
+%-Sub-syntax generation
+%-Command-line interface, in which main operations can be performed without the necessity of using the GUI or ?installing? the package necessary for the GUI
+%-GUI which provides a graphical overview and aids the user in the process of sub-syntax extraction and control file generation.
+%
+%The functionality of \ac{Synplifier} was demonstrated by extracting \ac{CNF} sub-syntax and creating a parser based on that syntax, which has been successfully tested with ?a number? of \ac{TPTP} problems.
+%
+%All requirements (section \ref{sec:ConceptRequirements}) have been fulfilled, and in addition useful functions like ?(importing a \ac{TPTP} syntax file from the \ac{TPTP} website)? also have been implemented. Therefore the goals of this research have been achieved.
 \section{Future Work}\label{sec:FutureWork}
-The concept of sub-syntax extraction is not limited to the \ac{TPTP} language. (Might be useful for any number of computer languages)
-It is conceivable to extend \ac{Synplifier} to apply it on other languages, e.g. SMT-lib~\cite{BFT-SMTLIB-17}.
-For that, mainly the lexer and parser components would have to be adapted to parser the new syntax. The logic of the sub-syntax extraction would mostly remain the same.\\
-Another option would be to create a tool, that accepts plain \ac{BNF} or \ac{EBNF} since many computer languages are described in these forms, which would ?provide? a standard tool that can be used with ?any number? of computer languages.
+The concept of sub-syntax extraction is not only limited to the \ac{TPTP} language and can also be applied to any other computer language for example the SMT-lib~\cite{BFT-SMTLIB-17}.
 
-Based on their grammar, the lexing and parsing component have to be adapted to parse the given syntax.
-The other components can be used with only minor modifications.
-The graph generation for example needs to be adapted depending on the amount of production symbols.
-Also comment association has to be adapted based on the specific comment convention.\\
-Also it can be invesitgated, if comment association based on comment content would lead to better a significantly better result.
+In order to adopt \ac{Synplifier} to extract sub-syntaxes from other languages, mainly the lexer and the parser components would have to be modified to parse the new syntax. Other components can be used with only minor modifications because the logic of the sub-syntax extraction would mostly remain the same.
+Furthermore, comment association would have to be adapted based on the specific comment convention (if comments are present in the syntax description).
+
+It is also be possible to create a tool that accepts plain \ac{BNF} or \ac{EBNF} since many computer languages are described in these forms. This would make the developed tool a standard tool since it could then be used with any arbitrary computer languages that is described in \ac{BNF}/\ac{EBNF}.
+
+Apart from adopting the tool to other languages, it can be investigated if comment association based on the comments content would lead to a significantly better result than using the heuristic approach that we have introduced.

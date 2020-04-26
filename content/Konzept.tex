@@ -12,20 +12,49 @@ Then the proposed software architecture is described. After that the concept of 
 The capitalized keyword are to be interpreted as described in \cite{Bradner.1997}.
 \ac{Synplifier} should meet the following requirements:\\
 \subsubsection{[R1]}\label{R1}
+
+
+\ac{Synplifier} MUST provide a GUI with the following functionalities:
 \subsubsection{[R2]}\label{R2}
-The user is able to import a \ac{TPTP} syntax file.
-\subsubsection{[R3]}\label{R2}
-\ac{Synplifier} MUST be able to display \ac{TPTP} syntax file.
+\ac{Synplifier} MUST provide the possibility for the user to import a \ac{TPTP} syntax file into the GUI by specifying a \ac{TPTP} syntax file path and a desired start symbol. The imported syntax MUST be displayed in the GUI. This includes displaying by the syntax defined productions as well as comments that are associated with these productions.
+
+\subsubsection{[G1]}\label{G1}
+\ac{Synplifier} MUST provide the functionality for the user to import a \ac{TPTP} syntax file into the GUI by specifying a \ac{TPTP} syntax file path and a desired start symbol. The imported syntax MUST be displayed in the GUI.
+\subsubsection{[G2]}\label{G2}
+The user MUST be able to select a new start symbol after a \ac{TPTP} syntax file has been imported (G1)
+\subsubsection{[G3]}\label{G3}
+The user MUST be able to select which productions should be blocked after a \ac{TPTP} syntax file has been imported (G1). 
+\subsubsection{[G4]}\label{G4}
+The user MUST be able to export a control file based on the users start symbol selection (G2) and blocked productions selection (G3) in a .txt-format.
+
++export control file
+\subsubsection{[G5]}\label{G5}
+\ac{Synplifier} MUST provide the functionality to display a generated sub-syntax in the GUI.
+\subsubsection{[G6]}\label{G6}
+\ac{Synplifier} MUST provide the functionality for the user to import a control file into the GUI by specifying a control file path. Selections in the GUI are set according to the control file content.
+
+\subsubsection{[G7]}\label{G7}
+\ac{Synplifier} MUST provide the functionality in the GUI for the user to export a generated sub-syntax to .txt format by specifying a file path.
+
 \subsubsection{[R3]}\label{R3}
-\subsubsection{[R4]}\label{R4}
-\subsubsection{[R5]}\label{R5}
-\ac{Synplifier} has a GUI that is the interface between \ac{Synplifier} and a user. Hence, the user communicates with \ac{Synplifier} via the GUI. The user is able to import a syntax file. After the syntax file is imported, it should is displayed. 
-This includes displaying by the syntax defined productions as well as comments that are associated with these productions.
-The user can select a new start symbol and can select which productions should be blocked. 
-After the user made his choice, the new sub-syntax is generated and displayed.
-\ac{Synplifier} can also generate a control file listing blocked productions and the start symbol.
+
+\subsubsection{[C1]}\label{C1}
+console interface help menu
+
+-extract sub-syntax
+
+R
+\ac{Synplifier} MUST provide the functionality to generate a sub-syntax based on a control file.
+
+nonfunctional requirements
+\ac{Synplifier} has a GUI that is the interface between \ac{Synplifier} and a user. Hence, the user communicates with \ac{Synplifier} via the GUI.
+%The user is able to import a syntax file. After the syntax file is imported, it should is displayed. 
+%This includes displaying by the syntax defined productions as well as comments that are associated with these productions.
+%The user can select a new start symbol and can select which productions should be blocked. 
+%After the user made his choice, the new sub-syntax is generated and displayed.
+%\ac{Synplifier} can also generate a control file listing blocked productions and the start symbol.
 Furthermore, \ac{Synplifier} is able to import a control file and extract a sub-syntax based on this control file instead of extracting a sub-syntax based on a users selection of blocked productions.
-The new sub-syntax can be exported to .txt format.
+%The new sub-syntax can be exported to .txt format.
 Also, comments referring to the remaining productions are kept and comments referring to productions that were discarded are not be included in the sub-syntax.
 \ac{Synplifier} also provides a console interface. This interface accepts a \ac{TPTP} syntax file and a control file and output the sub-syntax described in the control file. It is possible to specify the output path and filename.
 
