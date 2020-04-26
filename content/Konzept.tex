@@ -193,35 +193,27 @@ Therefore disambiguation of square brackets is necessary.
 \end{figure}
 
 \subsection{Data structures and data types}\label{sec:ConceptParserDataStructure}
-To build the representative data structure, data types that represent the data stored in the \ac{TPTP} syntax have to be defined.
-The following section describes the data structure and data types that are used and created by the parser in the parsing process.
 
-%Atomic data types
+When using the \ac{PLY} parser generator, production rules and data types that store the data of the \ac{TPTP} syntax have to be defined in order to generate the parser. In the following production rules are written in italic and data types are written in bold.
 
-\subsubsection{Terminal symbol}
-The terminal symbol data type has one attribute, which is the name of the terminal symbol it represents.
+A \textit{t\textunderscore symbol\textunderscore  production} rule implies a \textbf{t\textunderscore symbol} that has two attributes. These are the value of the terminal symbol token it represents and additionally a production property.
 
--todo Production Property
+A production property can take two values and denotes whether a t\textunderscore  symbol is embedded in square brackets or not. In the production rules a terminal symbol token, either embedded in square brackets or without brackets, can be derived from a t\textunderscore  symbol\textunderscore  production. Asterisk and vertical bar tokens embedded in square brackets can be derived from a t\textunderscore  symbol production as well. 
 
-\subsubsection{Nonterminal symbol}
-Analogue to the terminal symbol data type, the nonterminal symbol also has its name as an attribute.
+Analogue to the t\textunderscore symbol data type, the \textbf{nt\textunderscore  symbol} also has the value of the non-terminal symbol token as an attribute. 
 
-todo describe diagram
 \begin{figure}[H]
 \centering
 \includegraphics[width=.8\textwidth]{images/Concept_uml_data_types_symbols.pdf}
 \caption{Symbol data type UML class diagram}
 \label{fig:ConceptSymbolsClassDiagram}
 \end{figure}
-%Composite data types
 
-\subsubsection{Rules}
-%\subsubsection{Grammar Expression}
-A rule consists of the nonterminal symbol name which is produced, a production list and a position.
-The position denotes at which position in the \ac{TPTP} syntax the rule was listed.
-This information is needed to maintain the original order of the rules when printing the reduced syntax.\\
-For each rule type (see table \ref{tbl:ConceptTPTPProductionSymbols}) there is a data type.
-This means that grammar, token, strict and macro rule data types are introduced.\\
+A \textbf{rule} consists of an expression token, a production list and a position.
+The position denotes at which position in the TPTP syntax the rule was listed.
+This information is needed to maintain the original order of the rules when printing the reduced syntax.
+For each rule type there is a data type.
+This means that \textbf{grammar, token, strict} and \textbf{macro rule} data types are introduced.
 Listing \ref{lst:ConceptParserGrammarExpression} contains an example of a line in a \ac{TPTP} syntax file that is represented by the grammar rule data type.
 The nonterminal symbol name which is produced is <$tff \textunderscore formula$>.  The production list consists of two productions, as can be seen in the listing.
 \begin{lstlisting}[basicstyle=\scriptsize	,caption= Grammar expression,label= lst:ConceptParserGrammarExpression]
@@ -237,10 +229,8 @@ todo describe diagram
 \label{fig:ConceptRulesClassDiagram}
 \end{figure}
 
-\subsubsection{Comment block}
-A comment block is a list of consecutive comment lines.
+A \textbf{comment\textunderscore block} is a list of consecutive comment lines. 
 
-todo describe diagram
 \begin{figure}[H]
 \centering
 \includegraphics[width=.5\textwidth]{images/Concept_uml_data_types_comment_block.pdf}
@@ -248,8 +238,11 @@ todo describe diagram
 \label{fig:ConceptCommentBlockClassDiagram}
 \end{figure}
 
-\subsubsection{Production element}
-A production element is either a terminal or nonterminal symbol. Additionally a production symbol has a production property.
+
+A \textbf{production\textunderscore element} is either a t\textunderscore symbol\textunderscore production or a nt\textunderscore symbol. Additionally, a production element has a production property.
+The production property can take one of three values and denotes whether a production is optional, can be repeated multiple times or does not have any special property.
+In the original TPTP syntax file, the property is represented by square brackets or the repetition symbol. A production element can also only consist of square brackets (see Figure \ref{fig:ImplementationParsing}).
+
 \begin{figure}[H]
 \centering
 \includegraphics[width=.8\textwidth]{images/Concept_uml_data_types_production_element.pdf}
@@ -257,11 +250,6 @@ A production element is either a terminal or nonterminal symbol. Additionally a 
 \label{fig:ConceptProductionElementClassDiagram}
 \end{figure}
 
-\subsubsection{Production property}
-The production property can take one of three values and denotes whether a production is optional, can be repeated any number of times or does not have any special property.
-In the original \ac{TPTP} syntax file this was represented by square brackets or the repetition symbol.
-
-todo describe diagram
 \begin{figure}[H]
 \centering
 \includegraphics[width=.4\textwidth]{images/Concept_uml_data_types_production_property.pdf}
@@ -269,12 +257,10 @@ todo describe diagram
 \label{fig:ConceptProductionPropertyClassDiagram}
 \end{figure}
 
-\subsubsection{Production}
-A production is one production alternative specified in any expression.
-It consists of a list of production elements and has a production property. Productions can also be nested.
-Therefore the list can also contain further productions
+A \textbf{production} is one of the production alternatives of a rule.
+It consists of a list of production elements and has a production property that is like the production property of the production\textunderscore element. Productions can also be nested.
+Therefore, the list can also contain further productions. 
 
--show example
 \begin{figure}[H]
 \centering
 \includegraphics[width=.5\textwidth]{images/Concept_uml_data_types_production.pdf}
@@ -282,14 +268,10 @@ Therefore the list can also contain further productions
 \label{fig:ConceptProductionClassDiagram}
 \end{figure}
 
-\subsubsection{Productions list}
-A productions list contains a list of productions where each production is one alternative in the description of an expression.
+A \textbf{productions\textunderscore list} contains a list of productions where each production is one alternative in the description of an expression. 
 
+The \textbf{XOR\textunderscore productions\textunderscore list} represents multiple alternatives enclosed by parentheses. It contains a list of the alternate productions. 
 
-\subsubsection{XOR Productions list}
-The XOR productions list represents multiple alternatives enclosed by parentheses. It contains a list of the alternate productions.
- 
- todo describe diagram
 \begin{figure}[H]
 \centering
 \includegraphics[width=.6\textwidth]{images/Concept_uml_data_types_productions_list.pdf}
@@ -297,24 +279,18 @@ The XOR productions list represents multiple alternatives enclosed by parenthese
 \label{fig:ConceptProductionsListClassDiagram}
 \end{figure}
 
-\subsubsection{Grammar list}
-The grammar list is the top level data structure. It contains a list of all elements that were in the \ac{TPTP} syntax file.
-This includes any type of rules (grammar, token, strict and macro) and comment blocks.
 
-todo describe diagram
+The \textbf{grammar\textunderscore list} is the top level data structure. It contains a list of all rules that are in the TPTP syntax file.
+This includes any type of rules (grammar, token, strict and macro) and comment blocks. 
+
 \begin{figure}[H]
 \centering
 \includegraphics[width=.5\textwidth]{images/Concept_uml_data_types_grammar_list.pdf}
 \caption{Grammar list data type UML class diagram}
 \label{fig:ConceptGrammarListClassDiagram}
 \end{figure}
-\subsection{Production rules}
-When using the \ac{PLY} parser generator, production rules have to be defined.
-The rules describe how the tokens are to be processed.
 
-todo describe production rules
-
-\subsection{Disambiguation of  square brackets}
+\subsection{Disambiguation of  square brackets}\label{sec:ConceptDisambiguation}
 As mentioned before, square brackets have different meanings depending on the rule type.
 The idea to solve this problem is to treat all rules the same in the first processing step.
 Square brackets would then be interpreted as denoting the optional production property.
@@ -325,6 +301,130 @@ todo vor- nachteile
 
 
 The output of the parser is a list of the rules and the comments from the \ac{TPTP} syntax file.
+
+%
+%To build the representative data structure, data types that represent the data stored in the \ac{TPTP} syntax have to be defined.
+%The following section describes the data structure and data types that are used and created by the parser in the parsing process.
+%
+%%Atomic data types
+%
+%\subsubsection{Terminal symbol}
+%The terminal symbol data type has one attribute, which is the name of the terminal symbol it represents.
+%
+%-todo Production Property
+%
+%\subsubsection{Nonterminal symbol}
+%Analogue to the terminal symbol data type, the nonterminal symbol also has its name as an attribute.
+%
+%todo describe diagram
+%\begin{figure}[H]
+%\centering
+%\includegraphics[width=.8\textwidth]{images/Concept_uml_data_types_symbols.pdf}
+%\caption{Symbol data type UML class diagram}
+%\label{fig:ConceptSymbolsClassDiagram}
+%\end{figure}
+%%Composite data types
+%
+%\subsubsection{Rules}
+%%\subsubsection{Grammar Expression}
+%A rule consists of the nonterminal symbol name which is produced, a production list and a position.
+%The position denotes at which position in the \ac{TPTP} syntax the rule was listed.
+%This information is needed to maintain the original order of the rules when printing the reduced syntax.\\
+%For each rule type (see table \ref{tbl:ConceptTPTPProductionSymbols}) there is a data type.
+%This means that grammar, token, strict and macro rule data types are introduced.\\
+%Listing \ref{lst:ConceptParserGrammarExpression} contains an example of a line in a \ac{TPTP} syntax file that is represented by the grammar rule data type.
+%The nonterminal symbol name which is produced is <$tff \textunderscore formula$>.  The production list consists of two productions, as can be seen in the listing.
+%\begin{lstlisting}[basicstyle=\scriptsize	,caption= Grammar expression,label= lst:ConceptParserGrammarExpression]
+%<tff_formula>          ::= <tff_logic_formula> | <tff_atom_typing
+%\end{lstlisting}
+%
+%
+%todo describe diagram
+%\begin{figure}[H]
+%\centering
+%\includegraphics[width=1\textwidth]{images/Concept_uml_data_types_rules.pdf}
+%\caption{Rule data type UML class diagram}
+%\label{fig:ConceptRulesClassDiagram}
+%\end{figure}
+%
+%\subsubsection{Comment block}
+%A comment block is a list of consecutive comment lines.
+%
+%todo describe diagram
+%\begin{figure}[H]
+%\centering
+%\includegraphics[width=.5\textwidth]{images/Concept_uml_data_types_comment_block.pdf}
+%\caption{Comment block data type UML class diagram}
+%\label{fig:ConceptCommentBlockClassDiagram}
+%\end{figure}
+%
+%\subsubsection{Production element}
+%A production element is either a terminal or nonterminal symbol. Additionally a production symbol has a production property.
+%\begin{figure}[H]
+%\centering
+%\includegraphics[width=.8\textwidth]{images/Concept_uml_data_types_production_element.pdf}
+%\caption{Production element data type UML class diagram}
+%\label{fig:ConceptProductionElementClassDiagram}
+%\end{figure}
+%
+%\subsubsection{Production property}
+%The production property can take one of three values and denotes whether a production is optional, can be repeated any number of times or does not have any special property.
+%In the original \ac{TPTP} syntax file this was represented by square brackets or the repetition symbol.
+%
+%todo describe diagram
+%\begin{figure}[H]
+%\centering
+%\includegraphics[width=.4\textwidth]{images/Concept_uml_data_types_production_property.pdf}
+%\caption{Production property data type UML class diagram}
+%\label{fig:ConceptProductionPropertyClassDiagram}
+%\end{figure}
+%
+%\subsubsection{Production}
+%A production is one production alternative specified in any expression.
+%It consists of a list of production elements and has a production property. Productions can also be nested.
+%Therefore the list can also contain further productions
+%
+%-show example
+%\begin{figure}[H]
+%\centering
+%\includegraphics[width=.5\textwidth]{images/Concept_uml_data_types_production.pdf}
+%\caption{Production data type UML class diagram}
+%\label{fig:ConceptProductionClassDiagram}
+%\end{figure}
+%
+%\subsubsection{Productions list}
+%A productions list contains a list of productions where each production is one alternative in the description of an expression.
+%
+%
+%\subsubsection{XOR Productions list}
+%The XOR productions list represents multiple alternatives enclosed by parentheses. It contains a list of the alternate productions.
+% 
+% todo describe diagram
+%\begin{figure}[H]
+%\centering
+%\includegraphics[width=.6\textwidth]{images/Concept_uml_data_types_productions_list.pdf}
+%\caption{Productions list data type UML class diagram}
+%\label{fig:ConceptProductionsListClassDiagram}
+%\end{figure}
+%
+%\subsubsection{Grammar list}
+%The grammar list is the top level data structure. It contains a list of all elements that were in the \ac{TPTP} syntax file.
+%This includes any type of rules (grammar, token, strict and macro) and comment blocks.
+%
+%todo describe diagram
+%\begin{figure}[H]
+%\centering
+%\includegraphics[width=.5\textwidth]{images/Concept_uml_data_types_grammar_list.pdf}
+%\caption{Grammar list data type UML class diagram}
+%\label{fig:ConceptGrammarListClassDiagram}
+%\end{figure}
+%\subsection{Production rules}
+%When using the \ac{PLY} parser generator, production rules have to be defined.
+%The rules describe how the tokens are to be processed.
+%
+%todo describe production rules
+
+
 \section{Graph generation}\label{sec:ConceptGraphGeneration}
 After parsing the TPTP grammar is stored in a grammar list. The grammar list data structure does not allow traversing which is why a new data structure is introduced that allows for modification and traversing.
 The data structure that is used is a graph representing the grammar.
