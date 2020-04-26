@@ -4,7 +4,7 @@
 
 The aim of this research was to create a tool that automatically extracts sub-syntaxes of the \ac{TPTP} syntax. ?to reduce entry barrier to new users and also maintain consistency with original grammar  ?..
 
-The developed software tool enables users to consistently, conveniently, and automatically extract sub-languages from the \ac{TPTP} syntax, turning this one language into a family of languages, coming from a single source, but optimized for particular use cases.
+\ac{Synplifier} enables users to consistently, conveniently, and automatically extract sub-languages from the \ac{TPTP} syntax, turning this one language into a family of languages, coming from a single source, but optimized for particular use cases.
 
 This research included:
 The analysis of the \ac{TPTP} syntax and the lexer and parser creation.
@@ -15,12 +15,12 @@ The development of a format to describe what part of syntaxes to extract (contro
 -Command-line interface, in which main operations can be performed without the necessity of using the GUI or ?installing? the package necessary for the GUI
 -GUI which provides a graphical overview and aids the user in the process of sub-syntax extraction and control file generation.
 
-The functionality of the tool was demonstrated by extracting \ac{CNF} sub-syntax and creating a parser based on that syntax, which has been successfully tested with ?a number? of \ac{TPTP} problems.
+The functionality of \ac{Synplifier} was demonstrated by extracting \ac{CNF} sub-syntax and creating a parser based on that syntax, which has been successfully tested with ?a number? of \ac{TPTP} problems.
 
 All requirements (section \ref{sec:ConceptRequirements}) have been fulfilled, and in addition useful functions like ?(importing a \ac{TPTP} syntax file from the \ac{TPTP} website)? also have been implemented. Therefore the goals of this research have been achieved.
 \section{Future Work}\label{sec:FutureWork}
 The concept of sub-syntax extraction is not limited to the \ac{TPTP} language. (Might be useful for any number of computer languages)
-It is conceivable to extend the tool to apply it on other languages, e.g. SMT-lib~\cite{BFT-SMTLIB-17}.
+It is conceivable to extend \ac{Synplifier} to apply it on other languages, e.g. SMT-lib~\cite{BFT-SMTLIB-17}.
 For that, mainly the lexer and parser components would have to be adapted to parser the new syntax. The logic of the sub-syntax extraction would mostly remain the same.\\
 Another option would be to create a tool, that accepts plain \ac{BNF} or \ac{EBNF} since many computer languages are described in these forms, which would ?provide? a standard tool that can be used with ?any number? of computer languages.
 
