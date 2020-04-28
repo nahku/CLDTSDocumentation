@@ -10,49 +10,40 @@ Then the proposed software architecture is described. After that the concept of 
 \section{Requirements}\label{sec:ConceptRequirements}
 
 The capitalized keyword are to be interpreted as described in \cite{Bradner.1997}.
-\ac{Synplifier} should meet the following requirements:\\
-\subsubsection{[R1]}\label{R1}
-
-
-\ac{Synplifier} MUST provide a GUI with the following functionalities:
-\subsubsection{[R2]}\label{R2}
-\ac{Synplifier} MUST provide the possibility for the user to import a \ac{TPTP} syntax file into the GUI by specifying a \ac{TPTP} syntax file path and a desired start symbol. The imported syntax MUST be displayed in the GUI. This includes displaying by the syntax defined productions as well as comments that are associated with these productions.
-
+The requirements of \ac{Synplifier} are outlined in the following:\\
 \subsubsection{[G1]}\label{G1}
-\ac{Synplifier} MUST provide the functionality for the user to import a \ac{TPTP} syntax file into the GUI by specifying a \ac{TPTP} syntax file path and a desired start symbol. The imported syntax MUST be displayed in the GUI.
+\ac{Synplifier} MUST provide a GUI.
 \subsubsection{[G2]}\label{G2}
-The user MUST be able to select a new start symbol after a \ac{TPTP} syntax file has been imported (G1)
-\subsubsection{[G3]}\label{G3}
-The user MUST be able to select which productions should be blocked after a \ac{TPTP} syntax file has been imported (G1). 
+\ac{Synplifier} MUST provide the possibility for the user to import a \ac{TPTP} syntax file into the GUI by specifying a \ac{TPTP} syntax file path and a desired start symbol. The imported syntax MUST be displayed in the GUI. This includes displaying by the syntax defined productions as well as comments that are associated with these productions.
 \subsubsection{[G4]}\label{G4}
-The user MUST be able to export a control file based on the users start symbol selection (G2) and blocked productions selection (G3) in a .txt-format.
-
-+export control file
+The user MUST be able to select a new start symbol after a \ac{TPTP} syntax file has been imported (G1).
 \subsubsection{[G5]}\label{G5}
-\ac{Synplifier} MUST provide the functionality to display a generated sub-syntax in the GUI.
-\subsubsection{[G6]}\label{G6}
+The user MUST be able to select which productions should be blocked after a \ac{TPTP} syntax file has been imported (G1).
+\subsubsection{[G9]}\label{G9}
 \ac{Synplifier} MUST provide the functionality for the user to import a control file into the GUI by specifying a control file path. Selections in the GUI are set according to the control file content.
 
-\subsubsection{[G7]}\label{G7}
+-generate sub-syntax
+\subsubsection{[G8]}\label{G8}
+\ac{Synplifier} MUST provide the functionality to display a generated sub-syntax in the GUI.
+\subsubsection{[G6]}\label{G6}
+The user MUST be able to export a control file based on the users start symbol selection (G2) and blocked productions selection (G3) in a .txt-format.
+\subsubsection{[G10]}\label{G10}
 \ac{Synplifier} MUST provide the functionality in the GUI for the user to export a generated sub-syntax to .txt format by specifying a file path.
-
-\subsubsection{[R3]}\label{R3}
-
 \subsubsection{[C1]}\label{C1}
-console interface help menu
+\ac{Synplifier} MUST provide a command-line interface.
+\subsubsection{[C2]}\label{C2}
+The command-line interface MUST provide the functionality to extract a sub-syntax with the user specifying the \ac{TPTP} syntax file and control file path.
+\subsubsection{[C3]}\label{C3}
+The command-line interface MUST provide help information which describes all command-line parameters.
+\subsubsection{[R1]}\label{R1}
+When generating a sub-syntax comments referring to rules that are present in the reduced syntax SHOULD be maintained in the sub-syntax.
+\subsubsection{[R2]}\label{R2}
+Output \ac{TPTP} sub-syntaxes SHOULD be compatible to the automated parser generator for the \ac{TPTP} language \cite{VS06}.
 
--extract sub-syntax
-
-R
-\ac{Synplifier} MUST provide the functionality to generate a sub-syntax based on a control file.
+-export syntax based on control file
 
 nonfunctional requirements
-\ac{Synplifier} has a GUI that is the interface between \ac{Synplifier} and a user. Hence, the user communicates with \ac{Synplifier} via the GUI.
-%The user is able to import a syntax file. After the syntax file is imported, it should is displayed. 
-%This includes displaying by the syntax defined productions as well as comments that are associated with these productions.
-%The user can select a new start symbol and can select which productions should be blocked. 
-%After the user made his choice, the new sub-syntax is generated and displayed.
-%\ac{Synplifier} can also generate a control file listing blocked productions and the start symbol.
+
 Furthermore, \ac{Synplifier} is able to import a control file and extract a sub-syntax based on this control file instead of extracting a sub-syntax based on a users selection of blocked productions.
 %The new sub-syntax can be exported to .txt format.
 Also, comments referring to the remaining productions are kept and comments referring to productions that were discarded are not be included in the sub-syntax.
