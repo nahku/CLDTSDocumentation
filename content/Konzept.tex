@@ -2,10 +2,9 @@
 
 %TODO: Einleitungen überarbeiten
 \chapter{Concept}\label{cha:Concept}
-This chapter outlines the concept and the architecture of \ac{Synplifier}.
-In section \ref{sec:ConceptRequirements} the requirements \ac{Synplifier} needs to meet are described.
-In section \ref{sec:ConceptOverview} the components needed are introduced.
-Then the proposed software architecture is described. After that the concept of each component is developed.
+This chapter outlines the concept and the architecture of \ac{Synplifier}. In section \ref{sec:ConceptApproach} a general approach to build \ac{Synplifier} is outlined and in section \ref{sec:ConceptRequirements} resulting requirements \ac{Synplifier} needs to meet are described.
+Section \ref{sec:ConceptOverview} introduces into the architecture of \ac{Synplifier} and its components.
+The sections following section \ref{sec:ConceptOverview} describe the concept of each component that is developed.
 
 \section{Approach}\label{sec:ConceptApproach}
 
@@ -88,13 +87,24 @@ To make this grammar usable, lastly the syntax has to be output, based on the ne
 \end{figure}
 
 \subsection{Proposed architecture}\label{sec:ConceptProposedArchitecture}
-The architecture of the \ac{Synplifier} should take the procedure of extracting a sublanguage (section \ref{sec:ConceptOverview}) into consideration.
-From that, five main components can be identified:
-An import module responsible for importing the \ac{TPTP} syntax from a file;
-A lexer for extracting tokens from the language specification; A parser for creating a data structure from the tokens;
-A graph builder and manipulator;
-An export module for exporting the graph in a text representation corresponding to the original language specification.\\
-In addition to the components that provide the main functionality a graphical user interface and a console interface for user convenience is desired.
+The proposed architecture for \ac{Synplifier} consists of seven components:
+\begin{itemize}
+\item A lexer for extracting tokens from the \ac{TPTP} syntax
+\item A parser for creating a data structure from the tokens
+\item A graph builder for building a graph out of the parsers data structure and manipulating this graph
+\item A graphical user interface
+\item A console interface 
+\item An input module that imports the \ac{TPTP} syntax
+\item An output module that exports extracted sub syntaxes to local storage
+\end{itemize}
+
+%The architecture of the \ac{Synplifier} should take the procedure of extracting a sublanguage (section \ref{sec:ConceptOverview}) into consideration.
+%From that, five main components can be identified:
+%An import module responsible for importing the \ac{TPTP} syntax from a file;
+%A lexer for extracting tokens from the language specification; A parser for creating a data structure from the tokens;
+%A graph builder and manipulator;
+%An export module for exporting the graph in a text representation corresponding to the original language specification.\\
+%In addition to the components that provide the main functionality a graphical user interface and a console interface for user convenience is desired.
 
 Figure \ref{fig:ConceptArchitectureOverview} contains a high-level UML diagram describing the architecture of \ac{Synplifier}. The user interacts either with the \textit{Console} or \textit{View} class. The \textit{Console} class provides the command-line interface and the \textit{View} class provides the GUI. Both have a reference on \textit{Input} and \textit{Output} for reading from and writing to files. They also have a reference on the \textit{TPTPGraphBuilder} class. This class is responsible for building a grammar graph and extracting sub-syntaxes by graph manipulation. For that, lexing and parsing are necessary. The \textit{TPTPGraphBuilder} uses the \textit{Parser} class for getting a \ac{TPTP} syntax representation and the \textit{Parser} uses the \textit{Lexer} to extract the tokens from a \ac{TPTP} syntax file.
 \begin{figure}[H]
@@ -234,6 +244,8 @@ A production property can take two values and denotes whether a t\textunderscore
 
 Analogue to the t\textunderscore symbol data type, the \textbf{nt\textunderscore  symbol} also has the value of the non-terminal symbol token as an attribute. 
 
+Due to the similarities of \textbf{t\textunderscore symbol} and \textbf{nt\textunderscore  symbol} they are inherited from the same base class \textbf{symbol} that can be seen in figure \ref{fig:ConceptSymbolsClassDiagram}.
+
 \begin{figure}[H]
 \centering
 \includegraphics[width=.8\textwidth]{images/Concept_uml_data_types_symbols.pdf}
@@ -245,15 +257,13 @@ A \textbf{rule} consists of an expression token, a production list and a positio
 The position denotes at which position in the TPTP syntax the rule was listed.
 This information is needed to maintain the original order of the rules when printing the reduced syntax.
 For each rule type there is a data type.
-This means that \textbf{grammar, token, strict} and \textbf{macro rule} data types are introduced.
+This means that \textbf{grammar, token, strict} and \textbf{macro rule} data types are introduced. They inherit from the same base class \textbf{rule} which can be seen in figure \ref{fig:ConceptRulesClassDiagram}.
 Listing \ref{lst:ConceptParserGrammarExpression} contains an example of a line in a \ac{TPTP} syntax file that is represented by the grammar rule data type.
 The nonterminal symbol name which is produced is <$tff \textunderscore formula$>.  The production list consists of two productions, as can be seen in the listing.
 \begin{lstlisting}[basicstyle=\scriptsize	,caption= Grammar expression,label= lst:ConceptParserGrammarExpression]
 <tff_formula>          ::= <tff_logic_formula> | <tff_atom_typing
 \end{lstlisting}
 
-
-todo describe diagram
 \begin{figure}[H]
 \centering
 \includegraphics[width=1\textwidth]{images/Concept_uml_data_types_rules.pdf}
@@ -261,7 +271,7 @@ todo describe diagram
 \label{fig:ConceptRulesClassDiagram}
 \end{figure}
 
-A \textbf{comment\textunderscore block} is a list of consecutive comment lines. 
+A \textbf{comment\textunderscore block} is a list of consecutive comment lines. Comment lines can also be extended after initialising a comment block. Figure \ref{fig:ConceptCommentBlockClassDiagram} shows the UML denotation of a comment block.
 
 \begin{figure}[H]
 \centering
@@ -271,7 +281,7 @@ A \textbf{comment\textunderscore block} is a list of consecutive comment lines.
 \end{figure}
 
 
-A \textbf{production\textunderscore element} is either a t\textunderscore symbol\textunderscore production or a nt\textunderscore symbol. Additionally, a production element has a production property.
+A \textbf{production\textunderscore element} is either a t\textunderscore symbol\textunderscore production or a nt\textunderscore symbol. Therefore it has an instance of \textbf{symbol} as an attribute which can be seen in figure \ref{fig:ConceptProductionElementClassDiagram}. Additionally, a production element has a production property that is shown in figure \ref{fig:ConceptProductionPropertyClassDiagram}.
 The production property can take one of three values and denotes whether a production is optional, can be repeated multiple times or does not have any special property.
 In the original TPTP syntax file, the property is represented by square brackets or the repetition symbol. A production element can also only consist of square brackets (see Figure \ref{fig:ImplementationParsing}).
 
@@ -290,7 +300,7 @@ In the original TPTP syntax file, the property is represented by square brackets
 \end{figure}
 
 A \textbf{production} is one of the production alternatives of a rule.
-It consists of a list of production elements and has a production property that is like the production property of the production\textunderscore element. Productions can also be nested.
+As can be seen in figure \ref{fig:ConceptProductionClassDiagram} it consists of a list of production elements and has a production property that is like the production property of the production\textunderscore element. Productions can also be nested.
 Therefore, the list can also contain further productions. 
 
 \begin{figure}[H]
@@ -302,7 +312,7 @@ Therefore, the list can also contain further productions.
 
 A \textbf{productions\textunderscore list} contains a list of productions where each production is one alternative in the description of an expression. 
 
-The \textbf{XOR\textunderscore productions\textunderscore list} represents multiple alternatives enclosed by parentheses. It contains a list of the alternate productions. 
+The \textbf{XOR\textunderscore productions\textunderscore list} represents a productions\textunderscore list with multiple alternatives enclosed by parentheses. It contains a list of the alternate productions. Figure \ref{fig:ConceptProductionsListClassDiagram} shows the UML denotation of a productions\textunderscore list and a XOR\textunderscore productions\textunderscore list which is a an inherited productions\textunderscore list.
 
 \begin{figure}[H]
 \centering
@@ -312,7 +322,7 @@ The \textbf{XOR\textunderscore productions\textunderscore list} represents multi
 \end{figure}
 
 
-The \textbf{grammar\textunderscore list} is the top level data structure. It contains a list of all rules that are in the TPTP syntax file.
+The \textbf{grammar\textunderscore list} shown in figure \ref{fig:ConceptGrammarListClassDiagram} is the top level data structure. It contains a list of all rules that are in the TPTP syntax file.
 This includes any type of rules (grammar, token, strict and macro) and comment blocks. 
 
 \begin{figure}[H]
@@ -648,16 +658,25 @@ From all nodes, that are adressed (by nonterminal symbol name and rule type), th
 This includes deleting the corresponding element from the productions list and from the children list.
 
 \subsection{Determination of the remaining terminating symbols}\label{sec:ConceptDerterminingRemainingTerminating}
-After all reachable symbols have been determined, the last step of extracting a sub-syntax is to determine and remove the non-terminating productions and symbols.
-Non-terminating productions are productions in which at least one nonterminal symbol is non-terminating.
+After the desired productions have been deleted from the grammar graph, the next step is to remove the nonterminating symbols from the grammar graph.
+First it must be determined which symbols are terminating and which are nonterminating.
+Terminating nodes are found by iterating the nodes in the \textit{children\textunderscore list} of a node.
+If the \textit{children\textunderscore list} is empty, the production only consists of terminal symbols.
+If that is not the case, the node is terminating if all nodes in the \textit{children\textunderscore list} represent a non-terminal symbol which is terminating.
+If a non-terminal symbol has multiple rule types it is represented by multiple nodes. Also, if a non-terminal symbol with multiple rule types is in featured in a production, all nodes representing that non-terminal symbol are in the children list corresponding to this production. However, only one of the nodes needs to be terminating for the non-terminal symbol to be terminating.
 
-The terminating symbols can be determined recursively using dynamic programming techniques.
-The goal is to determine for each nonterminal symbol if it derives a terminating symbol. Only then it is a useful symbol since it is reachable and derives a terminating symbol todo reference
-Starting at the start symbol, the grammar graph is traversed. 
+After the terminating symbols have been determined, productions that contain a nonterminating symbol must be removed from the nodes of the grammar graph. Because some non-terminal symbols might have productions that contain nonterminating symbols, but also other productions that only contain terminating symbols, only the productions containing nonterminating symbols must be removed.
 
--start with start symbol
--traverse through graph and compute terminating symbols
-- store visited nodes to avoid infinite loops
+%After the desired productions have been deleted from the grammar graph, the next step is to remove the nonterminating symbols from the grammar graph.
+%Non-terminating productions are productions in which at least one nonterminal symbol is non-terminating.
+%First it must be determined which symbols are terminating and which are nonterminating.
+%The terminating symbols can be determined recursively using dynamic programming techniques.
+%The goal is to determine for each nonterminal symbol if it derives a terminating symbol. Only then it is a useful symbol since it is reachable and derives a terminating symbol todo reference
+%Starting at the start symbol, the grammar graph is traversed. 
+%
+%-start with start symbol
+%-traverse through graph and compute terminating symbols
+%- store visited nodes to avoid infinite loops
 
 \subsection{Determination of the remaining reachable symbols}\label{sec:ConceptDerterminingRemainingReachable}
 After removing the productions specified in the control file it has to be determined which part of the grammar still remains reachable.
