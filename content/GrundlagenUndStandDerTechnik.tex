@@ -17,35 +17,60 @@ A formal language is a set of words over an alphabet.
 An alphabet is a finite, nonempty set of symbols usually represented by $\sum$. An example is the binary alphabet $\sum = \{0,1\}$.
 A string is a finite sequence of symbols from some alphabet. For example the string $101$ is a string over the binary alphabet $\sum = \{0,1\}$.
 A language is set of strings. If $\sum$ is an alphabet, then    $L(\sum)$ is a language over $\sum$. \cite{AutomataTheory.2007}
-- Vocabulary
 
+- Vocabulary
+s ? Welche? Oder soll es die Menge aller solcher Sprachen sein? Dann nicht "a language".
 
 \subsection{Finite automata}\label{sec:BackgroundAutomata}
 
 \subsection{Regular expression}\label{sec:BackgroundRegEx}
-%A regular expression describes a formal language and can be described by a finite automata.
-%Shorthands are common to simplify a regular expression.
-%For example all alphabetic letters in lower and upper case are combined and represented by [a-zA-Z].
-%The same principle can be also be applied to represent a set of numbers.
-%However, using not clearly defined intervals e.g. [0-b] is not common as it has different interpretations by different lexer generators and thus can lead to mistakes. \cite{Mogensen.2017}
-
 A regular expression is an algebraic description of a regular/formal language. Regular expressions declare strings that are part of the language. \cite{AutomataTheory.2007} 
 For example the regular expression \textbf{10+1*} denotes the language consisting of a single 1 followed by a single 0 or any number of 1's. 
 
-
 \subsection{Formal grammars}\label{sec:BackgroundGrammar}
 Unlike regular expressions, grammars not only describe a language but also define a structure of the words of a language.\\
-A grammar is a list of rules that defines the relationships among tokens \cite{LexYacc.1992}.
+
+-s Ok, aber for allem können sie viel größer Klassen von Sprachen beschreiben!
+-...und wenn ich schon dabei bin: Machen REs das nicht auch? Nur halt anders.
+
+A grammar is a list of rules that defines the relationships between tokens \cite{LexYacc.1992}.
 These rules are also referred to as production rules.
 Given a start symbol, this symbol can be replaced by other symbols using the production rules.
-Using a recursive notation, production rules define derivations for words. The derived symbols can then once again be replaced until the derivation is a terminal symbol.  
+Using a recursive notation, production rules define derivations for words. The derived symbols can then once again be replaced until the derivation
+
+s Hier sauber trennen:
+- Die Ableitung ist eine Folge von Regelanwendungen
+- Das abgeleitete Wort
+- Terminale und nicht-terminale Symbole
+Speziell: Das abgeleitete Wort ist im allgemeinen kein Symbol
+(weder terminal noch nicht-terminal), sondern es besteht aus
+Symbolen (und wenn die Ableitung fertig ist, nur aus Terminalsymbolen
+
+is a terminal symbol.  
 Terminal symbols describe symbols that cannot be further derived. The alphabet of the described language is build by the set of terminal symbols.
 Nonterminal symbols however can be further derived and build  merged with the terminal symbols the vocabulary of a grammar. Nonterminal symbols and terminal symbols are disjoint. 
 \\
 - Beispiel
 
-\subsubsection{Context-free grammar}
+\subsubsection{Context-free grammars}
+-language is set of strings
+-recursive notation
 
+-description of language contains four components
+
+1. set of symbols that defines strings of the language, called terminal symbols
+
+2. set of variables, called nonterminal symbols. Each symbol represents a set of strings
+
+3. one nonterminal symbol represents the language that is being defined. This nonterminal symbol is called the start symbol
+
+4. set of productions/rules. They represent the recursive definition of the language. Each production consists of: nonterminal symbol that is being (partially) defined in production, production symbol, and a string of terminal symbols and/or variables.
+In production terminals are unchanged and nonterminal symbols are substituted by its production body
+
+Derivations:
+
+
+\cite{AutomataTheory.2007}
 \subsubsection{Reduced grammars}
 Grammars are called reduced if each nonterminal symbol is terminating and reachable \cite{Cremers75}. \\
 Given the set of terminal symbols $\sum$, a nonterminal symbol $\xi$ is called terminating if there are productions $\xi \underrightarrow{*} z$ so that $z$ can be derived from $\xi$ and $z \epsilon \sum$*. \\
