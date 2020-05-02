@@ -36,7 +36,7 @@ tokens = (
 
 \subsection{Regular expression}\label{sec:ImplementationLexerRegularExpression}
 
-Tokens are specified by regular expressions. Regular expressions can be defined in a function. The name of the function is the name of one token in the tokens list with the prefix t\textunderscore . Inside a function it is possible to modify the value of the generated LexToken object and then return it. If not modified, the value of the object is not modified and remains the actual text that has been matched. The regular expression is specified as a string in the beginning of a function. An extract of all functions can be seen in listing \ref{lst:Lexer_regex}. The function for the token $COMMENT$ consists of the comments regular expression that has already been described in chapter \ref{sec:ConceptLexer} and returns the LexToken object unmodified. The functions of $OPEN\textunderscore SQUARE\textunderscore BRACKET$, $NT\textunderscore SYMBOL$ and $T\textunderscore SYMBOL$ (and the other tokens in the tokens list) are implemented similar to $COMMENT$. However, the function of $LGRAMMAR\textunderscore EXPRESSION$ and the functions of the other expressions modify the value of the LexToken object. Instead of the value being the actual text matched, the last three characters are removed. The Python method $rstrip()$ removes all white spaced from the value. Thus, the function returns a LexToken object with the value of the text belonging to the nonterminal symbol the expression represents. The rule symbol is removed because the rule type already arises from the token type. \\
+Tokens are specified by regular expressions. Regular expressions can be defined in a function. The name of the function is the name of one token in the tokens list with the prefix t\textunderscore . Inside a function it is possible to modify the value of the generated LexToken object and then return it. If not modified, the value of the object is not modified and remains the actual text that has been matched. The regular expression is specified as a string in the beginning of a function. An extract of all functions can be seen in listing \ref{lst:Lexer_regex}. The function for the token $COMMENT$ consists of the comments regular expression that has already been described in chapter \ref{sec:ConceptLexer} and returns the LexToken object unmodified. The functions of $OPEN\textunderscore SQUARE\textunderscore BRACKET$, $NT\textunderscore SYMBOL$ and $T\textunderscore SYMBOL$ (and the other tokens in the tokens list) are implemented similar to $COMMENT$. However, the function of $LGRAMMAR\textunderscore EXPRESSION$ and the functions of the other expressions modify the value of the LexToken object. Instead of the value being the actual text matched, the last three characters are removed. The Python method $rstrip()$ removes all white spaced from the value. Thus, the function returns a LexToken object with the value of the text belonging to the nonterminal symbol that the expression represents. The rule symbol is removed because the rule type is already present in the token type. \\
 
 \begin{lstlisting}[language=Python,basicstyle=\scriptsize	,caption= Lexer regular expressions,label= lst:Lexer_regex]
 def t_COMMENT(self, t):
@@ -63,7 +63,7 @@ def t_T_SYMBOL(self, t):
 )
 \end{lstlisting}
 
-The function $t\textunderscore ignore$ is used for declaring characters that should be ignored in the input stream. In this project, white spaced and new lines are ignored (see chapter \ref{ConceptLexer}.
+The function $t\textunderscore ignore$ is used for declaring characters that should be ignored in the input stream. In this project, white spaced and new lines are ignored (see chapter \ref{sec:ConceptLexer}.
 
 The function $t\textunderscore error$ is called when an error occurs during lexing. The defined error function shown in listing \ref{lst:Lexer_error} prints the value of the illegal character and skips the character. \\
 
@@ -124,7 +124,7 @@ def t_error(self, t):
 \section{Parser}\label{sec:ImplementationParser}
 
 The parser takes the matched tokens from the lexer and constructs a grammar list (see chapter \ref{sec:ConceptParser}) based on a specified context free grammar. Each rule of the context free grammar is defined by a Python function. The docstrings of the functions contain a context free grammar specification of the rules. The function accepts one argument which is a list of grammar symbols. The function contains semantic actions initiated by the rule that are applied to the first element of the input argument.
-An example for a defined function can be seen in listing \ref{lst:Parser_functionProductionslist}. The function defines the rule that hast the nonterminal symbol $productions\textunderscore list$ on the left side. The docstring of the functions contains the specification of the rule and the code inside the function determines the actions that are taken once the function is called. If the input has the length 2, meaning the input list consists of two entries), a new $PRODUCTIONS\textunderscore LIST$ is created with $p[1]$ and is saved in $p[1]$. If the length of the input equals four, a $productions\textunderscore list$ already exists and is expanded by a new productions alternative. This is done by appending $p[3]$ to the existing list that is stored in $p[1]$. The result is again being stored in $p[0]$. \\
+An example for a defined function can be seen in listing \ref{lst:Parser_functionProductionslist}. The function defines the rule that has the nonterminal symbol $productions\textunderscore list$ on the left side. The docstring of the functions contains the specification of the rule and the code inside the function determines the actions that are taken once the function is called. If the input has the length 2, meaning the input list consists of two entries, a new $PRODUCTIONS\textunderscore LIST$ is created with $p[1]$ and is saved in $p[0]$. If the length of the input equals four, a $productions\textunderscore list$ already exists and is expanded by a new productions alternative. This is done by appending $p[3]$ to the existing list that is stored in $p[1]$. The result is again being stored in $p[0]$. \\
 
 \begin{lstlisting}[language=Python,basicstyle=\scriptsize	,caption= Parser function of productions list,label= lst:Parser_functionProductionslist]
 def p_productions_list(self, p):
@@ -173,7 +173,7 @@ A comment block is either a comment or a comment block with a comment.
                 \mid comment\;block\;\;\textbf{comment}
 \end{align*}
 
-The four expressions are the expression token followed by their productions list. Grammar expression has a special case without a productions list because the production rule $ <null> ::= $ has nothing on the right side. 
+The four expressions are the expression token followed by their productions list. Grammar expression has a special case without a productions list because the production rule $<null>::= $ of the \ac{TPTP} grammar has no production on the right side. 
 
 \begin{align*}
 	grammar\;expression\; \rightarrow\; &\textbf{l grammar expression}\;\;productions\;list \\ 
@@ -241,6 +241,7 @@ Production element can be replaced by a nt symbol or by a nt symbol in square br
 
 The start symbol is not specifically mentioned because it is per convention the left element of the first rule.
 
+\subsubsection{Example}
 Listing \ref{lst:Parser_example_productionelement} shows the production rule of the nonterminal $<tfx tuple>$ as well as the tokens that have been generated by the lexer. Using this single production, the functionality of the parser should be exemplified. \\
 
 \begin{lstlisting}[basicstyle=\scriptsize	,caption= Production element,label= lst:Parser_example_productionelement]
@@ -304,8 +305,8 @@ The methods highlighted in blue are used for building a graph and are described 
                 
 \section{Graph generation}\label{sec:ImplementationGraphGeneration}
 
-Before generating a graph a node dictionary consisting of nodes is built. Figure \ref{fig:ImplementationNTNodeUML} shows the class NTNode that has already been introduced in chapter\ref{sec:ConceptGraphGeneration}. The class has three class methods:
-$Add\textunderscore children$ adds a list of children to the existing nodes children list. $Extend\textunderscore comment\textunderscore block$ appends a comment block to the existing comment block of a node. $str$?? 
+Before generating a graph, a node dictionary consisting of nodes is built. Figure \ref{fig:ImplementationNTNodeUML} shows the class NTNode that has already been introduced in chapter \ref{sec:ConceptGraphGeneration}. The class has three class methods:
+$Add\textunderscore children$ adds a list of children to the existing nodes children list. $Extend\textunderscore comment\textunderscore block$ appends a comment block to the existing comment block of a node. The $str$ method is used for exporting the grammar.
 
 \begin{figure}[H]
 \centering
@@ -324,7 +325,7 @@ The rule type of a node is either grammar, token, strict or macro and is impleme
 \end{figure}
 
 Algorithm \ref{alg:buildNodesDictionary} shows how the nodes dictionary is build. Iterating the rules list, a new dictionary item is created that consists of the node key rule name and rule type and the \textit{NTNode} as value. This is only the case if the rule is not a comment block. 
-Listing \ref{lst:ImplementationMultipleSameRules} shows that multiple rules exists that corresponds to the same node.
+Listing \ref{lst:ImplementationMultipleSameRules} shows that multiple rules can exist that correspond to the same node.
 
 \begin{lstlisting}[language=None, basicstyle=\scriptsize	,caption= Multiple rules with the same left-hand side of the rule,label= lst:ImplementationMultipleSameRules]
 <defined_proposition>  :== <defined_predicate>
@@ -337,7 +338,7 @@ Listing \ref{lst:ImplementationMultipleSameRules} shows that multiple rules exis
                            $dia_P | $dia_i | $dia_int | $dia
 \end{lstlisting}
 
-If that is not taken into consideration, the second rule would create a new node and replace the existing on in the dictionary because their dictionary keys are the same. To not overwrite the node, the algorithm checks whether the key already exists in the dictionary. If the key already exists, the productions lists of the two rules are merged into one productions list that is appended to the node. 
+If that would not have been considered, the second rule would create a new node and replace the existing on in the dictionary because their dictionary keys are the same. To not overwrite the node, the algorithm checks whether the key already exists in the dictionary. If the key already exists, the productions lists of the two rules are merged into one productions list that is appended to the node. 
 After iterating, comments are assigned (see section \ref{sec:ImplementationMaintainingComments}).
 
 \begin{algorithm}[H]
@@ -382,7 +383,7 @@ After the children of a node have been appended to the node, every child calls t
 \end{algorithm}
 
 The right side of a production rule is stored in a productions list.
-For identifying the nonterminal or terminal symbols in the productions lists, a loop iterates through all elements of the productions list.
+For identifying the nonterminal or terminal symbols in the productions lists, a loop iterates all elements of the productions list.
 Each element is a production and calls the function $searchProductionForNT$.
 This function identifies the children of the given element who are then appended to the node.
 
@@ -401,7 +402,7 @@ This function identifies the children of the given element who are then appended
 The goal is to identify the nonterminal symbols.
 Therefore, it is checked if the production is a nested production and if so, the same function is called again.
 If the production is a XOR production list the function $searchProductionsListForNT$ is called to break down the productions list.
-If the production element is a nonterminal symbol the element is searched in the node dictionary to get the node where the element is on the left side.
+If the production element is a nonterminal symbol, the element is searched in the node dictionary to get the node where the element is on the left side.
 This element is then appended to a list of children. It is possible that an element appears multiple times on the left side if it is presented by multiple expressions.
 In this case each element is appended to the list of children.
 
@@ -423,7 +424,7 @@ In this case each element is appended to the list of children.
 \end{algorithm}
 
 \section{Maintaining comments}\label{sec:ImplementationMaintainingComments}
-This section describes the implementation of associating comments with rules, to maintain comments in a generated sub-syntax.
+This section describes the implementation of associating comments with rules in order to maintain comments in a generated sub-syntax.
 The implementation follows the concept outlined in section \ref{sec:ConceptMaintainingComments}.
 Comments are associated after the grammar graph has been generated.
 They are associated to the node, that represents the rule they belong to.
@@ -432,25 +433,25 @@ Associating comments with nodes has the advantage, that when the grammar graph i
 
 \subsection{Splitting comment blocks}\label{sec:ImplementationMaintainingCommentsSplitByTop}
 The flow chart in figure \ref{fig:ImplementationMaintainingCommentSplitByTopOfPage} shows how a comment block is split into multiple comment blocks separating it by top of page lines (todo REF to concept).\\
-First the indexes of the top of page lines are obtained in a list (using method of \textit{COMMENT\textunderscore BLOCK}).
-After that the \textit{comment\textunderscore block\textunderscore list}, which will contain the generated \textit{COMMENT\textunderscore BLOCK}s, is initialized.
-If the list of top of page line indexes is empty, the original comment block is added to the \textit{comment\textunderscore block\textunderscore list}, because the comment block does not need to be split into multiple comment blocks because no top of page line is present.
+First the indexes of the top of page lines are collected in a list (using method of \textit{COMMENT\textunderscore BLOCK}).
+After that, the \textit{comment\textunderscore block\textunderscore list}, which will contain the generated \textit{COMMENT\textunderscore BLOCK}s, is initialized.
+If the list, storing top of page line indexes, is empty, the original comment block is added to the \textit{comment\textunderscore block\textunderscore list}, because the comment block does not need to be split into multiple comment blocks because no top of page line is present.
 Then the \textit{comment\textunderscore block\textunderscore list} is returned.\\
-If the list of top of page line indexes is not empty the first top of page line index is obtained from the top of page indexes list.
-It is checked whether the first top of page index is unequal zero.\\
+If the list of top of page line indexes is not empty, the first top of page line index is retrieved from the top of page indexes list.
+It is also checked whether the first top of page index is unequal zero.\\
 If that is the case, the first top of page index is not the first line of the original comment block, and a comment block can be constructed from the line(s) before.
-In this case the leading comment block can be constructed from the comment lines of the original comment block from index zero to the first top of page index.
+In this case the first comment block can be constructed from the comment lines of the original comment block from index zero to the first top of page index.
 This comment block is added to the \textit{comment\textunderscore block\textunderscore list}.\\
 Then the \textit{index} variable, which represents an index on the \textit{top\textunderscore of\textunderscore page\textunderscore indexes} list, is initialized.
-The \textit{index} is used to obtain the corresponding element of the \textit{top\textunderscore of\textunderscore page\textunderscore indexes} list.\\
-Then it is checked if top of page line that corresponds to top of page line index is the last line of the original comment block.
-In that case no new comment block needs to be added to the \textit{comment\textunderscore block\textunderscore list} and the \textit{comment\textunderscore block\textunderscore list} is returned.\\
-todo ?Otherwise? the start index of next comment block is computed as the current \textit{top\textunderscore of\textunderscore page\textunderscore index} incremented by one (line after the top of page line).
+The \textit{index} is used to access the corresponding element of the \textit{top\textunderscore of\textunderscore page\textunderscore indexes} list.\\
+Then it is checked if top of page line that corresponds to the top of page line index is the last line of the original comment block.
+In that case, no further comment block needs to be added to the \textit{comment\textunderscore block\textunderscore list} and the \textit{comment\textunderscore block\textunderscore list} is returned.\\
+Otherwise the start index of the next comment block is computed as the current \textit{top\textunderscore of\textunderscore page\textunderscore index} incremented by one (line after the top of page line).
 There are two cases that have to be considered when determining the end index of the comment block.
-Either there is another top of page line, in which case the comment block ends before that, or the currently indexed top of page line was the last one, in which case the end index is the end of the original comment block.
+Either there is another top of page line, in this case the comment block ends before that, or the currently indexed top of page line was the last one, in that case the end index is the end of the original comment block.
 Then the new commend block is constructed with the before determined \textit{start} and \textit{end}.
 This comment block is added to the \textit{comment\textunderscore block\textunderscore list}.
-If the \textit{index} is at the end of the \textit{top\textunderscore of\textunderscore page\textunderscore index} list, the \textit{comment\textunderscore block\textunderscore list} is returned, if not, the \textit{index} variable is incremented and the process is repeated with the next top of page index.
+If the \textit{index} is at the end of the \textit{top\textunderscore of\textunderscore page\textunderscore index} list, the \textit{comment\textunderscore block\textunderscore list} is returned. If not, the \textit{index} variable is incremented and the process is repeated with the next top of page index.
 
 \begin{figure}[H]
 \centering
@@ -461,28 +462,28 @@ If the \textit{index} is at the end of the \textit{top\textunderscore of\textund
 
 \subsection{Associating comments with grammar graph nodes}\label{sec:ImplementationMaintainingCommentsAssociateWithNodes}
 
-Algorithm \ref{alg:assign_comments_to_rule} describes the procedure of matching comments to nodes. It follows procedure described in section \ref{sec:ConceptMaintainingComments} and is used within the \textit{TPTPGraphBuilder} after generating the grammar graph.\\
+Algorithm \ref{alg:assign_comments_to_rule} describes the procedure of matching comments to nodes. The algorithm follows the concept outlined in section \ref{sec:ConceptMaintainingComments} and is used within the \textit{TPTPGraphBuilder} after generating the grammar graph.\\
 The input is the \textit{grammar\textunderscore list}, that the parser created from parsing the \ac{TPTP} syntax file.
 The \textit{grammar\textunderscore list} contains rules and comment blocks in the order they appeared in the original \ac{TPTP} syntax file.
 The \textit{grammar\textunderscore list} is iterated (line 1).\\
-If the current element of the \textit{rules\textunderscore list} is a \textit{COMMENT\textunderscore BLOCK} it is split by top of page lines (line 3).
+If the current element of the \textit{rules\textunderscore list} is a \textit{COMMENT\textunderscore BLOCK}, it is split by top of page lines (line 3).
 The procedure of splitting a comment block by top of page lines is described in section \ref{sec:ImplementationMaintainingCommentsSplitByTop}.
 It returns a list of comment block objects.\\
 In the following if-clause it is checked, how many comment block objects are returned.\\
-In the first case of one comment block, this comment block should be associated with the rule after by default. If that is not possible, because the comment block is at the end of the syntax file, it should be associated with the rule before.
-In line 5 it is checked if the comment block is not at the end of the syntax file. To associated with the rule after, the next rule (rule after the comment block) is obtained, by indexing the next element of the \textit{rules\textunderscore list}.
+In the first case of one comment block, this comment block should be associated with the following rule by default. If that is not possible, because the comment block is at the end of the syntax file, it should be associated with the rule before.
+In line 5 it is checked whether the comment block is not at the end of the syntax file. To associate the comment block with the following rule, the next rule (rule after the comment block) is obtained by indexing the next element of the \textit{rules\textunderscore list}.
 Then, the comment block is appended to the node, specified by the rule, using the \textit{append\textunderscore comments\textunderscore to\textunderscore node} method. This method is described in the following subsection.\\
 If the comment block is at the end of the syntax file, it has to be associated with the rule before.
 This case is handled in the else branch (line 8).
-The procedure of adding the comment block to the desired node is essentially the same as described before. The difference lies in that the previous rule is addressed (line 9).\\
-If splitting the original comment block by top of page lines results in two comment blocks the first is associated with the rule before and the second with the rule after if the original comment block was neither at the end or the beginning of the syntax file (lines 14, 15, 21, 22).\\
+The procedure of adding the comment block to the desired node is essentially the same as described before. The difference is that the previous rule is addressed (line 9).\\
+If splitting the original comment block by top of page lines results in two comment blocks the first is associated with the rule before and the second with the rule after on condition that the original comment block was neither at the end nor the beginning of the syntax file (lines 14, 15, 21, 22).\\
 If the original comment block was at the beginning of the syntax file, the first comment block is appended to the rule 
 after too (lines 17, 18).\\
 If the original comment block was at the end of the syntax file, the second comment block is associated with the rule before.\\
 The case of two or more top of page lines does not occur in the \ac{TPTP} syntax version 7.3.0. and is not included in the pseudo-code.\\
-This hypothetical case is handled, by using the same procedure as in the case of two comment blocks but treating all comment blocks after the second comment block like the second. This means that all comment blocks from the second on would be associated with the rule after, except the case that the original comment block was at the end of the syntax file. In that case all comment blocks would be appended to the rule before.
+This hypothetical case is handled by using the same procedure as in the case of two comment blocks but treating all comment blocks after the second comment block like the second. This means that all comment blocks from the second on would be associated with the rule after, except the case that the original comment block was at the end of the syntax file. In that case all comment blocks would be appended to the rule before.
 
-The algorithm relies on that in the \textit{rules\textunderscore list} there are never two or more comment blocks in a row (meaning they are always separated by at least one rule). This is ensured by the parser, because all consecutive comment lines in the syntax file are included into one comment block. Therefore consecutive comment block objects do not occur in the \textit{rules\textunderscore list}.
+The algorithm relies on the \textit{rules\textunderscore list} never having two or more comment blocks in a row (meaning they are always separated by at least one rule). This is ensured by the parser, because all consecutive comment lines in the syntax file are included into one comment block. Therefore consecutive comment block objects do not occur in the \textit{rules\textunderscore list}.
 
 \begin{algorithm}[H]
 \small
@@ -528,10 +529,10 @@ The algorithm relies on that in the \textit{rules\textunderscore list} there are
 \subsubsection{Appending a comment block to a node}\label{sec:ImplementationMaintainingCommentBlockWithNodes}
 
 In Algorithm \ref{alg:append_comment_to_node} it is described, how a comment block is appended to a node from the grammar graph, using information from the original rule created by the parser to address the node.\\
-To associate the \textit{COMMENT\textunderscore BLOCK} with the node representing the rule, the node needs to be obtained.
-It is more efficient, to use the, on graph generation, created \textit{nodes\textunderscore dictionary} to access the desired nodes, instead of traversing the grammar graph for each wanted node.\\
-In the \textit{nodes\textunderscore dictionary}, the key for each node consists of the nonterminal symbol name and \textit{RuleType} (todo check ref see section \ref{sec:ImplementationGraphGeneration}).\\
-The rule type of the input rule is indicated by the type of the \textit{rule} object (see class diagram in figure \ref{fig:ImplementationUMLRule}).
+To associate the \textit{COMMENT\textunderscore BLOCK} with the node representing the rule, the node needs to be accessed.
+It is more efficient to use the created \textit{nodes\textunderscore dictionary} to access the desired nodes than to traverse the grammar graph for each wanted node.\\
+In the \textit{nodes\textunderscore dictionary}, the key for each node consists of the nonterminal symbol name and the \textit{RuleType} is stored(see section \ref{sec:ImplementationGraphGeneration}).\\
+The rule type of the input rule is indicated by the type of the \textit{rule} object (see class diagram in figure \ref{fig:ImplementationRuleTypeUML}).
 To index the node in the \textit{nodes\textunderscore dictionary} the \textit{RuleType} corresponding to the type of the rule object is needed.
 The \textit{find\textunderscore rule\textunderscore type\textunderscore for\textunderscore rule} method determines and returns the \textit{RuleType} corresponding to the \textit{rule} object type.\\
 Using the determined \textit{RuleType} and the nonterminal name, which is stored in the \textit{rule}, the key for the \textit{Nodes\textunderscore Dictionary} can be constructed (line 8).
@@ -554,9 +555,9 @@ It appends the \textit{COMMENT\textunderscore BLOCK} to the \textit{COMMENT\text
 
 \subsubsection{Extending a comment block of a node}\label{sec:ImplementationMaintainingExtendCommentBlock}
 
-Algorithm \ref{alg:extend_comment_block} shows the procedure, that is used in the \textit{extend\textunderscore comment\textunderscore block} method of the \textit{NTNode} class.
+Algorithm \ref{alg:extend_comment_block} shows the procedure that is used in the \textit{extend\textunderscore comment\textunderscore block} method of the \textit{NTNode} class.
 If no \textit{comment\textunderscore block} has not been associated with the node before, the input \textit{comment\textunderscore block} is associated with the node.
-If the node has already has a \textit{comment\textunderscore block}, this \textit{comment\textunderscore block} is extended, with the comments lines from the input \textit{comment\textunderscore block}.\\
+If the node has already have a \textit{comment\textunderscore block}, this \textit{comment\textunderscore block} is extended, with the comments lines from the input \textit{comment\textunderscore block}.\\
 This procedure is needed because it is possible that multiple comment blocks, that have been generated on splitting comment blocks, have to be associated with the same node. todo refine
 
 -todo explain comment block extend.
@@ -577,22 +578,21 @@ This procedure is needed because it is possible that multiple comment blocks, th
 \end{algorithm}
 
 \section{Extraction of a sub-syntax}\label{sec:ImplementationExtractReducedGrammar}
-The following sections describe the algorithms for the extraction of a sub-syntax based on the concept outlined in section \ref{sec:ConceptExtractReducedGrammar}
+The following sections describe the algorithms used for the extraction of a sub-syntax based on the concept outlined in section \ref{sec:ConceptExtractReducedGrammar}.
 
 \subsection{Removal of blocked productions}
-Algorithm \ref{alg:remove_blocked_productions} takes the text of the control file as an input argument (control file format description can be found in section \ref{sec:ConceptControlFile}) and removes the productions, that should be blocked, from the nodes.  
+Algorithm \ref{alg:remove_blocked_productions} takes the text of the control file as an input argument (control file format description can be found in section \ref{sec:ConceptControlFile}) and removes the productions that should be blocked from the nodes.  
 The control file string is split into a list of the lines (line 1).
 The first line of the control file string, which describes the start symbol, is deleted from the list (line 2) because this information is not needed at this step.\\
 Then the following lines are iterated:\\
 For each line the content is split by the comma symbol, which produces a list of strings.
-The first element of that list is the nonterminal symbol name of the symbol of which productions should be disabled.
+The first element of that list is the nonterminal symbol name of the symbol from which productions should be disabled.
 The second element is the corresponding rule type symbol.
 The nonterminal symbol name and the rule type, that is determined from the rules symbol (line 7), are stored in separate variables.
-Then these elements are removed from the list and the remaining elements are converted to integer.
+Then these elements are removed from the list and the remaining elements are converted to integers.
 They are the indexes of the productions that should be removed.
-The elements are ordered in a descending order (line 10).
-Ordering the indexes in that order has the advantage that, when the list of indexes is iterated to delete productions, the indexes of other productions that should be deleted are not changed by the deletion of productions before. ?todo verständlich?
-To delete the productions from the specified node, the node object has to be obtained.
+The elements are ordered descending (line 10).
+Ordering the indexes in that order has the advantage that, when the list of indexes is iterated to delete productions, the indexes of other productions that should be deleted are not changed by the deletion of productions before. To delete the productions from the specified node the node object has to be accessed.
 This is done by addressing the node in the \textit{nodes\textunderscore dictionary} with its key consisting of the nonterminal symbol name and the rule type.
 From the node, in a loop, the elements of the \textit{productions\textunderscore list} and the \textit{children} list corresponding to the indexes in the control file are deleted.
 
@@ -631,10 +631,10 @@ First it has to be determined which symbols are terminating and which are nonter
 -store known terminating symbols
 
 A set of terminating nodes and a temporary set of terminating nodes are initialized.
-In the while loop the recursive algorithm \textit{find\textunderscore non\textunderscore terminating\textunderscore symbols(start\textunderscore node, temp\textunderscore terminating, visited)} finds terminating nodes with the start\textunderscore node, and an initialized set of known terminating symbols and a set of already visited nodes.
+In a while loop the recursive algorithm \textit{find\textunderscore non\textunderscore terminating\textunderscore symbols(start\textunderscore node, temp\textunderscore terminating, visited)} finds terminating nodes with the start\textunderscore node, an initialized set of known terminating symbols and a set of already visited nodes.
 This algorithm is called with the ?updated? set of terminating symbols until the set does not differ from the run before.
-When that is the case all terminating nodes have been found.\\
-After all terminating nodes have been found, the productions that contain nonterminating symbols are deleted from the nodes and after that nodes representing nonterminating symbols are removed.\\
+When that is the case, all terminating nodes have been found.\\
+After all terminating nodes have been found, the productions that contain nonterminating symbols are deleted from the nodes and after that nodes representing nonterminating symbols are removed.
 
 In the following parts of the section, first the \textit{find\textunderscore non\textunderscore terminating\textunderscore symbols} algorithm is described. Then the \textit{delete\textunderscore non\textunderscore terminating\textunderscore productions} algorithm and after that the \textit{delete\textunderscore non\textunderscore terminating\textunderscore nodes} algorithm are outlined.
 
@@ -661,12 +661,11 @@ In the following parts of the section, first the \textit{find\textunderscore non
 \end{algorithm}
 
 Algorithm \ref{alg:find_non_terminating_symbols}  recursively determines whether a node can be identified as terminating.
-The input is a set of already known terminating nodes and nodes that already have been visited.
-If the node has been not been visited before, it is added to the visited set.
-If it has been visited before, the method ends to prevent infinite recursion.
-If it has not been visited, the \textit{children} list of the node is iterated. (todo children list contains list of nonterminal symbols per production)
-for each children list in node.children
-If a \textit{children\textunderscore list} is empty, this means that in a production there are no nonterminal symbols and the production only consists of terminal symbols. If that is the case the node is certainly terminating.\\
+The input is a set of already known terminating nodes and nodes that have already been visited.
+If the node has been not been visited yet, it is added to the visited set.
+If it has been visited, the method ends to prevent infinite recursion.
+If it has not been visited yet, the \textit{children} list of the node is iterated for each children list in $node.children$.
+If a \textit{children\textunderscore list} is empty, this means that in a production there are no nonterminal symbols and the production only consists of terminal symbols. If that is the case the node is terminating.\\
 If it is not the case, the node is terminating if all nodes in the \textit{children\textunderscore list} represent a terminating nonterminal symbol.
 To check that, the algorithm is called recursively for all nodes in the \textit{children\textunderscore list}.
 If a nonterminal symbol has multiple rule types, it is represented by multiple nodes. Also, if a nonterminal symbol with multiple rule types is in featured in a production, all nodes representing that nonterminal symbol are in the children list corresponding to this production. Only one of the nodes needs to be terminating in order for the nonterminal symbol to be terminating.
