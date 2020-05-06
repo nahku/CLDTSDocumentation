@@ -14,7 +14,7 @@ TODO more detailed
 
 A formal language is a set of words over an alphabet.
 
-An alphabet is a finite, nonempty set of symbols usually represented by $\sum$. An example is the binary alphabet $\sum = \{0,1\}$.
+An alphabet is a finite, non-empty set of symbols usually represented by $\sum$. An example is the binary alphabet $\sum = \{0,1\}$.
 A string is a finite sequence of symbols from some alphabet. For example the string $101$ is a string over the binary alphabet $\sum = \{0,1\}$.
 A language is set of strings. If $\sum$ is an alphabet, then    $L(\sum)$ is a language over $\sum$. \cite{AutomataTheory.2007}
 
@@ -143,7 +143,7 @@ There are four actions a shift-reduce parser can perform:
 	\item \textbf{Accept}: Declare that Input was successfully parsed.
 	\item \textbf{Error}: Detect a syntax error.
 \end{itemize}
-\label{itemize:BackgroundBNF}
+\cite{Aho.2007}
 
 -use justified by, handle will appear on top of stack not inside, proof ...
 
@@ -154,18 +154,22 @@ A reduce-reduce conflict occurs if the parser cannot decide which of multiple re
 for example: ambiguous grammar can never be LR (if else)
 \cite{Aho.2007}
 
-\subsubsection{LR parsing}\label{sec:BackgroundParserLR}
+\subsubsection{LR($k$) parsing}\label{sec:BackgroundParserLR}
 
-LR(k) parsing most prevalent type of bottom-up parser
--L for left-to-right
--R for constructing a rightmost derivation in reverse
--k number of input symbols of lookahead that are used in parsing decisions, without k k=1
+LR($k$) parsing most common type of bottom-up parser. The L stands for left-to-right and R stands for constructing a rightmost derivation in reverse. The parameter $k$ refers to the number of inputs symbols that are used as a lookahead. When $k$ is omitted, $k = 1$ is assumed.
+LR-Parsers are complex to implement, but LR parser generators can be used, which significantly reduce the effort in creating an LR-Parser
+
+-what is rightmost derivation
 continue at s 241
 
--LR-Parsers are complex to implement, but LR parser generators can be used
 
 \cite{Aho.2007}
--lr p. 241 
+-lr p. 241
+
+\subsubsection{LALR parsing}\label{sec:BackgroundParserLALR}
+
+\cite{Aho.2007}
+-p.259
 
 \section{Lex and Yacc}\label{sec:BackgroundLexYacc}
 Lex
@@ -185,7 +189,7 @@ todo why python
 \subsection{PLY}\label{sec:BackgroundPythonPLY}
 
 \acf{PLY} \cite{PLY} is an implementation of lex and yacc in python.
-[LALR-parsing]
+[LALR-parsing] \ref{sec:BackgroundParserLALR}
 consists of lex.py and yacc.py
 
 lex.py tokenizes an input string\
