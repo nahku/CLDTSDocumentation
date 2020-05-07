@@ -122,7 +122,6 @@ def t_error(self, t):
 
 
 \section{Parser}\label{sec:ImplementationParser}
-
 The parser takes the matched tokens from the lexer and constructs a grammar list (see chapter \ref{sec:ConceptParser}) based on a specified context free grammar. Each rule of the context free grammar is defined by a Python function. The docstrings of the functions contain a context free grammar specification of the rules. The function accepts one argument which is a list of grammar symbols. The function contains semantic actions initiated by the rule that are applied to the first element of the input argument.
 An example for a defined function can be seen in listing \ref{lst:Parser_functionProductionslist}. The function defines the rule that has the nonterminal symbol $productions\textunderscore list$ on the left side. The docstring of the functions contains the specification of the rule and the code inside the function determines the actions that are taken once the function is called. If the input has the length 2, meaning the input list consists of two entries, a new $PRODUCTIONS\textunderscore LIST$ is created with $p[1]$ and is saved in $p[0]$. If the length of the input equals four, a $productions\textunderscore list$ already exists and is expanded by a new productions alternative. This is done by appending $p[3]$ to the existing list that is stored in $p[1]$. The result is again being stored in $p[0]$. \\
 
@@ -214,9 +213,6 @@ Production element can be replaced by a nt symbol or by a nt symbol in square br
                &\mid \textbf{nt symbol} \\
                &\mid t\; symbol\; production 
 \end{align*}
-
-
-
 
 \begin{align*}
 	production\; \rightarrow\; &production\; element
@@ -424,6 +420,7 @@ In this case each element is appended to the list of children.
 \end{algorithm}
 
 \section{Maintaining comments}\label{sec:ImplementationMaintainingComments}
+
 This section describes the implementation of associating comments with rules in order to maintain comments in a generated sub-syntax.
 The implementation follows the concept outlined in section \ref{sec:ConceptMaintainingComments}.
 Comments are associated after the grammar graph has been generated.
@@ -432,7 +429,8 @@ For that, the \textit{NTNode} class has a \textit{COMMENT\textunderscore BLOCK} 
 Associating comments with nodes has the advantage, that when the grammar graph is reduced, only the comments associated with the rules that are part of the sub-syntax are maintained and can also be printed when outputting the sub-syntax.\\
 
 \subsection{Splitting comment blocks}\label{sec:ImplementationMaintainingCommentsSplitByTop}
-The flow chart in figure \ref{fig:ImplementationMaintainingCommentSplitByTopOfPage} shows how a comment block is split into multiple comment blocks separating it by top of page lines (todo REF to concept).\\
+
+The flow chart in figure \ref{fig:ImplementationMaintainingCommentSplitByTopOfPage} shows how a comment block is split into multiple comment blocks separating it by top of page lines.\\
 First the indexes of the top of page lines are collected in a list (using method of \textit{COMMENT\textunderscore BLOCK}).
 After that, the \textit{comment\textunderscore block\textunderscore list}, which will contain the generated \textit{COMMENT\textunderscore BLOCK}s, is initialized.
 If the list, storing top of page line indexes, is empty, the original comment block is added to the \textit{comment\textunderscore block\textunderscore list}, because the comment block does not need to be split into multiple comment blocks because no top of page line is present.
@@ -558,9 +556,7 @@ It appends the \textit{COMMENT\textunderscore BLOCK} to the \textit{COMMENT\text
 Algorithm \ref{alg:extend_comment_block} shows the procedure that is used in the \textit{extend\textunderscore comment\textunderscore block} method of the \textit{NTNode} class.
 If no \textit{comment\textunderscore block} has not been associated with the node before, the input \textit{comment\textunderscore block} is associated with the node.
 If the node has already have a \textit{comment\textunderscore block}, this \textit{comment\textunderscore block} is extended, with the comments lines from the input \textit{comment\textunderscore block}.\\
-This procedure is needed because it is possible that multiple comment blocks, that have been generated on splitting comment blocks, have to be associated with the same node. todo refine
-
--todo explain comment block extend.
+This procedure is needed because it is possible that multiple comment blocks, that have been generated on splitting comment blocks, have to be associated with the same node.
 
 \begin{algorithm}[H]
 \small
@@ -578,9 +574,11 @@ This procedure is needed because it is possible that multiple comment blocks, th
 \end{algorithm}
 
 \section{Extraction of a sub-syntax}\label{sec:ImplementationExtractReducedGrammar}
+
 The following sections describe the algorithms used for the extraction of a sub-syntax based on the concept outlined in section \ref{sec:ConceptExtractReducedGrammar}.
 
 \subsection{Removal of blocked productions}
+
 Algorithm \ref{alg:remove_blocked_productions} takes the text of the control file as an input argument (control file format description can be found in section \ref{sec:ConceptControlFile}) and removes the productions that should be blocked from the nodes.  
 The control file string is split into a list of the lines (line 1).
 The first line of the control file string, which describes the start symbol, is deleted from the list (line 2) because this information is not needed at this step.\\
@@ -621,6 +619,7 @@ From the node, in a loop, the elements of the \textit{productions\textunderscore
 \end{algorithm}
 
 \subsection{Determination of the remaining terminating symbols}
+
 After the desired productions have been deleted from the grammar graph, the next step is to remove the nonterminating symbols from the grammar graph. Algorithm \ref{alg:remove_non_terminating_symbols} shows the procedure of how to remove nonterminating symbols.
 First it has to be determined which symbols are terminating and which are nonterminating.
 
@@ -715,12 +714,15 @@ If a \textit{NodeKey} of any rule type and  with the nonterminal name is in the 
 After the terminating symbols have been determined, productions that contain a nonterminating symbol have to be removed from the nodes of the grammar graph because some nonterminal symbols might have productions that contain nonterminating symbols, but also other productions that only contain terminating symbols. Only the productions containing nonterminating symbols have to be removed.\\
 Algorithm \ref{alg:delete_non_terminating_productions}  describes how productions that include nonterminating symbols are removed from the grammar graph.
 The start node of the graph, the set of known terminating nodes and an empty set of already visited nodes are input at the first call of the algorithm.
-If the input node has been visited before it is not visited again, and the algorithm ends. If it has not been visited before the corresponding \textit{Node\textunderscore Key} is added to the set of visited nodes.
+If the input node has been visited before it is not visited again, and the algorithm ends.
+If it has not been visited before the corresponding \textit{Node\textunderscore Key} is added to the set of visited nodes.
 Then the \textit{children} list of the node is iterated (line 5).
-The index created in line 4 corresponds to the current element of the \textit{children} list, that is iterated. It is needed to delete the \textit{children} list and the corresponding \textit{productions\textunderscore list}, if a production contains nonterminating symbols. The \textit{children} list is iterated in reverse, because, if a \textit{children} list and \textit{productions\textunderscore list} is deleted this will not effect the indexing of the next \textit{children} list to analyze.
-The \textit{children} list contains lists of nodes for each production (todo reference). Each list, nested in the \textit{children} list, is iterated and for each node the algorithm is called recursively (line 7 and 8).\\
+The index created in line 4 corresponds to the current element of the \textit{children} list, that is iterated.
+It is needed to delete the \textit{children} list and the corresponding \textit{productions\textunderscore list}, if a production contains nonterminating symbols. The \textit{children} list is iterated in reverse, because, if a \textit{children} list and \textit{productions\textunderscore list} is deleted this will not effect the indexing of the next \textit{children} list to analyse.
+The \textit{children} list contains lists of nodes for each production (see section \ref{sec:sec:ConceptGraphGeneration}). Each list, nested in the \textit{children} list, is iterated and for each node the algorithm is called recursively (line 7 and 8).\\
 If a node represent a nonterminating symbol the \textit{not\textunderscore terminating} flag is set to true.
-If this flag is true after iteration of one element of the \textit{children} list, it means that the production corresponding to the \textit{children} list element contains at least one nonterminating symbol. If that is the case, the corresponding element of the \textit{children} list and of the \textit{productions\textunderscore list} are removed from the node.
+If this flag is true after iteration of one element of the \textit{children} list, it means that the production corresponding to the \textit{children} list element contains at least one nonterminating symbol.
+If that is the case, the corresponding element of the \textit{children} list and of the \textit{productions\textunderscore list} are removed from the node.
 This is repeated for all elements of the \textit{children} list.
 
 As a result of this algorithm, all productions that contained nonterminal symbols have been removed from the grammar graph.
@@ -770,6 +772,7 @@ To remove the nonterminating nodes, in a for-loop, all terminating nodes that ar
 \end{algorithm}
 
 \subsection{Determination of the remaining reachable symbols}
+
 Now, that nonterminating symbols have been removed from the grammar graph, the remaining reachable symbols have to be determined.
 As described in section \ref{sec:ConceptRemovingBlockedProductions} the determination of the remaining reachable is done by creating a new grammar graph, with the desired start symbol from the control file.
 The new grammar graph will only contain the reachable symbols (as described in section \ref{sec:ConceptDerterminingRemainingReachable}). 
@@ -779,6 +782,7 @@ The new grammar graph will only contain the reachable symbols (as described in s
 There are two methods performing input operations that are explained in the following. 
 
 \subsubsection{Import\textunderscore tptp\textunderscore syntax\textunderscore from\textunderscore web}
+
 The method $import\textunderscore tptp\textunderscore syntax\textunderscore from\textunderscore web$ shown in listing \ref{
 :ImplementationInputWeb} is used get a text from a website. \\
 For opening a \ac{URL}, the library urllib is used. $Urllib.request$ opens a specified \ac{URL} and sends an HTTP request. $Urlopen$ returns a response object for the initiated request. The response is a file-like object that can be read using $.read()$. \cite{urllib} \\
@@ -857,18 +861,21 @@ Recursively all children in the node's children list are traversed. Because a ch
 \end{algorithm}
 
 \subsubsection{Create string representations of objects}\label{sec:ImplementationOutputGrammarGraphStringRepresentations}
+
 -create str from node
 -node creates str represenation of attributes internally
 -following classes implement str method:
 -maybe examples from syntax file
 
 \subsubsection{\textit{NTNode} string representation creation}
+
 -goal is to create string with comment and rule, the same way like in the original syntax
 
 NTNODE (UML diagram in figure \ref{fig:ImplementationNTNodeUML})
 -node represents rule and comment block associated with node
 -consists of comment block
 -rule type table ref
+-whitespace padding
 
 called here:
 -create string representation of comment block
@@ -881,7 +888,7 @@ called here:
 	\State node\textunderscore string += str(this.comment\textunderscore block)
 \EndIf
 \State node\textunderscore string += this.value
-\State todo create string offset
+\State add whitespace padding
 \If{this.rule\textunderscore type == RuleType.GRAMMAR}
 	\State node\textunderscore string += " ::= "
 \ElsIf{this.rule\textunderscore type == RuleType.TOKEN}
@@ -897,9 +904,11 @@ called here:
 \end{algorithm}
 
 \subsubsection{\textit{COMMENT\textunderscore BLOCK} string representation creation}
+
 The \textit{COMMENT\textunderscore BLOCK} class has a list of comment lines as an attribute (see UML diagram in figure \ref{fig:ConceptCommentBlockClassDiagram}). The string representation of the \textit{COMMENT\textunderscore BLOCK} objects is created by concatenating the comment lines, separating them by newline characters.
 
 \subsubsection{\textit{PRODUCTIONS\textunderscore LIST} string representation creation}
+
 The \textit{PRODUCTIONS\textunderscore LIST} class contains a list of production alternatives of a rule (the right-hand side of a rule). The production alternatives are separated by " | " in the original \ac{TPTP} syntax.
 
 -listing example
@@ -989,18 +998,21 @@ The procedure to create the string representation of the \textit{XOR\textundersc
 \end{algorithm}
 
 \subsubsection{Symbol string representation creation}
+
 -The nonterminal symbol value can be returned as is
 -nt, terminal symbol
 -check t symbol str
 
 \subsection{Maintain original order}\label{sec:ImplementationOutputGrammarGraphMaintainOrder}
+
 - use tuple of position and node string
 
-
 \subsection{Automated parser generator compatibility}\label{sec:ImplementationAutomatedParserGenerator}
+
 -append option
 
 \section{GUI}\label{sec:ImplementationGUI}
+
 The GUI consists of the class View that can be seen in Figure \ref{fig:ImplementationViewClassDiagram}. The class has the attributes $treeView$ which is an instance of the PyQt QTreeWidget, $graphBuilder$ which is an instance of the TPTPGraphBuilder and the boolean value $commentStatus$. The class functions and their implementation are described in the following sections based on the five sub-menus.
 
 \begin{figure}[H]
@@ -1271,27 +1283,23 @@ Exceptions are used to handle wrong input from the user. There are three excepti
 The exception \textit{multiple start symbols} is raised if the user selects multiple start symbols in the GUI and presses any Reduce button. On the contrary the exception \textit{no start symbol} is raised if the user selects no start symbol in the GUI and presses any Reduce button. The exception \textit{no imported grammar} is raised if the user starts the application and does not import a grammar but presses a button that requires a grammar for example in the Reduce, View or Control File menu.
 
 \section{Command-line interface}\label{sec:ImplementationCommandLineInterface}
-With the argparse module a command-line parser object can be created and parameters can be added to that object.
+
+With the argparse module a command-line parser object can be created and parameters can be added to that object following the concept describet.
 In the first line of listing \ref{lst:ImplementationArgparseParserConfiguration} the command-line parser object is created with a description.
-Lines two to four contain the specification of the accepted arguments.
+Lines two to five contain the specification of the accepted arguments.
 In addition to the name and short form of the name, the type, a help message, and whether the parameter is optional or not can be specified.
 Default values for arguments can also be specified.
 If no default value is specified and if the argument is not passed it will have the value \textit{None}.
+The $action = 'store_true'$ in line 5 means, that if this argument flag is present in the command-line call, the value of this argument will be set to $True$.
+If the flag is not present it's value will be set to $False$.
 Argparse automatically checks the given conditions, for example if a required argument is not given and displays an error message if that is the case.
 
-todo listing describe last argument
 \begin{lstlisting}[language=Python, basicstyle=\scriptsize	,caption= Argparse command-line parser configuration,label= lst:ImplementationArgparseParserConfiguration]
 self.argument_parser = argparse.ArgumentParser(description='Extract sub-syntax using TPTP syntax file and a control file')
 self.argument_parser.add_argument('-g', '--grammar', metavar='', type=str, required=True, help='path of the TPTP syntax file')
 self.argument_parser.add_argument('-c', '--control', metavar='', type=str, required=True, help='path of the control file')
 self.argument_parser.add_argument('-o', '--output', metavar='', type=str, required=False, help='optional output file name (default output.txt)', default= "output.txt")
-self.argument_parser.add_argument('-ec', action='store_true', help="flag - include external comment syntax")
+self.argument_parser.add_argument('-ec',  '--external_comment', action='store_true', help="flag - include external comment syntax")
 \end{lstlisting}
 
 Argparse will also automatically create the help output by using the descriptions provided when configuring the argument parser.
-
-
--options for path to grammar and control file
--option for output path
-
--todo describe seperation of gui and why

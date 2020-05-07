@@ -1,6 +1,7 @@
 %!TEX root = ../dokumentation.tex
 
 \chapter{Conclusion}\label{cha:Conclusion}
+
 This paper has described a software tool that automatically extracts sub-syntaxes from the TPTP syntax. 
 The tool includes lexing and parsing the TPTP syntax, building 
 a graph that represents the syntax and extracting a sub-syntax based on the graph. The user can interact with the tool using a command-line interface or a GUI.
@@ -25,7 +26,9 @@ In short, the developed software tool enables users to consistently, convenientl
 %The functionality of \ac{Synplifier} was demonstrated by extracting \ac{CNF} sub-syntax and creating a parser based on that syntax, which has been successfully tested with ?a number? of \ac{TPTP} problems.
 %
 %All requirements (section \ref{sec:ConceptRequirements}) have been fulfilled, and in addition useful functions like ?(importing a \ac{TPTP} syntax file from the \ac{TPTP} website)? also have been implemented. Therefore the goals of this research have been achieved.
+
 \section{Future Work}\label{sec:FutureWork}
+
 The concept of sub-syntax extraction is not only limited to the \ac{TPTP} language and can also be applied to any other computer language for example the SMT-lib~\cite{BFT-SMTLIB-17}.
 
 In order to adopt \ac{Synplifier} to extract sub-syntaxes from other languages, mainly the lexer and the parser components would have to be modified to parse the new syntax. Other components can be used with only minor modifications because the logic of the sub-syntax extraction would mostly remain the same.

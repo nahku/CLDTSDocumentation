@@ -1,6 +1,5 @@
 %!TEX root = ../dokumentation.tex
 
-%TODO: Einleitungen überarbeiten
 \chapter{Concept}\label{cha:Concept}
 This chapter outlines the concept and the architecture of \ac{Synplifier}. In section \ref{sec:ConceptApproach} a general approach to build \ac{Synplifier} is outlined and in section \ref{sec:ConceptRequirements} resulting requirements \ac{Synplifier} needs to meet are described.
 Section \ref{sec:ConceptOverview} introduces into the architecture of \ac{Synplifier} and its components.
@@ -434,8 +433,8 @@ The output of the parser is a list of the rules and the comments from the \ac{TP
 %
 %todo describe production rules
 
-
 \section{Graph generation}\label{sec:ConceptGraphGeneration}
+
 After parsing the \ac{TPTP} grammar is stored in a grammar list. The grammar list data structure does not allow traversing which is why a new data structure is introduced that allows for modification and traversing.
 The data structure that is used is a graph representing the grammar.
 
@@ -446,7 +445,7 @@ The non-terminal symbols in the \ac{TPTP} syntax are represented by a node class
 \item rule type: rule type of non-terminal symbol
 \item comment block: list of comments belonging to the non-terminal symbol
 \item position: position of the production in the input file
-\item children: nested list that contains the node of every non-terminal symbol that is part of the productions list
+\item children: nested list that contains the node of every non-terminal symbol that is part of the productions list grouped by productions in the productions list
 \end{itemize}
 
 Before generating the graph, a dictionary is created, that provides an efficient way accessing the nodes in order to build the grammar graph and also during the next steps of the sub-syntax generation.
@@ -494,6 +493,7 @@ node.children: [[<literal>],[<disjunction>,<vline>,<literal>]]
 \end{lstlisting}
 
 \section{Control file}\label{sec:ConceptControlFile}
+
 A format for specifying the desired start symbol and blocked productions is required.
 Using a file-based configuration enables the user to store desired configurations so that a manual selection in the GUI is not necessary.
 It is also essential for using the command line interface, because there manual selection is not possible.
@@ -526,6 +526,7 @@ Specifying which production should be blocked, and not the ones should be kept, 
 Storing the indexes of the productions that should be blocked offers that in case productions are renamed the control file would still be valid. On the other hand if productions are added or deleted from the original \ac{TPTP} syntax, the control file may have to be updated.
 
 \section{Maintaining comments}\label{sec:ConceptMaintainingComments}
+
 In the \ac{TPTP} syntax there are comments providing supplemental information about the language and its symbols and rules.
 When generating a reduced grammar maintaining comments is desired. This means that comments from the original language specification should be associated with the rule they belong to and if the rule is still present in the reduced grammar, the comment should be as well.\\
 Therefore, a mechanism has to be designed for the association of comments to grammar rules.
@@ -586,13 +587,12 @@ First, the comment block is split into multiple separate comment blocks by using
 \begin{itemize}%[noitemsep]
 	\item If this results in no comment blocks the comment block consisted only of one line which was a \textit{Top of Page} line.
 	Then no comment block has to be associated to a rule because \textit{Top of Page} lines are not relevant.
-	\item If this results in one comment block, that means that no \textit{Top of Page} line was present in the comment block and the comment block is associated with the rule after, if the comment block is not at the end of the file.
-	If it is at the end of the file, it is associated with the rule before. todo why
-	\item If this results in two comment blocks, one \textit{Top of Page} line was present.
-	Then the comment block before the \textit{Top of Page} line is associated with the rule before when possible.
-	If this comment block is at the beginning of the file, it is associated with the rule after.
-	The comment block after the \textit{Top of Page} line is associated with the rule after.
-	If it is at the end of the file, it is associated with the rule before.
+	\item If this results in one comment block, that means that no \textit{Top of Page} line was present in the comment block or that there was a \textit{Top of Page} line at the beginning or end of the comment block. The comment block is associated with the rule after, if the comment block is not at the end of the file.
+	If it is at the end of the file, it is associated with the rule before, because no rule after exists.
+	\item If this results in two comment blocks, one \textit{Top of Page} line was present in between comment lines.
+	Then the comment block before the \textit{Top of Page} line is associated with the rule before when possible and the comment block after the \textit{Top of Page} line is associated with the rule after.
+	If the original comment block was at the beginning of the file, both comment blocks resulting from splitting the original comment block are associated with the rule after.
+	If the original comment block was at the end of the file, the comment blocks resulting from the split are associated with the rule before.
 \end{itemize}
 The case of three or more comment blocks after splitting the original comment block is not featured in the flow chart.
 This case does not occur in the \ac{TPTP} syntax version 7.3.0.
@@ -605,10 +605,8 @@ Since it might occur in a future version of the \ac{TPTP} syntax it is handled b
 \label{fig:ConceptMaintainingComments}
 \end{figure}
 
-
-todo explain could use content of comment
-
 \section{Extraction of a sub-syntax}\label{sec:ConceptExtractReducedGrammar}
+
 This section covers the concept of how a sub-syntax is computed from the original syntax.
 The original syntax is represented by a grammar graph (see section \ref{sec:ConceptGraphGeneration}) and the information on what part of the syntax to extract is described in a control file.
 To extract a sub-syntax from the original grammar graph, four steps must be performed:
@@ -618,7 +616,9 @@ To extract a sub-syntax from the original grammar graph, four steps must be perf
 	\item The remaining part of the grammar that is terminating must be computed.
 	\item From the part of the grammar that is terminating, non-reachable symbols must be removed.
 \end{enumerate}
+
 \subsection{Parsing a control file}\label{sec:ConceptParsingControlFile}
+
 The control file provides the necessary information for the extraction of a sub-syntax.
 The format of the control file is described in section \ref{sec:ConceptControlFile}. 
 The start symbol is listed in the first line.
@@ -626,11 +626,13 @@ Every consecutive line contains a nonterminal symbol, the corresponding rule typ
 The start symbol will be relevant in determining the remaining reachable part of the grammar (section \ref{sec:ConceptDerterminingRemainingReachable}) whereas the information on the productions that should be blocked will be needed in the next section.
 
 \subsection{Removal of blocked productions}\label{sec:ConceptRemovingBlockedProductions}
+
 In the control file, for each nonterminal symbol, whose productions should be modified, its name, rule type and the indexes of the productions that should be blocked are listed.
 From all nodes, that are addressed (by nonterminal symbol name and rule type), the indexed productions are removed.
 This includes deleting the corresponding element from the productions list and from the children list.
 
 \subsection{Determination of the remaining terminating symbols}\label{sec:ConceptDerterminingRemainingTerminating}
+
 After the desired productions have been deleted from the grammar graph, the next step is to remove the nonterminating symbols from the grammar graph.
 First it must be determined which symbols are terminating and which are nonterminating.
 Terminating nodes are found by iterating the nodes in the \textit{children\textunderscore list} of a node.
@@ -652,17 +654,20 @@ After the terminating symbols have been determined, productions that contain a n
 %- store visited nodes to avoid infinite loops
 
 \subsection{Determination of the remaining reachable symbols}\label{sec:ConceptDerterminingRemainingReachable}
+
 After removing the productions specified in the control file it has to be determined which part of the grammar still remains reachable.
 This is done by generating a new grammar graph starting from desired the start symbol.
 When generating the new grammar graph, all from the start symbol reachable parts of the grammar will be added to the new grammar graph (see section \ref{sec:ConceptGraphGeneration}).
 All nodes that are not part of the new grammar graph are not reachable and can therefore be removed.
 
 \section{Output generation}\label{sec:ConceptOutputGeneration}
+
 Within \ac{Synplifier} a syntax is represented by a grammar graph.
 To export sub-syntaxes that have been extracted from a grammar graph they have to be converted to the original form of a \ac{TPTP} syntax file. This process is described in the following subsection.
 After that, measures to provide compatibility with the automated parser generator are discussed in section \ref{sec:ConceptAutomatedParserGenerator}.
 
 \subsection{Create output from grammar graph}\label{sec:ConceptOutputGrammarGraph}
+
 There are three steps necessary that are displayed in figure \ref{fig:ConceptOutputGrammarGraphProcedure} in order to convert a syntax represented by a grammar graph to the original \ac{TPTP} syntax file form.
 
 The first step is to traverse the grammar graph by iterating all nodes and getting a string representation of the nodes.
@@ -674,7 +679,6 @@ After generating all string, in the second step all nodes are ordered based on t
 
 The ordered list of nodes strings is then in the third step written to a file and exported.
 The node that represents the temporary start symbol is not printed as it does not belong to the \ac{TPTP} syntax. 
-
  
 \begin{figure}[H]
 \tikzstyle{decision} = [ diamond, draw, fill=blue!10, text width=4.5em, text badly centered, node distance=2cm, inner sep-0pt]  
@@ -696,6 +700,7 @@ The node that represents the temporary start symbol is not printed as it does no
 \end{figure}
 
 \subsection{Automated parser generator compatibility}\label{sec:ConceptAutomatedParserGenerator}
+
 The automated parser generator for the \ac{TPTP} syntax \cite{VS06} takes a \ac{TPTP} syntax file as input and creates a lex and yacc file corresponding to the specification in the input syntax.\\
 In the \ac{TPTP} syntax version 7.3.0 there is a definition of the syntax of comments which is shown in listing \ref{lst:ConceptAutomatedParserGeneratorComment}.
 \begin{lstlisting}[language=none, basicstyle=\scriptsize, caption=Comment syntax definition in the \ac{TPTP} syntax, label= lst:ConceptAutomatedParserGeneratorComment]
@@ -708,7 +713,7 @@ In the \ac{TPTP} syntax version 7.3.0 there is a definition of the syntax of com
 
 However, this part of the syntax is not reachable from any other symbol.
 When constructing the grammar graph this part of the syntax is therefore removed.\\
-Using a syntax file, in which the comment syntax is not present, with the automated parser generator results in an error because the comment symbol is not present in the lex specification but is referred to in a yacc rule ?todo check this?.\\
+Using a syntax file, in which the comment syntax is not present, with the automated parser generator results in an error because the comment symbol is not present in the lex specification but is referred to in a yacc rule.\\
 There are two ways to include the comment syntax in the output of \ac{Synplifier} in order to be accepted by the automated parser generator.
 Either making the \textit{<comment>} nonterminal symbol reachable by for example adding it as an alternative to \textit{<TPTP\textunderscore input>} which can be seen in listing \ref{lst:ConceptAutomatedParserGeneratorCommentReachable} or maintaining the comment syntax separately and adding it to the output syntax even though it is not reachable.
 \begin{lstlisting}[language=none, basicstyle=\scriptsize, caption=Making the comment syntax reachable, label= lst:ConceptAutomatedParserGeneratorCommentReachable]
@@ -726,7 +731,9 @@ From the syntax in this configuration file a separate grammar graph is generated
 -comment symbol in lex
 
 -make comment reachableto be tested
+
 \section{GUI}\label{sec:ConceptGUI}
+
 The graphical user interface is built using PyQt. Advantages of PyQT are that it offers a treeview that is used for displaying the grammar. In comparison to the standard Python library Tkinter PyQt offers checkboxes in treeviews \cite{Tkinter} that are used for selecting blocked productions.
 
 The menu of the GUI consists of five submenus.
@@ -805,6 +812,7 @@ The user also has the option of generating a control file based on his GUI selec
 \end{figure}
 
 \section{Command-line interface}\label{sec:ConceptCommandLineInterface}
+
 In addition to the GUI the software tool offers a command-line interface to provide the means for convenient automation of sub-syntax extraction.
 It takes a \ac{TPTP} syntax file and a control file as input and outputs the resulting sub-syntax.
 It is implemented using the Python module argparse\footnote{\url{https://docs.python.org/3/library/argparse.html}}, which provides a framework for creating command-line argument parsers.\\
@@ -828,13 +836,9 @@ Additionally, the help description can be opened by using the \textit{-h} option
 \end{adjustbox}
 \label{tbl:ImplementationCommandLineParameters}
 \end{table}
+The implementation of the command-line interface is described in section \ref{sec:ImplementationCommandLineInterface}.
+More complex actions like control file generation can be done more comfortably by using GUI which is why this is not a feature of the command-line interface.\\
+The design decision to separate the GUI from the command-line interface (see section \ref{sec:ConceptProposedArchitecture}) has the advantage that if a user chooses to solely use the command-line interface, it is not necessary to install the library used in GUI implementation (PyQt 5).
 
-The implementation of the command-line interface is described in section \ref{sec:sec:ImplementationCommandLineInterface}.
+\section{Count rules in syntax}\label{sec:ConceptCountR}
 
-todo include comment option
-
- 
--more complex actions like control file generation can more comfortably be done by using gui
--gui package not needed
-
-todo count rules
