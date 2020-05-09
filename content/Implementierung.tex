@@ -3,7 +3,7 @@
 
 \chapter{Implementation}\label{cha:Implementation}
 
-Based on the previous introduction to the concept of the application, this chapter describes the implementation of the application in detail.
+Based on the previous introduction of the concept of the application, this chapter describes the implementation of the application in detail.
 
 \section{Lexer}\label{sec:ImplementationLexer}
 
@@ -290,11 +290,11 @@ By doing so, the productions in the productions list of a rule are iterated. If 
 \section{Graph Builder}\label{sec:ImplementationGraphBuilder}
 
 The class $TPTPGraphBuilder$ that can be seen in figure \ref{fig:ImplementationGraphbuilderUML} has an instance of the TPTPParser that has been introduced in chapter \ref{sec:ImplementationParser}. With the output of the parser, a grammar list, the graph builder builds a nodes dictionary and a graph. This is done by calling the $run$ method that calls $init\textunderscore tree$ for building the graph.
-The methods highlighted in blue are used for building a graph and are described in chapter \ref{sec:ImplementationGraphGeneration}. The graph builder is also responsible for reducing the \ac{TPTP} grammar, the methods used for that are highlighted in turquoise and introduced in chapter \ref{sec:ImplementationExtractReducedGrammar}. Moreover, with the graph builder, comments are assigned to rules and nodes. Belonging methods are highlighted in green and described in chapter \ref{sec:ImplementationMaintainingComments}.
+The methods assigned to a) in figure \ref{fig:ImplementationGraphbuilderUML} are used for building a graph and are described in chapter \ref{sec:ImplementationGraphGeneration}. The graph builder is also responsible for reducing the \ac{TPTP} grammar, the methods used for that are assigned to b) and introduced in chapter \ref{sec:ImplementationExtractReducedGrammar}. Moreover, with the graph builder, comments are assigned to rules and nodes. Belonging methods are assigned to c) and described in chapter \ref{sec:ImplementationMaintainingComments}.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=1 \textwidth]{images/uml_graphbuilder.png}
+\includegraphics[width=1 \textwidth]{images/uml_graphbuilderNEW.png}
 \caption{Graphbuilder UML diagram}
 \label{fig:ImplementationGraphbuilderUML}
 \end{figure}                
@@ -631,7 +631,7 @@ First it has to be determined which symbols are terminating and which are nonter
 
 A set of terminating nodes and a temporary set of terminating nodes are initialized.
 In a while loop the recursive algorithm \textit{find\textunderscore non\textunderscore terminating\textunderscore symbols(start\textunderscore node, temp\textunderscore terminating, visited)} finds terminating nodes with the start\textunderscore node, an initialized set of known terminating symbols and a set of already visited nodes.
-This algorithm is called with the ?updated? set of terminating symbols until the set does not differ from the run before.
+This algorithm is called with the updated set of terminating symbols until the set does not differ from the run before.
 When that is the case, all terminating nodes have been found.\\
 After all terminating nodes have been found, the productions that contain nonterminating symbols are deleted from the nodes and after that nodes representing nonterminating symbols are removed.
 
@@ -699,8 +699,8 @@ If every node in the \textit{children\textunderscore list} represents a terminat
 \label{alg:find_non_terminating_symbols}
 \end{algorithm}
 
-The flow diagram in figure \ref{fig:ImplementationCheckIfValueInTerminating} shows the procedure to check whether a nonterminal symbol, described by its name, is in the set that contains information on which nodes are known to be terminating.
-There can be up to four nodes representing a nonterminal symbol, because it can have up to four rule type (and a node represents the combination of nonterminal symbol name and rule type).\\
+The flow diagram in figure \ref{fig:ImplementationCheckIfValueInTerminating} shows the procedure of checking whether a nonterminal symbol, described by its name, is in the set that contains information on which nodes are known to be terminating.
+Theoretically there can be up to four nodes representing a nonterminal symbol, because it can have up to four rule type (and a node represents the combination of nonterminal symbol name and rule type). However, according to the \ac{TPTP} syntax only the rule types grammar and strict can belong to one nonterminal symbol.\\
 In the \textit{terminating\textunderscore set} the \textit{NodeKey}s of known terminating nodes are stored.
 A nonterminal symbol is known to be terminating when any node representing that nonterminal symbol is known to be terminating.
 If a \textit{NodeKey} of any rule type and  with the nonterminal name is in the \textit{terminating\textunderscore set} then the symbol is terminating and True is returned, otherwise False is returned.
@@ -711,17 +711,17 @@ If a \textit{NodeKey} of any rule type and  with the nonterminal name is in the 
 \label{fig:ImplementationCheckIfValueInTerminating}
 \end{figure}
 
-After the terminating symbols have been determined, productions that contain a nonterminating symbol have to be removed from the nodes of the grammar graph because some nonterminal symbols might have productions that contain nonterminating symbols, but also other productions that only contain terminating symbols. Only the productions containing nonterminating symbols have to be removed.\\
+After the terminating symbols have been determined, productions that contain a nonterminating symbol have to be removed from the nodes of the grammar graph. Only productions and not the node itself is deleted because a node might also have productions that terminate. Therefore only the productions containing nonterminating symbols have to be removed.\\
 Algorithm \ref{alg:delete_non_terminating_productions}  describes how productions that include nonterminating symbols are removed from the grammar graph.
 The start node of the graph, the set of known terminating nodes and an empty set of already visited nodes are input at the first call of the algorithm.
-If the input node has been visited before it is not visited again, and the algorithm ends.
+If the input node has been visited before, it is not visited again and the algorithm ends.
 If it has not been visited before the corresponding \textit{Node\textunderscore Key} is added to the set of visited nodes.
 Then the \textit{children} list of the node is iterated (line 5).
 The index created in line 4 corresponds to the current element of the \textit{children} list, that is iterated.
 It is needed to delete the \textit{children} list and the corresponding \textit{productions\textunderscore list}, if a production contains nonterminating symbols. The \textit{children} list is iterated in reverse, because, if a \textit{children} list and \textit{productions\textunderscore list} is deleted this will not effect the indexing of the next \textit{children} list to analyse.
 The \textit{children} list contains lists of nodes for each production (see section \ref{sec:sec:ConceptGraphGeneration}). Each list, nested in the \textit{children} list, is iterated and for each node the algorithm is called recursively (line 7 and 8).\\
-If a node represent a nonterminating symbol the \textit{not\textunderscore terminating} flag is set to true.
-If this flag is true after iteration of one element of the \textit{children} list, it means that the production corresponding to the \textit{children} list element contains at least one nonterminating symbol.
+If a node represents a nonterminating symbol the \textit{not\textunderscore terminating} flag is set to true.
+If this flag is true after iterating one element of the \textit{children} list, it means that the production corresponding to the \textit{children} list element contains at least one nonterminating symbol.
 If that is the case, the corresponding element of the \textit{children} list and of the \textit{productions\textunderscore list} are removed from the node.
 This is repeated for all elements of the \textit{children} list.
 
@@ -781,13 +781,12 @@ The new grammar graph will only contain the reachable symbols (as described in s
 
 There are two methods performing input operations that are explained in the following. 
 
-\subsubsection{Import\textunderscore tptp\textunderscore syntax\textunderscore from\textunderscore web}
+\subsubsection{Importing the \ac{TPTP} syntax from the web}
 
-The method $import\textunderscore tptp\textunderscore syntax\textunderscore from\textunderscore web$ shown in listing \ref{
-:ImplementationInputWeb} is used get a text from a website. \\
-For opening a \ac{URL}, the library urllib is used. $Urllib.request$ opens a specified \ac{URL} and sends an HTTP request. $Urlopen$ returns a response object for the initiated request. The response is a file-like object that can be read using $.read()$. \cite{urllib} \\
+The method $import\textunderscore tptp\textunderscore syntax\textunderscore from\textunderscore web$ shown in listing \ref{lst:ImplementationInputWeb} is used to get a textfile of the \ac{TPTP} grammar from the \ac{TPTP} website. \\
+For opening a \ac{URL}, the library urllib is used. \\ $Urllib.request$ opens a specified \ac{URL} and sends an HTTP request. $Urlopen$ returns a response object for the initiated request. The response is a file-like object that can be read using $.read()$. \cite{urllib} \\
 The file can then be converted from html to text format using BeautifulSoup's html parser.
-The header from the file is deleted because it does not belong to the \ac{TPTP} syntax but is appended by urllib. The header is deleted by splitting the grammar file at ever new line and joining all lines excluding the first one. \\
+The header from the file is deleted because it does not belong to the \ac{TPTP} syntax but is appended by urllib. The header is deleted by splitting the textfile of the grammar at every new line and joining all lines excluding the first one. \\
 
 \begin{lstlisting}[language=Python, basicstyle=\scriptsize	,caption= Import TPTP syntax from web,label= lst:ImplementationInputWeb]
 with urllib.request.urlopen("http://www.tptp.org/TPTP/SyntaxBNF.html") as url:
@@ -798,9 +797,9 @@ tptp_grammar = soup.get_text()
 tptp_grammar = '\n'.join(tptp_grammar.split('\n')[1:])
 \end{lstlisting}
 
-\subsubsection{Read\textunderscore text\textunderscore from\textunderscore file}
+\subsubsection{Reading \ac{TPTP} grammar from textfile}
 
-$Read\textunderscore text\textunderscore from\textunderscore file$ in listing \ref{lst:ImplementationInputText} uses the build-in function $open$ to read a text file. \\
+$Read\textunderscore text\textunderscore fromtextunderscore file$ in listing \ref{lst:ImplementationInputText} uses the build-in function $open$ to read a text file. The filename of the textfile has to be specified before.\\
 
 \begin{lstlisting}[language=Python, basicstyle=\scriptsize	,caption= Read text from file,label= lst:ImplementationInputText]
 with open(filename, 'r') as text_file:
@@ -814,8 +813,8 @@ with open(filename, 'r') as text_file:
 
 \subsection{Create output from grammar graph}\label{sec:ImplementationOutputGrammarGraph}
 
-For saving the grammar graph in a text file, the graph needs to be traversed and converted to a string format that can be saved to a text document. The grammar graph is converted to a string format by converting every rule to a string and coheres them. Every rule is represented by a node and the nodes children list. Therefore, the graph is traversed and string representation of the nodes are created.
-The final output is stored in a $print\textunderscore list$. A $print\textunderscore list$ is a list of $print\textunderscore list\textunderscore entries$ that can be seen in listing\ref{lst:ImplementationOutputPrintListEntry}. A $print\textunderscore list\textunderscore entry$ is a string consisting of the position of the rule that is represented by the node in the original \ac{TPTP} grammar and a string version of the rule or rather the node and its children list.
+For saving the grammar graph in a text file, the graph needs to be traversed and converted to a string format that can be saved in a text document. The grammar graph is converted to a string format by converting every rule to a string and cohering them. Every rule is represented by a node including the nodes children list. For converting the graph to a string format, the graph is traversed and string representation of the nodes are created.
+The final output is stored in a $print\textunderscore list$. A $print\textunderscore list$ is a list of $print\textunderscore list\textunderscore entries$ that can be seen in listing \ref{lst:ImplementationOutputPrintListEntry}. A $print\textunderscore list\textunderscore entry$ is a tuple consisting of the position of the rule that in the original \ac{TPTP} grammar is represented by the node and a string version of the rule or rather the node and its children list.
 
 \begin{lstlisting}[language=Python, basicstyle=\scriptsize	,caption= Print List Entry,label= lst:ImplementationOutputPrintListEntry]
 PrintListEntry = namedtuple("PrintListEntry", ["position", "string"])
@@ -825,7 +824,7 @@ The detailed process of saving a grammar graph in a text file is described in th
 
 \subsubsection{Saving string representation of graph in text file}\label{sec:ImplementationOutputSaveGrammarGraphStringRepresentations}
 
-In order to create the $print\textunderscore string$ the $print\textunderscore list$ is generated. For generating the $print\textunderscore list$, an empty set $visited$ is created that is used for memorising which nodes have already been visited. Moreover, an empty $print\textunderscore list$ and $print\textunderscore string$ are created. The set $visited$ and the empty $print\textunderscore list$ are used for calling the function $create\textunderscore print\textunderscore list$ (see following section) which returns the final $print\textunderscore list$. Because the rules in the $print\textunderscore list$ are not in the same order as the rules in the original \ac{TPTP} syntax, the $print\textunderscore list$ is sorted based on the rule's position that is stored in the first element of the $PrintListEntry$ tuple. For converting the $print\textunderscore list$ to one string, the $print\textunderscore string$, the $print\textunderscore list$ is iterated. Except for the first element of the list, every element of the list is added to the $print\textunderscore string$. This is done by adding the strings that are stored in the second element of the $PrintListEntry$ tuple and separating them by a new line. The first element is not added because it represents the general start symbol that has been added to the grammar (see chapter \ref{sec:ConceptGraphGeneration} but is not a part of the \ac{TPTP} grammar. A text document with a filename that has been selected by the user is then opened and the $print\textunderscore string$ is written to the file.
+In order to create the $print\textunderscore string$ the $print\textunderscore list$ is generated. For generating the $print\textunderscore list$, an empty set $visited$ is created that is used for memorising which nodes have already been visited. Moreover, an empty $print\textunderscore list$ and $print\textunderscore string$ are created. The set $visited$ and the empty $print\textunderscore list$ are used for calling the function $create\textunderscore print\textunderscore list$ (see following section) which returns the final $print\textunderscore list$. Because the rules in the $print\textunderscore list$ are not in the same order as the rules in the original \ac{TPTP} syntax, the $print\textunderscore list$ is sorted based on the rule's position that is stored in the first element of the $PrintListEntry$ tuple. For converting the $print\textunderscore list$ to one string, the $print\textunderscore string$, the $print\textunderscore list$ is iterated. Except for the first element of the list, every element of the list is added to the $print\textunderscore string$. This is done by adding the strings that are stored in the second element of the $PrintListEntry$ tuple and separating them by a new line. The first element is not added because it represents the general start symbol that has been added to the grammar (see chapter \ref{sec:ConceptGraphGeneration}) but is not a part of the \ac{TPTP} grammar. A text document with a filename that has been selected by the user is then opened and the $print\textunderscore string$ is written to the file.
 The simplified process can be seen in the flow diagram in figure \ref{fig:ImplementationOutputSaveOrderedRules}.
 
 \begin{figure}[H]
@@ -905,7 +904,7 @@ called here:
 
 \subsubsection{\textit{COMMENT\textunderscore BLOCK} string representation creation}
 
-The \textit{COMMENT\textunderscore BLOCK} class has a list of comment lines as an attribute (see UML diagram in figure \ref{fig:ConceptCommentBlockClassDiagram}). The string representation of the \textit{COMMENT\textunderscore BLOCK} objects is created by concatenating the comment lines, separating them by newline characters.
+The \textit{COMMENT\textunderscore BLOCK} class has a list of comment lines as an attribute (see UML diagram in figure \ref{fig:ConceptCommentBlockClassDiagram}). The string representation of the \textit{COMMENT\textunderscore BLOCK} objects is created by concatenating the comment lines, separating the individual comment lines by newline characters.
 
 \subsubsection{\textit{PRODUCTIONS\textunderscore LIST} string representation creation}
 
@@ -913,7 +912,7 @@ The \textit{PRODUCTIONS\textunderscore LIST} class contains a list of production
 
 -listing example
 
-Algorithm \ref{alg:OutputCreateProductionsListString} shows the process of creating the string representation of a \textit{PRODUCTIONS\textunderscore LIST}. The productions in \textit{PRODUCTIONS\textunderscore LIST} are iterated and the string representation of every production is created (described in ...) and the productions are separated by the " | " string. The counter is used to identify the last production and not print alternative symbol after that production.
+Algorithm \ref{alg:OutputCreateProductionsListString} shows the process of creating the string representation of a \textit{PRODUCTIONS\textunderscore LIST}. The productions in \textit{PRODUCTIONS\textunderscore LIST} are iterated and the string representation of every production is created. The string of the productions are then separated by the " | " character. The counter in line 3 of algorithm \ref{alg:OutputCreateProductionsListString} is used to identify the last production and thus not to print alternative symbol after that production.
 
 \begin{algorithm}[H]
 \caption{\textit{PRODUCTIONS\textunderscore LIST} string creation}\label{alg:OutputCreateProductionsListString}
@@ -926,20 +925,20 @@ Algorithm \ref{alg:OutputCreateProductionsListString} shows the process of creat
 	\If{counter < length}
 		\State productions\textunderscore list\textunderscore string += " | "
 	\EndIf
-	\State index += 1
+	\State counter += 1
 \EndFor
-\State Return \State productions\textunderscore list\textunderscore string
+\Return productions\textunderscore list\textunderscore string
 \end{algorithmic}
 \end{algorithm}
 
 \subsubsection{\textit{PRODUCTION} string representation creation}
 
-The \textit{PRODUCTION} class has a \textit{list} of element and a \textit{ProductionProperty} as an attribute (see UML diagram in figure \ref{fig:ConceptProductionClassDiagram}).
-The elements of the list of a \textit{PRODUCTION} can be of type \textit{PRODUCTION}, \textit{PRODUCTION\textunderscore ELEMENT}, and \textit{XOR\textunderscore PRODUCTIONS\textunderscore LIST}.\\
+The \textit{PRODUCTION} class has a list of elements and a \textit{ProductionProperty} as an attribute (see UML diagram in figure \ref{fig:ConceptProductionClassDiagram}).
+The elements of the list can be of type \textit{PRODUCTION}, \textit{PRODUCTION\textunderscore ELEMENT} or \textit{XOR\textunderscore PRODUCTIONS\textunderscore LIST}.\\
 Algorithm \ref{alg:OutputCreateProductionString} describes the procedure of creating the string representation of a \textit{PRODUCTION}.
 First, the \textit{production\textunderscore string} is initialised.
-Then, depending on the \textit{ProductionProperty} ?symbols? are added to the \textit{production\textunderscore string}.
-If the \textit{ProductionProperty} is \textit{NONE} no special symbols need to be added.
+Then, depending on the \textit{ProductionProperty} characters that represent these productions properties are added to the \textit{production\textunderscore string}.
+If the \textit{ProductionProperty} is \textit{NONE} no special characters need to be added.
 In case of the \textit{ProductionProperty} \textit{REPETITION}, the open parenthesis character "(" is added to the \textit{production\textunderscore string} in order to enclose the \textit{list} elements.
 In case of the \textit{ProductionProperty} \textit{OPTIONAL}, the elements have to be enclosed in square brackets. Therefore the "[" character is added to the \textit{production\textunderscore string} in that case.\\
 After that, the \textit{list} is iterated and the string representation of each element is created and added to the \textit{production\textunderscore string}.\\
@@ -971,7 +970,7 @@ Then the created \textit{production\textunderscore string} is returned.
 \end{algorithm}
 
 \subsubsection{\textit{XOR\textunderscore PRODUCTIONS\textunderscore LIST} string representation creation}
-The procedure to create the string representation of the \textit{XOR\textunderscore PRODUCTIONS\textunderscore LIST} class is equivalent to the \textit{PRODUCTIONS\textunderscore LIST} process described in algorithm \ref{alg:OutputCreateProductionsListString} with the difference that generated string is enclosed by parentheses.
+The procedure to create the string representation of the \textit{XOR\textunderscore PRODUCTIONS\textunderscore LIST} class is equivalent to the \textit{PRODUCTIONS\textunderscore LIST} process described in algorithm \ref{alg:OutputCreateProductionsListString}. However, generated string are enclosed by parentheses.
 \subsubsection{\textit{PRODUCTION\textunderscore ELEMENT} string representation creation}
 
 -production element symbol with production property 
@@ -1013,7 +1012,7 @@ The procedure to create the string representation of the \textit{XOR\textundersc
 
 \section{GUI}\label{sec:ImplementationGUI}
 
-The GUI consists of the class View that can be seen in Figure \ref{fig:ImplementationViewClassDiagram}. The class has the attributes $treeView$ which is an instance of the PyQt QTreeWidget, $graphBuilder$ which is an instance of the TPTPGraphBuilder and the boolean value $commentStatus$. The class functions and their implementation are described in the following sections based on the five sub-menus.
+The GUI consists of the class View that can be seen in Figure \ref{fig:ImplementationViewClassDiagram}. The class has the attributes $treeView$ which is an instance of the PyQt QTreeWidget, $graphBuilder$ which is an instance of the TPTPGraphBuilder and the boolean value $commentStatus$. The class functions and their implementation are described in the following sections based on the five sub-menus that have been introduced in chapter \ref{sec:ConceptGUI}.
 
 \begin{figure}[H]
 \centering
@@ -1034,7 +1033,7 @@ import_menu.addAction(import_tptp_file_action)
 import_menu.addAction(import_tptp_file_from_web_action)
 \end{lstlisting}
 
-Besides a name, a short cut for executing the menu action is defined. Also, triggers have been defined that triggers functions once menu button is pressed. Listing \ref{lst:ImplementationInitGUI2} shows how a short cut and a trigger have been defined for the action $Import TPTP syntax file$.
+Besides a name, a short cut for executing the menu action is defined. Also, triggers have been defined that trigger functions once the menu button is pressed. Listing \ref{lst:ImplementationInitGUI2} shows how a short cut and a trigger have been defined for the action $Import TPTP Syntax file$.
 
 \begin{lstlisting}[language=Python, basicstyle=\scriptsize	,caption= Implementation of menu actions,label= lst:ImplementationInitGUI2]
 import_tptp_file_action = QAction('&Import TPTP syntax file', self)
@@ -1044,7 +1043,7 @@ import_tptp_file_action.triggered.connect(self.load_tptp_syntax_file)
 
 
 \subsubsection{Init TreeView}\label{sec:ImplementationGUIInitTreeView}
-Init TreeView is used for displaying a grammar in the main application window. The method is called after importing or reducing a grammar. The grammar is stored in a nodes dictionary whose values (the nodes) are then converted to a list. This list is displayed by transforming it into a tree view. A tree view can be used for displaying nested lists and allowing a user to navigate through them. The tree view consists of all nodes whose leaves are the productions in their (nested) productions list. The nodes can be expanded to see their productions which are then displayed indented and underneath the node.
+Init TreeView is used for displaying a grammar in the main application window. The method is called after importing or reducing a grammar. The nodes of the grammar are stored in a nodes dictionary whose values (the nodes) are then converted to a list. This list is displayed by transforming it into a PyQT TreeView. A tree view can be used for displaying nested lists and allowing a user to navigate through them. The tree view consists of all nodes whose leaves are the productions in their (nested) productions list. The nodes can be expanded to see their productions which are then displayed indented and underneath the node.
 
 A new tree view is defined using QTreeWidget with the header labels "Nonterminal", "Production Type" and "Production" (line 1 and 2 in listing \ref{lst:ImplementationInitTreeView}).
 All nodes of the nodes dictionary of the GraphBuilder instance are extracted and sorted based on their position in the original \ac{TPTP} syntax file (line 3 and 4 in listing \ref{lst:ImplementationInitTreeView}. 
@@ -1084,7 +1083,7 @@ nodes_list.sort(key=lambda x: x.position)
 \subsection{Import menu}\label{sec:ImplementationGUIImportMenu}	
 \subsubsection{Import \ac{TPTP} syntax file}\label{sec:ImplementationGUIImportFile}
 
-The \ac{TPTP} syntax file is imported using QFileDialog which is returning the filename. If the filename is not empty, the application opens a dialog window where the user has to specify a desired start symbol. The method $red\textunderscore text\textunderscore from\textunderscore file$ returns the text of the file belonging to the filename. With the textfile and the start symbol, the method $create\textunderscore tptp\textunderscore view$ is called.
+The \ac{TPTP} syntax file is imported using a QFileDialog which is returning the filename of the imported file selected by the user. If the filename is not empty, the application opens a dialog window where the user has to specify a desired start symbol. The method $read\textunderscore text\textunderscore from\textunderscore file$ returns the text of the file belonging to the filename. With the textfile and the start symbol, the method $create\textunderscore tptp\textunderscore view$ is called.
 
 \subsubsection{Import \ac{TPTP} syntax from the \ac{TPTP} website}\label{sec:ImplementationGUIImportInternet}
 
@@ -1095,16 +1094,14 @@ The method creates a new instance of the $TPTPGraphBuilder$, calls $graphBuilder
 
 \subsubsection{Check start symbol}\label{sec:ImplementationGUIStartsymbol}
 
-This function checks the checkbox of the defined start symbol. The QTreeView method $findItem(string\; itemName)$ is used that returns all items that match the item name. 
+This function checks the checkbox of the defined start symbol. The QTreeView method $findItem(string\; itemName)$ is used to find the start symbol in the treeview and return all items that match the item name. 
 The found items are then checked.
 
 \subsection{View menu}\label{sec:ImplementationGUIViewMenu}
 \subsubsection{Toggle comments}\label{sec:ImplementationGUIToggleComments}
 
-Algorithm \ref{alg:toggleComments} shows the algorithm used for toggling comments. The algorithm should either show or hide the comments based on the current state. 
+Algorithm \ref{alg:toggleComments} shows the algorithm used for toggling comments. The algorithm should either show or hide the comments based on the current status. 
 The View class attribute $commentStatus$ indicates whether comments are displayed (true) or not (false). For toggling comments, a new status is set that is the opposite of $commentStatus$. While looping through every item in $treeView$, comment items can be found by checking whether the item is checkable because by default a comment is not checkable by the user. A QTreeWidgetItem has flags including a flag "ItemIsUserCheckable" that is used for determining whether the item is checkable. The QTreeWidgetItem function $setHidden(bool\;hide)$ is applied on every comment with the value of the new status. CommentStatus is set to the new status. 
-
--flag(), bitweises AND 
 
 \begin{algorithm}[H]
 \caption{GUI Algorithm: toggle\textunderscore comments}
@@ -1124,7 +1121,7 @@ The View class attribute $commentStatus$ indicates whether comments are displaye
 \subsubsection{Reduce \ac{TPTP} syntax with selection}\label{sec:ImplementationGUIReduceWithSelection}
 
 The method reduce \ac{TPTP} syntax with selection reduces the syntax and displays the resulting syntax in the GUI. 
-For reducing the \ac{TPTP} syntax based on the users selection in the GUI a control file is produced (see Produce Control file). If no grammar has been imported or no start symbol or multiple start symbol have been selected an error is raised. The error is displayed using a QMessageBox. With the produced control file, the Graphbuilder disables blocked productions, treeView is initialized and the start symbol is checked (see listing \ref{lst:ImplementationGUIReduceTPTPSelection}). 
+For reducing the \ac{TPTP} syntax based on the users selection in the GUI, a control file is produced. If no grammar has been imported, no start symbol or multiple start symbol have been selected an error is raised. The error is displayed using a QMessageBox. With the produced control file, the Graphbuilder disables blocked productions, treeView is initialized and the start symbol is checked (see listing \ref{lst:ImplementationGUIReduceTPTPSelection}). 
 
 \begin{lstlisting}[language=Python, basicstyle=\scriptsize	,caption= Reduce TPTP syntax with selection,label= lst:ImplementationGUIReduceTPTPSelection]
 control_string, start_symbol = self.produce_control_file()
@@ -1141,7 +1138,7 @@ First, the filename is import using a $QFileDialog$.
 If the import is successful, meaning a filename has been selected, a control file based on user's selection is produced. If the import is not successful, the method terminates. \\
 In comparison to \textit{Reduce \ac{TPTP} syntax with selection} the reduced syntax is not displayed in the GUI but only saved to local storage and the GUI displays still the full syntax. If the user wishes to display the reduced syntax in the GUI and save it, he can use the button \textit{Reduce \ac{TPTP} syntax with selection} and then use the button \textit{Reduce and save \ac{TPTP} syntax with selection}.
 Because the full syntax is still displayed, the graphBuilder object storing the syntax cannot be modified. Therefore, the old graphBuilder is copied to a new graphBuilder object. Because the old object should not change, the new object should have copies of all objects that are part of the graphBuilder rather than references.
-To copy the graphBuilder object which is a compound object it is necessary to use $copy.deepcopy$ instead of $copy.copy$. Deepcopy creates a new object and inserts copies of all objects that are part of to be copied object. Copy however, creates a new object and inserts references to the to be copied objects. 
+To copy the graphBuilder object which is a compound object it is necessary to use $copy.deepcopy$ instead of $copy.copy$. Deepcopy creates a new object and inserts copies of all objects that are part of to be copied object. Copy however, creates a new object and inserts references to the to be copied objects.\\
 The new graphBuilder is initialized with the start symbol that has been provided by the generated control file and rules that include blocked productions are disabled. During the initialization the new start symbol $<start\textunderscore symbol>$ has been added (see chapter \ref{sec:ConceptGraphGeneration} for explanation).
 This start symbol is searched in the reduced syntax.
 If it can be found, the syntax is saved with or without comments based on the input parameter.
@@ -1156,8 +1153,7 @@ To save the grammar the method $Output.save\textunderscore ordered\textunderscor
 \label{fig:ImplementationGUIReduceandSave}
 \end{figure}
 
-Each button in the sub-menu has an associated action.
-This action is triggered once the button is pressed. In the GUI there are two options of reducing and saving the \ac{TPTP} syntax namely \textit{Reduce and save \ac{TPTP} syntax with selection} and \textit{Reduce and save \ac{TPTP} syntax from selection with external comments}.
+In the GUI there are two options of reducing and saving the \ac{TPTP} syntax namely \textit{Reduce and save \ac{TPTP} syntax with selection} and \textit{Reduce and save \ac{TPTP} syntax from selection with external comments}.
 These two options both call the function described above and in figure \ref{fig:ImplementationGUIReduceandSave}. However, one calls it and passes $with\textunderscore comments$ as true and the other as false.
 Because each button in the GUI needs it own designated function to call, the functions $create\textunderscore tptp\textunderscore syntax file\textunderscore from\textunderscore selection\textunderscore with\textunderscore comments$ and $create\textunderscore tptp\textunderscore syntax file\textunderscore from\textunderscore selection\textunderscore without\textunderscore comments$ are introduced.
 They simply set the parameter $with\textunderscore comments$ accordingly and call the function \textit{Create \ac{TPTP} syntax file from selection}.
@@ -1185,9 +1181,9 @@ $create\textunderscore tptp\textunderscore syntax\textunderscore from\textunders
 \subsubsection{Import control file}\label{sec:ImplementationGUIImportControlFile}
 
 If a control file is imported, checkboxes have to be set accordingly. The pseudo code in \ref{alg:importControlfile} shows the process. 
-The name of the control file is read in using a QFileDialog. The file itself is imported using the method $Input.read\textunderscore text\textunderscore from\textunderscore file$ (see chapter REF). If the file exists and if a tree view exists thus a grammar has been imported, all nodes are unchecked and all leaves/productions are checked. The items can be distinguished by looking for whether an item has parents and if not if it is checkable. The checkboxes are set this way because the default mode is that all nodes are unchecked and all productions are checked.  
+The name of the control file is read in using a QFileDialog. The file itself is imported using the method $Input.read\textunderscore text\textunderscore from\textunderscore file$ (see chapter \ref{sec:ImplementationInput}). If the file exists and if a tree view exists, meaning a grammar has been imported, all nodes are unchecked and all leaves/productions are checked. The different items representing nodes and leaves can be distinguished by looking for whether an item has parents and if not if it is checkable. The checkboxes are set this way because the default mode is that all nodes are unchecked and all productions are checked.  
 After setting the checkboxes to the default mode, the first line of the control string is read and the start symbol is set accordingly. If there are multiple start symbols, every start symbol is checked.
-Iterating every line of the control string, the nt\textunderscore name which is the first element of a line is saved and the rule\textunderscore type which is the second element as well. The item that belongs to nt\textunderscore name is then searched and every production whose index is listed in the control file is unchecked.
+Iterating every line of the control string, the $nt\textunderscore name$ which is the first element of a line is saved and the $rule\textunderscore type$ which is the second element as well. The item that belongs to $nt\textunderscore name$ is then searched and every production whose index is listed in the control file is unchecked.
 
 \begin{algorithm}[H]
 \caption{GUI Pseudo Code: load\textunderscore controlfile}
@@ -1230,7 +1226,7 @@ Algorithm \ref{alg:produceControlfile} shows how the control file used for reduc
 The index of productions that have been blocked by the user in the GUI are identified and stored in a dictionary until further processing.
 The key of the dictionary is a tuple made of a value and a rule type that has to be defined alongside the dictionary.
 Besides the blocked productions, the start symbol is featured in the control file as well, therefore an empty list for listing possibly multiple start symbols is created.
-Multiple start symbols can occur when the nonterminal symbol has multiple rule types or if the users makes an invalid input. The dictionary is used for collecting all blocked productions. Looping through every node of the tree view it is checked, if the item has parents and its checkbox is unchecked. If so, the rule type of the parent is identified and a new tuple is defined. The index of the production in the parent's productions list is identified as well. If the tuple is not already in the dictionary, a new dictionary entry is created with the tuple as key and the index of the item as value. If the tuple is already in the dictionary, the index of the item is added to the existing indices. \\
+Multiple start symbols can occur when the nonterminal symbol has multiple rule types or if the users makes an invalid input. The dictionary is used for collecting all blocked productions. Looping through every node of the tree view it is checked, if the item has parents and if its checkbox is unchecked. If so, the rule type of the parent is identified and a new tuple is defined. The index of the production in the parent's productions list is identified as well. If the tuple is not already in the dictionary, a new dictionary entry is created with the tuple as key and the index of the item as value. If the tuple is already in the dictionary, the index of the item is added to the existing indices. \\
 However, if the item is checked and has no parents, the name of the item is appended to the list of start symbols. \\
 If there are multiple start symbols in the list that do not have the same nonterminal value or no start symbol at all, the user made an invalid input and an error is raised. 
 The final control string is made up of first entry of the start symbol list. The first entry is sufficient because the control file only specifies the start symbols name and not the rule type.
@@ -1285,7 +1281,7 @@ The exception \textit{multiple start symbols} is raised if the user selects mult
 \section{Command-line interface}\label{sec:ImplementationCommandLineInterface}
 
 With the argparse module a command-line parser object can be created and parameters can be added to that object following the concept describet.
-In the first line of listing \ref{lst:ImplementationArgparseParserConfiguration} the command-line parser object is created with a description.
+In the first line of listing \ref{lst:ImplementationArgparseParserConfiguration} the command-line parser object is created including a description.
 Lines two to five contain the specification of the accepted arguments.
 In addition to the name and short form of the name, the type, a help message, and whether the parameter is optional or not can be specified.
 Default values for arguments can also be specified.

@@ -14,23 +14,33 @@ productions.
 
 \section{Requirements}\label{sec:ConceptRequirements}
 
-The capitalized keyword are to be interpreted as described in \cite{Bradner.1997}.
-The requirements of \ac{Synplifier} are outlined in the following:\\
+The following section outlines requirements of \ac{Synplifier}. Requirements are numbered and split into three categories: 
+
+\begin{itemize}
+\item Requirements concerning the GUI are marked by a $G$
+\item Requirements concerning the Command-line interface are marked by a $C$
+\item General requirements concerning \ac{Synplifier} are marked by a $R$
+\end{itemize}
+
+The requirements are described using capitalized keywords like MUST or SHOULD following \cite{Bradner.1997}.
+
 \subsubsection{[G1]}\label{G1}
 \ac{Synplifier} MUST provide a GUI.
 \subsubsection{[G2]}\label{G2}
-\ac{Synplifier} MUST provide the possibility for the user to import a \ac{TPTP} syntax file into the GUI by specifying a \ac{TPTP} syntax file path and a desired start symbol. The imported syntax MUST be displayed in the GUI. This includes displaying by the syntax defined productions as well as comments that are associated with these productions.
+\ac{Synplifier} MUST provide the possibility for the user to import a \ac{TPTP} syntax file into the GUI by specifying a \ac{TPTP} syntax file path and a desired start symbol. 
+\subsubsection{[G3]}\label{G3}
+The imported syntax MUST be displayed in the GUI. This includes displaying by the syntax defined productions as well as comments that are associated with these productions.
 \subsubsection{[G4]}\label{G4}
-The user MUST be able to select a new start symbol after a \ac{TPTP} syntax file has been imported (G1).
+The user MUST be able to select a new start symbol in order to generate a sub-syntax.
 \subsubsection{[G5]}\label{G5}
-The user MUST be able to select which productions should be blocked after a \ac{TPTP} syntax file has been imported (G1).
-\subsubsection{[G9]}\label{G9}
-\ac{Synplifier} MUST provide the functionality for the user to import a control file into the GUI by specifying a control file path. Selections in the GUI are set according to the control file content.
-
--generate sub-syntax
+The user MUST be able to select which productions should be blocked in order to generate a sub-syntax.
+\subsubsection{[G6]}\label{G9}
+\ac{Synplifier} MUST provide the functionality for the user to import a control file into the GUI by specifying a control file path. 
+\subsubsection{[G7]}\label{G7}
+After importing a control file, selections are set according to the control file content in the GUI.
 \subsubsection{[G8]}\label{G8}
 \ac{Synplifier} MUST provide the functionality to display a generated sub-syntax in the GUI.
-\subsubsection{[G6]}\label{G6}
+\subsubsection{[G9]}\label{G9}
 The user MUST be able to export a control file based on the users start symbol selection (G2) and blocked productions selection (G3) in a .txt-format.
 \subsubsection{[G10]}\label{G10}
 \ac{Synplifier} MUST provide the functionality in the GUI for the user to export a generated sub-syntax to .txt format by specifying a file path.
@@ -39,22 +49,23 @@ The user MUST be able to export a control file based on the users start symbol s
 \subsubsection{[C2]}\label{C2}
 The command-line interface MUST provide the functionality to extract a sub-syntax with the user specifying the \ac{TPTP} syntax file and control file path.
 \subsubsection{[C3]}\label{C3}
-The command-line interface MUST provide help information which describes all command-line parameters.
+The extracted sub-syntax is saved in .txt format at a file path that has been specified by the user.
+\subsubsection{[C4]}\label{C4}
+The command-line interface MUST provide help information which describe all command-line parameters.
 \subsubsection{[R1]}\label{R1}
 When generating a sub-syntax comments referring to rules that are present in the reduced syntax SHOULD be maintained in the sub-syntax.
 \subsubsection{[R2]}\label{R2}
 Output \ac{TPTP} sub-syntaxes SHOULD be compatible to the automated parser generator for the \ac{TPTP} language \cite{VS06}.
 \subsubsection{[R3]}\label{R3}
-A generated sub-syntax MUST be ?reduced? (MUST only contain terminating and reachable symbols)
+A generated sub-syntax MUST only contain terminating and reachable symbols.
 
--export syntax based on control file
 
-nonfunctional requirements
-
-Furthermore, \ac{Synplifier} is able to import a control file and extract a sub-syntax based on this control file instead of extracting a sub-syntax based on a user's selection of blocked productions.
-%The new sub-syntax can be exported to .txt format.
-Also, comments referring to the remaining productions are kept and comments referring to productions that were discarded are not be included in the sub-syntax.
-\ac{Synplifier} also provides a console interface. This interface accepts a \ac{TPTP} syntax file and a control file and output the sub-syntax described in the control file. It is possible to specify the output path and filename.
+%nonfunctional requirements
+%
+%Furthermore, \ac{Synplifier} is able to import a control file and extract a sub-syntax based on this control file instead of extracting a sub-syntax based on a user's selection of blocked productions.
+%%The new sub-syntax can be exported to .txt format.
+%Also, comments referring to the remaining productions are kept and comments referring to productions that were discarded are not be included in the sub-syntax.
+%\ac{Synplifier} also provides a console interface. This interface accepts a \ac{TPTP} syntax file and a control file and output the sub-syntax described in the control file. It is possible to specify the output path and filename.
 
 \section{Overview}\label{sec:ConceptOverview}
 Figure \ref{fig:ConceptProcessSublanguage} outlines the procedure of extracting a sublanguage of the \ac{TPTP} language.
