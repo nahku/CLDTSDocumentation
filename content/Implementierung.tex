@@ -3,7 +3,7 @@
 
 \chapter{Implementation}\label{cha:Implementation}
 
-Based on the previous introduction of the concept of the application, this chapter describes the implementation of the application in detail.
+Based on the previous introduction of the concept of Synplifier, this chapter describes the implementation of Synplifier in detail. The chapter covers lexing and parsing as well as building the grammar graph, extracting a sub-syntax and maintaining comments. Furthermore, the implementation of the GUI and the command-line interface is introduced including belonging input and output functionalities.
 
 \section{Lexer}\label{sec:ImplementationLexer}
 
@@ -395,8 +395,7 @@ This function identifies the children of the given element who are then appended
 \end{algorithmic}
 \end{algorithm}
 
-The goal is to identify the nonterminal symbols.
-Therefore, it is checked if the production is a nested production and if so, the same function is called again.
+For identifying the nonterminal symbols, it is checked if the production is a nested production and if so, the same function is called again.
 If the production is a XOR production list the function $searchProductionsListForNT$ is called to break down the productions list.
 If the production element is a nonterminal symbol, the element is searched in the node dictionary to get the node where the element is on the left side.
 This element is then appended to a list of children. It is possible that an element appears multiple times on the left side if it is presented by multiple expressions.
@@ -421,42 +420,13 @@ In this case each element is appended to the list of children.
 
 \section{Maintaining comments}\label{sec:ImplementationMaintainingComments}
 
-This section describes the implementation of associating comments with rules in order to maintain comments in a generated sub-syntax.
+After building the nodes dictionary and the grammar graph, comments of the original \ac{TPTP} syntax are identified and assigned to the corresponding nodes.
+This section describes the implementation of associating comments with nodes in order to maintain comments in a generated sub-syntax.
 The implementation follows the concept outlined in section \ref{sec:ConceptMaintainingComments}.
 Comments are associated after the grammar graph has been generated.
 They are associated to the node, that represents the rule they belong to.
 For that, the \textit{NTNode} class has a \textit{COMMENT\textunderscore BLOCK} attribute (see \textit{NTNode} UML diagram in figure \ref{fig:ImplementationNTNodeUML}).\\
 Associating comments with nodes has the advantage, that when the grammar graph is reduced, only the comments associated with the rules that are part of the sub-syntax are maintained and can also be printed when outputting the sub-syntax.\\
-
-\subsection{Splitting comment blocks}\label{sec:ImplementationMaintainingCommentsSplitByTop}
-
-The flow chart in figure \ref{fig:ImplementationMaintainingCommentSplitByTopOfPage} shows how a comment block is split into multiple comment blocks separating it by top of page lines.\\
-First the indexes of the top of page lines are collected in a list (using method of \textit{COMMENT\textunderscore BLOCK}).
-After that, the \textit{comment\textunderscore block\textunderscore list}, which will contain the generated \textit{COMMENT\textunderscore BLOCK}s, is initialized.
-If the list, storing top of page line indexes, is empty, the original comment block is added to the \textit{comment\textunderscore block\textunderscore list}, because the comment block does not need to be split into multiple comment blocks because no top of page line is present.
-Then the \textit{comment\textunderscore block\textunderscore list} is returned.\\
-If the list of top of page line indexes is not empty, the first top of page line index is retrieved from the top of page indexes list.
-It is also checked whether the first top of page index is unequal zero.\\
-If that is the case, the first top of page index is not the first line of the original comment block, and a comment block can be constructed from the line(s) before.
-In this case the first comment block can be constructed from the comment lines of the original comment block from index zero to the first top of page index.
-This comment block is added to the \textit{comment\textunderscore block\textunderscore list}.\\
-Then the \textit{index} variable, which represents an index on the \textit{top\textunderscore of\textunderscore page\textunderscore indexes} list, is initialized.
-The \textit{index} is used to access the corresponding element of the \textit{top\textunderscore of\textunderscore page\textunderscore indexes} list.\\
-Then it is checked if top of page line that corresponds to the top of page line index is the last line of the original comment block.
-In that case, no further comment block needs to be added to the \textit{comment\textunderscore block\textunderscore list} and the \textit{comment\textunderscore block\textunderscore list} is returned.\\
-Otherwise the start index of the next comment block is computed as the current \textit{top\textunderscore of\textunderscore page\textunderscore index} incremented by one (line after the top of page line).
-There are two cases that have to be considered when determining the end index of the comment block.
-Either there is another top of page line, in this case the comment block ends before that, or the currently indexed top of page line was the last one, in that case the end index is the end of the original comment block.
-Then the new commend block is constructed with the before determined \textit{start} and \textit{end}.
-This comment block is added to the \textit{comment\textunderscore block\textunderscore list}.
-If the \textit{index} is at the end of the \textit{top\textunderscore of\textunderscore page\textunderscore index} list, the \textit{comment\textunderscore block\textunderscore list} is returned. If not, the \textit{index} variable is incremented and the process is repeated with the next top of page index.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=1\textwidth]{images/Implementation_split_comment_by_top_of_page.pdf}
-\caption{Split comment block by top of page line flow chart}
-\label{fig:ImplementationMaintainingCommentSplitByTopOfPage}
-\end{figure}
 
 \subsection{Associating comments with grammar graph nodes}\label{sec:ImplementationMaintainingCommentsAssociateWithNodes}
 
@@ -573,6 +543,38 @@ This procedure is needed because it is possible that multiple comment blocks, th
 \label{alg:extend_comment_block}
 \end{algorithm}
 
+
+\subsection{Splitting comment blocks}\label{sec:ImplementationMaintainingCommentsSplitByTop}
+
+The flow chart in figure \ref{fig:ImplementationMaintainingCommentSplitByTopOfPage} shows how a comment block is split into multiple comment blocks separating it by top of page lines.\\
+First the indexes of the top of page lines are collected in a list (using method of \textit{COMMENT\textunderscore BLOCK}).
+After that, the \textit{comment\textunderscore block\textunderscore list}, which will contain the generated \textit{COMMENT\textunderscore BLOCK}s, is initialized.
+If the list, storing top of page line indexes, is empty, the original comment block is added to the \textit{comment\textunderscore block\textunderscore list}, because the comment block does not need to be split into multiple comment blocks because no top of page line is present.
+Then the \textit{comment\textunderscore block\textunderscore list} is returned.\\
+If the list of top of page line indexes is not empty, the first top of page line index is retrieved from the top of page indexes list.
+It is also checked whether the first top of page index is unequal zero.\\
+If that is the case, the first top of page index is not the first line of the original comment block, and a comment block can be constructed from the line(s) before.
+In this case the first comment block can be constructed from the comment lines of the original comment block from index zero to the first top of page index.
+This comment block is added to the \textit{comment\textunderscore block\textunderscore list}.\\
+Then the \textit{index} variable, which represents an index on the \textit{top\textunderscore of\textunderscore page\textunderscore indexes} list, is initialized.
+The \textit{index} is used to access the corresponding element of the \textit{top\textunderscore of\textunderscore page\textunderscore indexes} list.\\
+Then it is checked if top of page line that corresponds to the top of page line index is the last line of the original comment block.
+In that case, no further comment block needs to be added to the \textit{comment\textunderscore block\textunderscore list} and the \textit{comment\textunderscore block\textunderscore list} is returned.\\
+Otherwise the start index of the next comment block is computed as the current \textit{top\textunderscore of\textunderscore page\textunderscore index} incremented by one (line after the top of page line).
+There are two cases that have to be considered when determining the end index of the comment block.
+Either there is another top of page line, in this case the comment block ends before that, or the currently indexed top of page line was the last one, in that case the end index is the end of the original comment block.
+Then the new commend block is constructed with the before determined \textit{start} and \textit{end}.
+This comment block is added to the \textit{comment\textunderscore block\textunderscore list}.
+If the \textit{index} is at the end of the \textit{top\textunderscore of\textunderscore page\textunderscore index} list, the \textit{comment\textunderscore block\textunderscore list} is returned. If not, the \textit{index} variable is incremented and the process is repeated with the next top of page index.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{images/Implementation_split_comment_by_top_of_page.pdf}
+\caption{Split comment block by top of page line flow chart}
+\label{fig:ImplementationMaintainingCommentSplitByTopOfPage}
+\end{figure}
+
+
 \section{Extraction of a sub-syntax}\label{sec:ImplementationExtractReducedGrammar}
 
 The following sections describe the algorithms used for the extraction of a sub-syntax based on the concept outlined in section \ref{sec:ConceptExtractReducedGrammar}.
@@ -620,15 +622,10 @@ From the node, in a loop, the elements of the \textit{productions\textunderscore
 
 \subsection{Determination of the remaining terminating symbols}
 
-After the desired productions have been deleted from the grammar graph, the next step is to remove the nonterminating symbols from the grammar graph. Algorithm \ref{alg:remove_non_terminating_symbols} shows the procedure of how to remove nonterminating symbols.
-First it has to be determined which symbols are terminating and which are nonterminating.
-
--one way: starting from terminal symbol, find nonterminal symbol that derives terminal symbol, then find nonterminal symbol that only produces terminating symbols
--graph data structure can only be traversed top down not bottom up.
--therefore start at start node, traverse graph, and find terminating symbols
--initialise visited set
--store known terminating symbols
-
+After the desired productions have been deleted from the grammar graph, the next step is to remove the nonterminating symbols from the grammar graph. Algorithm \ref{alg:remove_non_terminating_symbols} shows the procedure of removing nonterminating symbols.
+First it has to be determined which symbols are terminating and which are nonterminating. \\
+On the one hand, starting from the terminal symbols all nonterminal symbols that derive terminal symbols could be found. However, the graph data structure can only be traversed top down not bottom up.
+Therefore starting at the start node, the graph is traversed and terminating symbols are found. 
 A set of terminating nodes and a temporary set of terminating nodes are initialized.
 In a while loop the recursive algorithm \textit{find\textunderscore non\textunderscore terminating\textunderscore symbols(start\textunderscore node, temp\textunderscore terminating, visited)} finds terminating nodes with the start\textunderscore node, an initialized set of known terminating symbols and a set of already visited nodes.
 This algorithm is called with the updated set of terminating symbols until the set does not differ from the run before.
@@ -820,11 +817,11 @@ The final output is stored in a $print\textunderscore list$. A $print\textunders
 PrintListEntry = namedtuple("PrintListEntry", ["position", "string"])
 \end{lstlisting}
 
-The detailed process of saving a grammar graph in a text file is described in the following sections.
+The detailed process of saving a string version of a rule is described in the following sections.
 
 \subsubsection{Saving string representation of graph in text file}\label{sec:ImplementationOutputSaveGrammarGraphStringRepresentations}
 
-In order to create the $print\textunderscore string$ the $print\textunderscore list$ is generated. For generating the $print\textunderscore list$, an empty set $visited$ is created that is used for memorising which nodes have already been visited. Moreover, an empty $print\textunderscore list$ and $print\textunderscore string$ are created. The set $visited$ and the empty $print\textunderscore list$ are used for calling the function $create\textunderscore print\textunderscore list$ (see following section) which returns the final $print\textunderscore list$. Because the rules in the $print\textunderscore list$ are not in the same order as the rules in the original \ac{TPTP} syntax, the $print\textunderscore list$ is sorted based on the rule's position that is stored in the first element of the $PrintListEntry$ tuple. For converting the $print\textunderscore list$ to one string, the $print\textunderscore string$, the $print\textunderscore list$ is iterated. Except for the first element of the list, every element of the list is added to the $print\textunderscore string$. This is done by adding the strings that are stored in the second element of the $PrintListEntry$ tuple and separating them by a new line. The first element is not added because it represents the general start symbol that has been added to the grammar (see chapter \ref{sec:ConceptGraphGeneration}) but is not a part of the \ac{TPTP} grammar. A text document with a filename that has been selected by the user is then opened and the $print\textunderscore string$ is written to the file.
+In order to create the $print\textunderscore list$, an empty set $visited$ is created that is used for memorising which nodes have already been visited. Moreover, an empty $print\textunderscore list$ and $print\textunderscore string$ are created. The set $visited$ and the empty $print\textunderscore list$ are used for calling the function $create\textunderscore print\textunderscore list$ (see following section) which returns the final $print\textunderscore list$. Because the rules in the $print\textunderscore list$ are not in the same order as the rules in the original \ac{TPTP} syntax, the $print\textunderscore list$ is sorted based on the rule's position that is stored in the first element of the $PrintListEntry$ tuple. For converting the $print\textunderscore list$ to one string, the $print\textunderscore string$, the $print\textunderscore list$ is iterated. Except for the first element of the list, every element of the list is added to the $print\textunderscore string$. This is done by adding the strings that are stored in the second element of the $PrintListEntry$ tuple and separating them by a new line. The first element is not added because it represents the general start symbol that has been added to the grammar (see chapter \ref{sec:ConceptGraphGeneration}) but is not a part of the \ac{TPTP} grammar. A text document with a filename that has been selected by the user is then opened and the $print\textunderscore string$ is written to the file.
 The simplified process can be seen in the flow diagram in figure \ref{fig:ImplementationOutputSaveOrderedRules}.
 
 \begin{figure}[H]
