@@ -840,5 +840,30 @@ The implementation of the command-line interface is described in section \ref{se
 More complex actions like control file generation can be done more comfortably by using GUI which is why this is not a feature of the command-line interface.\\
 The design decision to separate the GUI from the command-line interface (see section \ref{sec:ConceptProposedArchitecture}) has the advantage that if a user chooses to solely use the command-line interface, it is not necessary to install the library used in GUI implementation (PyQt 5).
 
-\section{Count rules in syntax}\label{sec:ConceptCountR}
+\section{Counting the number of rules in the TPTP syntax}\label{sec:ConceptCountR}
 
+\subsubsection{Counting rules in a grammar graph}\label{sec:ConceptCountR}
+
+-count rules to compare syntax sizes and for statistics/information
+
+-count rules and productions
+
+-count rules by counting nodes in grammar graph and count productions by counting number of productions list elements of all nodes
+
+-count by traversing nodes in graph
+
+-in addition counting only grammar rules
+
+-print number of rules in console on import or sub-syntax generation
+
+-since grammar graph only contains reachable and terminating symbols, not full TPTP syntax can be counted
+
+\subsection{Counting rules in the original syntax}\label{sec:ConceptCountR}
+
+-to count full TPTP syntax (including non reachable and terminating symbols)
+
+-necessary to better compare original TPTP syntax to generated sub-syntaxes
+
+-create a separate script, which uses parser and grammar list
+
+-and count that
