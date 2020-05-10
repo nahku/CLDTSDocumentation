@@ -967,10 +967,13 @@ Then the created \textit{production\textunderscore string} is returned.
 \end{algorithm}
 
 \subsubsection{\textit{XOR\textunderscore PRODUCTIONS\textunderscore LIST} string representation creation}
-The procedure to create the string representation of the \textit{XOR\textunderscore PRODUCTIONS\textunderscore LIST} class is equivalent to the \textit{PRODUCTIONS\textunderscore LIST} process described in algorithm \ref{alg:OutputCreateProductionsListString}. However, generated string are enclosed by parentheses.
+The procedure to create the string representation of the \textit{XOR\textunderscore PRODUCTIONS\textunderscore LIST} class is almost equivalent to the \textit{PRODUCTIONS\textunderscore LIST} process described in algorithm \ref{alg:OutputCreateProductionsListString}. The only difference is, that generated string are enclosed by parentheses.
 \subsubsection{\textit{PRODUCTION\textunderscore ELEMENT} string representation creation}
 
--production element symbol with production property 
+The \textit{PRODUCTION\textunderscore ELEMENT} data type consists of a textit{SYMBOL} and a \textit{ProductionProperty}.
+The procedure of creating the string representation of a \textit{PRODUCTION\textunderscore ELEMENT} is outlined in the following algorithm \ref{alg:OutputCreateProductionElementString}. The string representation is created similar to the creation of the string representation of a \textit{PRODUCTION}.
+
+-todo referenz to production
 
 \begin{algorithm}[H]
 \caption{\textit{PRODUCTION\textunderscore ELEMENT}  string creation}
