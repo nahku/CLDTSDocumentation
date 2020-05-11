@@ -201,22 +201,33 @@ Yacc
 
 Since the use cases are all hand-created grammars of relatively small
 size (dozens to thousands of rules), and the algorithms do not have
-high complexity, we decided to implement the tool in Python 3. Python
-is a modern multi-paradigm language with good support and excellent
-libraries.
+high complexity, we decided to implement the tool in Python 3. 
+Python
+is a simple but powerful modern multi-paradigm language with good support and excellent
+libraries. Python is easy to learn and its power allows it to create complex applications using Python. Libraries that are used to implement \ac{Synplifier} are introduced in the following sections.
 
 \subsection{PLY}\label{sec:BackgroundPythonPLY}
 
-\acf{PLY} \cite{PLY} is an implementation of lex and yacc in python.
-[LALR-parsing] \ref{sec:BackgroundParserLALR}
-consists of lex.py and yacc.py
+\acf{PLY} is an implementation of lex and yacc in Python. It is compatible with Python 2 and 3 and is fully implemented in Python. The goal of \ac{PLY} is to offer a pure-Python implementation of lex and yacc. The implementation aims to rebuild the functionalities of lex and yacc and thus includes:
+\begin{itemize}
+\item Support for LALR parsing (see chapter \ref{sec:BackgroundParserLALR})
+\item Support for empty productions
+\item Support for ambiguous grammars 
+\item Precedence rules
+\item Error checking and recovery
+\end{itemize}
 
-lex.py tokenizes an input string
+\ac{PLY} consists of the two modules $lex.py$ and $yacc.py$ that are meant to execute together. For example $yacc.py$ retrieves tokens from the input stream provided by $lex.py$. $Yacc.py$ returns by default an Abstract Syntax Tree. However, it is possible for the user to change the output of $yacc.py$ according to his demands.
+
+\cite{PLY}
+
 
 \subsection{PyQt}\label{sec:BackgroundPytonPyQt}
 
 PyQt is a Python binding for the cross-platform GUI framework Qt \cite{PyQt}.
 It is licensed under the GNU GPL version 3.
+- qt is set of c++ libraries and development tools for various things: graphical user interfaces, regular expressions, sql databases, nfc and bluetooth,...
+- pyqt implements over 1000 of these classes in python
 - QMainWindow \\
 - QTreeWidget \\
 -pyqt 5
@@ -225,7 +236,11 @@ tkinter
 
 \subsection{argparse}\label{sec:BackgroundArgparse}
 
-The python module argparse \cite{argparse} is a module for creating command-line argument parsers.
+The Python module argparse is a module for creating command-line argument parsers.
 It provides the means to specify input arguments and automatically creates help and usage messages.
 It also checks if the given arguments are valid.
-From the specified input arguments, the module will automatically create a parser for the specified arguments.
+From the specified input arguments, the module will automatically create a parser for the specified arguments. \cite{argparse} 
+
+\subsection{Beautiful Soup}\label{sec:BackgroundBeautifulSoup}
+
+Beautiful Soup is a Python library for extracting data out of HTML and XML files. That makes it especially useful for getting information from web pages. Beautiful Soup is based on Python parses like $lxml$ and $html5lib$ and parses the files in order to build a parse tree and retrieve desired informations. \cite{BeautifulSoup}\cite{BeautifulSoupDoku}
