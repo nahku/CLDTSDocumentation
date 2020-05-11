@@ -317,24 +317,24 @@ The output of the parser is a list of the rules and the comments from the \ac{TP
 After parsing the \ac{TPTP} grammar is stored in a grammar list. The grammar list data structure is needed for modification and traversing.
 The data structure that is used is a graph representing the grammar.
 
-The non-terminal symbols in the \ac{TPTP} syntax are represented by a node class that has the following attributes (see also UML class diagram \ref{fig:ImplementationNTNodeUML}):
+The nonterminal symbols in the \ac{TPTP} syntax are represented by a node class that has the following attributes (see also UML class diagram \ref{fig:ImplementationNTNodeUML}):
 \begin{itemize}
-\item value: name of non-terminal symbol
-\item productions list: productions list of non-terminal symbol that has been created by the parser
-\item rule type: rule type of non-terminal symbol
-\item comment block: list of comments belonging to the non-terminal symbol
+\item value: name of nonterminal symbol
+\item productions list: productions list of nonterminal symbol that has been created by the parser
+\item rule type: rule type of nonterminal symbol
+\item comment block: list of comments belonging to the nonterminal symbol
 \item position: position of the production in the input file
-\item children: nested list that contains the node of every non-terminal symbol that is part of the productions list grouped by productions in the productions list
+\item children: nested list that contains the node of every nonterminal symbol that is part of the productions list grouped by productions in the productions list
 \end{itemize}
 
 Before generating the graph, a dictionary is created, that provides an efficient way accessing the nodes in order to build the grammar graph and also during the next steps of the sub-syntax generation.
 This dictionary contains nodes constructed from the grammar list output by the parser that contains rules and comments. The combination of the nodes value and rule type form the unique key for each node. While constructing the dictionary, comments in the grammar list are associated to nodes using a heuristic that is described in section \ref{sec:ConceptMaintainingComments}.
 
 Also, a new temporary start symbol is introduced.
-This is necessary because one non-terminal symbol in the \ac{TPTP} syntax can be mapped to multiple nodes which the following example shows. \\
-The example below shows the productions for the non-terminal symbol $\textless formula\textunderscore role\textgreater$.
-Since this non-terminal symbol has multiple types of rules one node will be created for each rule type.
-\begin{lstlisting}[caption= Productions of the non-terminal symbol $\textless formula\textunderscore role\textgreater$]
+This is necessary because one nonterminal symbol in the \ac{TPTP} syntax can be mapped to multiple nodes which the following example shows. \\
+The example below shows the productions for the nonterminal symbol $\textless formula\textunderscore role\textgreater$.
+Since this nonterminal symbol has multiple types of rules one node will be created for each rule type.
+\begin{lstlisting}[caption= Productions of the nonterminal symbol $\textless formula\textunderscore role\textgreater$]
 <formula_role>         ::= <lower_word>
 <formula_role>         :== axiom | hypothesis | definition | assumption |
                            lemma | theorem | corollary | conjecture |
@@ -342,7 +342,7 @@ Since this non-terminal symbol has multiple types of rules one node will be crea
                            fi_domain | fi_functors | fi_predicates | unknown
 \end{lstlisting}
 
-If a non-terminal symbol that has multiple rule types is selected as the desired start symbol multiple nodes would represent that start symbol and therefore it would not be possible to select one node as the starting point of the graph generation.
+If a nonterminal symbol that has multiple rule types is selected as the desired start symbol multiple nodes would represent that start symbol and therefore it would not be possible to select one node as the starting point of the graph generation.
 To solve this problem, a temporary start symbol is introduced before generating the graph.
 The temporary start symbol produces the start symbol that the user specified and is used as a starting point for the graph generation.
 If the non-terminal symbol $\textless formula\textunderscore role\textgreater$ that was mentioned before would be selected as start symbol by the user, a temporary start symbol representing the rule

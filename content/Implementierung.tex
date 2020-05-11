@@ -144,12 +144,12 @@ The function that is defined first in the Python file determines the start symbo
 
 The nonterminal symbols of the defined context-free grammar are described in the following.
 
-A T\textunderscore SYMBOL \textunderscore PRODUCTION consists of the token T\textunderscore SYMBOL (see chapter \ref{sec:ImplementationLexerToken}) and additionally a production property.
-The production property can take two values and denotes whether a T\textunderscore SYMBOL is
-embedded in square brackets or not. In the production rules a T\textunderscore SYMBOL
+A \textit{T\textunderscore SYMBOL \textunderscore PRODUCTION} consists of the token \textit{T\textunderscore SYMBOL} (see chapter \ref{sec:ImplementationLexerToken}) and additionally a production property.
+The production property can take two values and denotes whether a \textit{T\textunderscore SYMBOL} is
+embedded in square brackets or not. In the production rules a \textit{T\textunderscore SYMBOL}
 token, either embedded in square brackets or without brackets, can be derived
-from a T\textunderscore SYMBOL \textunderscore PRODUCTION. Asterisk and vertical bar tokens embedded in square
-brackets can be derived from a T\textunderscore SYMBOL \textunderscore PRODUCTION production as well. The T\textunderscore SYMBOL \textunderscore PRODUCTION is necessary because usually square brackets denote that the term within the brackets is optional which is not the case with terminal symbols. Square brackets embedding terminal symbols denote that the symbol within the brackets is terminal. For example an asterik embedded in square brackets refers to the terminal symbol. An asteriks not embedded in square bracket refers to the production property $optional$ (see figure \ref{fig:ConceptProductionPropertyClassDiagram}).
+from a \textit{T\textunderscore SYMBOL \textunderscore PRODUCTION}. Asterisk and vertical bar tokens embedded in square
+brackets can be derived from a \textit{T\textunderscore SYMBOL \textunderscore PRODUCTION} production as well. The \textit{T\textunderscore SYMBOL \textunderscore PRODUCTION} is necessary because usually square brackets denote that the term within the brackets is optional which is not the case with terminal symbols. Square brackets embedding terminal symbols denote that the symbol within the brackets is terminal. For example an asterisk embedded in square brackets refers to the terminal symbol. An asterisk not embedded in square bracket corresponds to the production property $optional$ (see figure \ref{fig:ConceptProductionPropertyClassDiagram}).
 
 %Analogue to the T\textunderscore symbol data type, the NT\textunderscore SYMBOL also has the value of the non-terminal symbol token as an attribute. 
 %
@@ -162,12 +162,12 @@ brackets can be derived from a T\textunderscore SYMBOL \textunderscore PRODUCTIO
 %\label{fig:ConceptSymbolsClassDiagram}
 %\end{figure}
 
-A RULE consists of an expression token (see chapter \ref{sec:ImplementationLexerToken}), a production list and a position.
-The position denotes at which position in the TPTP syntax the rule was listed.
+A \textit{RULE} consists of an expression token (see chapter \ref{sec:ImplementationLexerToken}), a production list and a position.
+The position denotes at which position in the \ac{TPTP} syntax the rule was listed.
 This information is needed to maintain the original order of the rules when printing the reduced syntax.
 For each rule type there is a data type.
-This means that GRAMMAR, TOKEN, STRICT and MACRO\textunderscore RULE nonterminal symbols are introduced. They inherit from the same base class RULE which can be seen in figure \ref{fig:ConceptRulesClassDiagram}.
-Listing \ref{lst:ConceptParserGrammarExpression} contains an example of a line in a \ac{TPTP} syntax file that is represented by the GRAMMAR\textunderscore RULE data type.
+This means that \textit{GRAMMAR}, \textit{TOKEN}, \textit{STRICT} and \textit{MACRO\textunderscore RULE} nonterminal symbols are introduced. They inherit from the base class \textit{RULE} which can be seen in figure \ref{fig:ConceptRulesClassDiagram}.
+Listing \ref{lst:ConceptParserGrammarExpression} contains an example of a line in a \ac{TPTP} syntax file that is represented by the \textit{GRAMMAR\textunderscore RULE} data type.
 The nonterminal symbol name which is produced is <$tff \textunderscore formula$>.  The production list consists of two productions, as can be seen in the listing.
 \begin{lstlisting}[basicstyle=\scriptsize	,caption= Grammar expression,label= lst:ConceptParserGrammarExpression]
 <tff_formula>          ::= <tff_logic_formula> | <tff_atom_typing
@@ -180,7 +180,7 @@ The nonterminal symbol name which is produced is <$tff \textunderscore formula$>
 \label{fig:ConceptRulesClassDiagram}
 \end{figure}
 
-A COMMENT\textunderscore BLOCK is a list of consecutive comment lines. Comment lines can also be extended after initialising a comment block. Figure \ref{fig:ConceptCommentBlockClassDiagram} shows the UML denotation of a comment block.
+A \textit{COMMENT\textunderscore BLOCK} is a list of consecutive comment lines. Comment lines can also be extended after initialising a comment block. Figure \ref{fig:ConceptCommentBlockClassDiagram} shows the UML denotation of a comment block.
 
 \begin{figure}[H]
 \centering
@@ -189,8 +189,7 @@ A COMMENT\textunderscore BLOCK is a list of consecutive comment lines. Comment l
 \label{fig:ConceptCommentBlockClassDiagram}
 \end{figure}
 
-
-A T\textunderscore SYMBOL\textunderscore PRODUCTION or a NT\textunderscore SYMBOL is a PRODUCTION\textunderscore ELEMENT. Therefore it has an instance of SYMBOL as an attribute which can be seen in figure \ref{fig:ConceptProductionElementClassDiagram}. Additionally, a production element has a production property that is shown in figure \ref{fig:ConceptProductionPropertyClassDiagram}.
+A \textit{T\textunderscore SYMBOL\textunderscore PRODUCTION} or a\textit{ NT\textunderscore SYMBOL} is a \textit{PRODUCTION\textunderscore ELEMENT}. Therefore it has an instance of \textit{SYMBOL} as an attribute which can be seen in figure \ref{fig:ConceptProductionElementClassDiagram}. Additionally, a production element has a production property that is shown in figure \ref{fig:ConceptProductionPropertyClassDiagram}.
 The production property can take one of three values and denotes whether a production is optional, can be repeated multiple times or does not have any special property.
 In the original \ac{TPTP} syntax file, the property is represented by square brackets or the repetition symbol. 
 
@@ -208,9 +207,8 @@ In the original \ac{TPTP} syntax file, the property is represented by square bra
 \label{fig:ConceptProductionPropertyClassDiagram}
 \end{figure}
 
-A PRODUCTION is one of the production alternatives of a rule.
-As can be seen in figure \ref{fig:ConceptProductionClassDiagram} it consists of a list of PRODUCTION\textunderscore ELEMENT and has a production property that is like the production property of the PRODUCTION\textunderscore ELEMENT. Productions can also be nested.
-Therefore, the list can also contain further productions. 
+A \textit{PRODUCTION} is one of the production alternatives of a rule.
+As can be seen in figure \ref{fig:ConceptProductionClassDiagram} it consists of a list of \textit{PRODUCTION\textunderscore ELEMENT}s and/or nested \textit{PRODUCTION}s. It also has a \textit{ProductionProperty} as attribute.
 
 \begin{figure}[H]
 \centering
@@ -219,9 +217,9 @@ Therefore, the list can also contain further productions.
 \label{fig:ConceptProductionClassDiagram}
 \end{figure}
 
-A PRODUCTIONS\textunderscore LIST contains a list of productions where each production is one alternative in the description of a rule. 
+A \textit{PRODUCTIONS\textunderscore LIST} contains a list of productions where each production is one alternative in the description of a rule. 
 
-The XOR\textunderscore PRODUCTIONS\textunderscore LIST represents a PRODUCTIONS\textunderscore LIST with multiple alternatives enclosed by parentheses. It contains a list of the alternate productions. Figure \ref{fig:ConceptProductionsListClassDiagram} shows the UML denotation of a PRODUCTIONS\textunderscore LIST and a XOR\textunderscore PRODUCTIONS\textunderscore LIST which inherits from the PRODUCTION\textunderscore LIST class.
+The \textit{XOR\textunderscore PRODUCTIONS\textunderscore LIST} represents a \textit{PRODUCTIONS\textunderscore LIST} with multiple alternatives enclosed by parentheses. It contains a list of the alternate productions. Figure \ref{fig:ConceptProductionsListClassDiagram} shows the UML denotation of a \textit{PRODUCTIONS\textunderscore LIST} and a \textit{XOR\textunderscore PRODUCTIONS\textunderscore LIST} which inherits from the \textit{PRODUCTION\textunderscore LIST} class.
 
 \begin{figure}[H]
 \centering
@@ -231,7 +229,7 @@ The XOR\textunderscore PRODUCTIONS\textunderscore LIST represents a PRODUCTIONS\
 \end{figure}
 
 
-The GRAMMAR\textunderscore LIST shown in figure \ref{fig:ConceptGrammarListClassDiagram} is the top level data structure. It contains a list of all rules that are in the \ac{TPTP} syntax file.
+The \textit{GRAMMAR\textunderscore LIST} class shown in figure \ref{fig:ConceptGrammarListClassDiagram} is the top level data structure. It contains a list of all rules that are in the \ac{TPTP} syntax file.
 This includes any type of rules (grammar, token, strict and macro) and comment blocks. 
 
 \begin{figure}[H]
@@ -1001,14 +999,11 @@ The procedure of creating the string representation of a \textit{PRODUCTION\text
 \end{algorithm}
 
 \subsubsection{Symbol string representation creation}
+To create the string representation of a non-terminal symbol, its value can be returned as-is.
+The terminal symbol data type additionally has a production property as a class attribute.\\
+To create the string representation of a terminal symbol, in the case of the property \textit{OPTIONAL}, square brackets have to be printed around the terminal symbol value. In case of the production property \textit{REPETITION} the asterisk symbol has to be printed after the terminal symbol value. In case of the production property \textit{NONE}, the string representation consists only of the terminal symbol value.
 
--The nonterminal symbol value can be returned as is
--nt, terminal symbol
--check t symbol str
-
-\subsection{Automated parser generator compatibility}\label{sec:ImplementationAutomatedParserGenerator}
-
--append option
+%\subsection{Automated parser generator compatibility}\label{sec:ImplementationAutomatedParserGenerator}
 
 \section{GUI}\label{sec:ImplementationGUI}
 
