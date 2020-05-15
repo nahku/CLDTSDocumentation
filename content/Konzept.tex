@@ -714,17 +714,20 @@ The design decision to separate the GUI from the command-line interface (see sec
 
 \section{Counting the number of rules in the TPTP syntax}\label{sec:ConceptCountR}
 
-Rules are counted for comparing syntax sizes and for generating statistics out of it. The results are described in chapter \ref{sec:Validation}.
+Rules and productions are counted in order to compare syntax sizes. The results are described in chapter \ref{sec:Validation}.
 
 \subsection{Counting rules in a grammar graph}\label{sec:ConceptCountR}
+ 
+Rules are counted by counting nodes in the grammar graph. Productions are counted by traversing the nodes in the grammar graph and counting the number of elements in each productions list.\\
+In addition to the total number of rules and productions, the number of grammar rules and productions are filtered and counted separately.
+The total number of rules and productions and the number of grammar rules and productions is printed to the command-line after the import of a syntax and after a sub-syntax generation. \\
+Since the grammar graph only contains reachable and terminating symbols, the total number of rules and productions in the original \ac{TPTP} syntax version 7.3.0 can not be counted, since some symbols are not reachable.
+To compare generated sub-syntaxes to the original \ac{TPTP} a script has been developed, which is described in the following.
 
-For comparing syntax sizes, rules and productions are counted.
-Rules are counted by counting nodes in the grammar graph. Productions are counted by traversing the nodes in the grammar graph.\\
-In addition only grammar rules are counted as well.
-The number of rules is printed in the console after the import and after the sub-syntax generation. \\
-Since the grammar graph only contains reachable and terminating symbols, not all rules of the \ac{TPTP} syntax can be counted.
+\subsection{Counting rules in the original \ac{TPTP} syntax}\label{sec:ConceptCountR}
 
-\subsection{Counting rules in the original syntax}\label{sec:ConceptCountR}
-
-To count rules of the full \ac{TPTP} syntax (including non reachable and terminating symbols) a separate script is created which uses the grammar list produced by the parser and counts based on this grammar list. Counting rules based on the full \ac{TPTP} syntax gives a better overview when comparing sub-syntaxes. 
+To count rules of the original \ac{TPTP} syntax (including non-reachable and nonterminating symbols) a script was developed.
+It uses the parser to parse the original \ac{TPTP} syntax which results in a grammar list. This grammar list is iterated and rules and productions are counted in order to get the total numbers. Also, grammar rules and production are counted separate too.\\
+Counting rules based on the full \ac{TPTP} syntax gives a better overview when comparing syntax sizes.\\
+The script can be used independently from \ac{Synplifier}
 
