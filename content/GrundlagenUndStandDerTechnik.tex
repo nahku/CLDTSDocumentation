@@ -14,30 +14,31 @@ TODO more detailed
 
 \section{Formal languages}\label{sec:BackgroundFormalLanguage}
 
-This section first introduces the terms alphabet, string and language.
-- also regular expression, finite automata and grammars
+This section introduces terms and concepts in the area of formal languages that are part of the basics of \ac{Synplifier}.
 
 \subsection{Alphabet}
-An alphabet is a finite, non-empty set of symbols usually represented by $\sum$. An example is the binary alphabet $\sum = \{0,1\}$.
+An alphabet is a finite, non-empty set of symbols usually represented by $\sum$. An example is the binary alphabet $\sum = \{0,1\}$. \cite{AutomataTheory.2007}
 
 \subsection{String}
-A string also called word is a finite sequence of symbols from some alphabet. For example the string $101$ is a string from the binary alphabet $\sum = \{0,1\}$.
+A string also called word is a finite sequence of symbols from some alphabet. For example the string \textit{101} is a string from the binary alphabet $\sum = \{0,1\}$.
+The set of all strings over an alphabet $\sum$ is denoted as $\sum ^{*}$. \cite{AutomataTheory.2007}
 
 \subsection{Language}
-A formal language is a set of words over an alphabet. If $\sum$ is an alphabet, then $L(\sum)$ is a language over $\sum$. \cite{AutomataTheory.2007}
-
-s ? Welche? Oder soll es die Menge aller solcher Sprachen sein? Dann nicht "a language".
+A formal language is a set of words over an alphabet $\sum ^*$. If $\sum$ is an alphabet and $L$ is a subset of $\sum ^*$, then $L$ is a language over $\sum$. \cite{AutomataTheory.2007}
 
 \subsection{Finite automata}\label{sec:BackgroundAutomata}
 
-- states and transitions in response to inputs
-- states are represented by circles
-- start state
-- final/accepting states
-- deterministic vs nondeterministic
-- recognize words of a language
-
-- example below shows automation that excepts word consistsing of 1, arbitrary amount of zeros and a 1, regular expression: 10*1
+A finite automaton recognizes words of a language. 
+An automaton is composed of states and transitions between states. 
+Transitions are executed in response to the input of an automaton. 
+States are usually represented by circles and transitions by labelled arrows. 
+Two special states are the start and the final/accepting state. 
+The start state is the state in which the automaton is in the beginning. 
+If the automaton reaches the final state, the word is part of the language the automaton represents. 
+It can be distinguished between deterministic and non-deterministic automata. 
+Non-deterministic have multiply transitions for the same input and thus it can not be predicted how the automata will operate.  
+The concept of finite automata can for example be applied to a lexical analyzer for recognizing tokens (see section \ref{sec:BackgroundLexer}). \cite{AutomataTheory.2007}\\
+Figure \ref{fig:FiniteAutomation} shows an automaton consisting of the three states $z\textsubscript{0}, z\textsubscript{1}$ and $z\textsubscript{2}$ and three transitions. The automaton accepts words consisting of a 1, an arbitrary amount of zeros and a 1. 
 
 \begin{figure}[H]
 \centering
@@ -58,22 +59,22 @@ s ? Welche? Oder soll es die Menge aller solcher Sprachen sein? Dann nicht "a la
 
 \subsection{Regular expression}\label{sec:BackgroundRegEx}
 
-- can describe the same "patterns" that can also be represented by a finite automaton
-A regular expression is an algebraic description of a regular/formal language. Regular expressions declare strings that are part of the language. \cite{AutomataTheory.2007} 
+A regular expression is an algebraic description of a regular/formal language. Regular expressions declare strings that are part of the language and can describe the same words that can also be represented by a finite automaton. 
+In comparison to finite automata, the words can be described in an algebraic way. 
+Due to the similarities between regular expressions and finite automata, it is possible to convert regular expressions to finite automata and backwards. 
+Regular expressions are often used to describe tokens that should be recognized by a lexer (see section \ref{sec:BackgroundLexer}). \cite{AutomataTheory.2007}\\
 For example the regular expression \textbf{10+1*} denotes the language consisting of a single 1 followed by a single 0 or any number of 1's. 
 
 \subsection{Formal grammars}\label{sec:BackgroundGrammar}
 
-Unlike regular expressions, grammars not only describe a language but also define a structure of the words of a language.\\
-- generate words of a language
+Formal grammars can generate words of a language and are thus able to describe larger languages than regular expression can describe. 
+Grammars process data using a recursive structure.
 
 %-s Ok, aber for allem können sie viel größer Klassen von Sprachen beschreiben!
 %-...und wenn ich schon dabei bin: Machen REs das nicht auch? Nur halt anders.
 
--language is set of strings
--recursive notation
 
-The grammatically description of a language consists of four components:
+The description of a grammar consists of four components:
 
 \begin{itemize}
 
@@ -84,9 +85,12 @@ The grammatically description of a language consists of four components:
 \item One nonterminal symbol represents the language that is being defined. This nonterminal symbol is called the start symbol. Other nonterminal symbols help to define the language of the start symbol.
 
 \item A set of productions/rules. They represent the recursive definition of the language. Each production consists of: nonterminal symbol that is being (partially) defined in production, production symbol, and a string of terminal symbols and/or variables.
-In production terminals are unchanged and nonterminal symbols are substituted by its production body
+In production terminals are unchanged and nonterminal symbols are substituted by its production body.
+- empty production
 \end{itemize}
 
+- ambigious grammars
+- precedence rules?
 
 \cite{AutomataTheory.2007}
 
@@ -111,7 +115,7 @@ In production terminals are unchanged and nonterminal symbols are substituted by
 
 \subsubsection{Context-free grammars}
 
-- subset of grammars
+A context-free grammar is a grammar that only allows productions rules that are in the form of $V \rightarrow \beta$ with V being a nonterminal symbol and $\beta$ being a sequence of nonterminal and terminal symbol with an arbitrary length. Context-free grammars are often the basis of a parser (see section \ref{sec:BackgroundParser}). \cite{AutomataTheory.2007}
 
 \subsubsection{Reduced grammars}
 
@@ -145,10 +149,7 @@ The \ac{EBNF} extends the \ac{BNF} by with following rules:
 
 Lexing or a so-called lexical analysis is the division of input into units called tokens \cite{LexYacc.1992}.\\
 The input is a string containing a sequence of characters.
-The lexer groups characters of the input string into sequences that are meaningful. These sequences are called lexemes. From each lexeme, the lexer produces a token, which consists of the token name and the lexeme string. The token name is an abstract symbol which is used during parsing. \cite{Aho.2007}
-
--todo example
-
+The lexer groups characters of the input string into sequences that are meaningful. These sequences are called lexemes. From each lexeme, the lexer produces a token, which consists of the token name and the lexeme string. The token name is an abstract symbol which is used during parsing. \cite{Aho.2007} \\
 The tokens are then passed to the parser for syntax analysis.\\
 A lexer needs to distinguish different types of tokens and furthermore decide which token to use if there are multiple ones that fit the input \cite{Mogensen.2017}.\\
 A simple approach to build a lexer would be building an automaton for each token definition and then test to which automata the input corresponds.\\
@@ -169,9 +170,7 @@ The specification is usually written using regular expressions.
 The aim of parsing is to establish a relationship among tokens generated by a lexer \cite{LexYacc.1992}. For doing so, a parser builds a parse tree out of the generated tokens \cite{Mogensen.2017}.\\
 Similar to lexers, parsers can be generated automatically.
 A parser generator takes as input a description of the relationship among tokens in form of a formal grammar (see ). The output is the generated parser. \cite{LexYacc.1992}\\
-During the syntax analysis a parser takes a string of tokens and forms a syntax tree with this construct by finding the matching derivations. The matching derivation can be found by using different approaches for example random guessing (predictive parsing) or LR parsing.
-Input: description of grammar \cite{LexYacc.1992}
-Output: parser \cite{LexYacc.1992}
+During the syntax analysis a parser takes a string of tokens and forms a syntax tree with this construct by finding the matching derivations. The matching derivation can be found by using different approaches. The approaches that are used in this report will be introduced in the following.
 
 \subsection{Bottom-up parsing}\label{sec:BackgroundParserBottomUp}
 
@@ -205,8 +204,8 @@ for example: ambiguous grammar can never be LR (if else)
 
 \subsubsection{LR($k$) parsing}\label{sec:BackgroundParserLR}
 
-LR($k$) parsing most common type of bottom-up parser. The L stands for left-to-right and R stands for constructing a rightmost derivation in reverse. The parameter $k$ refers to the number of inputs symbols that are used as a lookahead. When $k$ is omitted, $k = 1$ is assumed.
-LR-Parsers are complex to implement, but LR parser generators can be used, which significantly reduce the effort in creating an LR-Parser
+LR($k$) parsing is the most common type of bottom-up parsing. The L stands for left-to-right and R stands for constructing a rightmost derivation in reverse. The parameter $k$ refers to the number of inputs symbols that are used as a lookahead. When $k$ is omitted, $k = 1$ is assumed.
+LR-Parsers are complex to implement, but LR parser generators can be used, which significantly reduces the effort for creating an LR-Parser.
 
 -what is rightmost derivation
 continue at s 241
@@ -217,22 +216,23 @@ continue at s 241
 
 \subsubsection{LALR parsing}\label{sec:BackgroundParserLALR}
 
+- lookahead lr technique
 \cite{Aho.2007}
 -p.259
 
 \section{Lex and Yacc}\label{sec:BackgroundLexYacc}
 
-Lex
--specify lexer by regular expressions
--Lex compiler generates code from input in file lex.yy.c
-(p.140)
-Yacc
--transforms yacc specification to c file y.tab.c
--y.tab.c represens LALR parser
-(p. 287)
-\cite{Aho.2007}
+Lex and Yacc are tools for writing lexers and parsers. They often work together, meaning the parser uses the generated tokens from the lexer as input.
 
--automated parser generator creates lex and yacc specifications and generated files from \ac{TPTP} syntax
+\subsection{Lex}\label{sec:BackgroundLex}
+
+Lex is a tool written in C that generates a lexer by specifying regular expressions and belonging code fragments. The specified regular expressions are translated into a program that reads an input stream. The program partitions the input stream into strings matching the regular expressions. Once an expression is recognized the corresponding code is executed. For recognizing expressions, Lex builds a deterministic finite automaton. The automaton chooses the longest possible match if several expressions fit the input. \cite{Lex}
+
+\subsection{Yacc}\label{sec:BackgroundYacc}
+Yacc is a tool written in C that can be used for parsing the input of a computer program. 
+For generating a parser using Yacc, a specification specified the structure of the input has to be given. Besides the specification, the input also consists of code that is invoked once a structure has been recognized. 
+Yacc turns the input specification into a routine that handles the input. This routine calls Lex to get tokens from the input stream and arrange them based on the specification. \cite{Yacc}
+
 
 \section{Python}\label{sec:BackgroundPython}
 
