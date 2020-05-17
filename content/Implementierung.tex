@@ -13,7 +13,11 @@ In order to build the lexer, the function $lex.lex()$ is used. After the lexer h
 
 \subsection{Token}\label{sec:ImplementationLexerToken}
 
-Tokens are given names that indicate what they represent. All tokens that have been defined are combined to a token list.   A tokens list is always required when writing a lexer using \ac{PLY} \cite{PLY}. The list of tokens is also used by the parser to identify terminal symbols \cite{PLY}. Listing \ref{lst:Lexer_tokens} shows the tokens list of the implemented lexer. \\
+Tokens are given names that indicate what they represent.
+All tokens that have been defined are combined to a token list.
+A tokens list is always required when writing a lexer using \ac{PLY} \cite{PLY}.
+The list of tokens is also used by the parser to identify terminal symbols \cite{PLY}.
+Listing \ref{lst:Lexer_tokens} shows the tokens list of the implemented lexer. \\
 
 \begin{lstlisting}[language=Python,basicstyle=\scriptsize	,caption= Lexer tokens,label= lst:Lexer_tokens]
 # List of token names
@@ -36,7 +40,19 @@ tokens = (
 
 \subsection{Regular expression}\label{sec:ImplementationLexerRegularExpression}
 
-Tokens are specified by regular expressions. Regular expressions can be defined in a function. The name of the function is the name of one token in the tokens list with the prefix t\textunderscore . Inside a function it is possible to modify the value of the generated LexToken object and then return it. If not modified, the value of the object is not modified and remains the actual text that has been matched. The regular expression is specified as a string in the beginning of a function. An extract of all functions can be seen in listing \ref{lst:Lexer_regex}. The function for the token $COMMENT$ consists of the comments regular expression that has already been described in chapter \ref{sec:ConceptLexer} and returns the LexToken object unmodified. The functions of $OPEN\textunderscore SQUARE\textunderscore BRACKET$, $NT\textunderscore SYMBOL$ and $T\textunderscore SYMBOL$ (and the other tokens in the tokens list) are implemented similar to $COMMENT$. However, the function of $LGRAMMAR\textunderscore EXPRESSION$ and the functions of the other expressions modify the value of the LexToken object. Instead of the value being the actual text matched, the last three characters are removed. The Python method $rstrip()$ removes all white spaced from the value. Thus, the function returns a LexToken object with the value of the text belonging to the nonterminal symbol that the expression represents. The rule symbol is removed because the rule type is already present in the token type. \\
+Tokens are specified by regular expressions.
+Regular expressions can be defined in a function.
+The name of the function is the name of one token in the tokens list with the prefix t\textunderscore .
+Inside a function it is possible to modify the value of the generated LexToken object and then return it.
+If not modified, the value of the object is not modified and remains the actual text that has been matched.
+The regular expression is specified as a string in the beginning of a function. An extract of all functions can be seen in listing \ref{lst:Lexer_regex}.
+The function for the token $COMMENT$ consists of the comments regular expression that has already been described in chapter \ref{sec:ConceptLexer} and returns the LexToken object unmodified.
+The functions of $OPEN\textunderscore SQUARE\textunderscore BRACKET$, $NT\textunderscore SYMBOL$ and $T\textunderscore SYMBOL$ (and the other tokens in the tokens list) are implemented similar to $COMMENT$.
+However, the function of $LGRAMMAR\textunderscore EXPRESSION$ and the functions of the other expressions modify the value of the LexToken object.
+Instead of the value being the actual text matched, the last three characters are removed.
+The Python method $rstrip()$ removes all white spaced from the value.
+Thus, the function returns a LexToken object with the value of the text belonging to the nonterminal symbol that the expression represents.
+The rule symbol is removed because the rule type is already present in the token type.
 
 \begin{lstlisting}[language=Python,basicstyle=\scriptsize	,caption= Lexer regular expressions,label= lst:Lexer_regex]
 def t_COMMENT(self, t):
@@ -63,9 +79,11 @@ def t_T_SYMBOL(self, t):
 )
 \end{lstlisting}
 
-The function $t\textunderscore ignore$ is used for declaring characters that should be ignored in the input stream. In this project, white spaced and new lines are ignored (see chapter \ref{sec:ConceptLexer}.
+The function $t\textunderscore ignore$ is used for declaring characters that should be ignored in the input stream.
+In this project, white spaced and new lines are ignored (see chapter \ref{sec:ConceptLexer}.
 
-The function $t\textunderscore error$ is called when an error occurs during lexing. The defined error function shown in listing \ref{lst:Lexer_error} prints the value of the illegal character and skips the character. \\
+The function $t\textunderscore error$ is called when an error occurs during lexing.
+The defined error function shown in listing \ref{lst:Lexer_error} prints the value of the illegal character and skips the character. \\
 
 \begin{lstlisting}[language=Python,basicstyle=\scriptsize	,caption= Lexer error function,label= lst:Lexer_error]
 def t_error(self, t):
@@ -122,8 +140,18 @@ def t_error(self, t):
 
 
 \section{Parser}\label{sec:ImplementationParser}
-The parser takes the matched tokens from the lexer and constructs a grammar list (see chapter \ref{sec:ConceptParser}) based on a specified context free grammar. Each rule of the context free grammar is defined by a Python function. The docstrings of the functions contain a context free grammar specification of the rules. The function accepts one argument which is a list of grammar symbols. The function contains semantic actions initiated by the rule that are applied to the first element of the input argument.
-An example for a defined function can be seen in listing \ref{lst:Parser_functionProductionslist}. The function defines the rule that has the nonterminal symbol $productions\textunderscore list$ on the left side. The docstring of the functions contains the specification of the rule and the code inside the function determines the actions that are taken once the function is called. If the input has the length 2, meaning the input list consists of two entries, a new $PRODUCTIONS\textunderscore LIST$ is created with $p[1]$ and is saved in $p[0]$. If the length of the input equals four, a $productions\textunderscore list$ already exists and is expanded by a new productions alternative. This is done by appending $p[3]$ to the existing list that is stored in $p[1]$. The result is again being stored in $p[0]$. \\
+The parser takes the matched tokens from the lexer and constructs a grammar list (see chapter \ref{sec:ConceptParser}) based on a specified context free grammar.
+Each rule of the context free grammar is defined by a Python function.
+The docstrings of the functions contain a context free grammar specification of the rules.
+The function accepts one argument which is a list of grammar symbols.
+The function contains semantic actions initiated by the rule that are applied to the first element of the input argument.
+An example for a defined function can be seen in listing \ref{lst:Parser_functionProductionslist}.
+The function defines the rule that has the nonterminal symbol $productions\textunderscore list$ on the left side.
+The docstring of the functions contains the specification of the rule and the code inside the function determines the actions that are taken once the function is called.
+If the input has the length 2, meaning the input list consists of two entries, a new $PRODUCTIONS\textunderscore LIST$ is created with $p[1]$ and is saved in $p[0]$.
+If the length of the input equals four, a $productions\textunderscore list$ already exists and is expanded by a new productions alternative.
+This is done by appending $p[3]$ to the existing list that is stored in $p[1]$.
+The result is again being stored in $p[0]$. \\
 
 \begin{lstlisting}[language=Python,basicstyle=\scriptsize	,caption= Parser function of productions list,label= lst:Parser_functionProductionslist]
 def p_productions_list(self, p):
@@ -138,7 +166,9 @@ def p_productions_list(self, p):
         p[0] = p[1]
 \end{lstlisting}
 
-The function that is defined first in the Python file determines the start symbol to which the grammar should be reduced. The parser stops when no more input exists and the start symbol has been reached. The final value is p[0] from the start symbol. 
+The function that is defined first in the Python file determines the start symbol to which the grammar should be reduced.
+The parser stops when no more input exists and the start symbol has been reached.
+The final value is p[0] from the start symbol.
 
 \subsection{Nonterminal symbols}\label{sec:ConceptParserDataStructure}
 
@@ -149,7 +179,11 @@ The production property can take two values and denotes whether a \textit{T\text
 embedded in square brackets or not. In the production rules a \textit{T\textunderscore SYMBOL}
 token, either embedded in square brackets or without brackets, can be derived
 from a \textit{T\textunderscore SYMBOL \textunderscore PRODUCTION}. Asterisk and vertical bar tokens embedded in square
-brackets can be derived from a \textit{T\textunderscore SYMBOL \textunderscore PRODUCTION} production as well. The \textit{T\textunderscore SYMBOL \textunderscore PRODUCTION} is necessary because usually square brackets denote that the term within the brackets is optional which is not the case with terminal symbols. Square brackets embedding terminal symbols denote that the symbol within the brackets is terminal. For example an asterisk embedded in square brackets refers to the terminal symbol. An asterisk not embedded in square bracket corresponds to the production property $optional$ (see figure \ref{fig:ConceptProductionPropertyClassDiagram}).
+brackets can be derived from a \textit{T\textunderscore SYMBOL \textunderscore PRODUCTION} production as well.
+The \textit{T\textunderscore SYMBOL \textunderscore PRODUCTION} is necessary because usually square brackets denote that the term within the brackets is optional which is not the case with terminal symbols.
+Square brackets embedding terminal symbols denote that the symbol within the brackets is terminal.
+For example an asterisk embedded in square brackets refers to the terminal symbol.
+An asterisk not embedded in square bracket corresponds to the production property $optional$ (see figure \ref{fig:ConceptProductionPropertyClassDiagram}).
 
 %Analogue to the T\textunderscore symbol data type, the NT\textunderscore SYMBOL also has the value of the non-terminal symbol token as an attribute. 
 %
@@ -972,10 +1006,8 @@ Then the created \textit{production\textunderscore string} is returned.
 The procedure to create the string representation of the \textit{XOR\textunderscore PRODUCTIONS\textunderscore LIST} class is almost equivalent to the \textit{PRODUCTIONS\textunderscore LIST} process described in algorithm \ref{alg:OutputCreateProductionsListString}. The only difference is, that generated string are enclosed by parentheses.
 \subsubsection{\textit{PRODUCTION\textunderscore ELEMENT} string representation creation}
 
-The \textit{PRODUCTION\textunderscore ELEMENT} data type consists of a textit{SYMBOL} and a \textit{ProductionProperty}.
+The \textit{PRODUCTION\textunderscore ELEMENT} data type consists of a textit{SYMBOL} and a \textit{ProductionProperty}, which can be seen in the UML diagram in section \ref{fig:ConceptProductionElementClassDiagram}.
 The procedure of creating the string representation of a \textit{PRODUCTION\textunderscore ELEMENT} is outlined in the following algorithm \ref{alg:OutputCreateProductionElementString}. The string representation is created similar to the creation of the string representation of a \textit{PRODUCTION}.
-
--todo referenz to production
 
 \begin{algorithm}[H]
 \caption{\textit{PRODUCTION\textunderscore ELEMENT}  string creation}
@@ -1002,8 +1034,6 @@ The procedure of creating the string representation of a \textit{PRODUCTION\text
 To create the string representation of a non-terminal symbol, its value can be returned as-is.
 The terminal symbol data type additionally has a production property as a class attribute.\\
 To create the string representation of a terminal symbol, in the case of the property \textit{OPTIONAL}, square brackets have to be printed around the terminal symbol value. In case of the production property \textit{REPETITION} the asterisk symbol has to be printed after the terminal symbol value. In case of the production property \textit{NONE}, the string representation consists only of the terminal symbol value.
-
-%\subsection{Automated parser generator compatibility}\label{sec:ImplementationAutomatedParserGenerator}
 
 \section{GUI}\label{sec:ImplementationGUI}
 

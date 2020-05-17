@@ -8,9 +8,16 @@ This chapter introduces the technologies and background that will be utilized in
 
 The \acf{TPTP} is a library of problems for \ac{ATP}.
 Problems within the library are described in the \ac{TPTP} language.
-The  \ac{TPTP} language is a formal language and its syntax is specified in an \ac{EBNF}. \cite{Sut17}\\
+The  \ac{TPTP} language is a formal language and its syntax is specified in an \ac{EBNF}. \cite{Sut17}
 
-TODO more detailed
+Originally the \ac{TPTP} used only \ac{CNF} \cite{Sut09}, but over the
+years expanded to various other types of logics including
+include \ac{FOF} \cite{Sut09}, Typed \ac{FOF} \cite{SS+12, BP:CADE-2013} and \ac{THF} \cite{SB10, KSR:PAAR-2016}.
+
+The TPTP syntax uses an extended \ac{BNF}, with distinct rules for syntax, semantic constraints, tokens, and character classes which will be described in more detail in section \ref{sec:ConceptLexer}.
+A small tool chain based on Lex/Yacc for building a basic parser from the syntax is available \cite{VS06}. While the TPTP is a major success story, the resulting syntax is large and complex.
+Understanding the syntax is non-trivial.
+For new developers who want to implement ``only'' a first theorem prover for \ac{CNF}, identifying the relevant parts of the syntax and implementing a parser is a significant barrier to entry.
 
 \section{Formal languages}\label{sec:BackgroundFormalLanguage}
 
