@@ -20,22 +20,22 @@ The set of all strings over an alphabet $\sum$ is denoted as $\sum ^{*}$. \cite{
 If $\sum$ is an alphabet and $L$ is a subset of $\sum ^*$, then $L$ is a language over $\sum$. \cite{AutomataTheory.2007}
 
 \subsection{Finite automata}\label{sec:BackgroundAutomata}
--how is input of automaton processed?
--input alphabet
--error state omitted
 
-A finite automaton can recognizes words of a language.
-An automaton is composed of states and transitions between states.
-Transitions are executed in response to the input of an automaton.
+A finite automaton can recognize words of a language.
+The language represented by an automaton is the set of all accepted words.
+An automaton consists of  a set of states, a set of input symbols and transition functions.
+A transition function takes as input a state and an input symbol and returns a state based these input arguments.
 States are usually represented by circles and transitions by labelled arrows.
-Two special states are the start and the final/accepting state.
-The start state is the state in which the automaton starts processing.
-If the automaton reaches the final state, the word is part of the language the automaton represents.\\
+There are two special states: The start state and final state(s).
+The start state is the state in which the automaton starts processing the input symbols.
+Starting from the start state the automaton processes the first input symbol by evaluating the belonging transition function that takes the start state and the first input symbol as arguments. The automaton continues to process the input data by evaluating transition functions until the automaton has read every input symbol. The input word is part of the language the automaton represents if the automaton has reached a final state. If the automaton has not reached a final state, the input words is not part of the language the automaton represents.\\
 Deterministic and non-deterministic automata can be distinguished.
-Non-deterministic can have multiple transitions for the same input.
+Non-deterministic automata can have multiple transitions for the same input.
 Deterministic automata have unambiguous transitions for a given input.
 The concept of finite automata be applied to a lexical analyzer for recognizing tokens (see section \ref{sec:BackgroundLexer}). \cite{AutomataTheory.2007}\\
-Figure \ref{fig:FiniteAutomation} shows an automaton consisting of the three states $z\textsubscript{0}, z\textsubscript{1}$ and $z\textsubscript{2}$ and three transitions. The automaton accepts words consisting of a 1, an arbitrary amount of zeros and a 1.
+Figure \ref{fig:FiniteAutomaton} shows an automaton consisting of the set of states $\{z\textsubscript{0}, z\textsubscript{1}, z\textsubscript{2}\}$ and several transitions. For convenience not all transitions are printed.
+If the first input symbol would be a zero the automaton would transit in a so called error state which can not be left regardless the input symbols.\\
+The automaton accepts words consisting of a 1, an arbitrary amount of zeros and a 1.
 
 \begin{figure}[H]
 \centering
@@ -51,7 +51,7 @@ Figure \ref{fig:FiniteAutomation} shows an automaton consisting of the three sta
 	  ;
 \end{tikzpicture}
 \caption{Finite automaton}
-\label{fig:FiniteAutomat  on}
+\label{fig:FiniteAutomaton}
 \end{figure}
 
 \subsection{Regular expression}\label{sec:BackgroundRegEx}
@@ -65,8 +65,7 @@ For example the regular expression \textbf{10+1*} denotes the language consistin
 
 \subsection{Formal grammars}\label{sec:BackgroundGrammar}
 
-Formal grammars describe how words of a language can be generated. and are thus able to describe ?more classes of? languages than regular expression can describe.
--In comparison to regular expressions, more classes of languages can be described. Regular expressions only describe regular languages.
+Formal grammars describe how words of a language can be generated. In comparison to regular expressions, more classes of languages can be described. While regular expressions only describe regular grammars, formal grammars are able to describe all types of grammars of the Chomsky hierarchy.
 %Grammars process data using a recursive structure.
 
 %-s Ok, aber for allem können sie viel größer Klassen von Sprachen beschreiben!
@@ -78,17 +77,16 @@ The description of a grammar consists of four components:
 
 \item A set of symbols that defines words of the language. These symbols are called terminal symbols.
 
-\item A set of variables called nonterminal symbols. Each symbol represents a set of strings. 
+\item A set of variables called nonterminal symbols. Each nonterminal symbol represents a set of words. 
 
 \item One nonterminal symbol represents the language that is being defined. This nonterminal symbol is called the start symbol. Other nonterminal symbols help to define the language of the start symbol.
 
-\item A set of productions/rules. They represent the recursive definition of the language. Each production consists of: nonterminal symbol that is being (partially) defined in production, production symbol, and a string of terminal symbols and/or variables.
-In production terminals are unchanged and nonterminal symbols are substituted by its production body.
-- empty production
+\item A set of productions/rules. They recursively describe the language. Each production consists of a nonterminal symbol on the left-hand side that is being substituted by a sequence of terminal symbols and/or other nonterminal symbols on the right-hand side.
+There can also be empty productions, meaning a nonterminal symbol is substituted by nothing.
 \end{itemize}
 
-- ambigious grammars
-- precedence rules?
+%- ambigious grammars
+%- precedence rules?
 
 \cite{AutomataTheory.2007}
 
@@ -124,7 +122,7 @@ In other words, a nonterminal symbol $\xi$ is terminating if there exist product
 Given the set of terminal symbols $\sum$ and the start symbol $S$, a nonterminal symbol $\xi$ is called reachable if there are production rules $S \underrightarrow{*} u\xi v$ so that $S$ can be derived to $u\xi v$ and $u,v \epsilon \sum$*.\\
 In other words, a nonterminal symbol $\xi$ is reachable if there exist production rules so that the start symbol can be replaced by a word containing $\xi$. \cite{Cremers75}
 
-todo beispiel
+%todo beispiel
 
 \section{\acf{BNF}}\label{sec:BackgroundBNF}
 
@@ -136,10 +134,10 @@ Using this pattern of notation whole grammars can be specified.\\
 The \ac{EBNF} extends the \ac{BNF} by with following rules:
 
 \begin{itemize}%[noitemsep]
-	\item optional expressions are surrounded by square brackets.
-	\item repetition is denoted by curly brackets.
-	\item parentheses are used for grouping.
-	\item terminals are enclosed in quotation marks.
+	\item Optional expressions are surrounded by square brackets.
+	\item Repetition is denoted by curly brackets.
+	\item Parentheses are used for grouping.
+	\item Terminals are enclosed in quotation marks.
 \end{itemize}
 \label{itemize:BackgroundBNF}
 \cite{EBNF.1977}
@@ -185,18 +183,20 @@ The specification is usually written using regular expressions.
 
 The aim of parsing is to establish a relationship among tokens generated by a lexer \cite{LexYacc.1992}. For doing so, a parser builds a parse tree out of the generated tokens \cite{Mogensen.2017}.\\
 Similar to lexers, parsers can be generated automatically.
-A parser generator takes as input a description of the relationship among tokens in form of a formal grammar (see ). The output is the generated parser. \cite{LexYacc.1992}\\
-During the syntax analysis a parser takes a string of tokens and forms a syntax tree with this construct by finding the matching derivations. The matching derivation can be found by using different approaches. The approaches that are used in this report will be introduced in the following.
+A parser generator takes as input a description of the relationship among tokens in form of a formal grammar (see section \ref{sec:BackgroundGrammar}). The output is the generated parser. \cite{LexYacc.1992}\\
+During the syntax analysis a parser takes a string of tokens and forms a syntax tree by finding the matching derivations. The matching derivation can be found using different approaches. The approaches that are used in this report will be introduced in the following.
 
 \subsection{Bottom-up parsing}\label{sec:BackgroundParserBottomUp}
 
 In bottom-up parsing a parse tree for an input string is constructed beginning at the leaves working up to the root. The idea is to reduce a string to the start symbol of a grammar, constructing a deviation in reverse.
 \cite{Aho.2007}
 
--at each reduction step specific substring matching body of a production is replaced by the nonterminal at the head of that productions (reduction is reverse step of deviation)
--key decisions are when to reduce and what production to apply
+At each reduction step a specific substring matching the body of a production is replaced by the nonterminal at the head of that productions (reduction is reverse step of deviation).
+The key decisions are when to reduce and what production to apply.
+These decisions depend on the parser implementation.
+An example are shift-reduce parsers that are described in the following.
 
-\subsubsection{Shift-reduce parsing}\label{sec:BackgroundParserShiftReduce}
+\subsection{Shift-reduce parsing}\label{sec:BackgroundParserShiftReduce}
 
 Shift-reduce parsers are one class of bottom-up parsers. In shift-reduce parsing a stack is used to hold grammar symbols and an input buffer holds the rest of the input string.
 During parsing the input is scanned from left to right. The parser shifts zero or more input symbols on the stack until it can reduce the elements at the top of the stack. The elements at the top of the stack are reduced to the head of the corresponding production. This procedure is repeated until the stack contains the start symbol and the input buffer is empty or an error is detected. \cite{Aho.2007}\\
@@ -218,7 +218,7 @@ A reduce-reduce conflict occurs if the parser cannot decide which of multiple re
 for example: ambiguous grammar can never be LR (if else)
 \cite{Aho.2007}
 
-\subsubsection{LR($k$) parsing}\label{sec:BackgroundParserLR}
+\subsection{LR($k$) parsing}\label{sec:BackgroundParserLR}
 
 LR($k$) parsing is the most common type of bottom-up parsing. The L stands for left-to-right and R stands for constructing a rightmost derivation in reverse. The parameter $k$ refers to the number of inputs symbols that are used as a lookahead. When $k$ is omitted, $k = 1$ is assumed.
 LR-Parsers are complex to implement, but LR parser generators can be used, which significantly reduces the effort for creating an LR-Parser.
