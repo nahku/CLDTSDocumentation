@@ -38,12 +38,11 @@ The start symbol is \textit{TPTP\textunderscore file}.
 
 All productions except the \textit{cnf\textunderscore annotated} are disabled from the \textit{annotated\textunderscore formula} grammar rule (line 2 of listing \ref{lst:ValidationParserControlFile}).
 The \textit{annotated\textunderscore formula} grammar rule can be seen in the following listing \ref{lst:ValidationParserAnnotatedFormulaProductions}.
+Annotations are also disabled (line 3 in listing \ref{lst:ValidationParserControlFile}).
 \begin{lstlisting}[language = None,caption= \textit{annotated\textunderscore formula} production rule, label= lst:ValidationParserAnnotatedFormulaProductions]
 <annotated_formula>    ::= <thf_annotated> | <tff_annotated> | <tcf_annotated> |
                            <fof_annotated> | <cnf_annotated> | <tpi_annotated>
 \end{lstlisting}
-
-todo describe annotations rule
 
 To extract the \ac{CNF} sub-syntax using the control file content from listing \ref{lst:ValidationParserControlFile} either the command-line interface or the GUI can be used.
 

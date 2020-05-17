@@ -1,7 +1,8 @@
 %!TEX root = ../dokumentation.tex
 
 \chapter{Concept}\label{cha:Concept}
-This chapter outlines the concept and the architecture of \ac{Synplifier}. In section \ref{sec:ConceptApproach} a general approach to build \ac{Synplifier} is outlined and in section \ref{sec:ConceptRequirements} resulting requirements \ac{Synplifier} needs to meet are described.
+This chapter outlines the concept and the architecture of \ac{Synplifier}.
+In section \ref{sec:ConceptApproach} a general approach to build \ac{Synplifier} is outlined and in section \ref{sec:ConceptRequirements} requirements \ac{Synplifier} needs to meet are described.
 Section \ref{sec:ConceptOverview} introduces into the architecture of \ac{Synplifier} and its components.
 The sections following section \ref{sec:ConceptOverview} describe the concept of each component that is developed.
 
@@ -14,12 +15,13 @@ productions.
 
 \section{Requirements}\label{sec:ConceptRequirements}
 
-The following section outlines requirements of \ac{Synplifier}. Requirements are numbered and split into three categories: 
+The following section outlines requirements of \ac{Synplifier}.
+Requirements are numbered and split into three categories: 
 
 \begin{itemize}
 \item Requirements concerning the GUI are marked by a $G$
 \item Requirements concerning the Command-line interface are marked by a $C$
-\item General requirements concerning \ac{Synplifier} are marked by a $R$
+\item General requirements concerning \ac{Synplifier} are marked by an $R$
 \end{itemize}
 
 The requirements are described using capitalized keywords like MUST or SHOULD following \cite{Bradner.1997}.
@@ -358,7 +360,6 @@ Since it is possible for a non-terminal symbol to be on the right side as well a
 
 The following example shows a production rule and an abstract representation of the resulting list of children belonging to the node. Each production alternative is embedded in the children list of the node. %This is relevant for checking whether a non-terminal is terminating.
 
-%todo check listing below
 \begin{lstlisting}[caption= Rule and resulting list of children]
 Production rule:
 <disjunction>  ::=  <literal> | <disjunction><vline><literal>
@@ -517,17 +518,6 @@ If that is not the case, the node is terminating if all nodes in the \textit{chi
 If a non-terminal symbol has multiple rule types, it is represented by multiple nodes. Also, if a non-terminal symbol with multiple rule types is in featured in a production, all nodes representing that non-terminal symbol are in the children list corresponding to this production. However, only one of the nodes needs to be terminating for the non-terminal symbol to be terminating.
 
 After the terminating symbols have been determined, productions that contain a nonterminating symbol must be removed from the nodes of the grammar graph. Because some non-terminal symbols might have productions that contain nonterminating symbols, but also other productions that only contain terminating symbols, only the productions containing nonterminating symbols must be removed.
-
-%After the desired productions have been deleted from the grammar graph, the next step is to remove the nonterminating symbols from the grammar graph.
-%Non-terminating productions are productions in which at least one nonterminal symbol is non-terminating.
-%First it must be determined which symbols are terminating and which are nonterminating.
-%The terminating symbols can be determined recursively using dynamic programming techniques.
-%The goal is to determine for each nonterminal symbol if it derives a terminating symbol. Only then it is a useful symbol since it is reachable and derives a terminating symbol todo reference
-%Starting at the start symbol, the grammar graph is traversed. 
-%
-%-start with start symbol
-%-traverse through graph and compute terminating symbols
-%- store visited nodes to avoid infinite loops
 
 \subsection{Determination of the remaining reachable symbols}\label{sec:ConceptDerterminingRemainingReachable}
 
@@ -729,5 +719,5 @@ To compare generated sub-syntaxes to the original \ac{TPTP} a script has been de
 To count rules of the original \ac{TPTP} syntax (including non-reachable and nonterminating symbols) a script was developed.
 It uses the parser to parse the original \ac{TPTP} syntax which results in a grammar list. This grammar list is iterated and rules and productions are counted in order to get the total numbers. Also, grammar rules and production are counted separate too.\\
 Counting rules based on the full \ac{TPTP} syntax gives a better overview when comparing syntax sizes.\\
-The script can be used independently from \ac{Synplifier}
+The script can be used independently of \ac{Synplifier} 
 
