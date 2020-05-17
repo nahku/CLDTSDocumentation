@@ -4,48 +4,38 @@
 
 This chapter introduces the technologies and background that will be utilized in the following chapters. First, an introduction into the \ac{TPTP} language is given. Then, formal grammars and the \ac{BNF} are described. Following that, the foundations of lexing and parsing are outlined. Finally, Python and relevant Python modules that are used in the implementation are presented.
 
-\section{TPTP language}\label{sec:BackgroundTPTP}
-
-The \acf{TPTP} is a library of problems for \ac{ATP}.
-Problems within the library are described in the \ac{TPTP} language.
-The  \ac{TPTP} language is a formal language and its syntax is specified in an \ac{EBNF}. \cite{Sut17}
-
-Originally the \ac{TPTP} used only \ac{CNF} \cite{Sut09}, but over the
-years expanded to various other types of logics including
-include \ac{FOF} \cite{Sut09}, Typed \ac{FOF} \cite{SS+12, BP:CADE-2013} and \ac{THF} \cite{SB10, KSR:PAAR-2016}.
-
-The TPTP syntax uses an extended \ac{BNF}, with distinct rules for syntax, semantic constraints, tokens, and character classes which will be described in more detail in section \ref{sec:ConceptLexer}.
-A small tool chain based on Lex/Yacc for building a basic parser from the syntax is available \cite{VS06}. While the TPTP is a major success story, the resulting syntax is large and complex.
-Understanding the syntax is non-trivial.
-For new developers who want to implement ``only'' a first theorem prover for \ac{CNF}, identifying the relevant parts of the syntax and implementing a parser is a significant barrier to entry.
-
 \section{Formal languages}\label{sec:BackgroundFormalLanguage}
 
-This section introduces terms and concepts in the area of formal languages that are part of the basics of \ac{Synplifier}.
+This section introduces terms and concepts in the area of formal languages that are necessary to understand \ac{Synplifier}.
 
 \subsection{Alphabet}
-An alphabet is a finite, non-empty set of symbols usually represented by $\sum$. An example is the binary alphabet $\sum = \{0,1\}$. \cite{AutomataTheory.2007}
+An alphabet is a finite, non-empty set of symbols usually represented by the $\sum$ symbol.
+An example is the binary alphabet $\sum = \{0,1\}$. \cite{AutomataTheory.2007}
 
 \subsection{String}
-A string also called word is a finite sequence of symbols from some alphabet. For example the string \textit{101} is a string from the binary alphabet $\sum = \{0,1\}$.
+A string, also called word, is a finite sequence of symbols from some alphabet. For example the string \textit{101} is a string from the binary alphabet $\sum = \{0,1\}$.
 The set of all strings over an alphabet $\sum$ is denoted as $\sum ^{*}$. \cite{AutomataTheory.2007}
 
 \subsection{Language}
-A formal language is a set of words over an alphabet $\sum ^*$. If $\sum$ is an alphabet and $L$ is a subset of $\sum ^*$, then $L$ is a language over $\sum$. \cite{AutomataTheory.2007}
+If $\sum$ is an alphabet and $L$ is a subset of $\sum ^*$, then $L$ is a language over $\sum$. \cite{AutomataTheory.2007}
 
 \subsection{Finite automata}\label{sec:BackgroundAutomata}
+-how is input of automaton processed?
+-input alphabet
+-error state omitted
 
-A finite automaton recognizes words of a language. 
-An automaton is composed of states and transitions between states. 
-Transitions are executed in response to the input of an automaton. 
-States are usually represented by circles and transitions by labelled arrows. 
-Two special states are the start and the final/accepting state. 
-The start state is the state in which the automaton is in the beginning. 
-If the automaton reaches the final state, the word is part of the language the automaton represents. 
-It can be distinguished between deterministic and non-deterministic automata. 
-Non-deterministic have multiply transitions for the same input and thus it can not be predicted how the automata will operate.  
-The concept of finite automata can for example be applied to a lexical analyzer for recognizing tokens (see section \ref{sec:BackgroundLexer}). \cite{AutomataTheory.2007}\\
-Figure \ref{fig:FiniteAutomation} shows an automaton consisting of the three states $z\textsubscript{0}, z\textsubscript{1}$ and $z\textsubscript{2}$ and three transitions. The automaton accepts words consisting of a 1, an arbitrary amount of zeros and a 1. 
+A finite automaton can recognizes words of a language.
+An automaton is composed of states and transitions between states.
+Transitions are executed in response to the input of an automaton.
+States are usually represented by circles and transitions by labelled arrows.
+Two special states are the start and the final/accepting state.
+The start state is the state in which the automaton starts processing.
+If the automaton reaches the final state, the word is part of the language the automaton represents.\\
+Deterministic and non-deterministic automata can be distinguished.
+Non-deterministic can have multiple transitions for the same input.
+Deterministic automata have unambiguous transitions for a given input.
+The concept of finite automata be applied to a lexical analyzer for recognizing tokens (see section \ref{sec:BackgroundLexer}). \cite{AutomataTheory.2007}\\
+Figure \ref{fig:FiniteAutomation} shows an automaton consisting of the three states $z\textsubscript{0}, z\textsubscript{1}$ and $z\textsubscript{2}$ and three transitions. The automaton accepts words consisting of a 1, an arbitrary amount of zeros and a 1.
 
 \begin{figure}[H]
 \centering
@@ -66,7 +56,8 @@ Figure \ref{fig:FiniteAutomation} shows an automaton consisting of the three sta
 
 \subsection{Regular expression}\label{sec:BackgroundRegEx}
 
-A regular expression is an algebraic description of a regular/formal language. Regular expressions declare strings that are part of the language and can describe the same words that can also be represented by a finite automaton. 
+A regular expression is an algebraic description of a regular language.
+Regular expressions declare strings that are part of the language and can describe the same words that can also be represented by a finite automaton. 
 In comparison to finite automata, the words can be described in an algebraic way. 
 Due to the similarities between regular expressions and finite automata, it is possible to convert regular expressions to finite automata and backwards. 
 Regular expressions are often used to describe tokens that should be recognized by a lexer (see section \ref{sec:BackgroundLexer}). \cite{AutomataTheory.2007}\\
@@ -74,12 +65,12 @@ For example the regular expression \textbf{10+1*} denotes the language consistin
 
 \subsection{Formal grammars}\label{sec:BackgroundGrammar}
 
-Formal grammars can generate words of a language and are thus able to describe larger languages than regular expression can describe. 
-Grammars process data using a recursive structure.
+Formal grammars describe how words of a language can be generated. and are thus able to describe ?more classes of? languages than regular expression can describe.
+-In comparison to regular expressions, more classes of languages can be described. Regular expressions only describe regular languages.
+%Grammars process data using a recursive structure.
 
 %-s Ok, aber for allem können sie viel größer Klassen von Sprachen beschreiben!
 %-...und wenn ich schon dabei bin: Machen REs das nicht auch? Nur halt anders.
-
 
 The description of a grammar consists of four components:
 
@@ -122,14 +113,15 @@ In production terminals are unchanged and nonterminal symbols are substituted by
 
 \subsubsection{Context-free grammars}
 
-A context-free grammar is a grammar that only allows productions rules that are in the form of $V \rightarrow \beta$ with V being a nonterminal symbol and $\beta$ being a sequence of nonterminal and terminal symbol with an arbitrary length. Context-free grammars are often the basis of a parser (see section \ref{sec:BackgroundParser}). \cite{AutomataTheory.2007}
+A context-free grammar is a grammar that only allows productions rules that are in the form of $V \rightarrow \beta$ with V being a nonterminal symbol and $\beta$ being a sequence of nonterminal and terminal symbol with an arbitrary length.
+Context-free grammars are often the basis of a parser (see section \ref{sec:BackgroundParser}). \cite{AutomataTheory.2007}
 
 \subsubsection{Reduced grammars}
 
-Grammars are called reduced if each nonterminal symbol is terminating and reachable \cite{Cremers75}. \\
-Given the set of terminal symbols $\sum$, a nonterminal symbol $\xi$ is called terminating if there are productions $\xi \underrightarrow{*} z$ so that $z$ can be derived from $\xi$ and $z \epsilon \sum$*. \\
+Grammars are called reduced if each nonterminal symbol is terminating and reachable \cite{Cremers75}.\\
+Given the set of terminal symbols $\sum$, a nonterminal symbol $\xi$ is called terminating if there are productions $\xi \underrightarrow{*} z$ so that $z$ can be derived from $\xi$ and $z \epsilon \sum$*.\\
 In other words, a nonterminal symbol $\xi$ is terminating if there exist production rules so that  $\xi$ can be replaced by a string of terminal symbols. \cite{Cremers75}\\
-Given the set of terminal symbols $\sum$ and the start symbol $S$, a nonterminal symbol $\xi$ is called reachable if there are production rules $S \underrightarrow{*} u\xi v$ so that $S$ can be derived to $u\xi v$ and $u,v \epsilon \sum$*. \\
+Given the set of terminal symbols $\sum$ and the start symbol $S$, a nonterminal symbol $\xi$ is called reachable if there are production rules $S \underrightarrow{*} u\xi v$ so that $S$ can be derived to $u\xi v$ and $u,v \epsilon \sum$*.\\
 In other words, a nonterminal symbol $\xi$ is reachable if there exist production rules so that the start symbol can be replaced by a word containing $\xi$. \cite{Cremers75}
 
 todo beispiel
@@ -151,6 +143,23 @@ The \ac{EBNF} extends the \ac{BNF} by with following rules:
 \end{itemize}
 \label{itemize:BackgroundBNF}
 \cite{EBNF.1977}
+
+\section{TPTP language}\label{sec:BackgroundTPTP}
+
+The \acf{TPTP} is a library of problems for \ac{ATP}.
+Problems within the library are described in the \ac{TPTP} language.
+The  \ac{TPTP} language is a formal language and its syntax is specified in an \ac{EBNF}. \cite{Sut17}
+
+Originally the \ac{TPTP} used only \ac{CNF} \cite{Sut09}, but over the
+years expanded to various other types of logics including
+include \ac{FOF} \cite{Sut09}, Typed \ac{FOF} \cite{SS+12, BP:CADE-2013} and \ac{THF} \cite{SB10, KSR:PAAR-2016}.
+
+The TPTP syntax uses an extended \ac{BNF}, with distinct rules for syntax, semantic constraints, tokens, and character classes which will be described in more detail in section \ref{sec:ConceptLexer}.
+A small tool chain based on Lex/Yacc for building a basic parser from the syntax is available \cite{VS06}.
+While the TPTP is a major success story, the resulting syntax is large and complex.
+Understanding the syntax is non-trivial.
+For new developers who want to implement ``only'' a first theorem prover for \ac{CNF}, identifying the relevant parts of the syntax and implementing a parser is a significant barrier to entry.
+
 
 \section{Lexing}\label{sec:BackgroundLexer}
 
@@ -237,18 +246,15 @@ Lex is a tool written in C that generates a lexer by specifying regular expressi
 
 \subsection{Yacc}\label{sec:BackgroundYacc}
 Yacc is a tool written in C that can be used for parsing the input of a computer program. 
-For generating a parser using Yacc, a specification specified the structure of the input has to be given. Besides the specification, the input also consists of code that is invoked once a structure has been recognized. 
-Yacc turns the input specification into a routine that handles the input. This routine calls Lex to get tokens from the input stream and arrange them based on the specification. \cite{Yacc}
-
+For generating a parser using Yacc, a specification that specifies the structure of the input of the parser has to be given. In addition to the specification of the structure, the input to the parser generator also consists of code that is invoked once a structure has been recognized. 
+Yacc turns the input specification into a routine that handles the input. This routine calls Lex to get tokens from the input stream and arranges them based on the specification. \cite{Yacc}
 
 \section{Python}\label{sec:BackgroundPython}
 
-Since the use cases are all hand-created grammars of relatively small
-size (dozens to thousands of rules), and the algorithms do not have
-high complexity, we decided to implement the tool in Python 3. 
-Python
-is a simple but powerful modern multi-paradigm language with good support and excellent
-libraries. Python is easy to learn and its power allows it to create complex applications using Python. Libraries that are used to implement \ac{Synplifier} are introduced in the following sections.
+Since the use cases are all hand-created grammars of relatively small size (dozens to thousands of rules), and the algorithms do not have high complexity, we decided to implement the tool in Python 3. 
+Python is a simple but powerful modern multi-paradigm language with good support and excellent libraries.
+Python is easy to learn and its power allows it to create complex applications using Python.
+Libraries that are used in the implementation \ac{Synplifier} are introduced in the following sections.
 
 \subsection{PLY}\label{sec:BackgroundPythonPLY}
 
@@ -262,8 +268,8 @@ libraries. Python is easy to learn and its power allows it to create complex app
 \end{itemize}
 
 \ac{PLY} consists of the two modules $lex.py$ and $yacc.py$ that are meant to execute together. For example $yacc.py$ retrieves tokens from the input stream provided by $lex.py$. $Yacc.py$ returns by default an Abstract Syntax Tree. However, it is possible for the user to change the output of $yacc.py$ according to his demands.
-
 \cite{PLY}
+PLY is used to generate the lexer and parser for the \ac{TPTP} syntax files.
 
 
 \subsection{PyQt}\label{sec:BackgroundPytonPyQt}
@@ -283,8 +289,11 @@ tkinter
 The Python module argparse is a module for creating command-line argument parsers.
 It provides the means to specify input arguments and automatically creates help and usage messages.
 It also checks if the given arguments are valid.
-From the specified input arguments, the module will automatically create a parser for the specified arguments. \cite{argparse} 
+From the specified input arguments, the module will automatically create a parser for the specified arguments. \cite{argparse}\\
+This module is used in the implementation of the command-line interface of \ac{Synplifier}.
 
 \subsection{Beautiful Soup}\label{sec:BackgroundBeautifulSoup}
 
-Beautiful Soup is a Python library for extracting data out of HTML and XML files. That makes it especially useful for getting information from web pages. Beautiful Soup is based on Python parses like $lxml$ and $html5lib$ and parses the files in order to build a parse tree and retrieve desired informations. \cite{BeautifulSoup,BeautifulSoupDoku}
+Beautiful Soup is a Python library for extracting data out of HTML and XML files.
+That makes it especially useful for getting information from web pages. \cite{BeautifulSoup,BeautifulSoupDoku}
+In \ac{Synplifier} Beautiful soup is used to extract the latest \ac{TPTP} syntax, which is stored in HTML format, from the \ac{TPTP} website.
