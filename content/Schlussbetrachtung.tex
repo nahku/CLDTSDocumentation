@@ -3,19 +3,20 @@
 \chapter{Conclusion}\label{cha:Conclusion}
 
 This paper described \ac{Synplifier}, a software tool that automatically extracts sub-syntaxes from the \ac{TPTP} syntax. 
-The tool includes lexing and parsing the \ac{TPTP} syntax, building 
-a graph that represents the syntax and extracting a sub-syntax based on the graph. The user can interact with the tool using a command-line interface or a GUI.
+The tool includes lexing and parsing the \ac{TPTP} syntax, building a grammar graph that represents the syntax and extracting a sub-syntax based on the graph.
+The user can interact with the tool using a command-line interface or a GUI.
+Both the GUI and the command-line interface use a developed control-file format that specifies blocked productions and the start symbol.
+For the GUI a concept to display the grammar in a clear and structured way using a tree structure has been developed and implemented.
 The functionality of the tool has been demonstrated by extracting the \ac{CNF} sub-syntax and creating a parser based on that syntax, which has been successfully tested with a number of \ac{TPTP} problems.
 
-The tool reduces the entry barrier of new users to use the \ac{TPTP} language because desired sub-syntaxes of the \ac{TPTP} syntax can be extracted while maintaining consistency with the original \ac{TPTP} syntax.
+All requirements, outlined in section \ref{sec:ConceptRequirements}, have been fulfilled.
+In addition, features like importing the original \ac{TPTP} syntax from the \ac{TPTP} website, toggling comments in the GUI and counting rules as well as rule productions have been included to increase the user-friendliness of \ac{Synplifier}.
+
+The tool reduces the entry barrier for new users to use the \ac{TPTP} language because desired sub-syntaxes of the \ac{TPTP} syntax can be extracted while maintaining consistency with the original \ac{TPTP} syntax.
 
 In short, the developed software tool enables users to consistently, conveniently, and automatically extract sub-languages from the \ac{TPTP} syntax, turning this one language into a family of languages, coming from a single source, but optimized for particular use cases.
 
--all requirements, outlined in section \ref{sec:ConceptRequirements}, have been fulfilled
--in addition, features including importing the original \ac{TPTP} syntax from the \ac{TPTP} website, toggling comments in the GUI ... increase the usability and ?convenience? of using \ac{Synplifier}
--what else?
--developed control-file format
--and novel concept to display a syntax in GUI
+
 %The aim of this research was to create a tool that automatically extracts sub-syntaxes of the \ac{TPTP} syntax. ?to reduce entry barrier to new users and also maintain consistency with original grammar  ?..
 %
 %\ac{Synplifier} enables users to consistently, conveniently, and automatically extract sub-languages from the \ac{TPTP} syntax, turning this one language into a family of languages, coming from a single source, but optimized for particular use cases.
