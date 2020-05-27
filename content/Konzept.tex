@@ -3,14 +3,14 @@
 \chapter{Concept}\label{cha:Concept}
 This chapter outlines the concept and the architecture of \ac{Synplifier}.
 In section \ref{sec:ConceptApproach} a general approach to build \ac{Synplifier} is outlined and in section \ref{sec:ConceptRequirements} requirements \ac{Synplifier} needs to meet are described.
-Section \ref{sec:ConceptOverview} introduces into the architecture of \ac{Synplifier} and its components.
-The sections following section \ref{sec:ConceptOverview} describe the concept of each component that is developed.
+Section \ref{sec:ConceptOverview} introduces the architecture of \ac{Synplifier} and its components.
+The following sections describe the concept of each component that is developed.
 
 \section{Approach}\label{sec:ConceptApproach}
 
 In order to decompose the full \ac{TPTP} syntax into smaller sub-syntaxes extracting desired sub-syntaxes by selecting a new start symbol and disabling undesired productions is proposed.
 The idea is to process the full \ac{TPTP} syntax in multiple stages.
-These stages include parsing the syntax into a structured internal representation and presenting it to the user in order to define undesired productions and the start symbol. To extract the sub-syntax, we introduce a recursive algorithm that checks which productions are still reachable and extracts all reachable
+These stages include parsing the syntax into a structured internal representation and presenting it to the user to define undesired productions and the start symbol. To extract the sub-syntax, a recursive algorithm is introduced that checks which productions are still terminating and extracts all reachable
 productions.
 
 \section{Requirements}\label{sec:ConceptRequirements}
@@ -33,9 +33,9 @@ The requirements are described using capitalized keywords like MUST or SHOULD fo
 \subsubsection{[G3]}\label{G3}
 The imported syntax MUST be displayed in the GUI. This includes displaying by the syntax defined productions as well as comments that are associated with these productions.
 \subsubsection{[G4]}\label{G4}
-The user MUST be able to select a new start symbol in order to generate a sub-syntax.
+The user MUST be able to select a new start symbol to generate a sub-syntax.
 \subsubsection{[G5]}\label{G5}
-The user MUST be able to select which productions should be blocked in order to generate a sub-syntax.
+The user MUST be able to select which productions should be blocked to generate a sub-syntax.
 \subsubsection{[G6]}\label{G9}
 \ac{Synplifier} MUST provide the functionality for the user to import a control file into the GUI by specifying a control file path. 
 \subsubsection{[G7]}\label{G7}
@@ -77,7 +77,7 @@ Then, a graph representing the imported \ac{TPTP} syntax is built.\\
 This graph is subject to manipulation by disabling certain transitions or selecting a new start symbol in the following phase.
 This includes computation of the remaining reachable and terminating syntax.
 That new graph represents the syntax of the extracted sub-language.
-To make this syntax usable, lastly the syntax has to be output, based on the new graph, in the same format as the original syntax.
+To make this syntax usable, lastly the syntax must be output, based on the new graph, in the same format as the original syntax.
 \begin{figure}[H]
 \tikzstyle{decision} = [ diamond, draw, fill=blue!10, text width=4.5em, text badly centered, node distance=2cm, inner sep-0pt]  
 \tikzstyle{block} = [ rectangle, draw, fill=blue!10, text width=4.5em, text badly centered, rounded corners, minimum height=4em]  
@@ -108,7 +108,7 @@ The proposed architecture for \ac{Synplifier} consists of seven components:
 \item A graph builder for building a graph out of the parsers data structure and manipulating this graph
 \item A graphical user interface
 \item A console interface 
-\item An input module that imports the filename of the\ac{TPTP} syntax
+\item An input module that imports the filename of the \ac{TPTP} syntax
 \item An output module that exports extracted sub syntaxes to local storage
 \end{itemize}
 
@@ -155,12 +155,12 @@ The following paragraph introduces the tokens that are recognized by the lexer. 
 Following standard \ac{BNF}, \textbf{nonterminal} symbols are enclosed by the \textless\; and \textgreater \;symbol.
 In between there can be any arbitrary sequence of alphanumerical characters and underscores.
 
-A \textbf{terminal symbol} does not have any special notation and can be any sequence of characters excluding whitespace characters that is not matched to any other token.
+A \textbf{terminal symbol} does not have any special notation and can be any sequence of characters, excluding whitespace characters, that is not matched to any other token.
 
 There are four \textbf{expression} token types (one for each rule type).
 \textbf{Expressions} are defined as a nonterminal symbol followed by a production symbol (::= for grammar, ::- for token, :== for strict, ::: for macro rule type).
 The nonterminal symbol and the following production symbol are selected to be a single token and are not identified as two separate tokens to clearly identify the start of a new rule and therefore avoid ambiguity while parsing.
-The listing below features two tokens, a grammar expression and a nonterminal symbol.
+The listing below features two tokens: A grammar expression and a nonterminal symbol.
 \begin{lstlisting}[caption= Rule example]
 <formula_role>         ::= <lower_word>
 \end{lstlisting}
@@ -170,7 +170,8 @@ The percentage sign when used as terminal symbol is embedded in square brackets 
 
 Additional tokens are the meta-symbols including \textbf{open} $"("$ and \textbf{close parentheses} $")"$, \textbf{open} $"["$ and \textbf{close square brackets} $"]"$, asterisks $"*"$ called \textbf{repetition symbols} and vertical bars $"\mid"$ called \textbf{alternative symbols}.
 
-In PLY it is possible to declare characters that should be ignored. This means that the characters are ignored in the input stream of the lexer. However, if one of those characters are part of a regular expression of a token they are not ignored and will be used for token matching. In this project tabs, white spaces and newline characters are ignored as they do not have any special meaning other than providing better readability. With exception of the comment token, the information about newline characters is not relevant due to rules being defined over multiple lines, which can be seen in the listing below.
+In PLY it is possible to declare characters that should be ignored. This means that the characters are ignored in the input stream of the lexer. However, if one of those characters is part of a regular expression of a token it is not ignored and will be used for token matching. In this project tabs, white spaces and newline characters are ignored as they do not have any special meaning other than providing better readability. With exception of the comment token, the information about newline characters is not relevant due to rules being defined over multiple lines, which can be seen in the listing below.
+
 \begin{lstlisting}[caption= Example of rules defined over multiple lines]
 <annotated_formula>  ::=    <thf_annotated> | <tff_annotated> |
                             <tcf_annotated> | <fof_annotated> |
@@ -182,9 +183,9 @@ The parser takes the tokens from the lexer as input and creates a data structure
 
 Figure \ref{fig:ConceptParserFlow} outlines the responsibilities of the parser component and the sequence of its sub-functions.
 First, the tokens generated by the lexer need to be parsed and based on that the data structure representing the \ac{TPTP} syntax is to be created.
-Secondly, the rules in the data structure have to be numbered, to maintain the correct order for output.
-The third step is the so called disambiguation of square brackets.
-In the \ac{TPTP} syntax square brackets not necessarily denote that an expression is optional, which is the case in traditional \ac{EBNF}.
+Secondly, the rules in the data structure have to be numbered to maintain the correct order for output.
+The third step is the so-called disambiguation of square brackets.
+In the \ac{TPTP} syntax, square brackets not necessarily denote that an expression is optional, which is the case in traditional \ac{EBNF}.
 In token and macro rules they denote that an expression is optional and in grammar and strict rules square brackets are terminals.
 Therefore, disambiguation of square brackets is necessary.
 Finally, the output of the parser is returned.
@@ -219,7 +220,7 @@ $\sum$ is the set of terminal symbols. Terminal symbols of the specified grammar
 
 $P$ is the set of production rules that is presented in the following. 
 
-A grammar list implies a comment block, the four expressions or a grammar list followed by the expressions.
+A grammar list implies a comment block, the four expressions (grammar expression, token expression, macro expression, strict expression) or a grammar list followed by one of the expressions.
 
 \begin{align*}
 	grammar\;list\; \rightarrow\; &comment\;block
@@ -240,7 +241,10 @@ A comment block is either a comment or a comment block with a comment.
                 \mid comment\;block\;\;\textbf{comment}
 \end{align*}
 
-The four expressions are the expression token followed by their productions list. Grammar expression has a special case without a productions list because the production rule $<null>::= $ of the \ac{TPTP} grammar has no production on the right side. 
+The four expressions are the expression token followed by their productions list. Grammar expression has a special case without a productions list because the production rule
+\begin{verbatim}
+<null>   ::= 
+\end{verbatim} of the \ac{TPTP} grammar has no production on the right-hand side. 
 
 \begin{align*}
 	grammar\;expression\; \rightarrow\; &\textbf{l grammar expression}\;\;productions\;list \\ 
@@ -268,7 +272,7 @@ T symbol production is either a t symbol or a t symbol/repetition symbol/ altern
                &\mid \textbf{t symbol} 
 \end{align*}
 
-Production element can be replaced by a nt symbol or by a nt symbol in square brackets or nt symbol repetition. In the case of repetition or square brackets the production element is categorized as optional when in square brackets or as repetition when followed by the repetition symbol. The same applies to t symbol production. A production element can also only be square brackets only.
+A production element can be replaced by a nt symbol or by a nt symbol in square brackets or nt symbol repetition. In the case of repetition or square brackets the production element is categorized as optional when in square brackets or as repetition when followed by the repetition symbol. The same applies to t symbol production. A production element can also only be square brackets only.
 
  
 
@@ -316,41 +320,43 @@ The output of the parser is a list of the rules and the comments from the \ac{TP
 
 \section{Graph generation}\label{sec:ConceptGraphGeneration}
 
-After parsing the \ac{TPTP} grammar is stored in a grammar list. The grammar list data structure is needed for modification and traversing.
-The data structure that is used is a graph representing the grammar.
+After parsing, the parsed \ac{TPTP} grammar is stored in a grammar list. The grammar list data structure does not allow easy traversing which is needed for extracting a sub-language. That is why a new data structure is introduced that allows easy modification and traversing. The data structure that is used is a graph representing the
+grammar.
 
-The nonterminal symbols in the \ac{TPTP} syntax are represented by a node class that has the following attributes (see also UML class diagram \ref{fig:ImplementationNTNodeUML}):
+In the graph, the nonterminal symbols of the \ac{TPTP} syntax are represented by a node class that has the following attributes (see also UML class diagram \ref{fig:ImplementationNTNodeUML}):
 \begin{itemize}
-\item value: name of nonterminal symbol
-\item productions list: productions list of nonterminal symbol that has been created by the parser
-\item rule type: rule type of nonterminal symbol
-\item comment block: list of comments belonging to the nonterminal symbol
-\item position: position of the production in the input file
-\item children: nested list that contains the node of every nonterminal symbol that is part of the productions list grouped by productions in the productions list
+\item Value: name of nonterminal symbol
+\item Productions list: productions list of nonterminal symbols that has been created by the parser
+\item Rule type: rule type of nonterminal symbol
+\item Comment block: list of comments belonging to the nonterminal symbol
+\item Position: position of the production in the input file
+\item Children: nested list that contains the node of every nonterminal symbol that is part of the productions list grouped by productions in the productions list
 \end{itemize}
 
-Before generating the graph, a dictionary is created, that provides an efficient way accessing the nodes in order to build the grammar graph and also during the next steps of the sub-syntax generation.
-This dictionary contains nodes constructed from the grammar list output by the parser that contains rules and comments. The combination of the nodes value and rule type form the unique key for each node. While constructing the dictionary, comments in the grammar list are associated to nodes using a heuristic that is described in section \ref{sec:ConceptMaintainingComments}.
+Before generating the graph, a dictionary is created that provides an efficient way accessing the nodes in order to build the grammar graph and also during the next steps of the sub-syntax generation.
+This dictionary contains nodes constructed from the grammar list output by the parser. The combination of the nodes value and rule type form the unique key for each node. While constructing the dictionary, comments in the grammar list are associated to nodes using a heuristic that is described in section \ref{sec:ConceptMaintainingComments}.
 
 Also, a new temporary start symbol is introduced.
-This is necessary because one nonterminal symbol in the \ac{TPTP} syntax can be mapped to multiple nodes which the following example shows. \\
-The example below shows the productions for the nonterminal symbol $\textless formula\textunderscore role\textgreater$.
+This is necessary because one nonterminal symbol in the \ac{TPTP} syntax can be mapped to multiple nodes which the following example \ref{lst:ConceptMultipleRules} shows. \\
+The example below shows the productions for the nonterminal symbol \\
+$\textless formula\textunderscore role\textgreater$.
 Since this nonterminal symbol has multiple types of rules one node will be created for each rule type.
-\begin{lstlisting}[caption= Productions of the nonterminal symbol $\textless formula\textunderscore role\textgreater$]
-<formula_role>         ::= <lower_word>
-<formula_role>         :== axiom | hypothesis | definition | assumption |
+
+\begin{lstlisting}[caption= Productions of the nonterminal symbol $\textless formula\textunderscore role\textgreater$, label=lst:ConceptMultipleRules]
+<formula_role> ::= <lower_word>
+<formula_role> :== axiom | hypothesis | definition | assumption |
                            lemma | theorem | corollary | conjecture |
                            negated_conjecture | plain | type |
                            fi_domain | fi_functors | fi_predicates | unknown
 \end{lstlisting}
 
-If a nonterminal symbol that has multiple rule types is selected as the desired start symbol multiple nodes would represent that start symbol and therefore it would not be possible to select one node as the starting point of the graph generation.
+If a nonterminal symbol that has multiple rule types is selected as the desired start symbol, multiple nodes would represent that start symbol and therefore it would not be possible to select one node as the starting point of the graph generation.
 To solve this problem, a temporary start symbol is introduced before generating the graph.
 The temporary start symbol produces the start symbol that the user specified and is used as a starting point for the graph generation.
 If the non-terminal symbol $\textless formula\textunderscore role\textgreater$ that was mentioned before would be selected as start symbol by the user, a temporary start symbol representing the rule
-\begin{lstlisting}[caption= Rule of the temporary start symbol]
-<start_symbol>         ::= <formula_role>
-\end{lstlisting}
+\begin{verbatim}
+<start_symbol>         ::=  <formula_role>
+\end{verbatim}
 would be introduced.
 This ensures that only one node is representing the start symbol that is used for graph generation.
 
@@ -360,14 +366,14 @@ Since it is possible for a non-terminal symbol to be on the right side as well a
 
 The following example shows a production rule and an abstract representation of the resulting list of children belonging to the node. Each production alternative is embedded in the children list of the node. %This is relevant for checking whether a non-terminal is terminating.
 
-\begin{lstlisting}[caption= Rule and resulting list of children]
-Production rule:
+\begin{verbatim}
 <disjunction>  ::=  <literal> | <disjunction><vline><literal>
+
 Output:
-node.value: <disjunction>
-node.ruleType: grammar
-node.children: [[<literal>],[<disjunction>,<vline>,<literal>]]
-\end{lstlisting}
+node.value:     <disjunction>
+node.ruleType:  grammar
+node.children:  [[<literal>],[<disjunction>,<vline>,<literal>]]
+\end{verbatim}
 
 \section{Control file}\label{sec:ConceptControlFile}
 
@@ -396,7 +402,7 @@ Furthermore, the first, second, third and fifth grammar production alternative o
 <annotated_formula>,::=,0,1,2,5
 \end{lstlisting}
 This format is easy to parse and also enables users to specify their desired start symbols and blocked productions without having to use the GUI. The control file can also be generated from selections made by the user in the GUI.
-It can be exported as a textfile.
+It can be exported as a text file.
 When generating a sub-syntax from the user GUI selection a control file representing that selection is created internally as input for the next processing steps.
 
 Specifying which production should be blocked, and not the ones should be kept, typically results in a significantly smaller file.
@@ -464,7 +470,7 @@ First, the comment block is split into multiple separate comment blocks by using
 \begin{itemize}%[noitemsep]
 	\item If this results in no comment blocks the comment block consisted only of one line which was a \textit{Top of Page} line.
 	Then no comment block has to be associated to a rule because \textit{Top of Page} lines are not relevant.
-	\item If this results in one comment block, that means that no \textit{Top of Page} line was present in the comment block or that there was a \textit{Top of Page} line at the beginning or end of the comment block. The comment block is associated with the rule after, if the comment block is not at the end of the file.
+	\item If this results in one comment block, that means that no \textit{Top of Page} line was present in the comment block or that there was a \textit{Top of Page} line at the beginning or end of the comment block. The comment block is associated with the rule after if the comment block is not at the end of the file.
 	If it is at the end of the file, it is associated with the rule before, because no rule after exists.
 	\item If this results in two comment blocks, one \textit{Top of Page} line was present in between comment lines.
 	Then the comment block before the \textit{Top of Page} line is associated with the rule before when possible and the comment block after the \textit{Top of Page} line is associated with the rule after.
@@ -664,7 +670,7 @@ In the $Save\;syntax$ menu that is shown in figure \ref{fig:save} the user can r
 \subsection{Control file Menu}\label{sec:ConceptGUIControlFileMenu}
 
 The $Control\;file$ menu shown in figure \ref{fig:ControlFileMenu} gives the user the option to import a control file instead of blocking productions manually. If the user imports a control file, the checkboxes are set accordingly.
-The user also has the option of generating a control file based on his GUI selection. This is particularly helpful if the users uses the same blocked productions multiple times. This way the user can use the import control file option later instead of selecting the blocked productions in the GUI.
+The user also has the option of generating a control file based on his GUI selection. This is particularly helpful if the user uses the same blocked productions multiple times. This way the user can use the import control file option later instead of selecting the blocked productions in the GUI.
 
 \begin{figure}[H]
 \centering
@@ -704,14 +710,14 @@ The design decision to separate the GUI from the command-line interface (see sec
 
 \section{Counting the number of rules in the TPTP syntax}\label{sec:ConceptCountR}
 
-Rules and productions are counted in order to compare syntax sizes. The results are described in chapter \ref{sec:Validation}.
+Rules and productions are counted to compare syntax sizes. The results are described in chapter \ref{sec:Validation}.
 
 \subsection{Counting rules in a grammar graph}\label{sec:ConceptCountR}
  
 Rules are counted by counting nodes in the grammar graph. Productions are counted by traversing the nodes in the grammar graph and counting the number of elements in each productions list.\\
 In addition to the total number of rules and productions, the number of grammar rules and productions are filtered and counted separately.
 The total number of rules and productions and the number of grammar rules and productions is printed to the command-line after the import of a syntax and after a sub-syntax generation. \\
-Since the grammar graph only contains reachable and terminating symbols, the total number of rules and productions in the original \ac{TPTP} syntax version 7.3.0 can not be counted, since some symbols are not reachable.
+Since the grammar graph only contains reachable and terminating symbols, the total number of rules and productions in the original \ac{TPTP} syntax version 7.3.0 cannot be counted, since some symbols are not reachable.
 To compare generated sub-syntaxes to the original \ac{TPTP} a script has been developed, which is described in the following.
 
 \subsection{Counting rules in the original \ac{TPTP} syntax}\label{sec:ConceptCountR}
