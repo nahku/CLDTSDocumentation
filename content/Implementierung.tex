@@ -1,9 +1,8 @@
 %!TEX root = ../dokumentation.tex
 
-
 \chapter{Implementation}\label{cha:Implementation}
 
-Based on the previous introduction of the concept of Synplifier, this chapter describes the implementation of Synplifier in detail. The chapter covers lexing and parsing as well as building the grammar graph, extracting a sub-syntax and maintaining comments. Furthermore, the implementation of the GUI and the command-line interface is introduced including belonging input and output functionalities.
+Based on the previous introduction of the concept of Synplifier, this chapter describes the implementation of Synplifier in detail. The chapter covers lexing and parsing as well as building the grammar graph, extracting a sub-syntax and maintaining comments. Furthermore, the implementation of the GUI and the command-line interface is introduced including needed input and output functionalities.
 
 \section{Lexer}\label{sec:ImplementationLexer}
 
@@ -315,7 +314,7 @@ The resulting output of the parser can be seen in figure \ref{fig:Implementation
                 
 \subsection{Building the parser}\label{sec:ImplementationRunParser}
 
-To build the parser the \ac{PLY} function $yacc.yacc()$ is called that constructs a parser from a specified grammar. To run the generated parser $parse()$ must be called. 
+To build the parser, the \ac{PLY} function $yacc.yacc()$ is called that constructs a parser from a specified grammar. To run the generated parser $parse()$ must be called. 
 
 The output of the parser if further modified to include a numbering of the rules and to handle square brackets correctly (see chapter \ref{sec:ConceptDisambiguation}).
 Rules are numbered by assigning the position of a rule within the grammar list as its position. Comment blocks are skipped. \\
@@ -841,11 +840,6 @@ with open(filename, 'r') as text_file:
 
 \section{Output generation}\label{sec:ImplementationOutputGeneration}
 
-- creating print list\\ 
-- saving print list to file
-
-\subsection{Create output from grammar graph}\label{sec:ImplementationOutputGrammarGraph}
-
 For saving the grammar graph in a text file, the graph needs to be traversed and converted to a string format that can be saved in a text document. The grammar graph is converted to a string format by converting every rule to a string and cohering them. Every rule is represented by a node including the nodes children list. For converting the graph to a string format, the graph is traversed and string representation of the nodes are created.
 The final output is stored in a $print\textunderscore list$. A $print\textunderscore list$ is a list of $print\textunderscore list\textunderscore entries$ that can be seen in listing \ref{lst:ImplementationOutputPrintListEntry}. A $print\textunderscore list\textunderscore entry$ is a tuple consisting of the position of the rule that in the original \ac{TPTP} grammar is represented by the node and a string version of the rule or rather the node and its children list.
 
@@ -855,7 +849,7 @@ PrintListEntry = namedtuple("PrintListEntry", ["position", "string"])
 
 The detailed process of saving a string version of a rule is described in the following sections.
 
-\subsubsection{Saving string representation of graph in text file}\label{sec:ImplementationOutputSaveGrammarGraphStringRepresentations}
+\subsection{Saving string representation of graph in text file}\label{sec:ImplementationOutputSaveGrammarGraphStringRepresentations}
 
 In order to create the $print\textunderscore list$, an empty set $visited$ is created that is used for memorising which nodes have already been visited. Moreover, an empty $print\textunderscore list$ and $print\textunderscore string$ are created. The set $visited$ and the empty $print\textunderscore list$ are used for calling the function $create\textunderscore print\textunderscore list$ (see following section) which returns the final $print\textunderscore list$. Because the rules in the $print\textunderscore list$ are not in the same order as the rules in the original \ac{TPTP} syntax, the $print\textunderscore list$ is sorted based on the rule's position that is stored in the first element of the $PrintListEntry$ tuple. For converting the $print\textunderscore list$ to one string, the $print\textunderscore string$, the $print\textunderscore list$ is iterated. Except for the first element of the list, every element of the list is added to the $print\textunderscore string$. This is done by adding the strings that are stored in the second element of the $PrintListEntry$ tuple and separating them by a new line. The first element is not added because it represents the general start symbol that has been added to the grammar (see chapter \ref{sec:ConceptGraphGeneration}) but is not a part of the \ac{TPTP} grammar. A text document with a filename that has been selected by the user is then opened and the $print\textunderscore string$ is written to the file.
 The simplified process can be seen in the flow diagram in figure \ref{fig:ImplementationOutputSaveOrderedRules}.
@@ -867,7 +861,7 @@ The simplified process can be seen in the flow diagram in figure \ref{fig:Implem
 \label{fig:ImplementationOutputSaveOrderedRules}
 \end{figure}
 
-\subsubsection{Traverse graph to create string representations of objects}\label{sec:ImpolementationOutputGrammarGraphTraverse}
+\subsection{Traverse graph to create string representations of objects}\label{sec:ImpolementationOutputGrammarGraphTraverse}
 
 The graph is traversed using the function $create\textunderscore print\textunderscore list$. For every node a new $print\textunderscore list\textunderscore entry$ is created. The str function that is called to create the $print\textunderscore list\textunderscore entry$ is described in section \ref{sec:ImplementationOutputGrammarGraphStringRepresentations}. 
 The $print\textunderscore list\textunderscore entry$ is then appended to the $print\textunderscore list$. Once visited a node is added to the set $visited$ so that it will not be visited again.
@@ -892,26 +886,23 @@ Recursively all children in the node's children list are traversed. Because a ch
 \end{algorithmic}
 \end{algorithm}
 
-\subsubsection{Create string representations of objects}\label{sec:ImplementationOutputGrammarGraphStringRepresentations}
+\subsection{Create string representations of objects}\label{sec:ImplementationOutputGrammarGraphStringRepresentations}
 
--create str from node
--node creates str represenation of attributes internally
--following classes implement str method:
--maybe examples from syntax file
+This section covers the string representation creation for the data types that are used within the grammar graph.
+The algorithms outlined in the following are embedded in the \textit{\textunderscore \textunderscore str\textunderscore \textunderscore ()} method of each class.
+The goal is for the generated string representations to be in the same formate as original \ac{TPTP} syntax.
 
 \subsubsection{\textit{NTNode} string representation creation}
 
--goal is to create string with comment and rule, the same way like in the original syntax
-
-NTNODE (UML diagram in figure \ref{fig:ImplementationNTNodeUML})
--node represents rule and comment block associated with node
--consists of comment block
--rule type table ref
--whitespace padding
-
-called here:
--create string representation of comment block
--also create string represent
+An \textit{NTNode} object represents a rule statement. This may include a comment block associated with that rule statement.
+The UML diagram of the \textit{NTNode} class can be seen in figure \ref{fig:ImplementationNTNodeUML}.
+The algorithm that describes how a string representation of an \textit{NTNode} object is generated is featured in algorithm \ref{alg:OutputCreateNodeString}.
+If a comment block is associated with an \textit{NTNode}, its string representation is added to the \textit{NTNode} string representation at the beginning.
+Then the value of the nonterminal symbol (left hand side of the production rule the \textit{NTNode} represents) is added to the string representation.
+After that the corresponding production symbol corresponding to the \textit{RuleType} (see table \ref{tbl:ConceptTPTPProductionSymbols}) of the \textit{NTNode} is added to the string representation separated to the nonterminal symbol by a space character.
+To align the productions in the output file, a whitespace padding is added.
+Next, the string representation of the \textit{productions\textunderscore list} is added to the string representation of the \textit{NTNode}.
+The procedure of how the string representation of the \textit{productions\textunderscore list} is created is outlined in the following after the description of the comment block string generation.
 
 \begin{algorithm}[H]
 \caption{\textit{NTNode} string creation}\label{alg:OutputCreateNodeString}
@@ -941,9 +932,12 @@ The \textit{COMMENT\textunderscore BLOCK} class has a list of comment lines as a
 
 \subsubsection{\textit{PRODUCTIONS\textunderscore LIST} string representation creation}
 
-The \textit{PRODUCTIONS\textunderscore LIST} class contains a list of production alternatives of a rule (the right-hand side of a rule). The production alternatives are separated by " | " in the original \ac{TPTP} syntax.
+The \textit{PRODUCTIONS\textunderscore LIST} class contains a list of production alternatives of a rule (the right-hand side of a rule). The production alternatives are separated by " | " in the original \ac{TPTP} syntax, which can be seen in the following listing.
 
--listing example
+\begin{lstlisting}[language=none, basicstyle=\scriptsize, caption=Production alternatives in the TPTP syntax, label= lst:ConceptOutputProductionsListProductionsAlternatives]
+<annotated_formula>    ::= <thf_annotated> | <tff_annotated> | <tcf_annotated> |
+                           <fof_annotated> | <cnf_annotated> | <tpi_annotated>
+\end{lstlisting}
 
 Algorithm \ref{alg:OutputCreateProductionsListString} shows the process of creating the string representation of a \textit{PRODUCTIONS\textunderscore LIST}. The productions in \textit{PRODUCTIONS\textunderscore LIST} are iterated and the string representation of every production is created. The string of the productions are then separated by the " | " character. The counter in line 3 of algorithm \ref{alg:OutputCreateProductionsListString} is used to identify the last production and thus not to print alternative symbol after that production.
 
