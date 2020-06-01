@@ -2,11 +2,12 @@
 
 \chapter{Implementation}\label{cha:Implementation}
 
-Based on the previous introduction of the concept of Synplifier, this chapter describes the implementation of Synplifier in detail. The chapter covers lexing and parsing as well as building the grammar graph, extracting a sub-syntax and maintaining comments. Furthermore, the implementation of the GUI and the command-line interface is introduced including needed input and output functionalities.
+Based on the previous introduction of the concept of Synplifier, this chapter describes the implementation of Synplifier in detail. The chapter covers lexing and parsing the \ac{TPTP} syntax as well as building the grammar graph, extracting a sub-syntax and maintaining comments.
+Furthermore, the implementation of the GUI and the command-line interface is introduced including needed input and output functionalities.
 
 \section{Lexer}\label{sec:ImplementationLexer}
 
-As mentioned in chapter \ref{sec:ConceptLexer} the implementation of the lexer consists of the definition of tokens in form of regular expression. The following paragraph presents defined tokens and their regular expressions.
+As mentioned in chapter \ref{sec:ConceptLexer} the \ac{PLY} package uses the definition of tokens in form of regular expressions to generate the lexer. The following sections presents defined tokens and the regular expressions that describe these tokens.
 
 In order to build the lexer, the function $lex.lex()$ is used. After the lexer has been created, the function $lex.token()$ returns matched tokens. The function $lex.token()$ is called until it returns a token of the type $None$ that marks the end of the input stream. 
 
@@ -16,7 +17,8 @@ The names of the tokens indicate what they represent.
 All tokens that have been defined are combined to a token list.
 A token list is always required when writing a lexer using \ac{PLY} \cite{PLY}.
 The list of tokens is also used by the parser to identify terminal symbols \cite{PLY}.
-Listing \ref{lst:Lexer_tokens} shows the token list of the implemented lexer. \\
+Listing \ref{lst:Lexer_tokens} shows the token list of the implemented lexer.
+The tokens featured in the token list are described in the following.\\
 
 \begin{lstlisting}[language=Python,basicstyle=\scriptsize	,caption= Lexer tokens,label= lst:Lexer_tokens]
 # List of token names
@@ -37,21 +39,23 @@ tokens = (
 )
 \end{lstlisting}
 
-\subsection{Regular expression}\label{sec:ImplementationLexerRegularExpression}
+\subsection{Regular expressions}\label{sec:ImplementationLexerRegularExpression}
 
 Tokens are specified by regular expressions.
-Regular expressions can be defined in a function.
-The name of the function is the name of one token in the token list with the prefix t\textunderscore .
+Regular expressions, that define tokens, have to be defined in a Python function in order for \ac{PLY} to recognize these tokens.
+The name of the function is the name of the corresponding token in the token list with the prefix t\textunderscore .
 Inside a function, it is possible to modify the value of the generated LexToken object and then return it.
-If not modified, the value of the object is not modified and remains the actual text that has been matched. \\
-The regular expression is specified as a string in the beginning of a function. An extract of all functions can be seen in listing \ref{lst:Lexer_regex}.
-The function for the token $COMMENT$ consists of the comments regular expression that has already been described in chapter \ref{sec:ConceptLexer} and returns the LexToken object unmodified.
+If not modified, the value of the object is not modified and remains to be the actual text that has been matched.\\
+The regular expression is specified as a string in the beginning of a function.
+An extract of all functions can be seen in listing \ref{lst:Lexer_regex}.
+The function for the token $COMMENT$ consists of the regular expression that matches a comment which has already been described in chapter \ref{sec:ConceptLexer} and returns the LexToken object unmodified.
 The functions of $OPEN\textunderscore SQUARE\textunderscore BRACKET$, $NT\textunderscore SYMBOL$ and $T\textunderscore SYMBOL$ (and the other tokens in the tokens list) are implemented similar to $COMMENT$.
-However, the function of $LGRAMMAR\textunderscore EXPRESSION$ and the functions of the other expressions modify the value of the LexToken object.
-Instead of the value being the actual text matched, the last three characters are removed.
-The Python method $rstrip()$ removes all white spaced from the value.
-Thus, the function returns a LexToken object with the value of the text belonging to the nonterminal symbol that the expression represents.
-The rule symbol is removed because the rule type is already present in the token type.\\
+The function of $LGRAMMAR\textunderscore EXPRESSION$ and the functions of the other expressions modify the value of the LexToken object.
+Instead of the value being the actual text matched, first the last three characters are removed.
+These characters represent the production symbol which indicates the rule type (for an overview of the present rule types see table \ref{tbl:ConceptTPTPProductionSymbols}).
+The rule type is already known because depending on the rule type of a production different tokens are matched.
+Then the Python method $rstrip()$ removes all trailing white space characters from the string value.
+Thus, the function returns a LexToken object with the value of the text belonging to the nonterminal symbol that the expression represents.\\
 
 \begin{lstlisting}[language=Python,basicstyle=\scriptsize	,caption= Lexer regular expressions,label= lst:Lexer_regex]
 def t_COMMENT(self, t):
@@ -140,13 +144,12 @@ def t_error(self, t):
 
 \section{Parser}\label{sec:ImplementationParser}
 The parser takes the matched tokens from the lexer and constructs a grammar list (see chapter \ref{sec:ConceptParser}) based on a specified context free grammar.
-Each rule of the context free grammar is defined by a Python function.
-The docstrings of the functions contain a context free grammar specification of the rules.
-The function accepts one argument which is a list of grammar symbols.
-The function contains semantic actions initiated by the rule that are applied to the first element of the input argument.
+The rules of the context free grammar are defined by Python functions.
+The docstrings of the functions contain a specification of the rules.
+This kind of function accepts one argument which is a list of grammar symbols and contains semantic actions. The nonterminal symbol that is on the left side of the rule(s) is stored in the first element of the input.\\
 An example for a defined function can be seen in listing \ref{lst:Parser_functionProductionslist}.
-The function defines the rule that has the nonterminal symbol $productions\textunderscore list$ on the left side.
-The docstring of the functions contains the specification of the rule and the code inside the function determines the actions that are taken once the function is called.
+This function defines the rule that has the nonterminal symbol $productions\textunderscore list$ on the left side.
+The docstring of the function contains the specification of the rule and the code inside the function determines the actions that are taken once the function is called.
 If the input has the length 2, meaning the input list consists of two entries, a new $PRODUCTIONS\textunderscore LIST$ is created with $p[1]$ and is saved in $p[0]$.
 If the length of the input equals four, a $productions\textunderscore list$ already exists and is expanded by a new productions alternative.
 This is done by appending $p[3]$ to the existing list that is stored in $p[1]$.
@@ -165,9 +168,8 @@ def p_productions_list(self, p):
         p[0] = p[1]
 \end{lstlisting}
 
-The function that is defined first in the Python file determines the start symbol to which the grammar should be reduced.
+The function that is defined first in the Python file determines the start symbol to which the grammar should be reduced to.
 The parser stops when no more input exists and the start symbol has been reached.
-The final value is p[0] from the start symbol.
 
 \subsection{Nonterminal symbols}\label{sec:ConceptParserDataStructure}
 
@@ -321,11 +323,10 @@ Rules are numbered by assigning the position of a rule within the grammar list a
 The disambiguation of square brackets replaces the $ProductionProperty$ $Optional$ by the terminal symbols open and closing square bracket for $GRAMMAR$ and $STRICT$ expressions.
 By doing so, the productions in the productions list of a rule are iterated. If the production has the production property $Optional$ the production property is changed to $None$ and square brackets are inserted in the production. This is done for productions as well as production elements that have the production property $Optional$ inside a production.
 
-
-\section{Graph Builder}\label{sec:ImplementationGraphBuilder}
+\section{Graph generation}\label{sec:ImplementationGraphGeneration}
 
 The class $TPTPGraphBuilder$ that can be seen in figure \ref{fig:ImplementationGraphbuilderUML} has an instance of the Parser that has been introduced in chapter \ref{sec:ImplementationParser}. With the output of the parser, which is a grammar list, the graph builder builds a nodes dictionary and a graph. This is done by calling the $run$ method that calls $init\textunderscore tree$ for building the graph.
-The methods assigned to a) in figure \ref{fig:ImplementationGraphbuilderUML} are used for building a graph and are described in chapter \ref{sec:ImplementationGraphGeneration}. The graph builder is also responsible for reducing the \ac{TPTP} grammar, the methods used for that are assigned to b) and introduced in chapter \ref{sec:ImplementationExtractReducedGrammar}. Moreover, with the graph builder, comments are assigned to rules and nodes. Belonging methods are assigned to c) and described in chapter \ref{sec:ImplementationMaintainingComments}.
+The methods assigned to a) in figure \ref{fig:ImplementationGraphbuilderUML} are used for building a graph and are in the following. The graph builder is also responsible for reducing the \ac{TPTP} syntax, the methods used for that are assigned to b) and introduced in chapter \ref{sec:ImplementationExtractReducedGrammar}. Moreover, with the graph builder, comments are assigned to rules and nodes. Belonging methods are assigned to c) and described in chapter \ref{sec:ImplementationMaintainingComments}.
 
 \begin{figure}[H]
 \centering
@@ -333,10 +334,9 @@ The methods assigned to a) in figure \ref{fig:ImplementationGraphbuilderUML} are
 \caption{Graphbuilder UML diagram}
 \label{fig:ImplementationGraphbuilderUML}
 \end{figure}                
-                
-\section{Graph generation}\label{sec:ImplementationGraphGeneration}
-
-Before generating a graph, a node dictionary consisting of nodes is built. Figure \ref{fig:ImplementationNTNodeUML} shows the class NTNode that has already been introduced in chapter \ref{sec:ConceptGraphGeneration}. The class has three class methods:
+               
+Before generating a graph, a node dictionary consisting of nodes is built.\\
+Figure \ref{fig:ImplementationNTNodeUML} shows the class \textit{NTNode} that has already been introduced in chapter \ref{sec:ConceptGraphGeneration}. The class has three class methods:
 $Add\textunderscore children$ adds a list of children to the existing nodes children list. $Extend\textunderscore comment\textunderscore block$ appends a comment block to the existing comment block of a node. The $str$ method is used for exporting the grammar.
 
 \begin{figure}[H]
@@ -346,7 +346,7 @@ $Add\textunderscore children$ adds a list of children to the existing nodes chil
 \label{fig:ImplementationNTNodeUML}
 \end{figure}
 
-The rule type of a node is either grammar, token, strict or macro and is implemented as an enumeration that can be seen in figure \ref{fig:ImplementationRuleTypeUML}. 
+The rule type of a node is either grammar, token, strict or macro and is implemented as an enumeration which can be seen in figure \ref{fig:ImplementationRuleTypeUML}. 
 
 \begin{figure}[H]
 \centering
@@ -397,7 +397,7 @@ To generate the graph of a given grammar three algorithms are needed that will b
 
 The algorithm $buildGraphRek$ calls the function $searchProductionsListForNT$ that appends children of a node to the nodes list of children.
 The algorithm is first called with the start symbol.
-After the children of a node have been appended to the node, every child calls the algorithm resulting in appending their own children to their children's list.
+After the children of a node have been appended to the node, for every child the algorithm is called resulting in appending their children to their children's list.
 
 \begin{algorithm}[H]
 \caption{Graph Generation Algorithm: buildGraphRek}
@@ -416,7 +416,7 @@ After the children of a node have been appended to the node, every child calls t
 The right side of a production rule is stored in a productions list.
 For identifying the nonterminal or terminal symbols in the productions lists, a loop iterates all elements of the productions list.
 Each element is a production and calls the function $searchProductionForNT$.
-This function identifies the children of the given element who are then appended to the node.
+This function identifies the children of the given element which are then appended to the node.
 
 \begin{algorithm}[H]
 \caption{Algorithm for extracting productions from productions list: searchProductionsListForNT}
