@@ -18,21 +18,23 @@ The set of all strings over an alphabet $\sum$ is denoted as $\sum ^{*}$. \cite{
 
 \subsection{Language}
 If $\sum$ is an alphabet and $L$ is a subset of $\sum ^*$, then $L$ is a language over $\sum$ \cite{AutomataTheory.2007}.
-An example for a language $L(\sum)$ is the \ac{ASCII} which is a language over the alphabet $\sum = \{a-zA-Z,0-9,!,=,\#,\%,\$,\&,',(,),*,+,,,-,.,/,:,;,<,>,=,?,@,[,],\backslash ,\textasciicircum ,\textunderscore ,`,\{,\},\mid,\sim\}$. In the example the abbreviations $a-zA-Z$ and $0-9$ are used. The first abbreviation represents all alphabetic letters in lower and upper case. The second abbreviation represents one-digit numbers.
+An example for a language $L(\sum)$ is the \ac{ASCII} which is a language over the alphabet $\sum = \{a-zA-Z,0-9,!,=,\#,\%,\$,\&,',(,),*,+,,,-,.,/,:,;,<,>,=,?,@,[,],\backslash ,\textasciicircum ,\textunderscore ,`,\{,\},\mid,\sim\}$. In the example the abbreviations $a-zA-Z$ and $0-9$ are used. The first abbreviation represents all alphabetic letters in lower and upper case. The second abbreviation represents all one-digit numbers.
 
 \subsection{Finite automata}\label{sec:BackgroundAutomata}
 A finite automaton can recognize words of a language.
 The language represented by an automaton is the set of all accepted words.
-An automaton consists of  a set of states, a set of input symbols and transition functions.
-A transition function takes as input a state and an input symbol and returns a state based these input arguments.
-States are usually represented by circles and transitions by labelled arrows.
+An automaton consists of a set of states, a set of input symbols and transition functions.
+A transition function takes a state and an input symbol as input and returns a state based on these input arguments.
+States are usually represented graphically by circles and transitions by labelled arrows.
 There are two special states: The start state and final state(s).
 The start state is the state in which the automaton starts processing the input symbols.
+It is represented graphically by an arrow pointing to the start state.
+Final states are represented graphically by a second circle embedded in the circle of a state.
 Starting from the start state the automaton processes the first input symbol by evaluating the belonging transition function that takes the start state and the first input symbol as arguments. The automaton continues to process the input data by evaluating transition functions until the automaton has read every input symbol. The input word is part of the language the automaton represents if the automaton has reached a final state. If the automaton has not reached a final state, the input words is not part of the language the automaton represents.\\
 Deterministic and non-deterministic automata can be distinguished.
 Non-deterministic automata can have multiple transitions for the same input.
 Deterministic automata have unambiguous transitions for a given input.
-The concept of finite automata be applied to a lexical analyzer for recognizing tokens (see section \ref{sec:BackgroundLexer}). \cite{AutomataTheory.2007}\\
+The concept of finite automata be applied to a lexical analysers for recognizing tokens (see section \ref{sec:BackgroundLexer}). \cite{AutomataTheory.2007}\\
 Figure \ref{fig:FiniteAutomaton} shows an automaton consisting of the set of states $\{z\textsubscript{0}, z\textsubscript{1}, z\textsubscript{2}\}$ and several transitions. For convenience not all transitions are printed.
 If the first input symbol would be a zero the automaton would transit in a so called error state which can not be left regardless the input symbols.\\
 The automaton accepts words consisting of a 1, an arbitrary amount of zeros and a 1.
@@ -82,14 +84,13 @@ The description of a grammar consists of four components:
 
 \begin{itemize}
 
-\item A set of symbols that defines words of the language. These symbols are called terminal symbols.
+\item A set of symbols that defines the alphabet of the language. These symbols are called terminal symbols. The words of a language only consist of terminal symbols.
 
 \item A set of variables called nonterminal symbols. Each nonterminal symbol represents a set of words. 
 
 \item One nonterminal symbol represents the language that is being defined. This nonterminal symbol is called the start symbol. Other nonterminal symbols help to define the language of the start symbol.
 
-\item A set of productions/rules. They recursively describe the language. Each production consists of a nonterminal symbol on the left-hand side that is being substituted by a sequence of terminal symbols and/or other nonterminal symbols on the right-hand side.
-There can also be empty productions, meaning a nonterminal symbol is substituted by nothing.
+\item A set of productions/rules. They recursively describe the language. Each production consists of a nonterminal symbol on the left-hand side that is being substituted by a sequence of terminal symbols and/or other nonterminal symbols on the right-hand side. There can also be empty productions, meaning a nonterminal symbol is substituted by an empty string.
 \end{itemize}
 
 %- ambigious grammars
@@ -175,7 +176,7 @@ The tokens are then passed to the parser for syntax analysis.\\
 A lexer needs to distinguish different types of tokens and furthermore decide which token to use if there are multiple ones that fit the input \cite{Mogensen.2017}.\\
 A simple approach to build a lexer would be building an automaton for each token definition and then test to which automata the input corresponds.\\
 However, this would be inefficient because in the worst case the input needs to pass all automata before the belonging automata is identified.
-More suitable is building a single automaton that tests each token simultaneously.
+Vuilding a single automaton that tests each token simultaneously is more suitable.
 This automaton can be built by combining all regular expressions by disjunction.
 Each final state from each regular expression is marked to know which token has been identified.\\
 Potentially final states overlap as a consequence of one token being a substring of another token. \\
@@ -183,15 +184,17 @@ For solving such conflicts, a lexer is separating the input in order to divide i
 Per convention the lexer chooses the longest input that matches any token. \cite{Mogensen.2017} \\
 Furthermore, a precedence of tokens can be declared. Usually the token that is being defined first has a higher precedence and thus will be chosen if possible token matches have the same length. \cite{Mogensen.2017}
 
-Besides of writing a lexer manually it can also be generated by a lexer generator. A lexer generator takes a specification of tokens as input and generates the lexer automatically. 
-The specification is usually written using regular expressions. 
+Besides of writing a lexer manually it can also be generated by a lexer generator.
+A lexer generator takes a specification of tokens as input and generates the lexer automatically. 
+The specification of the tokens is usually written using regular expressions. 
 
 \section{Parsing}\label{sec:BackgroundParser}
 
-The aim of parsing is to establish a relationship among tokens generated by a lexer \cite{LexYacc.1992}. For doing so, a parser builds a parse tree out of the generated tokens \cite{Mogensen.2017}.\\
-Similar to lexers, parsers can be generated automatically.
-A parser generator takes as input a description of the relationship among tokens in form of a formal grammar (see section \ref{sec:BackgroundGrammar}). The output is the generated parser. \cite{LexYacc.1992}\\
-During the syntax analysis a parser takes a string of tokens and forms a syntax tree by finding the matching derivations. The matching derivation can be found using different approaches. The approaches that are used in this report will be introduced in the following.
+The aim of parsing is to establish a relationship among tokens generated by a lexer \cite{LexYacc.1992}.
+To do so, a parser builds a parse tree out of the generated tokens \cite{Mogensen.2017}.\\
+Parsers can also be generated automatically.
+A parser generator takes a description of the relationship among tokens in form of a formal grammar (see section \ref{sec:BackgroundGrammar}) as input. The output is the generated parser. \cite{LexYacc.1992}\\
+During the syntax analysis a parser takes a string of tokens and forms a syntax tree by finding the matching derivations. The matching derivation can be found using various approaches. The approaches that are used in this report will be introduced in the following.
 
 \subsection{Bottom-up parsing}\label{sec:BackgroundParserBottomUp}
 
@@ -201,12 +204,12 @@ In bottom-up parsing a parse tree for an input string is constructed beginning a
 At each reduction step a specific substring matching the body of a production is replaced by the nonterminal at the head of that productions (reduction is reverse step of deviation).
 The key decisions are when to reduce and what production to apply.
 These decisions depend on the parser implementation.
-An example are shift-reduce parsers that are described in the following.
-
+An example for bottom-up are shift-reduce parsers that are described in the following.
+\cite{Aho.2007}
 \subsection{Shift-reduce parsing}\label{sec:BackgroundParserShiftReduce}
 
-Shift-reduce parsers are one class of bottom-up parsers. In shift-reduce parsing a stack is used to hold grammar symbols and an input buffer holds the rest of the input string.
-During parsing the input is scanned from left to right. The parser shifts zero or more input symbols on the stack until it can reduce the elements at the top of the stack. The elements at the top of the stack are reduced to the head of the corresponding production. This procedure is repeated until the stack contains the start symbol and the input buffer is empty or an error is detected. \cite{Aho.2007}\\
+Shift-reduce parsers are a class of bottom-up parsers. In shift-reduce parsing a stack is used to hold grammar symbols and an input buffer holds the rest of the input string.
+During parsing the input is scanned from left to right. The parser shifts zero or more input symbols on the stack until it can reduce the elements at the top of the stack. The elements at the top of the stack are reduced to the head of the corresponding production. This procedure is repeated until the stack only contains the start symbol and the input buffer is empty or an error is detected. \cite{Aho.2007}\\
 There are four actions a shift-reduce parser can perform:
 \begin{itemize}%[noitemsep]
 	\item \textbf{Shift}: Shift next input symbol on top of stack.
