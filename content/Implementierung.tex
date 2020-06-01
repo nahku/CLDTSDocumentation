@@ -9,15 +9,15 @@ Based on the previous introduction of the concept of Synplifier, this chapter de
 
 As mentioned in chapter \ref{sec:ConceptLexer} the implementation of the lexer consists of the definition of tokens in form of regular expression. The following paragraph presents defined tokens and their regular expressions.
 
-In order to build the lexer, the function $lex.lex()$ is used. After the lexer has been created, the function $lex.token()$ returns matched tokens. The function $lex.token()$ is called until it returns a token of the type None that marks the end of the input stream. 
+In order to build the lexer, the function $lex.lex()$ is used. After the lexer has been created, the function $lex.token()$ returns matched tokens. The function $lex.token()$ is called until it returns a token of the type $None$ that marks the end of the input stream. 
 
 \subsection{Token}\label{sec:ImplementationLexerToken}
 
-Tokens are given names that indicate what they represent.
+The names of the tokens indicate what they represent. 
 All tokens that have been defined are combined to a token list.
-A tokens list is always required when writing a lexer using \ac{PLY} \cite{PLY}.
+A token list is always required when writing a lexer using \ac{PLY} \cite{PLY}.
 The list of tokens is also used by the parser to identify terminal symbols \cite{PLY}.
-Listing \ref{lst:Lexer_tokens} shows the tokens list of the implemented lexer. \\
+Listing \ref{lst:Lexer_tokens} shows the token list of the implemented lexer. \\
 
 \begin{lstlisting}[language=Python,basicstyle=\scriptsize	,caption= Lexer tokens,label= lst:Lexer_tokens]
 # List of token names
@@ -42,9 +42,9 @@ tokens = (
 
 Tokens are specified by regular expressions.
 Regular expressions can be defined in a function.
-The name of the function is the name of one token in the tokens list with the prefix t\textunderscore .
-Inside a function it is possible to modify the value of the generated LexToken object and then return it.
-If not modified, the value of the object is not modified and remains the actual text that has been matched.
+The name of the function is the name of one token in the token list with the prefix t\textunderscore .
+Inside a function, it is possible to modify the value of the generated LexToken object and then return it.
+If not modified, the value of the object is not modified and remains the actual text that has been matched. \\
 The regular expression is specified as a string in the beginning of a function. An extract of all functions can be seen in listing \ref{lst:Lexer_regex}.
 The function for the token $COMMENT$ consists of the comments regular expression that has already been described in chapter \ref{sec:ConceptLexer} and returns the LexToken object unmodified.
 The functions of $OPEN\textunderscore SQUARE\textunderscore BRACKET$, $NT\textunderscore SYMBOL$ and $T\textunderscore SYMBOL$ (and the other tokens in the tokens list) are implemented similar to $COMMENT$.
@@ -52,7 +52,7 @@ However, the function of $LGRAMMAR\textunderscore EXPRESSION$ and the functions 
 Instead of the value being the actual text matched, the last three characters are removed.
 The Python method $rstrip()$ removes all white spaced from the value.
 Thus, the function returns a LexToken object with the value of the text belonging to the nonterminal symbol that the expression represents.
-The rule symbol is removed because the rule type is already present in the token type.
+The rule symbol is removed because the rule type is already present in the token type.\\
 
 \begin{lstlisting}[language=Python,basicstyle=\scriptsize	,caption= Lexer regular expressions,label= lst:Lexer_regex]
 def t_COMMENT(self, t):
@@ -80,7 +80,7 @@ def t_T_SYMBOL(self, t):
 \end{lstlisting}
 
 The function $t\textunderscore ignore$ is used for declaring characters that should be ignored in the input stream.
-In this project, white spaced and new lines are ignored (see chapter \ref{sec:ConceptLexer}.
+In this project, white spaces and new lines are ignored (see chapter \ref{sec:ConceptLexer}).
 
 The function $t\textunderscore error$ is called when an error occurs during lexing.
 The defined error function shown in listing \ref{lst:Lexer_error} prints the value of the illegal character and skips the character. \\
@@ -315,9 +315,9 @@ The resulting output of the parser can be seen in figure \ref{fig:Implementation
                 
 \subsection{Building the parser}\label{sec:ImplementationRunParser}
 
-To build the parser the \ac{PLY} function $yacc.yacc()$ is called that constructs a parser from a specified grammar. To run the generated parser $parse()$ must be called. 
+To build the parser, the \ac{PLY} function $yacc.yacc()$ is called that constructs a parser from a specified grammar. To run the generated parser $parse()$ must be called. 
 
-The output of the parser if further modified to include a numbering of the rules and to handle square brackets correctly (see chapter \ref{sec:ConceptDisambiguation}).
+The output of the parser is further modified to include a numbering of rules and to handle square brackets correctly (see chapter \ref{sec:ConceptDisambiguation}).
 Rules are numbered by assigning the position of a rule within the grammar list as its position. Comment blocks are skipped. \\
 The disambiguation of square brackets replaces the $ProductionProperty$ $Optional$ by the terminal symbols open and closing square bracket for $GRAMMAR$ and $STRICT$ expressions.
 By doing so, the productions in the productions list of a rule are iterated. If the production has the production property $Optional$ the production property is changed to $None$ and square brackets are inserted in the production. This is done for productions as well as production elements that have the production property $Optional$ inside a production.
@@ -325,7 +325,7 @@ By doing so, the productions in the productions list of a rule are iterated. If 
 
 \section{Graph Builder}\label{sec:ImplementationGraphBuilder}
 
-The class $TPTPGraphBuilder$ that can be seen in figure \ref{fig:ImplementationGraphbuilderUML} has an instance of the TPTPParser that has been introduced in chapter \ref{sec:ImplementationParser}. With the output of the parser, a grammar list, the graph builder builds a nodes dictionary and a graph. This is done by calling the $run$ method that calls $init\textunderscore tree$ for building the graph.
+The class $TPTPGraphBuilder$ that can be seen in figure \ref{fig:ImplementationGraphbuilderUML} has an instance of the Parser that has been introduced in chapter \ref{sec:ImplementationParser}. With the output of the parser, which is a grammar list, the graph builder builds a nodes dictionary and a graph. This is done by calling the $run$ method that calls $init\textunderscore tree$ for building the graph.
 The methods assigned to a) in figure \ref{fig:ImplementationGraphbuilderUML} are used for building a graph and are described in chapter \ref{sec:ImplementationGraphGeneration}. The graph builder is also responsible for reducing the \ac{TPTP} grammar, the methods used for that are assigned to b) and introduced in chapter \ref{sec:ImplementationExtractReducedGrammar}. Moreover, with the graph builder, comments are assigned to rules and nodes. Belonging methods are assigned to c) and described in chapter \ref{sec:ImplementationMaintainingComments}.
 
 \begin{figure}[H]
@@ -356,8 +356,8 @@ The rule type of a node is either grammar, token, strict or macro and is impleme
 \label{fig:ImplementationRuleTypeUML}
 \end{figure}
 
-Algorithm \ref{alg:buildNodesDictionary} shows how the nodes dictionary is build. Iterating the rules list, a new dictionary item is created that consists of the node key rule name and rule type and the \textit{NTNode} as value. This is only the case if the rule is not a comment block. 
-Listing \ref{lst:ImplementationMultipleSameRules} shows that multiple rules can exist that correspond to the same node.
+Algorithm \ref{alg:buildNodesDictionary} shows how the nodes dictionary is build. Iterating the rules list, a new dictionary item is created that consists of the key rule name and rule type and the \textit{NTNode} as value. This is only the case if the rule is not a comment block. 
+Listing \ref{lst:ImplementationMultipleSameRules} shows that multiple rules can exist that correspond to the same node.\\
 
 \begin{lstlisting}[language=None, basicstyle=\scriptsize	,caption= Multiple rules with the same left-hand side of the rule,label= lst:ImplementationMultipleSameRules]
 <defined_proposition>  :== <defined_predicate>
@@ -370,7 +370,7 @@ Listing \ref{lst:ImplementationMultipleSameRules} shows that multiple rules can 
                            $dia_P | $dia_i | $dia_int | $dia
 \end{lstlisting}
 
-If that would not have been considered, the second rule would create a new node and replace the existing on in the dictionary because their dictionary keys are the same. To not overwrite the node, the algorithm checks whether the key already exists in the dictionary. If the key already exists, the productions lists of the two rules are merged into one productions list that is appended to the node. 
+If that would not have been considered, the second rule would create a new node and replace the existing one in the dictionary because their dictionary keys are the same. To not overwrite the node, the algorithm checks whether the key already exists in the dictionary. If the key already exists, the productions lists of the two rules are merged into one productions list that is appended to the node. 
 After iterating, comments are assigned (see section \ref{sec:ImplementationMaintainingComments}).
 
 \begin{algorithm}[H]
