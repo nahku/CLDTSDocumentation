@@ -6,10 +6,10 @@ This chapter introduces the technologies and background that will be utilized in
 
 \section{Formal languages}\label{sec:BackgroundFormalLanguage}
 
-This section introduces terms and concepts in the area of formal languages that are necessary to understand \ac{Synplifier}.
+This section introduces terms and concepts in the area of formal languages that are necessary to understand the concept of \ac{Synplifier}.
 
 \subsection{Alphabet}
-An alphabet is a finite, non-empty set of symbols usually represented by the $\sum$ symbol.
+An alphabet is a finite, non-empty set of symbols usually represented by an uppercase sigma $\sum$.
 An example is the binary alphabet $\sum = \{0,1\}$. \cite{AutomataTheory.2007}
 
 \subsection{String}
@@ -63,12 +63,12 @@ Regular expressions declare strings that are part of the language and can descri
 In comparison to finite automata, the words can be described in an algebraic way. 
 Due to the similarities between regular expressions and finite automata, it is possible to convert regular expressions to finite automata and backwards. 
 Regular expressions are often used to describe tokens that should be recognized by a lexer (see section \ref{sec:BackgroundLexer}). \cite{AutomataTheory.2007}\\
-For example the regular expression \textbf{10+1*} denotes the language consisting of a single 1 followed by a single 0 or any number of 1's.\\
+For example the regular expression \textbf{10*} denotes the language consisting of a single 1 followed an arbitrary number of 0's.\\
 Given an alphabet $\sum$, regular expressions are formally defined as followed \cite{AutomataTheory.2007}:
 \begin{enumerate}
 \item The constants $\epsilon$ and $\emptyset$ are regular expressions denoting the empty string and the empty set.
 \item If $a$ is a symbol of the alphabet $\sum$, then $a$ is a regular expression.
-\item If $a$ and $b$ are regular expressions, then the alternation $a|b$, the concatenation $ab$ and the Kleene star $a*$ are regular expressions.
+\item If $a$ and $b$ are regular expressions, then the alternation $a|b$ (either $a$ or $b$), the concatenation $ab$ ($a$ followed by $b$) and the Kleene star $a*$ (an arbitrary number of $a$) are regular expressions.
 \end{enumerate}
 
 
