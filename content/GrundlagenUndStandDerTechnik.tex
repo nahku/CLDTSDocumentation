@@ -17,11 +17,10 @@ A string, also called word, is a finite sequence of symbols from some alphabet. 
 The set of all strings over an alphabet $\sum$ is denoted as $\sum ^{*}$. \cite{AutomataTheory.2007}
 
 \subsection{Language}
-If $\sum$ is an alphabet and $L$ is a subset of $\sum ^*$, then $L$ is a language over $\sum$. \cite{AutomataTheory.2007}
-- zb ASCII language
+If $\sum$ is an alphabet and $L$ is a subset of $\sum ^*$, then $L$ is a language over $\sum$ \cite{AutomataTheory.2007}.
+An example for a language $L(\sum)$ is the \ac{ASCII} which is a language over the alphabet $\sum = \{a-zA-Z,0-9,!,=,\#,\%,\$,\&,',(,),*,+,,,-,.,/,:,;,<,>,=,?,@,[,],\backslash ,\textasciicircum ,\textunderscore ,`,\{,\},\mid,\sim\}$. In the example the abbreviations $a-zA-Z$ and $0-9$ are used. The first abbreviation represents all alphabetic letters in lower and upper case. The second abbreviation represents one-digit numbers.
 
 \subsection{Finite automata}\label{sec:BackgroundAutomata}
-
 A finite automaton can recognize words of a language.
 The language represented by an automaton is the set of all accepted words.
 An automaton consists of  a set of states, a set of input symbols and transition functions.
@@ -62,14 +61,11 @@ Regular expressions declare strings that are part of the language and can descri
 In comparison to finite automata, the words can be described in an algebraic way. 
 Due to the similarities between regular expressions and finite automata, it is possible to convert regular expressions to finite automata and backwards. 
 Regular expressions are often used to describe tokens that should be recognized by a lexer (see section \ref{sec:BackgroundLexer}). \cite{AutomataTheory.2007}\\
-For example the regular expression \textbf{10+1*} denotes the language consisting of a single 1 followed by a single 0 or any number of 1's. 
-
-- algebra of regular expression 
-
-Given an alphabet $\sum$, the following ?definitions ?are regular expressions:
+For example the regular expression \textbf{10+1*} denotes the language consisting of a single 1 followed by a single 0 or any number of 1's.\\
+Given an alphabet $\sum$, regular expressions are formally defined as followed \cite{AutomataTheory.2007}:
 \begin{enumerate}
 \item The constants $\epsilon$ and $\emptyset$ are regular expressions denoting the empty string and the empty set.
-\item If $a$ is an symbol of the alphabet $\sum$, then $a$ is a regular expression.
+\item If $a$ is a symbol of the alphabet $\sum$, then $a$ is a regular expression.
 \item If $a$ and $b$ are regular expressions, then the alternation $a|b$, the concatenation $ab$ and the Kleene star $a*$ are regular expressions.
 \end{enumerate}
 
@@ -285,16 +281,12 @@ PLY is used to generate the lexer and parser for the \ac{TPTP} syntax files.
 
 \subsection{PyQt}\label{sec:BackgroundPytonPyQt}
 
-PyQt is a Python binding for the cross-platform GUI framework Qt \cite{PyQt}.
+PyQt is a Python binding for the cross-platform GUI framework Qt.
 It is licensed under the GNU GPL version 3.
-- qt is set of c++ libraries and development tools for various things: graphical user interfaces, regular expressions, sql databases, nfc and bluetooth,...
-- pyqt implements over 1000 of these classes in python
-- QMainWindow \\
+Qt offers a set of C++ libraries and development tools for various things including tools for building GUIs, defining regular expressions, setting up SQL databases, using NFC or interacting via Bluetooth.
+PyQt implements over 1000 of these Qt tools in Python.
+Using PyQt a GUI consists of a main windows (QMainWindow). \cite{PyQt}
 - QTreeWidget \\
--pyqt 5
-- widgets:
-
-tkinter
 
 \subsection{argparse}\label{sec:BackgroundArgparse}
 
