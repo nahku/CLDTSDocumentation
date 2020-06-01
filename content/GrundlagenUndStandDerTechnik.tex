@@ -196,61 +196,52 @@ During the syntax analysis a parser takes a string of tokens and forms a syntax 
 \subsection{Bottom-up parsing}\label{sec:BackgroundParserBottomUp}
 
 In bottom-up parsing a parse tree for an input string is constructed beginning at the leaves working up to the root. The idea is to reduce a string to the start symbol of a grammar, constructing a deviation in reverse.
-\cite{Aho.2007}\\
-At each reduction step, a specific substring matching the body of a production is replaced by the nonterminal at the head of that productions (reduction is reverse step of deviation).
+\cite{Aho.2007}
+
+At each reduction step a specific substring matching the body of a production is replaced by the nonterminal at the head of that productions (reduction is reverse step of deviation).
 The key decisions are when to reduce and what production to apply.
 These decisions depend on the parser implementation.
 An example are shift-reduce parsers that are described in the following.
 
 \subsection{Shift-reduce parsing}\label{sec:BackgroundParserShiftReduce}
 
-Shift-reduce parsers are one class of bottom-up parsers. In shift-reduce parsing a stack is used to hold grammar symbols and an input buffer holding the rest of the input string.
+Shift-reduce parsers are one class of bottom-up parsers. In shift-reduce parsing a stack is used to hold grammar symbols and an input buffer holds the rest of the input string.
 During parsing the input is scanned from left to right. The parser shifts zero or more input symbols on the stack until it can reduce the elements at the top of the stack. The elements at the top of the stack are reduced to the head of the corresponding production. This procedure is repeated until the stack contains the start symbol and the input buffer is empty or an error is detected. \cite{Aho.2007}\\
 There are four actions a shift-reduce parser can perform:
 \begin{itemize}%[noitemsep]
 	\item \textbf{Shift}: Shift next input symbol on top of stack.
-	\item \textbf{Reduce}: With the right end of a sting to be reduced being at top of the stack and the left end of the string located within the stack, the string is replaced with a  chosen nonterminal.
-	\item \textbf{Accept}: Declare that input was successfully parsed.
+	\item \textbf{Reduce}: todo right end of sting to be reduced must be at top of stack, locate left end of string within the stack and decide with what nonterminal to replace the string.
+	\item \textbf{Accept}: Declare that Input was successfully parsed.
 	\item \textbf{Error}: Detect a syntax error.
 \end{itemize}
 \cite{Aho.2007}
 
-%-use justified by, handle will appear on top of stack not inside, proof ...
+-use justified by, handle will appear on top of stack not inside, proof ...
 
 There are two kinds of conflicts that can occur during shift-reduce parsing. A shift-reduce conflict occurs if the parser cannot decide whether to shift or reduce.
-A reduce-reduce conflict occurs if the parser cannot decide which of multiple reductions to make.\cite{Aho.2007}
+A reduce-reduce conflict occurs if the parser cannot decide which of multiple reductions to make.
 
-%-these grammars are not in LR(k) class of grammars (non-LR grammars)
-%for example: ambiguous grammar can never be LR (if else)
-%\cite{Aho.2007}
+-these grammars are not in LR(k) class of grammars (non-LR grammars)
+for example: ambiguous grammar can never be LR (if else)
+\cite{Aho.2007}
 
 \subsection{LR($k$) parsing}\label{sec:BackgroundParserLR}
 
-LR($k$) parsing is the most common type of bottom-up parsing. The L stands for left-to-right, meaning the input is read from left to right, and R stands for constructing a rightmost derivation in reverse.
-In the context of LR parsing, the rightmost derivation refers to reducing the input to the start symbol.
-The parameter $k$ refers to the number of inputs symbols that are used as a lookahead. When $k$ is omitted, $k = 1$ is assumed.
-An LR parser makes shift-reduce decisions based on transitioning to different parsing states.
-An LR parser consists of a stack and a parsing table defining parsing-action functions and goto functions.
-An action function takes a state and an input symbol as input and defines which action to perform (Shift, Reduce, Accept, Error).
-A goto function takes a state and a nonterminal symbol as input and is used to find the next state after a reduction.
-States represent set of items.
-An item is a production of the grammar that the parser is based on with a dot at some position on the right-hand side of the production.
-An item indicates how much of a right-hand side has already been seen and what the parser is expecting next to apply the production (lookahead).
-For example $A \rightarrow B\cdot C$ indicates that the parsers has already read the input $B$ and expects $C$ in order to reduce the right-hand side to $A$.\cite{Aho.2007}\\
-LR parsers are complex to implement, but LR parser generators can be used, which significantly reduces the effort for creating an LR parser.
+LR($k$) parsing is the most common type of bottom-up parsing. The L stands for left-to-right and R stands for constructing a rightmost derivation in reverse. The parameter $k$ refers to the number of inputs symbols that are used as a lookahead. When $k$ is omitted, $k = 1$ is assumed.
+LR-Parsers are complex to implement, but LR parser generators can be used, which significantly reduces the effort for creating an LR-Parser.
+
+-what is rightmost derivation
+continue at s 241
+
+
 \cite{Aho.2007}
+-lr p. 241
 
 \subsubsection{LALR parsing}\label{sec:BackgroundParserLALR}
 
-An LALR parser (Look-Ahead LR parser) is a simplified LR parser.
-The simplification consists of merging items that have identical cores.
-A core is the part of the right-hand side of a productions that is left of the dot. 
-For example an LR parser would separate the items $A \rightarrow B\cdot C$ and $A \rightarrow B\cdot D$ as their core is identical but their lookahead is different.
-An LALR parser merges the two items to one item
-$A \rightarrow B\cdot \{C,D\}$.
-Not considering the lookahead reduces the power of the parser because it might lead to reduce/reduce conflicts.
-LALR parsers are nevertheless often used because the parsing table is much smaller comparing to other LR parsing techniques  due to merging items.
+- lookahead lr technique
 \cite{Aho.2007}
+-p.259
 
 \section{Lex and Yacc}\label{sec:BackgroundLexYacc}
 
