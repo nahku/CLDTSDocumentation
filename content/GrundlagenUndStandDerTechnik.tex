@@ -261,16 +261,16 @@ Lex and Yacc are tools for writing lexers and parsers. They often work together,
 
 \subsection{Lex}\label{sec:BackgroundLex}
 
-Lex is a tool written in C that generates a lexer by specifying regular expressions and belonging code fragments. The specified regular expressions are translated into a program that reads an input stream. The program partitions the input stream into strings matching the regular expressions. Once an expression is recognized the corresponding code is executed. For recognizing expressions, Lex builds a deterministic finite automaton. The automaton chooses the longest possible match if several expressions fit the input. \cite{Lex}
+Lex is a tool written in C that generates a lexer by specifying regular expressions and corresponding code fragments. The specified regular expressions are translated into a program that reads an input stream. The program partitions the input stream into strings matching the regular expressions. Once an expression is recognized the corresponding code is executed. For recognizing expressions, Lex builds a deterministic finite automaton. The automaton chooses the longest possible match if the input fits multiple specified regular expressions. \cite{Lex}
 
 \subsection{Yacc}\label{sec:BackgroundYacc}
 Yacc is a tool written in C that can be used for parsing the input of a computer program. 
-For generating a parser using Yacc, a specification that specifies the structure of the input of the parser has to be given. In addition to the specification of the structure, the input to the parser generator also consists of code that is invoked once a structure has been recognized. 
+For generating a parser using Yacc, a specification that specifies the structure of the input has to be given. In addition to the specification of the structure, the input to the parser generator also consists of code that is invoked once a structure has been recognized. 
 Yacc turns the input specification into a routine that handles the input. This routine calls Lex to get tokens from the input stream and arranges them based on the specification. \cite{Yacc}
 
 \section{Python}\label{sec:BackgroundPython}
 
-Since the use cases are all hand-created grammars of relatively small size (dozens to thousands of rules), and the algorithms do not have high complexity, we decided to implement the tool in Python 3. 
+Since the use cases of \ac{Synplifier} are all hand-created grammars of relatively small size (dozens to thousands of rules), and the algorithms do not have high complexity, we decided to implement the tool in Python 3. 
 Python is a simple but powerful modern multi-paradigm language with good support and excellent libraries.
 Python is easy to learn and its power allows it to create complex applications using Python.
 Libraries that are used in the implementation \ac{Synplifier} are introduced in the following sections.
@@ -286,10 +286,8 @@ Libraries that are used in the implementation \ac{Synplifier} are introduced in 
 \item Error checking and recovery
 \end{itemize}
 
-\ac{PLY} consists of the two modules $lex.py$ and $yacc.py$ that are meant to execute together. For example $yacc.py$ retrieves tokens from the input stream provided by $lex.py$. $Yacc.py$ returns by default an Abstract Syntax Tree. However, it is possible for the user to change the output of $yacc.py$ according to his demands.
-\cite{PLY}
+\ac{PLY} consists of the two modules $lex.py$ and $yacc.py$ that are meant be to execute together. I. e. $yacc.py$ retrieves tokens from the input stream provided by $lex.py$. $Yacc.py$ returns an Abstract Syntax Tree by default. However, it is possible for the user to change the output of $yacc.py$ according to his demands. \cite{PLY}
 PLY is used to generate the lexer and parser for the \ac{TPTP} syntax files.
-
 
 \subsection{PyQt}\label{sec:BackgroundPytonPyQt}
 
