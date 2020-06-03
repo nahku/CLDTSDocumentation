@@ -18,7 +18,8 @@ The set of all strings over an alphabet $\sum$ is denoted as $\sum ^{*}$. \cite{
 
 \subsection{Language}
 If $\sum$ is an alphabet and $L$ is a subset of $\sum ^*$, then $L$ is a language over $\sum$ \cite{AutomataTheory.2007}.
-If sigma equals the \ac{ASCII} alphabet $\sum = \{a-zA-Z,0-9,\enspace,!,=,\#,\%,\$,\&,',(,),*,+,,,-,.,/,:,;,<,>,=,?,@,[,],\backslash ,\textasciicircum ,\textunderscore ,`,\{,\},\mid,\sim\}$, then $L(\sum)$ is a language over the \ac{ASCII} alphabet. In the example the abbreviations $a-zA-Z$ and $0-9$ are used. The first abbreviation represents all alphabetic letters in lower and upper case. The second abbreviation represents all one-digit numbers.
+If sigma is the \ac{ASCII} alphabet $\sum = \{a-zA-Z,0-9,\enspace,!,=,\#,\%,\$,\&,',(,),*,+,,,-,.,/,:,;,<,>,=,?,@,[,],\backslash ,\textasciicircum ,\textunderscore ,`,\{,\},\mid,\sim\}$, then for example the language where words can consist of $a-zA-Z$ is one language over the \ac{ASCII} alphabet.\\
+In the example the abbreviations $a-zA-Z$ and $0-9$ are used. The first abbreviation represents all alphabetic letters in lower and upper case. The second abbreviation represents all one-digit numbers.
 
 \subsection{Finite automata}\label{sec:BackgroundAutomata}
 A finite automaton can recognize words of a language.
@@ -271,12 +272,14 @@ Lex and Yacc are tools for writing lexers and parsers. They often work together,
 
 \subsection{Lex}\label{sec:BackgroundLex}
 
-Lex is a tool written in C that generates a lexer by specifying regular expressions and corresponding code fragments. The specified regular expressions are translated into a program that reads an input stream. The program partitions the input stream into strings matching the regular expressions. Once an expression is recognized the corresponding code is executed. For recognizing expressions, Lex builds a deterministic finite automaton. The automaton chooses the longest possible match if the input fits multiple specified regular expressions. \cite{Lex}
+Lex is a tool written in C that generates a lexer by specifying regular expressions and corresponding code fragments. The specified regular expressions are translated into a program that reads an input stream. The program partitions the input stream into strings matching the regular expressions. Once an expression is recognized the corresponding code is executed. For recognizing expressions, Lex builds a deterministic finite automaton. The automaton chooses the longest possible match if the input fits multiple specified regular expressions. \cite{Lex}\\
+Flex is an open-source alternative to Lex and also compatible to Lex. \cite{Flex}
 
 \subsection{Yacc}\label{sec:BackgroundYacc}
 Yacc is a tool written in C that can be used for parsing the input of a computer program. 
 For generating a parser using Yacc, a specification that specifies the structure of the input has to be given. In addition to the specification of the structure, the input to the parser generator also consists of code that is invoked once a structure has been recognized. 
-Yacc turns the input specification into a routine that handles the input. This routine calls Lex to get tokens from the input stream and arranges them based on the specification. \cite{Yacc}
+Yacc turns the input specification into a routine that handles the input. This routine calls Lex to get tokens from the input stream and arranges them based on the specification. \cite{Yacc}\\
+Bison is an open-source general-purpose parser generator that can be used as an alternative to Yacc and also accepts Yacc grammars. \cite{Bison}
 
 \section{Python}\label{sec:BackgroundPython}
 

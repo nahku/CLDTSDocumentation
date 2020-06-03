@@ -8,11 +8,7 @@ The following sections describe the concept of each component that is developed.
 
 \section{Approach}\label{sec:ConceptApproach}
 
-In order to decompose the full \ac{TPTP} syntax into smaller sub-syntaxes extracting desired sub-syntaxes by selecting a new start symbol and disabling undesired productions is proposed.
-%The idea is to process the full \ac{TPTP} syntax in multiple stages.
-%These stages include parsing the syntax into a structured internal representation and presenting it to the user to define undesired productions and the start symbol.
-To extract the sub-syntax, a recursive algorithm is introduced that checks which nont are still terminating and extracts all reachable
-productions.
+The goal is to decompose the full \ac{TPTP} syntax into smaller sub-syntaxes extracting desired sub-syntaxes. We propose the following approach: The user selects a start symbol and can disable undesired productions. A recursive algorithm is introduced that checks which symbols are still terminating and reachable and extracts those (and the productions that contain only them) into a sub-syntax.
 
 \section{Requirements}\label{sec:ConceptRequirements}
 
@@ -109,7 +105,7 @@ The proposed architecture for \ac{Synplifier} consists of seven components:
 \item A graph builder for building a graph out of the parsers data structure and manipulating this graph
 \item A graphical user interface
 \item A console interface 
-\item An input module that imports the filename of the \ac{TPTP} syntax
+\item An input module that imports the the \ac{TPTP} syntax file
 \item An output module that exports extracted sub syntaxes to local storage
 \end{itemize}
 
@@ -165,9 +161,8 @@ The listing below features two tokens: A grammar expression and a nonterminal sy
 \begin{lstlisting}[caption= Rule example]
 <formula_role>         ::= <lower_word>
 \end{lstlisting}
-
-A \textbf{comment} is defined as the start of a new line, a percentage sign, arbitrary characters and ends with a newline character.
-The percentage sign when used as terminal symbol is embedded in square brackets and can therefore never be the first character of a new line.
+\ac{TPTP} \textbf{comment}s always occupy a full line. They start with a percentage sign and continue to the end of the line. The percentage sign can appear as a regular character in \ac{EBNF} productions but also indicates the start of a comment.
+But when it is used as  a terminal symbol it is always is embedded in square brackets and can therefore never be the first character of a new line. Therefore a percentage sign used as terminal symbol can not be mistaken as the start of a comment.
 
 Additional tokens are the meta-symbols including \textbf{open} $"("$ and \textbf{close parentheses} $")"$, \textbf{open} $"["$ and \textbf{close square brackets} $"]"$, asterisks $"*"$ called \textbf{repetition symbols} and vertical bars $"\mid"$ called \textbf{alternative symbols}.
 
