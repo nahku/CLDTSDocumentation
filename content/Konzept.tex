@@ -155,7 +155,7 @@ The following paragraph introduces the tokens that are recognized by the lexer. 
 Following standard \ac{BNF}, \textbf{nonterminal} symbols are enclosed by the \textless\; and \textgreater \;symbol.
 In between there can be any arbitrary sequence of alphanumerical characters and underscores.
 
-A \textbf{terminal symbol} does not have any special notation and can be any sequence of characters, excluding whitespace characters, that is not matched to any other token.
+A \textbf{terminal symbol} does not have any special notation and can be any sequence of characters, excluding whitespace characters, that is not matched by any other token.
 
 There are four \textbf{expression} token types (one for each rule type).
 \textbf{Expressions} are defined as a nonterminal symbol followed by a production symbol (::= for grammar, ::- for token, :== for strict, ::: for macro rule type).
@@ -320,7 +320,7 @@ The output of the parser is a list of the rules and the comments from the \ac{TP
 
 \section{Graph generation}\label{sec:ConceptGraphGeneration}
 
-After parsing, the parsed \ac{TPTP} grammar is stored in a grammar list. The grammar list data structure does not allow easy traversing which is needed for extracting a sub-language. That is why a new data structure is introduced that allows easy modification and traversing. The data structure that is used is a graph representing the
+After parsing, the parsed \ac{TPTP} grammar is stored in a grammar list. The grammar list data structure does not allow easy traversing which is needed for extracting a sub-language. That is why a new data structure is introduced that allows easy modification and traversing. The data structure that is used is a graph representing the
 grammar.
 
 In the graph, the nonterminal symbols of the \ac{TPTP} syntax are represented by a node class that has the following attributes (see also UML class diagram \ref{fig:ImplementationNTNodeUML}):
@@ -529,7 +529,7 @@ After the terminating symbols have been determined, productions that contain a n
 
 After removing the productions specified in the control file it has to be determined which part of the grammar still remains reachable.
 This is done by generating a new grammar graph starting from desired the start symbol.
-When generating the new grammar graph, all from the start symbol reachable parts of the grammar will be added to the new grammar graph (see section \ref{sec:ConceptGraphGeneration}).
+When generating the new grammar graph, all reachable parts of the grammar from the start symbol will be added to the new grammar graph (see section \ref{sec:ConceptGraphGeneration}).
 All nodes that are not part of the new grammar graph are not reachable and can therefore be removed. They are also removed from the nodes dictionary.
 
 \section{Output generation}\label{sec:ConceptOutputGeneration}
