@@ -9,8 +9,9 @@ The following sections describe the concept of each component that is developed.
 \section{Approach}\label{sec:ConceptApproach}
 
 In order to decompose the full \ac{TPTP} syntax into smaller sub-syntaxes extracting desired sub-syntaxes by selecting a new start symbol and disabling undesired productions is proposed.
-The idea is to process the full \ac{TPTP} syntax in multiple stages.
-These stages include parsing the syntax into a structured internal representation and presenting it to the user to define undesired productions and the start symbol. To extract the sub-syntax, a recursive algorithm is introduced that checks which productions are still terminating and extracts all reachable
+%The idea is to process the full \ac{TPTP} syntax in multiple stages.
+%These stages include parsing the syntax into a structured internal representation and presenting it to the user to define undesired productions and the start symbol.
+To extract the sub-syntax, a recursive algorithm is introduced that checks which nont are still terminating and extracts all reachable
 productions.
 
 \section{Requirements}\label{sec:ConceptRequirements}
