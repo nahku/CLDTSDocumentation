@@ -20,7 +20,7 @@ The list of tokens is also used by the parser to identify terminal symbols \cite
 Listing \ref{lst:Lexer_tokens} shows the token list of the implemented lexer.
 The tokens featured in the token list are described in the following.\\
 
-\begin{lstlisting}[language=Python,basicstyle=\scriptsize	,caption= Lexer tokens,label= lst:Lexer_tokens]
+\begin{lstlisting}[language=None,basicstyle=\scriptsize	,caption= Lexer tokens,label= lst:Lexer_tokens]
 # List of token names
 tokens = (
     'LGRAMMAR_EXPRESSION',
@@ -57,7 +57,7 @@ The rule type is already known because depending on the rule type of a productio
 Then the Python method $rstrip()$ removes all trailing white space characters from the string value.
 Thus, the function returns a LexToken object with the value of the text belonging to the nonterminal symbol that the expression represents.\\
 
-\begin{lstlisting}[language=Python,basicstyle=\scriptsize	,caption= Lexer regular expressions,label= lst:Lexer_regex]
+\begin{lstlisting}[language=None,basicstyle=\scriptsize	,caption= Lexer regular expressions,label= lst:Lexer_regex]
 def t_COMMENT(self, t):
     r'^%.*$'
     return t

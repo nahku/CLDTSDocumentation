@@ -9,7 +9,7 @@ This chapter introduces the technologies and background that will be utilized in
 This section introduces terms and concepts in the area of formal languages that are necessary to understand \ac{Synplifier}.
 
 \subsection{Alphabet}
-An alphabet is a finite, non-empty set of symbols usually represented by the $\sum$ symbol.
+An alphabet is a finite, non-empty set of symbols usually represented by the uppercase sigma $\sum$.
 An example is the binary alphabet $\sum = \{0,1\}$. \cite{AutomataTheory.2007}
 
 \subsection{String}
@@ -18,13 +18,13 @@ The set of all strings over an alphabet $\sum$ is denoted as $\sum ^{*}$. \cite{
 
 \subsection{Language}
 If $\sum$ is an alphabet and $L$ is a subset of $\sum ^*$, then $L$ is a language over $\sum$ \cite{AutomataTheory.2007}.
-An example for a language $L(\sum)$ is the \ac{ASCII} which is a language over the alphabet $\sum = \{a-zA-Z,0-9,!,=,\#,\%,\$,\&,',(,),*,+,,,-,.,/,:,;,<,>,=,?,@,[,],\backslash ,\textasciicircum ,\textunderscore ,`,\{,\},\mid,\sim\}$. In the example the abbreviations $a-zA-Z$ and $0-9$ are used. The first abbreviation represents all alphabetic letters in lower and upper case. The second abbreviation represents all one-digit numbers.
+If sigma equals the \ac{ASCII} alphabet $\sum = \{a-zA-Z,0-9,\enspace,!,=,\#,\%,\$,\&,',(,),*,+,,,-,.,/,:,;,<,>,=,?,@,[,],\backslash ,\textasciicircum ,\textunderscore ,`,\{,\},\mid,\sim\}$, then $L(\sum)$ is a language over the \ac{ASCII} alphabet. In the example the abbreviations $a-zA-Z$ and $0-9$ are used. The first abbreviation represents all alphabetic letters in lower and upper case. The second abbreviation represents all one-digit numbers.
 
 \subsection{Finite automata}\label{sec:BackgroundAutomata}
 A finite automaton can recognize words of a language.
 The language represented by an automaton is the set of all accepted words.
-An automaton consists of a set of states, a set of input symbols and transition functions.
-A transition function takes a state and an input symbol as input and returns a state based on these input arguments.
+An automaton consists of a set of states, a set of input symbols and a transition function.
+The transition function takes a state and an input symbol as input and returns a state based on these input arguments.
 States are usually represented graphically by circles and transitions by labelled arrows.
 There are two special states: The start state and final state(s).
 The start state is the state in which the automaton starts processing the input symbols.
@@ -63,12 +63,12 @@ Regular expressions declare strings that are part of the language and can descri
 In comparison to finite automata, the words can be described in an algebraic way. 
 Due to the similarities between regular expressions and finite automata, it is possible to convert regular expressions to finite automata and backwards. 
 Regular expressions are often used to describe tokens that should be recognized by a lexer (see section \ref{sec:BackgroundLexer}). \cite{AutomataTheory.2007}\\
-For example the regular expression \textbf{10+1*} denotes the language consisting of a single 1 followed by a single 0 or any number of 1's.\\
+For example the regular expression \textbf{10*} denotes the language consisting of a single 1 followed by an arbitrary numver of 0's.\\
 Given an alphabet $\sum$, regular expressions are formally defined as followed \cite{AutomataTheory.2007}:
 \begin{enumerate}
 \item The constants $\epsilon$ and $\emptyset$ are regular expressions denoting the empty string and the empty set.
 \item If $a$ is a symbol of the alphabet $\sum$, then $a$ is a regular expression.
-\item If $a$ and $b$ are regular expressions, then the alternation $a|b$, the concatenation $ab$ and the Kleene star $a*$ are regular expressions.
+\item If $a$ and $b$ are regular expressions, then the alternation $a|b$ (either $a$ or $b$), the concatenation $ab$ ($a$ followed by $b$) and the Kleene star $a*$ (an arbitrary number of $a$) are regular expressions.
 \end{enumerate}
 
 
@@ -169,7 +169,7 @@ For new developers who want to implement ``only'' a first theorem prover for \ac
 
 \section{Lexing}\label{sec:BackgroundLexer}
 
-Lexing or a so-called lexical analysis is the division of input into units called tokens \cite{LexYacc.1992}.\\
+Lexing or a so-called lexical analysis is the division of input into units called tokens~\cite{LexYacc.1992}.\\
 The input is a string containing a sequence of characters.
 The lexer groups characters of the input string into sequences that are meaningful. These sequences are called lexemes. From each lexeme, the lexer produces a token, which consists of the token name and the lexeme string. The token name is an abstract symbol which is used during parsing. \cite{Aho.2007} \\
 The tokens are then passed to the parser for syntax analysis.\\
@@ -181,7 +181,7 @@ This automaton can be built by combining all regular expressions by disjunction.
 Each final state from each regular expression is marked to know which token has been identified.\\
 Potentially final states overlap as a consequence of one token being a substring of another token. \\
 For solving such conflicts, a lexer is separating the input in order to divide it into tokens.
-Per convention the lexer chooses the longest input that matches any token. \cite{Mogensen.2017} \\
+Per convention the lexer chooses the longest input that matches any token.~\cite{Mogensen.2017} \\
 Furthermore, a precedence of tokens can be declared. Usually the token that is being defined first has a higher precedence and thus will be chosen if possible token matches have the same length. \cite{Mogensen.2017}
 
 Besides of writing a lexer manually it can also be generated by a lexer generator.
@@ -212,7 +212,7 @@ During parsing the input is scanned from left to right. The parser shifts zero o
 There are four actions a shift-reduce parser can perform:
 \begin{itemize}%[noitemsep]
 	\item \textbf{Shift}: Shift next input symbol on top of stack.
-	\item \textbf{Reduce}: With the right end of a sting to be reduced being at top of the stack and the left end of the string located within the stack, the string is replaced with a  chosen nonterminal.
+	\item \textbf{Reduce}: With the right end of a string to be reduced being at top of the stack and the left end of the string located within the stack, the string is replaced with a  chosen nonterminal.
 	\item \textbf{Accept}: Declare that input was successfully parsed.
 	\item \textbf{Error}: Detect a syntax error.
 \end{itemize}
@@ -311,4 +311,4 @@ This module is used in the implementation of the command-line interface of \ac{S
 
 Beautiful Soup is a Python library for extracting data out of HTML and XML files.
 That makes it especially useful for getting information from web pages. \cite{BeautifulSoup,BeautifulSoupDoku}
-In \ac{Synplifier} Beautiful soup is used to extract the latest \ac{TPTP} syntax, which is stored in HTML format, from the \ac{TPTP} website.
+In \ac{Synplifier} Beautiful soup is used to automatically extract the latest \ac{TPTP} syntax from the HTML version on the \ac{TPTP} website.
