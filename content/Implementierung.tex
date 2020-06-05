@@ -85,6 +85,13 @@ def t_T_SYMBOL(self, t):
 The function $t\textunderscore ignore$ is used for declaring characters that should be ignored in the input stream.
 In this project, white spaces and new lines are ignored (see chapter \ref{sec:ConceptLexer}).
 
+\begin{lstlisting}[language=Python,basicstyle=\scriptsize	,caption= Lexer ignor function,label= lst:Lexer_ignor]
+def t_error(self, t):
+    print("Illegal character '%s'" % t.value[0])
+    t.lexer.skip(1)
+)
+\end{lstlisting}
+
 The function $t\textunderscore error$ is called when an error occurs during lexing.
 The defined error function shown in listing \ref{lst:Lexer_error} prints the value of the illegal character and skips the character. \\
 
