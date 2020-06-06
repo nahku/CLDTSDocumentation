@@ -166,14 +166,6 @@ But when it is used as  a terminal symbol it is always is embedded in square bra
 
 Additional tokens are the meta-symbols including \textbf{open} $"("$ and \textbf{close parentheses} $")"$, \textbf{open} $"["$ and \textbf{close square brackets} $"]"$, asterisks $"*"$ called \textbf{repetition symbols} and vertical bars $"\mid"$ called \textbf{alternative symbols}.
 
-In PLY it is possible to declare characters that should be ignored. This means that the characters are ignored in the input stream of the lexer. However, if one of those characters is part of a regular expression of a token it is not ignored and will be used for token matching. In this project tabs, white spaces and newline characters are ignored as they do not have any special meaning other than providing better readability. With exception of the comment token, the information about newline characters is not relevant due to rules being defined over multiple lines, which can be seen in the listing below.
-
-\begin{lstlisting}[caption= Example of rules defined over multiple lines]
-<annotated_formula>  ::=    <thf_annotated> | <tff_annotated> |
-                            <tcf_annotated> | <fof_annotated> |
-                            <cnf_annotated> | <tpi_annotated>
-\end{lstlisting}
-
 \section{Parser}\label{sec:ConceptParser}
 The parser takes the tokens from the lexer as input and creates a data structure that represents the structure of the \ac{TPTP} syntax. The parser is based on a context-free grammar that is described in section \ref{sec:ConceptParserGrammar}.
 
@@ -268,9 +260,7 @@ Terminal symbol production is either a terminal symbol or a terminal symbol/repe
                &\mid \textbf{terminal symbol} 
 \end{align*}
 
-A production element can be replaced by a nonterminal symbol or by a nonterminal symbol in square brackets or nonterminal symbol repetition. In the case of repetition or square brackets the production element is categorized as optional when in square brackets or as repetition when followed by the repetition symbol. The same applies to t symbol production. A production element can also only be square brackets only.
-
- 
+A production element can be replaced by a nonterminal symbol or by a nonterminal symbol in square brackets or nonterminal symbol repetition. In the case of repetition or square brackets the production element is categorized as optional when in square brackets or as repetition when followed by the repetition symbol. The same applies to terminal symbol production. A production element can also only be square brackets only.
 
 \begin{align*}
 	production\;element\; \rightarrow\; & \textbf{open square bracket \; nonterminal symbol} \\ 
@@ -281,6 +271,8 @@ A production element can be replaced by a nonterminal symbol or by a nonterminal
                &\mid \textbf{nonterminal symbol} \\
                &\mid terminal\; symbol\; production 
 \end{align*}
+
+A production is either a production element, an already existing production followed by a production element or a composition of production(s), a xor production list, parenthesis and a repetition symbol. 
 
 \begin{align*}
 	production\; \rightarrow\; &production\; element
