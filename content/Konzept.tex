@@ -348,9 +348,7 @@ If the non-terminal symbol \textit{<formula\textunderscore role>}, that was ment
 would be introduced.
 This ensures that only one node is representing the start symbol that is used for graph generation.
 
-Starting with the temporary start symbol, the graph is generated recursively. Iterating over each non-terminal symbol in the productions list of the start symbol, the corresponding nodes are identified. These nodes are then appended to the list of children of the start symbol. If a non-terminal symbol corresponds to two nodes with different rule types, the two nodes are stored in a list and are appended to the list of children resulting in a nested list. The identified children may again have children. This process is repeated until a node has no children because there are only terminal symbols in the productions list of a non-terminal symbol.
-
-Since it is possible for a non-terminal symbol to be on the right side as well as on the left side of the same production rule, a node can also be its own child. To avoid revisiting the same node infinitely, it is checked whether a node already has children so that it will not be visited again. This also improves the performance of the tool as a non-terminal symbol that has already been visited will not be visited again independent of circular dependencies.
+Starting with the temporary start symbol, the graph is generated recursively.
 
 The following example shows a production rule and an abstract representation of the resulting list of children belonging to the node. Each production alternative is embedded in the children list of the node. %This is relevant for checking whether a non-terminal is terminating.
 
