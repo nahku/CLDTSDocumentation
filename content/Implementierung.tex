@@ -405,11 +405,15 @@ After iterating, comments are assigned (see section \ref{sec:ImplementationMaint
 \end{algorithmic}
 \end{algorithm}
 
+Starting with the temporary start symbol, the graph is generated recursively. Iterating over each non-terminal symbol in the productions list of the start symbol, the corresponding nodes are identified. These nodes are then appended to the list of children of the start symbol. If a non-terminal symbol corresponds to two nodes with different rule types, the two nodes are stored in a list and are appended to the list of children resulting in a nested list. The identified children may again have children. This process is repeated until a node has no children because there are only terminal symbols in the productions list of a non-terminal symbol.
+
+Since it is possible for a non-terminal symbol to be on the right side as well as on the left side of the same production rule, a node can also be its own child. To avoid revisiting the same node infinitely, it is checked whether a node already has children so that it will not be visited again. This also improves the performance of the tool as a non-terminal symbol that has already been visited will not be visited again independent of circular dependencies.
+
 To generate the graph of a given grammar three algorithms are needed that will be explained in the following.
 
 The algorithm $buildGraphRek$ calls the function $searchProductionsListForNT$ that appends children of a node to the nodes list of children.
 The algorithm is first called with the start symbol.
-After the children of a node have been appended to the node, for every child the algorithm is called resulting in appending their children to their children's list.
+After the children of a node have been appended to the node, the algorithm is called for every child the resulting in appending their children to their children's list.
 
 \begin{algorithm}[H]
 \caption{Graph Generation Algorithm: buildGraphRek}
