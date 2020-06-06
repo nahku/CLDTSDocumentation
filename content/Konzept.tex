@@ -158,7 +158,7 @@ There are four \textbf{expression} token types (one for each rule type).
 \textbf{Expressions} are defined as a nonterminal symbol followed by a production symbol (::= for grammar, ::- for token, :== for strict, ::: for macro rule type).
 The nonterminal symbol and the following production symbol are selected to be a single token and are not identified as two separate tokens to clearly identify the start of a new rule and therefore avoid ambiguity while parsing.
 The listing below features two tokens: A grammar expression and a nonterminal symbol.
-\begin{lstlisting}[caption= Rule example]
+\begin{lstlisting}[caption= TPTP rule example]
 <formula_role>         ::= <lower_word>
 \end{lstlisting}
 \ac{TPTP} \textbf{comment}s always occupy a full line. They start with a percentage sign and continue to the end of the line. The percentage sign can appear as a regular character in \ac{EBNF} productions but also indicates the start of a comment.
@@ -168,7 +168,7 @@ Additional tokens are the meta-symbols including \textbf{open} $"("$ and \textbf
 
 In PLY it is possible to declare characters that should be ignored. This means that the characters are ignored in the input stream of the lexer. However, if one of those characters is part of a regular expression of a token it is not ignored and will be used for token matching. In this project tabs, white spaces and newline characters are ignored as they do not have any special meaning other than providing better readability. With exception of the comment token, the information about newline characters is not relevant due to rules being defined over multiple lines, which can be seen in the listing below.
 
-\begin{lstlisting}[caption= Example of rules defined over multiple lines]
+\begin{lstlisting}[caption= Example of TPTP rules defined over multiple lines]
 <annotated_formula>  ::=    <thf_annotated> | <tff_annotated> |
                             <tcf_annotated> | <fof_annotated> |
                             <cnf_annotated> | <tpi_annotated>
@@ -338,7 +338,7 @@ The example below shows the productions for the nonterminal symbol \\
 $\textless formula\textunderscore role\textgreater$.
 Since this nonterminal symbol has multiple types of rules one node will be created for each rule type.
 
-\begin{lstlisting}[caption= Productions of the nonterminal symbol $\textless formula\textunderscore role\textgreater$, label=lst:ConceptMultipleRules]
+\begin{lstlisting}[caption= Productions of the nonterminal symbol \textit{<formula\textunderscore role>}, label=lst:ConceptMultipleRules]
 <formula_role> ::= <lower_word>
 <formula_role> :== axiom | hypothesis | definition | assumption |
                            lemma | theorem | corollary | conjecture |
@@ -349,7 +349,7 @@ Since this nonterminal symbol has multiple types of rules one node will be creat
 If a nonterminal symbol that has multiple rule types is selected as the desired start symbol, multiple nodes would represent that start symbol and therefore it would not be possible to select one node as the starting point of the graph generation.
 To solve this problem, a temporary start symbol is introduced before generating the graph.
 The temporary start symbol produces the start symbol that the user specified and is used as a starting point for the graph generation.
-If the non-terminal symbol $\textless formula\textunderscore role\textgreater$ that was mentioned before would be selected as start symbol by the user, a temporary start symbol representing the rule
+If the non-terminal symbol \textit{<formula\textunderscore role>}, that was mentioned before would be selected as start symbol by the user, a temporary start symbol representing the rule
 \begin{verbatim}
 <start_symbol>         ::=  <formula_role>
 \end{verbatim}
@@ -392,7 +392,7 @@ In this file, \textit{\textless TPTP\textunderscore file\textgreater} is specifi
 The second line indicates that the second grammar production alternative of the non-terminal symbol \textit{\textless TPTP\textunderscore input\textgreater} should be disabled.
 Furthermore, the first, second, third and fifth grammar production alternative of the non-terminal symbol \textit{\textless annotated\textunderscore formula\textgreater} are said to be disabled in line 3.
 
-\begin{lstlisting}[caption= Control file,label= lst:ConceptControlFile]
+\begin{lstlisting}[caption= Control file example,label= lst:ConceptControlFile]
 <TPTP_file>
 <TPTP_input>,::=,1
 <annotated_formula>,::=,0,1,2,5
@@ -412,7 +412,7 @@ Therefore, a mechanism has to be designed for the association of comments to gra
 
 Listing \ref{lst:ConceptComment_tptp} features an example of a comment in a \ac{TPTP} syntax file. This comment begins with a \textit{Top of Page} line which, in the HTML version of the \ac{TPTP} syntax, contains a hyperlink which leads to the beginning of the syntax file.
 The next line contains a relevant comment.\\
-\begin{lstlisting}[language=none, basicstyle=\scriptsize	,caption= Comment in the \ac{TPTP} syntax,label= lst:ConceptComment_tptp]
+\begin{lstlisting}[language=none, basicstyle=\scriptsize	,caption= Example of a comment in the \ac{TPTP} syntax, label= lst:ConceptComment_tptp]
 %----Top of Page---------------------------------------------------------------
 %----TFF formulae.
 <tff_formula>          ::= <tff_logic_formula> | <tff_atom_typing> |
@@ -563,7 +563,7 @@ The node that represents the temporary start symbol is not printed as it does no
   \path [line] (order) -- (store);  
 \end{tikzpicture}
 \end{center}
-\caption{Procedure of generating a Syntax string representation from the grammar graph}
+\caption{Procedure of generating a string representation of the grammar graph}
 \label{fig:ConceptOutputGrammarGraphProcedure}
 \end{figure}
 
@@ -624,7 +624,7 @@ Comments that have been assigned to a rule are also displayed. An example of the
 \begin{figure}[H]
 \centering
 \includegraphics[width=1\textwidth]{images/gui.png}
-\caption{GUI}
+\caption{Main GUI view}
 \label{fig:gui}
 \end{figure}
 

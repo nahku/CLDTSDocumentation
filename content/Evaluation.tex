@@ -36,10 +36,10 @@ The start symbol is \textit{TPTP\textunderscore file}.
 <annotations>,::=,0
 \end{lstlisting}
 
-All productions except the \textit{cnf\textunderscore annotated} are disabled from the \textit{annotated\textunderscore formula} grammar rule (line 2 of listing \ref{lst:ValidationParserControlFile}).
-The \textit{annotated\textunderscore formula} grammar rule can be seen in the following listing \ref{lst:ValidationParserAnnotatedFormulaProductions}.
+All productions except the \textit{<cnf\textunderscore annotated>} are disabled from the \textit{<annotated\textunderscore formula>} grammar rule (line 2 of listing \ref{lst:ValidationParserControlFile}).
+The \textit{<annotated\textunderscore formula>} grammar rule can be seen in the following listing \ref{lst:ValidationParserAnnotatedFormulaProductions}.
 Annotations are also disabled (line 3 in listing \ref{lst:ValidationParserControlFile}).
-\begin{lstlisting}[language = None,caption= \textit{annotated\textunderscore formula} production rule, label= lst:ValidationParserAnnotatedFormulaProductions]
+\begin{lstlisting}[language = None,caption= \textit{<annotated\textunderscore formula>} production rule, label= lst:ValidationParserAnnotatedFormulaProductions]
 <annotated_formula>    ::= <thf_annotated> | <tff_annotated> | <tcf_annotated> |
                            <fof_annotated> | <cnf_annotated> | <tpi_annotated>
 \end{lstlisting}
