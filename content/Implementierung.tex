@@ -817,8 +817,11 @@ As described in section \ref{sec:ConceptRemovingBlockedProductions} the determin
 The new grammar graph will only contain the reachable symbols (as described in section \ref{sec:ConceptDerterminingRemainingReachable}). 
 
 \section{Input}\label{sec:ImplementationInput}
-
-There are two methods performing input operations that are explained in the following. 
+There are two input operations that are needed for \ac{Synplifier}.
+One is reading the content of text files which is needed for importing \ac{TPTP} syntax files and also control files.
+The other input operation is the import of the current full \ac{TPTP} syntax from the \ac{TPTP} website.
+This increases the convenience for users because no local copy of the original \ac{TPTP} syntax is needed for sub-syntax extraction.\\
+The two methods representing these operations are described in the following.
 
 \subsubsection{Importing the \ac{TPTP} syntax from the \ac{TPTP} website}
 
@@ -836,7 +839,7 @@ tptp_grammar = soup.get_text()
 tptp_grammar = '\n'.join(tptp_grammar.split('\n')[1:])
 \end{lstlisting}
 
-\subsubsection{Reading \ac{TPTP} syntax from textfile}
+\subsubsection{Reading \ac{TPTP} syntax file and control file}
 
 $Read\textunderscore text\textunderscore fromtextunderscore file$ in listing \ref{lst:ImplementationInputText} uses the build-in function $open$ to read a text file. The filename of the textfile has to be specified before.\\
 
@@ -846,7 +849,6 @@ with open(filename, 'r') as text_file:
 \end{lstlisting}
 
 \section{Output generation}\label{sec:ImplementationOutputGeneration}
-
 For saving the grammar graph in a text file, the graph needs to be traversed and converted to a string format that can be saved in a text document. The grammar graph is converted to a string format by converting every rule to a string and cohering them. Every rule is represented by a node including the nodes children list. For converting the graph to a string format, the graph is traversed and string representation of the nodes are created.
 The final output is stored in a $print\textunderscore list$. A $print\textunderscore list$ is a list of $print\textunderscore list\textunderscore entries$ that can be seen in listing \ref{lst:ImplementationOutputPrintListEntry}. A $print\textunderscore list\textunderscore entry$ is a tuple consisting of the position of the rule that in the original \ac{TPTP} grammar is represented by the node and a string version of the rule or rather the node and its children list.
 
@@ -1288,13 +1290,12 @@ Moreover, an error is risen if there is no imported grammar, for example the use
 \end{algorithm} 
 
 \subsubsection{Output control file}\label{sec:ImplementationGUIOutput control file}
-
-Output control file saves a control file to local storage. 
-First, a control file is produced based using the method \textit{Produce control file}. A filename under which the control file is stored is input using a QFileDialog window. The control file is then stored using $Output.save\textunderscore text\textunderscore to\textunderscore file$.
+A control file can also be generated from GUI selections.
+For that, the information on start symbol selection and the selection of blocked productions is extracted from the GUI and a control file is generated from that information. The control file is then stored in a text file at the location the user specified.
 
 \subsection{Exception handling}\label{sec:ImplementationGUIExceptionHandling}
 
-Exceptions are used to handle wrong input from the user. There are three exceptions that are raised whenever the user makes a wrong input: 
+Exceptions are used to handle wrong input from the user. There are three types of exceptions that are raised whenever the user makes a wrong input: 
 
 \begin{itemize}
 \item Multiple start symbols
