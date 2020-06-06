@@ -7,18 +7,15 @@ Furthermore, the implementation of the GUI and the command-line interface is int
 
 \section{Lexer}\label{sec:ImplementationLexer}
 
-As mentioned in chapter \ref{sec:ConceptLexer} the \ac{PLY} package uses the definition of tokens in form of regular expressions to generate the lexer. The following sections presents defined tokens and the regular expressions that describe these tokens.
+As mentioned in chapter \ref{sec:ConceptLexer} the \ac{PLY} package uses the definition of tokens in form of regular expressions to generate the lexer. The following sections presents defined tokens that have been introduced in chapter \ref{sec:ConceptLexer} and the regular expressions that describe these tokens in detail.
 
-In order to build the lexer, the function $lex.lex()$ is used. After the lexer has been created, the function $lex.token()$ returns matched tokens. The function $lex.token()$ is called until it returns a token of the type $None$ that marks the end of the input stream. 
-
-\subsection{Token}\label{sec:ImplementationLexerToken}
+\subsection{Tokens}\label{sec:ImplementationLexerToken}
 
 The names of the tokens indicate what they represent. 
 All tokens that have been defined are combined to a token list.
 A token list is always required when writing a lexer using \ac{PLY} \cite{PLY}.
 The list of tokens is also used by the parser to identify terminal symbols \cite{PLY}.
 Listing \ref{lst:Lexer_tokens} shows the token list of the implemented lexer.
-The tokens featured in the token list are described in the following.\\
 
 \begin{lstlisting}[language=None,basicstyle=\scriptsize	,caption= Lexer tokens,label= lst:Lexer_tokens]
 # List of token names
@@ -39,15 +36,13 @@ tokens = (
 )
 \end{lstlisting}
 
-\subsection{Regular expressions}\label{sec:ImplementationLexerRegularExpression}
-
 Tokens are specified by regular expressions.
 Regular expressions, that define tokens, have to be defined in a Python function in order for \ac{PLY} to recognize these tokens.
 The name of the function is the name of the corresponding token in the token list with the prefix t\textunderscore .
 Inside a function, it is possible to modify the value of the generated LexToken object and then return it.
 If not modified, the value of the object is not modified and remains to be the actual text that has been matched.\\
-The regular expression is specified as a string in the beginning of a function.
-An extract of all functions can be seen in listing \ref{lst:Lexer_regex}.
+The regular expression is specified as a string in the beginning of a function.\\
+An extract of the functions can be seen in listing \ref{lst:Lexer_regex}.
 The function for the token $COMMENT$ consists of the regular expression that matches a comment which has already been described in chapter \ref{sec:ConceptLexer} and returns the LexToken object unmodified.
 The functions of $OPEN\textunderscore SQUARE\textunderscore BRACKET$, $NT\textunderscore SYMBOL$ and $T\textunderscore SYMBOL$ (and the other tokens in the tokens list) are implemented similar to $COMMENT$.
 The function of $LGRAMMAR\textunderscore EXPRESSION$ and the functions of the other expressions modify the value of the LexToken object.
@@ -82,18 +77,26 @@ def t_T_SYMBOL(self, t):
 )
 \end{lstlisting}
 
-The function $t\textunderscore ignore$ is used for declaring characters that should be ignored in the input stream.
-In this project, white spaces and new lines are ignored (see chapter \ref{sec:ConceptLexer}).
+\subsection{Building the lexer}\label{sec:ImplementationBuildingLexer}
 
-\begin{lstlisting}[language=Python,basicstyle=\scriptsize	,caption= Lexer ignor function,label= lst:Lexer_ignor]
-def t_error(self, t):
-    print("Illegal character '%s'" % t.value[0])
-    t.lexer.skip(1)
-)
+In order to build the lexer, the function $lex.lex()$ is used. After the lexer has been created, the function $lex.token()$ returns matched tokens. The function $lex.token()$ is called until it returns a token of the type $None$ that marks the end of the input stream. 
+
+In \ac{PLY} it is possible to declare characters that should be ignored. This means that the characters are ignored in the input stream of the lexer. However, if one of those characters is part of a regular expression of a token it is not ignored and will be used for token matching. In this project tabs, white spaces and newline characters are ignored as they do not have any special meaning other than providing better readability. With exception of the comment token, the information about newline characters is not relevant due to rules being defined over multiple lines, which can be seen in the listing below.
+
+\begin{lstlisting}[caption= Example of rules defined over multiple lines]
+<annotated_formula>  ::=    <thf_annotated> | <tff_annotated> |
+                            <tcf_annotated> | <fof_annotated> |
+                            <cnf_annotated> | <tpi_annotated>
+\end{lstlisting}
+
+The variable $t\textunderscore ignore$ shown in listing \ref{lst:Lexer_ignore} is used for declaring characters that should be ignored in the input stream.
+
+\begin{lstlisting}[language=Python,basicstyle=\scriptsize	,caption= Lexer ignore function,label= lst:Lexer_ignore]
+t_ignore = ' \t\n '
 \end{lstlisting}
 
 The function $t\textunderscore error$ is called when an error occurs during lexing.
-The defined error function shown in listing \ref{lst:Lexer_error} prints the value of the illegal character and skips the character. \\
+The defined error function shown in listing \ref{lst:Lexer_error} prints the value of the illegal character and skips the character.
 
 \begin{lstlisting}[language=Python,basicstyle=\scriptsize	,caption= Lexer error function,label= lst:Lexer_error]
 def t_error(self, t):
@@ -150,17 +153,19 @@ def t_error(self, t):
 
 
 \section{Parser}\label{sec:ImplementationParser}
-The parser takes the matched tokens from the lexer and constructs a grammar list (see chapter \ref{sec:ConceptParser}) based on a specified context free grammar.
-The rules of the context free grammar are defined by Python functions.
-The docstrings of the functions contain a specification of the rules.
-This kind of function accepts one argument which is a list of grammar symbols and contains semantic actions. The nonterminal symbol that is on the left side of the rule(s) is stored in the first element of the input.\\
+
+The parser takes the matched tokens from the lexer and constructs a grammar list based on a specified context free grammar (see chapter \ref{sec:ConceptParser}).
+The rules of this grammar are defined by Python functions that are described in the following paragraph. The left-hand side nonterminal symbols of the rules are implemented using data structures that are introduced in section \ref{sec:ImplementationParserDataStructure}. After that, in section \ref{sec:ImplementationRunParser} it is explained how to build the parser with \ac{PLY}.
+
+The docstrings of the Python functions contain a specification of the grammars rules.
+Functions accept one argument which is a list of grammar symbols and the bodies of the functions contain semantic actions.
 An example for a defined function can be seen in listing \ref{lst:Parser_functionProductionslist}.
 This function defines the rule that has the nonterminal symbol $productions\textunderscore list$ on the left side.
 The docstring of the function contains the specification of the rule and the code inside the function determines the actions that are taken once the function is called.
-If the input has the length 2, meaning the input list consists of two entries, a new $PRODUCTIONS\textunderscore LIST$ is created with $p[1]$ and is saved in $p[0]$.
+If the input has the length 2, meaning the input list consists of two entries, a new $PRODUCTIONS\textunderscore LIST$ is created with the second input element and is saved in the first input element.
 If the length of the input equals four, a $productions\textunderscore list$ already exists and is expanded by a new productions alternative.
-This is done by appending $p[3]$ to the existing list that is stored in $p[1]$.
-The result is again being stored in $p[0]$. \\
+This is done by appending the fourth input element to the existing list that is stored in the second input element.
+The result is again being stored in the first input element.\\
 
 \begin{lstlisting}[language=Python, basicstyle=\scriptsize, caption= Productions list parser function, label= lst:Parser_functionProductionslist]
 def p_productions_list(self, p):
@@ -175,12 +180,11 @@ def p_productions_list(self, p):
         p[0] = p[1]
 \end{lstlisting}
 
-The function that is defined first in the Python file determines the start symbol to which the grammar should be reduced to.
-The parser stops when no more input exists and the start symbol has been reached.
+%When a function is called and the right-hand side of a production is reduced to the left-hand side nonterminal symbol, the right-hand side is stored in a data structure that represents the left-hand side nonterminal symbol.
 
-\subsection{Nonterminal symbols}\label{sec:ConceptParserDataStructure}
+\subsection{Nonterminal symbols}\label{sec:ImplementationParserDataStructure}
 
-The nonterminal symbols of the defined context-free grammar are described in the following.
+The nonterminal symbols of the defined context-free grammar, that the parser is based on, are implemented using multiple data structures. These data structures are described in the following.
 
 A \textit{T\textunderscore SYMBOL \textunderscore PRODUCTION} consists of the token \textit{T\textunderscore SYMBOL} (see chapter \ref{sec:ImplementationLexerToken}) and additionally a production property.
 The production property can take two values and denotes whether a \textit{T\textunderscore SYMBOL} is
@@ -312,7 +316,7 @@ The resulting output of the parser can be seen in figure \ref{fig:Implementation
                 child{ node  {\textbf{alternative symbol}}}
                 child{ node  {production}
                 	child {node {productions element}
-                		child{node {\textbf{\shortstack{open square bracket \\ nt symbol \\ close square bracket }}}}}}
+                		child{node {\textbf{\shortstack{open square bracket \\ nonterminal symbol \\ close square bracket }}}}}}
                 				}}
    
 ; 
@@ -323,8 +327,9 @@ The resulting output of the parser can be seen in figure \ref{fig:Implementation
                 
 \subsection{Building the parser}\label{sec:ImplementationRunParser}
 
-To build the parser, the \ac{PLY} function $yacc.yacc()$ is called that constructs a parser from a specified grammar. To run the generated parser $parse()$ must be called. 
-
+To build the parser, the \ac{PLY} function $yacc.yacc()$ is called that constructs a parser from a specified grammar. To run the generated parser $parse()$ must be called.
+The function that is defined first in the Python file determines the start symbol to which the grammar should be reduced to.
+The parser stops when no more input exists and the start symbol has been reached or if an error has occurred.\\
 The output of the parser is further modified to include a numbering of rules and to handle square brackets correctly (see chapter \ref{sec:ConceptDisambiguation}).
 Rules are numbered by assigning the position of a rule within the grammar list as its position. Comment blocks are skipped. \\
 The disambiguation of square brackets replaces the $ProductionProperty$ $Optional$ by the terminal symbols open and closing square bracket for $GRAMMAR$ and $STRICT$ expressions.
@@ -332,8 +337,8 @@ By doing so, the productions in the productions list of a rule are iterated. If 
 
 \section{Graph generation}\label{sec:ImplementationGraphGeneration}
 
-The class $TPTPGraphBuilder$ that can be seen in figure \ref{fig:ImplementationGraphbuilderUML} has an instance of the Parser that has been introduced in chapter \ref{sec:ImplementationParser}. With the output of the parser, which is a grammar list, the graph builder builds a nodes dictionary and a graph. This is done by calling the $run$ method that calls $init\textunderscore tree$ for building the graph.
-The methods assigned to a) in figure \ref{fig:ImplementationGraphbuilderUML} are used for building a graph and are in the following. The graph builder is also responsible for reducing the \ac{TPTP} syntax, the methods used for that are assigned to b) and introduced in chapter \ref{sec:ImplementationExtractReducedGrammar}. Moreover, with the graph builder, comments are assigned to rules and nodes. Belonging methods are assigned to c) and described in chapter \ref{sec:ImplementationMaintainingComments}.
+The class $TPTPGraphBuilder$ that can be seen in figure \ref{fig:ImplementationGraphbuilderUML} has an instance of the parser that has been introduced in chapter \ref{sec:ImplementationParser}. With the output of the parser, which is a grammar list, the graph builder builds a nodes dictionary and a grammar graph. This is done by calling the $run$ method that calls $init\textunderscore tree$ for building the graph.
+The methods assigned to a) in figure \ref{fig:ImplementationGraphbuilderUML} are used for building a graph and are introduced in the following. The graph builder is also responsible for reducing the \ac{TPTP} syntax, the methods used for that are assigned to b) and introduced in chapter \ref{sec:ImplementationExtractReducedGrammar}. Moreover, with the graph builder, comments are assigned to rules and nodes. Belonging methods are assigned to c) and described in chapter \ref{sec:ImplementationMaintainingComments}.
 
 \begin{figure}[H]
 \centering
