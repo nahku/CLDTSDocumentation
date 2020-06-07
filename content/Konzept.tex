@@ -106,7 +106,7 @@ The proposed architecture for \ac{Synplifier} consists of seven components:
 \item A graphical user interface
 \item A console interface 
 \item An input module that imports the the \ac{TPTP} syntax file
-\item An output module that exports extracted sub syntaxes to local storage
+\item An output module that exports extracted sub-syntaxes to local storage
 \end{itemize}
 
 %The architecture of the \ac{Synplifier} should take the procedure of extracting a sublanguage (section \ref{sec:ConceptOverview}) into consideration.
@@ -341,7 +341,7 @@ Since this nonterminal symbol has multiple types of rules one node will be creat
 If a nonterminal symbol that has multiple rule types is selected as the desired start symbol, multiple nodes would represent that start symbol and therefore it would not be possible to select one node as the starting point of the graph generation.
 To solve this problem, a temporary start symbol is introduced before generating the graph.
 The temporary start symbol produces the start symbol that the user specified and is used as a starting point for the graph generation.
-If the non-terminal symbol \textit{<formula\textunderscore role>}, that was mentioned before would be selected as start symbol by the user, a temporary start symbol representing the rule
+If the nonterminal symbol \textit{<formula\textunderscore role>}, that was mentioned before would be selected as start symbol by the user, a temporary start symbol representing the rule
 \begin{verbatim}
 <start_symbol>         ::=  <formula_role>
 \end{verbatim}
@@ -350,7 +350,7 @@ This ensures that only one node is representing the start symbol that is used fo
 
 Starting with the temporary start symbol, the graph is generated recursively.
 
-The following example shows a production rule and an abstract representation of the resulting list of children belonging to the node. Each production alternative is embedded in the children list of the node. %This is relevant for checking whether a non-terminal is terminating.
+The following example shows a production rule and an abstract representation of the resulting list of children belonging to the node. Each production alternative is embedded in the children list of the node. %This is relevant for checking whether a nonterminal is terminating.
 
 \begin{verbatim}
 <disjunction>  ::=  <literal> | <disjunction><vline><literal>
@@ -373,14 +373,14 @@ The proposed way to describe this information is to:
 
 \begin{itemize}%[noitemsep]
 	\item Define the desired start symbol in the first line.
-	\item Define blocked productions grouped by the non-terminal symbol and rule type symbol, separating each group by a new line.
-	First defining the non-terminal symbol, then the production symbol and after that the indexes of the alternatives that should be blocked (indexing starts at zero).
+	\item Define blocked productions grouped by the nonterminal symbol and rule type symbol, separating each group by a new line.
+	First defining the nonterminal symbol, then the production symbol and after that the indexes of the alternatives that should be blocked (indexing starts at zero).
 \end{itemize}
-Identifying the production symbol is necessary because there are non-terminal symbols that have productions with more than one production symbol.\\
+Identifying the production symbol is necessary because there are nonterminal symbols that have productions with more than one production symbol.\\
 The example below contains a sample control file.
 In this file, \textit{\textless TPTP\textunderscore file\textgreater} is specified as start symbol.
-The second line indicates that the second grammar production alternative of the non-terminal symbol \textit{\textless TPTP\textunderscore input\textgreater} should be disabled.
-Furthermore, the first, second, third and fifth grammar production alternative of the non-terminal symbol \textit{\textless annotated\textunderscore formula\textgreater} are said to be disabled in line 3.
+The second line indicates that the second grammar production alternative of the nonterminal symbol \textit{\textless TPTP\textunderscore input\textgreater} should be disabled.
+Furthermore, the first, second, third and fifth grammar production alternative of the nonterminal symbol \textit{\textless annotated\textunderscore formula\textgreater} are said to be disabled in line 3.
 
 \begin{lstlisting}[caption= Control file example,label= lst:ConceptControlFile]
 <TPTP_file>
@@ -451,7 +451,7 @@ The comment line after refers to the rule after that line.
                            <thf_subtype> | <thf_sequent>
 \end{lstlisting}
 
-The flow chart in figure \ref{fig:ConceptMaintainingComments} shows the process of matching comment blocks, that are consecutive comment lines (see section \ref{sec:ConceptParserDataStructure}),  to rules.
+The flow chart in figure \ref{fig:ConceptMaintainingComments} shows the process of matching comment blocks, that are consecutive comment lines,  to rules.
 First, the comment block is split into multiple separate comment blocks by using \textit{Top of Page} lines as separators.
 \begin{itemize}%[noitemsep]
 	\item If this results in no comment blocks the comment block consisted only of one line which was a \textit{Top of Page} line.
@@ -506,10 +506,10 @@ After the desired productions have been deleted from the grammar graph, the next
 First it must be determined which symbols are terminating and which are nonterminating.
 Terminating nodes are found by iterating the nodes in the \textit{children\textunderscore list} of a node.
 If the \textit{children\textunderscore list} is empty, the production only consists of terminal symbols.
-If that is not the case, the node is terminating if all nodes in the \textit{children\textunderscore list} represent a non-terminal symbol which is terminating.
-If a non-terminal symbol has multiple rule types, it is represented by multiple nodes. Also, if a non-terminal symbol with multiple rule types is in featured in a production, all nodes representing that non-terminal symbol are in the children list corresponding to this production. However, only one of the nodes needs to be terminating for the non-terminal symbol to be terminating.
+If that is not the case, the node is terminating if all nodes in the \textit{children\textunderscore list} represent a nonterminal symbol which is terminating.
+If a nonterminal symbol has multiple rule types, it is represented by multiple nodes. Also, if a nonterminal symbol with multiple rule types is in featured in a production, all nodes representing that nonterminal symbol are in the children list corresponding to this production. However, only one of the nodes needs to be terminating for the nonterminal symbol to be terminating.
 
-After the terminating symbols have been determined, productions that contain a nonterminating symbol must be removed from the nodes of the grammar graph. Because some non-terminal symbols might have productions that contain nonterminating symbols, but also other productions that only contain terminating symbols, only the productions containing nonterminating symbols must be removed.
+After the terminating symbols have been determined, productions that contain a nonterminating symbol must be removed from the nodes of the grammar graph. Because some nonterminal symbols might have productions that contain nonterminating symbols, but also other productions that only contain terminating symbols, only the productions containing nonterminating symbols must be removed.
 
 \subsection{Determination of the remaining reachable symbols}\label{sec:ConceptDerterminingRemainingReachable}
 
