@@ -197,7 +197,7 @@ Square brackets embedding terminal symbols denote that the symbol within the bra
 For example an asterisk embedded in square brackets refers to the terminal symbol.
 An asterisk not embedded in square bracket corresponds to the production property $optional$ (see figure \ref{fig:ConceptProductionPropertyClassDiagram}).
 
-%Analogue to the T\textunderscore symbol data type, the NT\textunderscore SYMBOL also has the value of the non-terminal symbol token as an attribute. 
+%Analogue to the T\textunderscore symbol data type, the NT\textunderscore SYMBOL also has the value of the nonterminal symbol token as an attribute. 
 %
 %Due to the similarities of T\textunderscore SYMBOL and NT\textunderscore SYMBOL they are inherited from the same base class SYMBOL that can be seen in figure \ref{fig:ConceptSymbolsClassDiagram}.
 %
@@ -385,7 +385,7 @@ If that would not have been considered, the second rule would create a new node 
 After iterating, comments are assigned (see section \ref{sec:ImplementationMaintainingComments}).
 
 \begin{algorithm}[H]
-\caption{Graph Generation Algorithm: buildNodesDictionary}\label{alg:buildNodesDictionary}
+\caption{Build nodes dictionary}\label{alg:buildNodesDictionary}
 \begin{algorithmic}[1] 
 \Require rules\textunderscore list
 \ForAll {rule in rules\textunderscore list} 
@@ -405,18 +405,19 @@ After iterating, comments are assigned (see section \ref{sec:ImplementationMaint
 \end{algorithmic}
 \end{algorithm}
 
-Starting with the temporary start symbol, the graph is generated recursively. Iterating over each non-terminal symbol in the productions list of the start symbol, the corresponding nodes are identified. These nodes are then appended to the list of children of the start symbol. If a non-terminal symbol corresponds to two nodes with different rule types, the two nodes are stored in a list and are appended to the list of children resulting in a nested list. The identified children may again have children. This process is repeated until a node has no children because there are only terminal symbols in the productions list of a non-terminal symbol.
+Starting with the temporary start symbol, the graph is generated recursively. Iterating over each nonterminal symbol in the productions list of the start symbol, the corresponding nodes are identified. These nodes are then appended to the list of children of the start symbol. If a nonterminal symbol corresponds to two nodes with different rule types, the two nodes are stored in a list and are appended to the list of children resulting in a nested list. The identified children may again have children. This process is repeated until a node has no children because there are only terminal symbols in the productions list of a nonterminal symbol.
 
-Since it is possible for a non-terminal symbol to be on the right side as well as on the left side of the same production rule, a node can also be its own child. To avoid revisiting the same node infinitely, it is checked whether a node already has children so that it will not be visited again. This also improves the performance of the tool as a non-terminal symbol that has already been visited will not be visited again independent of circular dependencies.
+Since it is possible for a nonterminal symbol to be on the right side as well as on the left side of the same production rule, a node can also be its own child. To avoid revisiting the same node infinitely, it is checked whether a node already has children so that it will not be visited again. This also improves the performance of the tool as a nonterminal symbol that has already been visited will not be visited again independent of circular dependencies.
 
 To generate the graph of a given grammar three algorithms are needed that will be explained in the following.
 
-The algorithm $buildGraphRek$ calls the function $searchProductionsListForNT$ that appends children of a node to the nodes list of children.
+Algorithm \ref{alg:BuildGraphRek} calls the function \ref{alg:SearchProductionsListForNT} that appends children of a node to the nodes list of children.
 The algorithm is first called with the start symbol.
 After the children of a node have been appended to the node, the algorithm is called for every child the resulting in appending their children to their children's list.
 
 \begin{algorithm}[H]
-\caption{Graph Generation Algorithm: buildGraphRek}
+\caption{Build graph recursively}
+\label{alg:BuildGraphRek}
 \begin{algorithmic}[1] 
 \Require node
 %\ENSURE $y = x^n$
@@ -431,11 +432,12 @@ After the children of a node have been appended to the node, the algorithm is ca
 
 The right side of a production rule is stored in a productions list.
 For identifying the nonterminal or terminal symbols in the productions lists, a loop iterates all elements of the productions list.
-Each element is a production and calls the function $searchProductionForNT$.
+Each element is a production and calls the function \ref{alg:SearchProductionsListForNT}.
 This function identifies the children of the given element which are then appended to the node.
 
 \begin{algorithm}[H]
-\caption{Algorithm for extracting productions from productions list: searchProductionsListForNT}
+\caption{Extract productions from productions list}
+\label{alg:SearchProductionsListForNT}
 \begin{algorithmic}[1] 
 \Require node, productionsList
 \ForAll {elements in productionsList}
@@ -447,13 +449,13 @@ This function identifies the children of the given element which are then append
 \end{algorithm}
 
 For identifying the nonterminal symbols, it is checked if the production is a nested production and if so, the same function is called again.
-If the production is a XOR production list the function $searchProductionsListForNT$ is called to break down the productions list.
+If the production is a XOR production list the function \ref{alg:SearchProductionsListForNT} is called to break down the productions list.
 If the production element is a nonterminal symbol, the element is searched in the node dictionary to get the node where the element is on the left side.
 This element is then appended to a list of children. It is possible that an element appears multiple times on the left side if it is presented by multiple expressions.
 In this case each element is appended to the list of children.
 
 \begin{algorithm}[H]
-\caption{Algorithm for appending children to node: searchProductionForNT}
+\caption{Append children to node}
 \begin{algorithmic}[1] 
 \Require node, productionsElement, children
 \ForAll {elements in productionsElementList}
@@ -767,7 +769,7 @@ If it has not been visited before the corresponding \textit{Node\textunderscore 
 Then the \textit{children} list of the node is iterated (line 5).
 The index created in line 4 corresponds to the current element of the \textit{children} list, that is iterated.
 It is needed to delete the \textit{children} list and the corresponding \textit{productions\textunderscore list}, if a production contains nonterminating symbols. The \textit{children} list is iterated in reverse, because, if a \textit{children} list and \textit{productions\textunderscore list} is deleted this will not effect the indexing of the next \textit{children} list to analyse.
-The \textit{children} list contains lists of nodes for each production (see section \ref{sec:sec:ConceptGraphGeneration}). Each list, nested in the \textit{children} list, is iterated and for each node the algorithm is called recursively (line 7 and 8).\\
+The \textit{children} list contains lists of nodes for each production (see section \ref{sec:ConceptGraphGeneration}). Each list, nested in the \textit{children} list, is iterated and for each node the algorithm is called recursively (line 7 and 8).\\
 If a node represents a nonterminating symbol the \textit{not\textunderscore terminating} flag is set to true.
 If this flag is true after iterating one element of the \textit{children} list, it means that the production corresponding to the \textit{children} list element contains at least one nonterminating symbol.
 If that is the case, the corresponding element of the \textit{children} list and of the \textit{productions\textunderscore list} are removed from the node.
@@ -881,12 +883,12 @@ The simplified process can be seen in the flow diagram in figure \ref{fig:Implem
 
 \subsection{Traverse graph to create string representations of objects}\label{sec:ImpolementationOutputGrammarGraphTraverse}
 
-The graph is traversed using the function $create\textunderscore print\textunderscore list$. For every node a new $print\textunderscore list\textunderscore entry$ is created. The str function that is called to create the $print\textunderscore list\textunderscore entry$ is described in section \ref{sec:ImplementationOutputGrammarGraphStringRepresentations}. 
+The graph is traversed using function \ref{alg:OutputCreatePrintList}. For every node a new $print\textunderscore list\textunderscore entry$ is created. The str function that is called to create the $print\textunderscore list\textunderscore entry$ is described in section \ref{sec:ImplementationOutputGrammarGraphStringRepresentations}. 
 The $print\textunderscore list\textunderscore entry$ is then appended to the $print\textunderscore list$. Once visited a node is added to the set $visited$ so that it will not be visited again.
-Recursively all children in the node's children list are traversed. Because a child can once again have a list, every element of the child's list is considered and calls $create\textunderscore print\textunderscore list$ to complete the final $print\textunderscore list$. The visited elements are then also added to visited set. The algorithms ends with returning his version of the $print\textunderscore list$ that will be complete list once the first node who called the function return its $print\textunderscore list$.
+Recursively all children in the node's children list are traversed. Because a child can once again have a list, every element of the child's list is considered and calls $create\textunderscore print\textunderscore list$ to complete the final $print\textunderscore list$. The visited elements are then also added to visited set. The function ends with returning his version of the $print\textunderscore list$ that will be complete list once the first node who called the function return its $print\textunderscore list$.
 
 \begin{algorithm}[H]
-\caption{Output Algorithm: create\textunderscore print\textunderscore list}\label{alg:OutputCreatePrintList}
+\caption{Create print list}\label{alg:OutputCreatePrintList}
 \begin{algorithmic}[1] 
 \Require node, visited, print\textunderscore list
 \State Create PrintListEntry with node.position and str(node)
@@ -1043,7 +1045,7 @@ The procedure of creating the string representation of a \textit{PRODUCTION\text
 \end{algorithm}
 
 \subsubsection{Symbol string representation creation}
-To create the string representation of a non-terminal symbol, its value can be returned as-is.
+To create the string representation of a nonterminal symbol, its value can be returned as-is.
 The terminal symbol data type additionally has a production property as a class attribute.\\
 To create the string representation of a terminal symbol, in the case of the property \textit{OPTIONAL}, square brackets have to be printed around the terminal symbol value. In case of the production property \textit{REPETITION} the asterisk symbol has to be printed after the terminal symbol value. In case of the production property \textit{NONE}, the string representation consists only of the terminal symbol value.
 
@@ -1095,7 +1097,7 @@ nodes_list.sort(key=lambda x: x.position)
 \end{lstlisting}
 
 \begin{algorithm}[H]
-\caption{GUI Pseudo Code: init\textunderscore tree\textunderscore view}
+\caption{Init tree view}
 \label{alg:initTreeView}
 \begin{algorithmic}[1] 
 \ForAll {nodes in nodes\textunderscore list}
@@ -1141,7 +1143,7 @@ Algorithm \ref{alg:toggleComments} shows the algorithm used for toggling comment
 The View class attribute $commentStatus$ indicates whether comments are displayed (true) or not (false). For toggling comments, a new status is set that is the opposite of $commentStatus$. While looping through every item in $treeView$, comment items can be found by checking whether the item is checkable because by default a comment is not checkable by the user. A QTreeWidgetItem has flags including a flag "ItemIsUserCheckable" that is used for determining whether the item is checkable. The QTreeWidgetItem function $setHidden(bool\;hide)$ is applied on every comment with the value of the new status. CommentStatus is set to the new status. 
 
 \begin{algorithm}[H]
-\caption{GUI Algorithm: toggle\textunderscore comments}
+\caption{Toggle comments}
 \label{alg:toggleComments}
 \begin{algorithmic}[1] 
 \State newStatus = not commentStatus
@@ -1223,7 +1225,7 @@ After setting the checkboxes to the default mode, the first line of the control 
 Iterating every line of the control string, the $nt\textunderscore name$ which is the first element of a line is saved and the $rule\textunderscore type$ which is the second element as well. The item that belongs to $nt\textunderscore name$ is then searched and every production whose index is listed in the control file is unchecked.
 
 \begin{algorithm}[H]
-\caption{GUI Pseudo Code: load\textunderscore controlfile}
+\caption{Load controlfile}
 \label{alg:importControlfile}
 \begin{algorithmic}[1] 
 \State Import Control File
@@ -1272,7 +1274,7 @@ Each in a new line, the nonterminal symbol name, rule type and indices of blocke
 Moreover, an error is risen if there is no imported grammar, for example the user presses the Reduce grammar button in the GUI without importing a grammar.
 
 \begin{algorithm}[H]
-\caption{GUI Algorithm: produce\textunderscore controlfile}
+\caption{Produce controlfile}
 \label{alg:produceControlfile}
 \begin{algorithmic}[1] 
 \State Define new tuple Entry("Entry", ["value", "rule\textunderscore type"])
