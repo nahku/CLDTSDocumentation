@@ -157,7 +157,7 @@ def t_error(self, t):
 The parser takes the matched tokens from the lexer and constructs a grammar list based on a specified context free grammar (see chapter \ref{sec:ConceptParser}).
 The rules of this grammar are defined by Python functions that are described in the following paragraph. The left-hand side nonterminal symbols of the rules are implemented using data structures that are introduced in section \ref{sec:ImplementationParserDataStructure}. After that, in section \ref{sec:ImplementationRunParser} it is explained how to build the parser with \ac{PLY}.
 
-The docstrings of the Python functions contain a specification of the grammars rules.
+The docstrings of the Python functions contain a specification of the grammar's rules.
 Functions accept one argument which is a list of grammar symbols and the bodies of the functions contain semantic actions.
 An example for a defined function can be seen in listing \ref{lst:Parser_functionProductionslist}.
 This function defines the rule that has the nonterminal symbol $productions\textunderscore list$ on the left side.
@@ -194,7 +194,7 @@ from a \textit{T\textunderscore SYMBOL \textunderscore PRODUCTION}. Asterisk and
 brackets can be derived from a \textit{T\textunderscore SYMBOL \textunderscore PRODUCTION} production as well.
 The \textit{T\textunderscore SYMBOL \textunderscore PRODUCTION} is necessary because usually square brackets denote that the term within the brackets is optional which is not the case with terminal symbols.
 Square brackets embedding terminal symbols denote that the symbol within the brackets is terminal.
-For example an asterisk embedded in square brackets refers to the terminal symbol.
+For example, an asterisk embedded in square brackets refers to the terminal symbol.
 An asterisk not embedded in square bracket corresponds to the production property $optional$ (see figure \ref{fig:ConceptProductionPropertyClassDiagram}).
 
 %Analogue to the T\textunderscore symbol data type, the NT\textunderscore SYMBOL also has the value of the nonterminal symbol token as an attribute. 
@@ -235,7 +235,7 @@ A \textit{COMMENT\textunderscore BLOCK} is a list of consecutive comment lines. 
 \label{fig:ConceptCommentBlockClassDiagram}
 \end{figure}
 
-A \textit{T\textunderscore SYMBOL\textunderscore PRODUCTION} or a\textit{ NT\textunderscore SYMBOL} is a \textit{PRODUCTION\textunderscore ELEMENT}. Therefore it has an instance of \textit{SYMBOL} as an attribute which can be seen in figure \ref{fig:ConceptProductionElementClassDiagram}. Additionally, a production element has a production property that is shown in figure \ref{fig:ConceptProductionPropertyClassDiagram}.
+A \textit{T\textunderscore SYMBOL\textunderscore PRODUCTION} or a\textit{ NT\textunderscore SYMBOL} is a \textit{PRODUCTION\textunderscore ELEMENT}. Therefore, it has an instance of \textit{SYMBOL} as an attribute which can be seen in figure \ref{fig:ConceptProductionElementClassDiagram}. Additionally, a production element has a production property that is shown in figure \ref{fig:ConceptProductionPropertyClassDiagram}.
 The production property can take one of three values and denotes whether a production is optional, can be repeated multiple times or does not have any special property.
 In the original \ac{TPTP} syntax file, the property is represented by square brackets or the repetition symbol. 
 
@@ -275,7 +275,7 @@ The \textit{XOR\textunderscore PRODUCTIONS\textunderscore LIST} represents a \te
 \end{figure}
 
 
-The \textit{GRAMMAR\textunderscore LIST} class shown in figure \ref{fig:ConceptGrammarListClassDiagram} is the top level data structure. It contains a list of all rules that are in the \ac{TPTP} syntax file.
+The \textit{GRAMMAR\textunderscore LIST} class shown in figure \ref{fig:ConceptGrammarListClassDiagram} is the top-level data structure. It contains a list of all rules that are in the \ac{TPTP} syntax file.
 This includes any type of rules (grammar, token, strict and macro) and comment blocks. 
 
 \begin{figure}[H]
@@ -367,7 +367,7 @@ The rule type of a node is either grammar, token, strict or macro and is impleme
 \label{fig:ImplementationRuleTypeUML}
 \end{figure}
 
-Algorithm \ref{alg:buildNodesDictionary} shows how the nodes dictionary is build. Iterating the rules list, a new dictionary item is created that consists of the key rule name and rule type and the \textit{NTNode} as value. This is only the case if the rule is not a comment block. 
+Algorithm \ref{alg:buildNodesDictionary} shows how the nodes dictionary is built. Iterating the rules list, a new dictionary item is created that consists of the key rule name and rule type and the \textit{NTNode} as value. This is only the case if the rule is not a comment block. 
 Listing \ref{lst:ImplementationMultipleSameRules} shows that multiple rules can exist that correspond to the same node.\\
 
 \begin{lstlisting}[language=None, basicstyle=\scriptsize	,caption= Multiple rules with the same left-hand side of the rule,label= lst:ImplementationMultipleSameRules]
@@ -457,8 +457,8 @@ In this case each element is appended to the list of children.
 \begin{algorithm}[H]
 \caption{Append children to node}
 \begin{algorithmic}[1] 
-\Require node, productionsElement, children
-\ForAll {elements in productionsElementList}
+\Require node, productionsList, children
+\ForAll {elements in productionsList}
 	\If {element is  a production}
 		\State {searchProductionForNT(node, element, children)}
 	\ElsIf {element is a XOR productions list}
@@ -504,7 +504,7 @@ If the original comment block was at the end of the syntax file, the second comm
 The case of two or more top of page lines does not occur in the \ac{TPTP} syntax version 7.3.0. and is not included in the pseudo-code.\\
 This hypothetical case is handled by using the same procedure as in the case of two comment blocks but treating all comment blocks after the second comment block like the second. This means that all comment blocks from the second on would be associated with the rule after, except the case that the original comment block was at the end of the syntax file. In that case all comment blocks would be appended to the rule before.
 
-The algorithm relies on the \textit{rules\textunderscore list} never having two or more comment blocks in a row (meaning they are always separated by at least one rule). This is ensured by the parser, because all consecutive comment lines in the syntax file are included into one comment block. Therefore consecutive comment block objects do not occur in the \textit{rules\textunderscore list}.
+The algorithm relies on the \textit{rules\textunderscore list} never having two or more comment blocks in a row (meaning they are always separated by at least one rule). This is ensured by the parser, because all consecutive comment lines in the syntax file are included into one comment block. Therefore, consecutive comment block objects do not occur in the \textit{rules\textunderscore list}.
 
 \begin{algorithm}[H]
 \small
@@ -552,7 +552,7 @@ The algorithm relies on the \textit{rules\textunderscore list} never having two 
 In Algorithm \ref{alg:append_comment_to_node} it is described, how a comment block is appended to a node from the grammar graph, using information from the original rule created by the parser to address the node.\\
 To associate the \textit{COMMENT\textunderscore BLOCK} with the node representing the rule, the node needs to be accessed.
 It is more efficient to use the created \textit{nodes\textunderscore dictionary} to access the desired nodes than to traverse the grammar graph for each wanted node.\\
-In the \textit{nodes\textunderscore dictionary}, the key for each node consists of the nonterminal symbol name and the \textit{RuleType} is stored(see section \ref{sec:ImplementationGraphGeneration}).\\
+In the \textit{nodes\textunderscore dictionary}, the key for each node consists of the nonterminal symbol name and the \textit{RuleType} is stored (see section \ref{sec:ImplementationGraphGeneration}).\\
 The rule type of the input rule is indicated by the type of the \textit{rule} object (see class diagram in figure \ref{fig:ImplementationRuleTypeUML}).
 To index the node in the \textit{nodes\textunderscore dictionary} the \textit{RuleType} corresponding to the type of the rule object is needed.
 The \textit{find\textunderscore rule\textunderscore type\textunderscore for\textunderscore rule} method determines and returns the \textit{RuleType} corresponding to the \textit{rule} object type.\\
@@ -578,7 +578,7 @@ It appends the \textit{COMMENT\textunderscore BLOCK} to the \textit{COMMENT\text
 
 Algorithm \ref{alg:extend_comment_block} shows the procedure that is used in the \textit{extend\textunderscore comment\textunderscore block} method of the \textit{NTNode} class.
 If no \textit{comment\textunderscore block} has not been associated with the node before, the input \textit{comment\textunderscore block} is associated with the node.
-If the node has already have a \textit{comment\textunderscore block}, this \textit{comment\textunderscore block} is extended, with the comments lines from the input \textit{comment\textunderscore block}.\\
+If the node already has a \textit{comment\textunderscore block}, this \textit{comment\textunderscore block} is extended, with the comments lines from the input \textit{comment\textunderscore block}.\\
 This procedure is needed because it is possible that multiple comment blocks, that have been generated on splitting comment blocks, have to be associated with the same node.
 
 \begin{algorithm}[H]
@@ -678,7 +678,7 @@ From the node, in a loop, the elements of the \textit{productions\textunderscore
 After the desired productions have been deleted from the grammar graph, the next step is to remove the nonterminating symbols from the grammar graph. Algorithm \ref{alg:remove_non_terminating_symbols} shows the procedure of removing nonterminating symbols.
 First it has to be determined which symbols are terminating and which are nonterminating. \\
 On the one hand, starting from the terminal symbols all nonterminal symbols that derive terminal symbols could be found. However, the graph data structure can only be traversed top down not bottom up.
-Therefore starting at the start node, the graph is traversed and terminating symbols are found. 
+Therefore, starting at the start node, the graph is traversed and terminating symbols are found. 
 A set of terminating nodes and a temporary set of terminating nodes are initialized.
 In a while loop the recursive algorithm \textit{find\textunderscore non\textunderscore terminating\textunderscore symbols(start\textunderscore node, temp\textunderscore terminating, visited)} (algorithm \ref{alg:find_non_terminating_symbols}) finds terminating nodes with the start\textunderscore node, an initialized set of known terminating symbols and a set of already visited nodes.
 This algorithm is called with the updated set of terminating symbols until the set does not differ from the run before.
@@ -688,7 +688,7 @@ After all terminating nodes have been found, the productions that contain nonter
 In the following parts of the section, first the \textit{find\textunderscore non\textunderscore terminating\textunderscore symbols} algorithm is described. Then the \textit{delete\textunderscore non\textunderscore terminating\textunderscore productions} algorithm and after that the \textit{delete\textunderscore non\textunderscore terminating\textunderscore nodes} algorithm are outlined.
 
 \begin{algorithm}[H]
-\caption{Removing non terminating symbols}
+\caption{Removing nonterminating symbols}
 \begin{algorithmic}[1] 
 \Require start\textunderscore node
 \State terminating = new set()
@@ -722,7 +722,7 @@ This is considered in the procedure of checking if a node represents a terminati
 If every node in the \textit{children\textunderscore list} represents a terminating symbol, the node is added to the known terminating nodes.
 
 \begin{algorithm}[H]
-\caption{Find non terminating symbols}
+\caption{Find nonterminating symbols}
 \begin{algorithmic}[1] 
 \Require node, terminating\textunderscore set, visited\textunderscore set
 \State node\textunderscore key = Node\textunderscore Key(node.value, node.rule\textunderscore type)
@@ -761,24 +761,24 @@ If a \textit{NodeKey} of any rule type and  with the nonterminal name is in the 
 \label{fig:ImplementationCheckIfValueInTerminating}
 \end{figure}
 
-After the terminating symbols have been determined, productions that contain a nonterminating symbol have to be removed from the nodes of the grammar graph. Only productions and not the node itself is deleted because a node might also have productions that only contain terminating symbol. Therefore only the productions containing nonterminating symbols have to be removed.\\
+After the terminating symbols have been determined, productions that contain a nonterminating symbol have to be removed from the nodes of the grammar graph. Only productions and not the node itself is deleted because a node might also have productions that only contain terminating symbol. Therefore, only the productions containing nonterminating symbols have to be removed.\\
 Algorithm \ref{alg:delete_non_terminating_productions}  describes how productions that include nonterminating symbols are removed from the grammar graph.
 The start node of the graph, the set of known terminating nodes and an empty set of already visited nodes are input at the first call of the algorithm.
 If the input node has been visited before, it is not visited again and the algorithm ends.
 If it has not been visited before the corresponding \textit{Node\textunderscore Key} is added to the set of visited nodes.
 Then the \textit{children} list of the node is iterated (line 5).
 The index created in line 4 corresponds to the current element of the \textit{children} list, that is iterated.
-It is needed to delete the \textit{children} list and the corresponding \textit{productions\textunderscore list}, if a production contains nonterminating symbols. The \textit{children} list is iterated in reverse, because, if a \textit{children} list and \textit{productions\textunderscore list} is deleted this will not effect the indexing of the next \textit{children} list to analyse.
+It is needed to delete the \textit{children} list and the corresponding \textit{productions\textunderscore list}, if a production contains nonterminating symbols. The \textit{children} list is iterated in reverse, because, if a \textit{children} list and \textit{productions\textunderscore list} is deleted this will not affect the indexing of the next \textit{children} list to analyse.
 The \textit{children} list contains lists of nodes for each production (see section \ref{sec:ConceptGraphGeneration}). Each list, nested in the \textit{children} list, is iterated and for each node the algorithm is called recursively (line 7 and 8).\\
 If a node represents a nonterminating symbol the \textit{not\textunderscore terminating} flag is set to true.
 If this flag is true after iterating one element of the \textit{children} list, it means that the production corresponding to the \textit{children} list element contains at least one nonterminating symbol.
-If that is the case, the corresponding element of the \textit{children} list and of the \textit{productions\textunderscore list} are removed from the node.
+If that is the case, the corresponding element of the \textit{children} list and of the \textit{productions\textunderscore list} is removed from the node.
 This is repeated for all elements of the \textit{children} list.
 
 As a result of this algorithm, all productions that contained nonterminal symbols have been removed from the grammar graph.
 
 \begin{algorithm}[H]
-\caption{Delete non terminating productions}
+\caption{Delete productions containing nonterminating symbols}
 \begin{algorithmic}[1] 
 \Require node, terminating\textunderscore set, visited\textunderscore set
 \State node\textunderscore key = Node\textunderscore Key(node.value, node.rule\textunderscore type)
@@ -808,7 +808,7 @@ After the productions containing nonterminating symbols have been removed from t
 Algorithm \ref{alg:delete_non_terminating_nodes} is responsible for this. It takes the set of \textit{Node\textunderscore Key}s as input, that specifies all terminating nodes.
 To remove the nonterminating nodes, in a for-loop, all terminating nodes that are addressed by the \textit{Node\textunderscore Key}s are stored in a temporary dictionary. This dictionary replaces the original \textit{nodes\textunderscore dictionary} of the \textit{TPTPGraphBuilder}.
 \begin{algorithm}[H]
-\caption{Delete non terminating nodes}
+\caption{Delete nonterminating nodes}
 \begin{algorithmic}[1] 
 \Require terminating\textunderscore set
 \State temporary\textunderscore dictionary = \{\}
@@ -836,10 +836,10 @@ The two methods representing these operations are described in the following.
 
 \subsubsection{Importing the \ac{TPTP} syntax from the \ac{TPTP} website}
 
-The method $import\textunderscore tptp\textunderscore syntax\textunderscore from\textunderscore web$ shown in listing \ref{lst:ImplementationInputWeb} is used to get a textfile of the \ac{TPTP} grammar from the \ac{TPTP} website. \\
-For opening a \ac{URL}, the library urllib is used. \\ $Urllib.request$ opens a specified \ac{URL} and sends an HTTP request. $Urlopen$ returns a response object for the initiated request. The response is a file-like object that can be read using $.read()$. \cite{urllib} \\
+The method $import\textunderscore tptp\textunderscore syntax\textunderscore from\textunderscore web$ shown in listing \ref{lst:ImplementationInputWeb} is used to get a text file of the \ac{TPTP} syntax from the \ac{TPTP} website. \\
+For opening a \ac{URL}, the library urllib is used. \\ $Urllib.request$ opens a specified \ac{URL} and sends an HTTP request. $Urlopen$ returns a response object for the initiated request. The response is a file-like object that can be read using $read()$. \cite{urllib} \\
 The file can then be converted from html to text format using BeautifulSoup's html parser.
-The header from the file is deleted because it does not belong to the \ac{TPTP} syntax but is appended by urllib. The header is deleted by splitting the textfile of the grammar at every new line and joining all lines excluding the first one. \\
+The header from the file is deleted because it does not belong to the \ac{TPTP} syntax but is appended by urllib. The header is deleted by splitting the text file of the grammar at every new line and joining all lines excluding the first one. \\
 
 \begin{lstlisting}[language=Python, basicstyle=\scriptsize	, caption= Import TPTP syntax from the \ac{TPTP} website, label= lst:ImplementationInputWeb]
 with urllib.request.urlopen("http://www.tptp.org/TPTP/SyntaxBNF.html") as url:
@@ -852,7 +852,7 @@ tptp_grammar = '\n'.join(tptp_grammar.split('\n')[1:])
 
 \subsubsection{Reading \ac{TPTP} syntax file and control file}
 
-$Read\textunderscore text\textunderscore fromtextunderscore file$ in listing \ref{lst:ImplementationInputText} uses the build-in function $open$ to read a text file. The filename of the textfile has to be specified before.\\
+$Read\textunderscore text\textunderscore from\textunderscore file$ in listing \ref{lst:ImplementationInputText} uses the build-in function $open$ to read a text file. The filename of the text file has to be specified before.\\
 
 \begin{lstlisting}[language=Python, basicstyle=\scriptsize	,caption= Read text from file,label= lst:ImplementationInputText]
 with open(filename, 'r') as text_file:
@@ -861,7 +861,7 @@ with open(filename, 'r') as text_file:
 
 \section{Output generation}\label{sec:ImplementationOutputGeneration}
 For saving the grammar graph in a text file, the graph needs to be traversed and converted to a string format that can be saved in a text document. The grammar graph is converted to a string format by converting every rule to a string and cohering them. Every rule is represented by a node including the nodes children list. For converting the graph to a string format, the graph is traversed and string representation of the nodes are created.
-The final output is stored in a $print\textunderscore list$. A $print\textunderscore list$ is a list of $print\textunderscore list\textunderscore entries$ that can be seen in listing \ref{lst:ImplementationOutputPrintListEntry}. A $print\textunderscore list\textunderscore entry$ is a tuple consisting of the position of the rule that in the original \ac{TPTP} grammar is represented by the node and a string version of the rule or rather the node and its children list.
+The final output is stored in a $print\textunderscore list$. A $print\textunderscore list$ is a list of $print\textunderscore list\textunderscore entries$ that can be seen in listing \ref{lst:ImplementationOutputPrintListEntry}. A $print\textunderscore list\textunderscore entry$ is a tuple consisting of the position of the rule that in the original \ac{TPTP} syntax is represented by the node and a string version of the rule or rather the node and its children list.
 
 \begin{lstlisting}[language=Python, basicstyle=\scriptsize	,caption= Print list entry,label= lst:ImplementationOutputPrintListEntry]
 PrintListEntry = namedtuple("PrintListEntry", ["position", "string"])
@@ -871,7 +871,7 @@ The detailed process of saving a string version of a rule is described in the fo
 
 \subsection{Saving string representation of graph in text file}\label{sec:ImplementationOutputSaveGrammarGraphStringRepresentations}
 
-In order to create the $print\textunderscore list$, an empty set $visited$ is created that is used for memorising which nodes have already been visited. Moreover, an empty $print\textunderscore list$ and $print\textunderscore string$ are created. The set $visited$ and the empty $print\textunderscore list$ are used for calling the function $create\textunderscore print\textunderscore list$ (see following section) which returns the final $print\textunderscore list$. Because the rules in the $print\textunderscore list$ are not in the same order as the rules in the original \ac{TPTP} syntax, the $print\textunderscore list$ is sorted based on the rule's position that is stored in the first element of the $PrintListEntry$ tuple. For converting the $print\textunderscore list$ to one string, the $print\textunderscore string$, the $print\textunderscore list$ is iterated. Except for the first element of the list, every element of the list is added to the $print\textunderscore string$. This is done by adding the strings that are stored in the second element of the $PrintListEntry$ tuple and separating them by a new line. The first element is not added because it represents the general start symbol that has been added to the grammar (see chapter \ref{sec:ConceptGraphGeneration}) but is not a part of the \ac{TPTP} grammar. A text document with a filename that has been selected by the user is then opened and the $print\textunderscore string$ is written to the file.
+In order to create the $print\textunderscore list$, an empty set $visited$ is created that is used for memorising which nodes have already been visited. Moreover, an empty $print\textunderscore list$ and $print\textunderscore string$ are created. The set $visited$ and the empty $print\textunderscore list$ are used for calling the function $create\textunderscore print\textunderscore list$ (see following section) which returns the final $print\textunderscore list$. Because the rules in the $print\textunderscore list$ are not in the same order as the rules in the original \ac{TPTP} syntax, the $print\textunderscore list$ is sorted based on the rule's position that is stored in the first element of the $PrintListEntry$ tuple. For converting the $print\textunderscore list$ to one string, the $print\textunderscore string$, the $print\textunderscore list$ is iterated. Except for the first element of the list, every element of the list is added to the $print\textunderscore string$. This is done by adding the strings that are stored in the second element of the $PrintListEntry$ tuple and separating them by a new line. The first element is not added because it represents the general start symbol that has been added to the grammar (see chapter \ref{sec:ConceptGraphGeneration}) but is not a part of the \ac{TPTP} syntax. A text document with a filename that has been selected by the user is then opened and the $print\textunderscore string$ is written to the file.
 The simplified process can be seen in the flow diagram in figure \ref{fig:ImplementationOutputSaveOrderedRules}.
 
 \begin{figure}[H]
@@ -909,8 +909,11 @@ Recursively all children in the node's children list are traversed. Because a ch
 \subsection{Create string representations of objects}\label{sec:ImplementationOutputGrammarGraphStringRepresentations}
 
 This section covers the string representation creation for the data types that are used within the grammar graph.
+For creating the string representation, the Python string class is used \cite{StringClass}. The string class creates a string version of the object passed to the constructor.
+To do that it calls the \textit{\textunderscore \textunderscore str \textunderscore \textunderscore ()} of the passed object, if the object provides that method.\\
 The algorithms outlined in the following are embedded in the \textit{\textunderscore \textunderscore str\textunderscore \textunderscore ()} method of each class.
-The goal is for the generated string representations to be in the same formate as original \ac{TPTP} syntax.
+
+The goal is for the generated string representations to be in the same format as the original \ac{TPTP} syntax.
 
 \subsubsection{\textit{NTNode} string representation creation}
 
@@ -959,7 +962,7 @@ The \textit{PRODUCTIONS\textunderscore LIST} class contains a list of production
                            <fof_annotated> | <cnf_annotated> | <tpi_annotated>
 \end{lstlisting}
 
-Algorithm \ref{alg:OutputCreateProductionsListString} shows the process of creating the string representation of a \textit{PRODUCTIONS\textunderscore LIST}. The productions in \textit{PRODUCTIONS\textunderscore LIST} are iterated and the string representation of every production is created. The string of the productions are then separated by the " | " character. The counter in line 3 of algorithm \ref{alg:OutputCreateProductionsListString} is used to identify the last production and thus not to print alternative symbol after that production.
+Algorithm \ref{alg:OutputCreateProductionsListString} shows the process of creating the string representation of a \textit{PRODUCTIONS\textunderscore LIST}. The productions in \textit{PRODUCTIONS\textunderscore LIST} are iterated and the string representation of every production is created. The strings of the productions are then separated by the " | " character. The counter in line 3 of algorithm \ref{alg:OutputCreateProductionsListString} is used to identify the last production and thus not to print alternative symbol after that production.
 
 \begin{algorithm}[H]
 \caption{\textit{PRODUCTIONS\textunderscore LIST} string creation}\label{alg:OutputCreateProductionsListString}
@@ -1122,11 +1125,11 @@ nodes_list.sort(key=lambda x: x.position)
 \subsection{Import menu}\label{sec:ImplementationGUIImportMenu}	
 \subsubsection{Import \ac{TPTP} syntax file}\label{sec:ImplementationGUIImportFile}
 
-The \ac{TPTP} syntax file is imported using a QFileDialog which is returning the filename of the imported file selected by the user. If the filename is not empty, the application opens a dialog window where the user has to specify a desired start symbol. The method $read\textunderscore text\textunderscore from\textunderscore file$ returns the text of the file belonging to the filename. With the textfile and the start symbol, the method $create\textunderscore tptp\textunderscore view$ is called.
+The \ac{TPTP} syntax file is imported using a QFileDialog which is returning the filename of the imported file selected by the user. If the filename is not empty, the application opens a dialog window where the user has to specify a desired start symbol. The method $read\textunderscore text\textunderscore from\textunderscore file$ returns the text of the file belonging to the filename. With the text file and the start symbol, the method $create\textunderscore tptp\textunderscore view$ is called.
 
 \subsubsection{Import \ac{TPTP} syntax from the \ac{TPTP} website}\label{sec:ImplementationGUIImportInternet}
 
-The \ac{TPTP} syntax file is extracted from the \ac{TPTP} website using the Input method $import\textunderscore tptp\textunderscore syntax\textunderscore from\textunderscore web$ (see chapter REF). This method returns a textfile. The application opens a dialog window where the user has to specify a desired start symbol. With the textfile and the start symbol, the method $create\textunderscore tptp\textunderscore view$ is called.
+The \ac{TPTP} syntax file is extracted from the \ac{TPTP} website using the Input method $import\textunderscore tptp\textunderscore syntax\textunderscore from\textunderscore web$ (see chapter REF). This method returns a text file. The application opens a dialog window where the user has to specify a desired start symbol. With the text file and the start symbol, the method $create\textunderscore tptp\textunderscore view$ is called.
 
 $create\textunderscore tptp\textunderscore view$ \\
 The method creates a new instance of the $TPTPGraphBuilder$, calls $graphBuilder.run$, $init\textunderscore tree\textunderscore view$ and $check\textunderscore start\textunderscore symbol$.
@@ -1160,7 +1163,7 @@ The View class attribute $commentStatus$ indicates whether comments are displaye
 \subsubsection{Reduce \ac{TPTP} syntax with selection}\label{sec:ImplementationGUIReduceWithSelection}
 
 The method reduce \ac{TPTP} syntax with selection reduces the syntax and displays the resulting syntax in the GUI. 
-For reducing the \ac{TPTP} syntax based on the users selection in the GUI, a control file is produced. If no grammar has been imported, no start symbol or multiple start symbol have been selected an error is raised. The error is displayed using a QMessageBox. With the produced control file, the Graphbuilder disables blocked productions, treeView is initialized and the start symbol is checked (see listing \ref{lst:ImplementationGUIReduceTPTPSelection}). 
+For reducing the \ac{TPTP} syntax based on the user's selection in the GUI, a control file is produced. If no grammar has been imported, no start symbol or multiple start symbol have been selected an error is raised. The error is displayed using a QMessageBox. With the produced control file, the Graphbuilder disables blocked productions, treeView is initialized and the start symbol is checked (see listing \ref{lst:ImplementationGUIReduceTPTPSelection}). 
 
 \begin{lstlisting}[language=Python, basicstyle=\scriptsize	,caption= Reduce TPTP syntax with selection,label= lst:ImplementationGUIReduceTPTPSelection]
 control_string, start_symbol = self.produce_control_file()
@@ -1194,7 +1197,7 @@ To save the grammar the method $Output.save\textunderscore ordered\textunderscor
 
 In the GUI there are two options of reducing and saving the \ac{TPTP} syntax namely \textit{Reduce and save \ac{TPTP} syntax with selection} and \textit{Reduce and save \ac{TPTP} syntax from selection with external comments}.
 These two options both call the function described above and in figure \ref{fig:ImplementationGUIReduceandSave}. However, one calls it and passes $with\textunderscore comments$ as true and the other as false.
-Because each button in the GUI needs it own designated function to call, the functions $create\textunderscore tptp\textunderscore syntax file\textunderscore from\textunderscore selection\textunderscore with\textunderscore comments$ and $create\textunderscore tptp\textunderscore syntax file\textunderscore from\textunderscore selection\textunderscore without\textunderscore comments$ are introduced.
+Because each button in the GUI needs its own designated function to call, the functions $create\textunderscore tptp\textunderscore syntax file\textunderscore from\textunderscore selection\textunderscore with\textunderscore comments$ and $create\textunderscore tptp\textunderscore syntax file\textunderscore from\textunderscore selection\textunderscore without\textunderscore comments$ are introduced.
 They simply set the parameter $with\textunderscore comments$ accordingly and call the function \textit{Create \ac{TPTP} syntax file from selection}.
 
 \subsubsection{Create \ac{TPTP} syntax file from control file}\label{sec:ImplementationGUICreateTPTPFromControlfile}
@@ -1204,7 +1207,7 @@ The described function in this section also reduces and saves a \ac{TPTP} syntax
 The function is similar to the previous function \textit{Create \ac{TPTP} syntax file from selection}.
 Figure \ref{fig:ImplementationGUIReduceandSaveControl} shows the same flow diagram as figure \ref{fig:ImplementationGUIReduceandSave} but highlights applied changes in red.
 Changes are that besides importing a filename, a name for the control file has to be imported as well.
-Instead of producing a control file based on the users selection, the specified control file is read and the grammar graph is initialised with the start symbol that is specified in the first line of the control file.
+Instead of producing a control file based on the user's selection, the specified control file is read and the grammar graph is initialised with the start symbol that is specified in the first line of the control file.
 
 Also similar to the previous section, the functions \\ $create\textunderscore tptp\textunderscore syntax\textunderscore from\textunderscore control\textunderscore file\textunderscore with\textunderscore comments$ and \\
 $create\textunderscore tptp\textunderscore syntax\textunderscore from\textunderscore control\textunderscore file\textunderscore without\textunderscore comments$ are introduced that set the parameter $with\textunderscore comments$ accordingly and call the function \textit{Create \ac{TPTP} syntax file from control file}.
