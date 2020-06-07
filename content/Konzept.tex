@@ -73,8 +73,8 @@ The next phase is for the parser to create a data structure from the tokens, als
 Then, a graph representing the imported \ac{TPTP} syntax is built.\\
 This graph is subject to manipulation by disabling certain transitions or selecting a new start symbol in the following phase.
 This includes computation of the remaining reachable and terminating syntax.
-That new graph represents the syntax of the extracted sub-language.
-To make this syntax usable, lastly the syntax must be output, based on the new graph, in the same format as the original syntax.
+The modified graph represents the syntax of the extracted sub-language.
+To make this syntax usable, lastly the syntax must be output in the same format as the original syntax.
 \begin{figure}[H]
 \tikzstyle{decision} = [ diamond, draw, fill=blue!10, text width=4.5em, text badly centered, node distance=2cm, inner sep-0pt]  
 \tikzstyle{block} = [ rectangle, draw, fill=blue!10, text width=4.5em, text badly centered, rounded corners, minimum height=4em]  
@@ -229,7 +229,7 @@ A comment block is either a comment or a comment block with a comment.
                 \mid comment\;block\;\;\textbf{comment}
 \end{align*}
 
-The four expressions are the expression token followed by their productions list. Grammar expression has a special case without a productions list because the production rule
+The four expressions are the expression token followed by an productions list. Grammar expression has a special case without a productions list because the production rule
 \begin{verbatim}
 <null>   ::= 
 \end{verbatim} of the \ac{TPTP} syntax has no production on the right-hand side. 
@@ -341,14 +341,14 @@ Since this nonterminal symbol has multiple types of rules one node will be creat
 If a nonterminal symbol that has multiple rule types is selected as the desired start symbol, multiple nodes would represent that start symbol and therefore it would not be possible to select one node as the starting point of the graph generation.
 To solve this problem, a temporary start symbol is introduced before generating the graph.
 The temporary start symbol produces the start symbol that the user specified and is used as a starting point for the graph generation.
-If the nonterminal symbol \textit{<formula\textunderscore role>}, that was mentioned before would be selected as start symbol by the user, a temporary start symbol representing the rule
+If the nonterminal symbol \textit{<formula\textunderscore role>}, that was mentioned before, would be selected as start symbol by the user, a temporary start symbol representing the rule
 \begin{verbatim}
 <start_symbol>         ::=  <formula_role>
 \end{verbatim}
 would be introduced.
 This ensures that only one node is representing the start symbol that is used for graph generation.
 
-Starting with the temporary start symbol, the graph is generated recursively.
+Starting with the temporary start symbol, the graph is generated recursively (described in chapter \ref{sec:ImplementationGraphGeneration}).
 
 The following example shows a production rule and an abstract representation of the resulting list of children belonging to the node. Each production alternative is embedded in the children list of the node. %This is relevant for checking whether a nonterminal is terminating.
 
@@ -496,8 +496,8 @@ The start symbol will be relevant in determining the remaining reachable part of
 
 \subsection{Removal of blocked productions}\label{sec:ConceptRemovingBlockedProductions}
 
-In the control file, for each nonterminal symbol, productions should be modified, its name, rule type and the indexes of the productions that should be blocked are listed.
-From all nodes, that are addressed (by nonterminal symbol name and rule type), the indexed productions are removed.
+In the control file, for each nonterminal symbol, that will be modified, its name, rule type and the indexes of the productions that should be blocked are listed.
+From all nodes that are addressed (by nonterminal symbol name and rule type), the indexed productions are removed.
 This includes deleting the corresponding element from the productions list and from the children list.
 
 \subsection{Determination of the remaining terminating symbols}\label{sec:ConceptDerterminingRemainingTerminating}
@@ -530,8 +530,7 @@ There are three steps necessary in order to convert a syntax represented by a gr
 
 The first step is to traverse the grammar graph by iterating all nodes and getting a string representation of the nodes.\\
 In order to maintain the same order that rules have had in the original \ac{TPTP} syntax, the position of the nodes is saved together with the node string in a tuple. 
-After generating all node string representations, in the second step all tuples are ordered based on their position. 
-
+After generating all node string representations, in the second step all tuples are ordered based on their position.\\
 The ordered list of nodes strings is then, in the third step, written to a file and exported.
 The node that represents the temporary start symbol is not printed as it does not belong to the \ac{TPTP} syntax. 
  
@@ -556,7 +555,7 @@ The node that represents the temporary start symbol is not printed as it does no
 
 \subsection{Automated parser generator compatibility}\label{sec:ConceptAutomatedParserGenerator}
 
-The automated parser generator for the \ac{TPTP} syntax \cite{VS06} takes a \ac{TPTP} syntax file as input and creates a lex and yacc file corresponding to the specification in the input syntax. It is uses for validating that an extracted sub-syntax is compatible with the original \ac{TPTP} syntax.\\
+The automated parser generator for the \ac{TPTP} syntax \cite{VS06} takes a \ac{TPTP} syntax file as input and creates a Lex and Yacc file corresponding to the specification in the input syntax. It is used for validating that an extracted sub-syntax is compatible with the original \ac{TPTP} syntax.\\
 In the \ac{TPTP} syntax version 7.3.0 there is a definition of the syntax of comments which is shown in listing \ref{lst:ConceptAutomatedParserGeneratorComment}.
 \begin{lstlisting}[language=none, basicstyle=\scriptsize, caption=Comment syntax definition in the \ac{TPTP} syntax, label= lst:ConceptAutomatedParserGeneratorComment]
 <comment>              ::- <comment_line>|<comment_block> 
@@ -568,7 +567,7 @@ In the \ac{TPTP} syntax version 7.3.0 there is a definition of the syntax of com
 
 However, this part of the syntax is not reachable from the start symbol $TPTP\textunderscore file$.
 When constructing the grammar graph this part of the syntax is therefore removed.\\
-Using a syntax file, in which the comment syntax is not present, with the automated parser generator results in an error because the comment symbol is not present in the lex specification but is referred to in a yacc rule.\\
+Using a syntax file, in which the comment syntax is not present, with the automated parser generator results in an error because the comment symbol is not present in the lex specification but is referred to in a Yacc rule.\\
 There are two ways to include the comment syntax in the output of \ac{Synplifier} in order to be accepted by the automated parser generator.
 Either making the \textit{<comment>} nonterminal symbol reachable by for example adding it as an alternative to \textit{<TPTP\textunderscore input>} which can be seen in listing \ref{lst:ConceptAutomatedParserGeneratorCommentReachable} or maintaining the comment syntax separately and adding it to the output syntax even though it is not reachable.
 \begin{lstlisting}[language=none, basicstyle=\scriptsize, caption=Making the comment syntax reachable, label= lst:ConceptAutomatedParserGeneratorCommentReachable]
@@ -585,13 +584,13 @@ The GUI provides a menu option for appending \textit{<comment>} to the output fi
 
 \section{GUI}\label{sec:ConceptGUI}
 
-The graphical user interface is built using PyQt. Advantages of PyQT are that it offers a treeview that is used for displaying the grammar. In comparison to the standard Python tool kit Tkinter PyQt offers checkboxes in treeviews \cite{Tkinter} that are used for selecting blocked productions.
+The graphical user interface is built using PyQt. Advantages of PyQT are that it offers a treeview that is used for displaying the grammar. In comparison to the standard Python tool kit Tkinter \cite{Tkinter} PyQt offers checkboxes in treeviews that are used for selecting blocked productions.
 
 The menu of the GUI consists of five submenus.
 
 \subsection{Import Menu}\label{sec:ConceptGUIImportMenu}
 
-The $Import$ menu that can be seen in figure \ref{fig:import} provides the option to import a \ac{TPTP} syntax file in txt file format from local storage or to import the latest \ac{TPTP} syntax version from the \ac{TPTP} website.
+The $Import$ menu that can be seen in figure \ref{fig:import} provides the option to import a \ac{TPTP} syntax file in .txt file format from local storage or to import the latest \ac{TPTP} syntax version from the \ac{TPTP} website.
 The \ac{TPTP} syntax on the \ac{TPTP} project website is stored in a HTML format.
 This file is downloaded and converted to plain text using the Beautiful Soup Python library \cite{BeautifulSoup}.
 
@@ -602,7 +601,7 @@ This file is downloaded and converted to plain text using the Beautiful Soup Pyt
 \label{fig:import}
 \end{figure}
 
-After selecting a file for import a start symbol needs to be selected.
+After selecting a file for import, a start symbol needs to be selected.
 Starting with the start symbol a grammar graph is generated and the corresponding text displayed.
 Each rule in the \ac{TPTP} syntax is a top-level element of the treeview and can be expanded to show the productions alternatives.
 Right of the nonterminals name the rule type is displayed.
@@ -664,7 +663,7 @@ The user also has the option of generating a control file based on his GUI selec
 
 \section{Command-line interface}\label{sec:ConceptCommandLineInterface}
 
-In addition to the GUI the software tool offers a command-line interface to provide the means for convenient automation of sub-syntax extraction.
+In addition to the GUI, \ac{Synplifier} offers a command-line interface to provide the means for convenient automation of sub-syntax extraction.
 It takes a \ac{TPTP} syntax file and a control file as input and outputs the resulting sub-syntax.
 It is implemented using the Python module argparse \cite{argparse}, which provides a framework for creating command-line argument parsers.\\
 The table below provides an overview about the implemented command-line arguments.
@@ -705,8 +704,8 @@ To compare generated sub-syntaxes to the original \ac{TPTP} a script has been de
 
 \subsection{Counting rules in the original \ac{TPTP} syntax}\label{sec:ConceptCountR}
 
-To count rules of the original \ac{TPTP} syntax (including non-reachable and nonterminating symbols) a script was developed.
+To count rules of the original \ac{TPTP} syntax (including non-reachable and nonterminating symbols) a script has been developed.
 It uses the parser to parse the original \ac{TPTP} syntax which results in a grammar list. This grammar list is iterated and rules and productions are counted in order to get the total numbers. Also, grammar rules and production are counted separate too.\\
 Counting rules based on the full \ac{TPTP} syntax gives a better overview when comparing syntax sizes.\\
-The script can be used independently of \ac{Synplifier} 
+The script can be used independently of \ac{Synplifier}.
 
