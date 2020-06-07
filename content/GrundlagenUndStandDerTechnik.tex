@@ -31,7 +31,7 @@ There are two special states: The start state and final state(s).
 The start state is the state in which the automaton starts processing the input symbols.
 It is represented graphically by an arrow pointing to the start state.
 Final states are represented graphically by a second circle embedded in the circle of a state.
-Starting from the start state the automaton processes the first input symbol by evaluating the belonging transition function that takes the start state and the first input symbol as arguments. The automaton continues to process the input data by evaluating transition functions until the automaton has read every input symbol. The input word is part of the language the automaton represents if the automaton has reached a final state. If the automaton has not reached a final state, the input words is not part of the language the automaton represents.\\
+Starting from the start state the automaton processes the first input symbol by evaluating the transition function that takes the start state and the first input symbol as arguments. The automaton continues to process the input data by evaluating transition functions until the automaton has read every input symbol. The input word is part of the language the automaton represents if the automaton has reached a final state. If the automaton has not reached a final state, the input words is not part of the language the automaton represents. \cite{AutomataTheory.2007}\\
 Deterministic and non-deterministic automata can be distinguished.
 Non-deterministic automata can have multiple transitions for the same input.
 Deterministic automata have unambiguous transitions for a given input.
@@ -69,7 +69,7 @@ Given an alphabet $\sum$, regular expressions are formally defined as followed \
 \begin{enumerate}
 \item The constants $\epsilon$ and $\emptyset$ are regular expressions denoting the empty string and the empty set.
 \item If $a$ is a symbol of the alphabet $\sum$, then $a$ is a regular expression.
-\item If $a$ and $b$ are regular expressions, then the alternation $a|b$ (either $a$ or $b$), the concatenation $ab$ ($a$ followed by $b$) and the Kleene star $a*$ (an arbitrary number of $a$) are regular expressions.
+\item If $a$ and $b$ are regular expressions, then the alternation $a|b$ (either $a$ or $b$), the concatenation $ab$ ($a$ followed by $b$) and the Kleene star $a*$ (an arbitrary number of $a's$) are regular expressions.
 \end{enumerate}
 
 
@@ -126,10 +126,10 @@ Context-free grammars are often the basis of a parser (see section \ref{sec:Back
 \subsubsection{Reduced grammars}
 
 Grammars are called reduced if each nonterminal symbol is terminating and reachable \cite{Cremers75}.\\
-Given the set of terminal symbols $\sum$, a nonterminal symbol $A$ is called terminating if there are productions $A \underrightarrow{*} z$ (meaning some sequence of productions can be applied) so that $z$ can be derived from $A$ in one or multiple steps and $z \epsilon \sum$*.\\
-In other words, a nonterminal symbol $A$ is terminating if there exist production rules so that  $A$ can be replaced by a string of terminal symbols. \cite{Cremers75}\\
-Given the set of terminal symbols $\sum$ and the start symbol $S$, a nonterminal symbol $A$ is called reachable if there are production rules $S \underrightarrow{*} uAv$ so that $S$ can be derived to $uAv$ and $u,v \epsilon \sum$*.\\
-In other words, a nonterminal symbol $A$ is reachable if there exist production rules so that the start symbol can be replaced by a word containing $A$. \cite{Cremers75}
+Given the set of terminal symbols $\sum$, a nonterminal symbol $A$ is called terminating if there are productions $A \underrightarrow{*} z$ (meaning some sequence of productions can be applied) so that $z$ can be derived from $A$ in one or multiple steps and $z \epsilon \sum$*. \cite{Cremers75}\\
+In other words, a nonterminal symbol $A$ is terminating if there exist production rules so that  $A$ can be replaced by a string of terminal symbols.\\
+Given the set of terminal symbols $\sum$ and the start symbol $S$, a nonterminal symbol $A$ is called reachable if there are production rules $S \underrightarrow{*} uAv$ so that $S$ can be derived to $uAv$ and $u,v \epsilon \sum$*. \cite{Cremers75}\\
+In other words, a nonterminal symbol $A$ is reachable if there exist production rules so that the start symbol can be replaced by a word containing $A$.
 
 %todo beispiel
 
@@ -150,7 +150,7 @@ Without using alternative symbols it would be
 \end{verbatim}
 which is longer than the previous notation. 
 Using the \ac{BNF} pattern of notation whole grammars can be specified.\\
-The \ac{EBNF} extends the \ac{BNF} by with following rules:
+The \ac{EBNF} extends the \ac{BNF} with following rules:
 
 \begin{itemize}%[noitemsep]
 	\item Optional expressions are surrounded by square brackets.
@@ -165,15 +165,13 @@ The \ac{EBNF} extends the \ac{BNF} by with following rules:
 
 The \acf{TPTP} is a library of problems for \ac{ATP}.
 Problems within the library are described in the \ac{TPTP} language.
-The  \ac{TPTP} language is a formal language and its syntax is specified in an \ac{EBNF}. \cite{Sut17}
+The \ac{TPTP} language is a formal language and its syntax is specified in an \ac{EBNF}. \cite{Sut17}
 
-Originally the \ac{TPTP} used only \ac{CNF} \cite{Sut09}, but over the
-years expanded to various other types of logics including
-include \ac{FOF} \cite{Sut09}, Typed \ac{FOF} \cite{SS+12, BP:CADE-2013} and \ac{THF} \cite{SB10, KSR:PAAR-2016}.
+Originally the \ac{TPTP} used only \ac{CNF} \cite{Sut09}, but over the years expanded to various other types of logics including include \ac{FOF} \cite{Sut09}, Typed \ac{FOF} \cite{SS+12, BP:CADE-2013} and \ac{THF} \cite{SB10, KSR:PAAR-2016}.
 
-The TPTP syntax uses an extended \ac{BNF}, with distinct rules for syntax, semantic constraints, tokens, and character classes which will be described in more detail in section \ref{sec:ConceptLexer}.
+The \ac{TPTP} syntax uses an extended \ac{BNF}, with distinct rules for syntax, semantic constraints, tokens, and character classes which will be described in more detail in section \ref{sec:ConceptLexer}.
 A small tool chain based on Lex/Yacc for building a basic parser from the syntax is available \cite{VS06}.
-While the TPTP is a major success story, the resulting syntax is large and complex.
+While the \ac{TPTP} is a major success story, the resulting syntax is large and complex.
 Understanding the syntax is non-trivial.
 For new developers who want to implement ``only'' a first theorem prover for \ac{CNF}, identifying the relevant parts of the syntax and implementing a parser is a significant barrier to entry.
 
@@ -182,15 +180,15 @@ For new developers who want to implement ``only'' a first theorem prover for \ac
 
 Lexing or a so-called lexical analysis is the division of input into units called tokens~\cite{LexYacc.1992}.\\
 The input is a string containing a sequence of characters.
-The lexer groups characters of the input string into sequences that are meaningful. These sequences are called lexemes. From each lexeme, the lexer produces a token, which consists of the token name and the lexeme string. The token name is an abstract symbol which is used during parsing. \cite{Aho.2007} \\
-The tokens are then passed to the parser for syntax analysis.\\
+The lexer groups characters of the input string into sequences that are meaningful. These sequences are called lexemes. From each lexeme, the lexer produces a token, which consists of a token name and the lexeme string. The token name is an abstract symbol which is used during parsing. \cite{Aho.2007} \\
+The tokens are then passed to the parser for syntax analysis.
 A lexer needs to distinguish different types of tokens and furthermore decide which token to use if there are multiple ones that fit the input \cite{Mogensen.2017}.\\
-A simple approach to build a lexer would be building an automaton for each token definition and then test to which automata the input corresponds.\\
+A simple approach to build a lexer would be building an automaton for each token definition and then test to which automata the input corresponds.
 However, this would be inefficient because in the worst case the input needs to pass all automata before the belonging automata is identified.
 Building a single automaton that tests each token simultaneously is more suitable.
 This automaton can be built by combining all regular expressions by disjunction.
 Each final state from each regular expression is marked to know which token has been identified.\\
-Potentially final states overlap as a consequence of one token being a substring of another token. \\
+Potentially final states overlap as a consequence of one token being a substring of another token.
 For solving such conflicts, a lexer is separating the input in order to divide it into tokens.
 Per convention the lexer chooses the longest input that matches any token.~\cite{Mogensen.2017} \\
 Furthermore, a precedence of tokens can be declared. Usually the token that is being defined first has a higher precedence and thus will be chosen if possible token matches have the same length. \cite{Mogensen.2017}
@@ -232,7 +230,7 @@ There are four actions a shift-reduce parser can perform:
 %-use justified by, handle will appear on top of stack not inside, proof ...
 
 There are two kinds of conflicts that can occur during shift-reduce parsing. A shift-reduce conflict occurs if the parser cannot decide whether to shift or reduce.
-A reduce-reduce conflict occurs if the parser cannot decide which of multiple reductions to make.\cite{Aho.2007}
+A reduce-reduce conflict occurs if the parser cannot decide which of multiple reductions to make. \cite{Aho.2007}
 
 %-these grammars are not in LR(k) class of grammars (non-LR grammars)
 %for example: ambiguous grammar can never be LR (if else)
@@ -250,7 +248,7 @@ A goto function takes a state and a nonterminal symbol as input and is used to f
 States represent set of items.
 An item is a production of the grammar that the parser is based on with a dot at some position on the right-hand side of the production.
 An item indicates how much of a right-hand side has already been seen and what the parser is expecting next to apply the production (lookahead).
-For example $A \rightarrow B\cdot C$ indicates that the parsers has already read the input $B$ and expects $C$ in order to reduce the right-hand side to $A$.\cite{Aho.2007}\\
+For example $A \rightarrow B\cdot C$ indicates that the parsers has already read the input $B$ and expects $C$ in order to reduce the right-hand side to $A$. \cite{Aho.2007}\\
 LR parsers are complex to implement, but LR parser generators can be used, which significantly reduces the effort for creating an LR parser.
 \cite{Aho.2007}
 
@@ -290,7 +288,7 @@ Libraries that are used in the implementation \ac{Synplifier} are introduced in 
 
 \subsection{PLY}\label{sec:BackgroundPythonPLY}
 
-\acf{PLY} is an implementation of lex and yacc in Python. It is compatible with Python 2 and 3 and is fully implemented in Python. The goal of \ac{PLY} is to offer a pure-Python implementation of lex and yacc. The implementation aims to rebuild the functionalities of lex and yacc and thus includes:
+\acf{PLY} is an implementation of Lex and Yacc in Python. It is compatible with Python 2 and 3 and is fully implemented in Python. The goal of \ac{PLY} is to offer a pure-Python implementation of Lex and Yacc. The implementation aims to rebuild the functionalities of Lex and Yacc and thus includes:
 \begin{itemize}
 \item Support for LALR parsing (see chapter \ref{sec:BackgroundParserLALR})
 \item Support for empty productions
@@ -299,8 +297,8 @@ Libraries that are used in the implementation \ac{Synplifier} are introduced in 
 \item Error checking and recovery
 \end{itemize}
 
-\ac{PLY} consists of the two modules $lex.py$ and $yacc.py$ that are meant be to execute together. I. e. $yacc.py$ retrieves tokens from the input stream provided by $lex.py$. $Yacc.py$ returns an Abstract Syntax Tree by default. However, it is possible for the user to change the output of $yacc.py$ according to his demands. \cite{PLY}
-PLY is used to generate the lexer and parser for the \ac{TPTP} syntax files.
+\ac{PLY} consists of the two modules $lex.py$ and $yacc.py$ that are meant be to execute together. I. e. $yacc.py$ retrieves tokens from the input stream provided by $lex.py$. $Yacc.py$ returns an abstract syntax tree by default. However, it is possible for the user to change the output of $yacc.py$ according to his demands. \cite{PLY}
+\ac{PLY} is used to generate the lexer and parser for the \ac{TPTP} syntax files.
 
 \subsection{PyQt}\label{sec:BackgroundPytonPyQt}
 
@@ -308,8 +306,7 @@ PyQt is a Python binding for the cross-platform GUI framework Qt.
 It is licensed under the GNU GPL version 3.
 Qt offers a set of C++ libraries and development tools for various things including tools for building GUIs, defining regular expressions, setting up SQL databases, using NFC or interacting via Bluetooth.
 PyQt implements over 1000 of these Qt tools in Python.
-Using PyQt a GUI consists of a main window (QMainWindow).
-A simple GUI can be created by subclassing the QMainWindow, which provides a main window for an application
+A simple GUI can be created by subclassing the QMainWindow, which provides a main window for an application.
 The QTreeView class provides an implementation of a tree view, which can be used to display data in a hierarchically structured way. \cite{PyQt}
 
 \subsection{argparse}\label{sec:BackgroundArgparse}
