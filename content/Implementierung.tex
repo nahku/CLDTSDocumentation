@@ -7,7 +7,7 @@ Furthermore, the implementation of the GUI and the command-line interface is int
 
 \section{Lexer}\label{sec:ImplementationLexer}
 
-As mentioned in chapter \ref{sec:ConceptLexer} the \ac{PLY} package uses the definition of tokens in form of regular expressions to generate the lexer. The following sections presents defined tokens that have been introduced in chapter \ref{sec:ConceptLexer} and the regular expressions that describe these tokens in detail.
+As mentioned in chapter \ref{sec:ConceptLexer} the \ac{PLY} package uses the definition of tokens in form of regular expressions to generate the lexer. The following section presents defined tokens that have been introduced in chapter \ref{sec:ConceptLexer} and the regular expressions that describe these tokens in detail.
 
 \subsection{Tokens}\label{sec:ImplementationLexerToken}
 
@@ -349,7 +349,7 @@ The methods assigned to a) in figure \ref{fig:ImplementationGraphbuilderUML} are
                
 Before generating a graph, a node dictionary consisting of nodes is built.\\
 Figure \ref{fig:ImplementationNTNodeUML} shows the class \textit{NTNode} that has already been introduced in chapter \ref{sec:ConceptGraphGeneration}. The class has three class methods:
-$Add\textunderscore children$ adds a list of children to the existing nodes children list. $Extend\textunderscore comment\textunderscore block$ appends a comment block to the existing comment block of a node. The $str$ method is used for exporting the grammar.
+$Add\textunderscore children$ adds a list of children to the existing nodes children list. $Extend\textunderscore comment\textunderscore block$ appends a comment block to the existing comment block of a node. The $\_\_str\_\_()$ method is used for exporting the grammar.
 
 \begin{figure}[H]
 \centering
@@ -411,9 +411,9 @@ Since it is possible for a nonterminal symbol to be on the right side as well as
 
 To generate the graph of a given grammar three algorithms are needed that will be explained in the following.
 
-Algorithm \ref{alg:BuildGraphRek} calls the function \ref{alg:SearchProductionsListForNT} that appends children of a node to the nodes list of children.
+Algorithm \ref{alg:BuildGraphRek} calls function \ref{alg:SearchProductionsListForNT} that appends children of a node to the nodes list of children.
 The algorithm is first called with the start symbol.
-After the children of a node have been appended to the node, the algorithm is called for every child the resulting in appending their children to their children's list.
+After the children of a node have been appended to the node, the algorithm is called for every child resulting in appending their children to their children's list.
 
 \begin{algorithm}[H]
 \caption{Build graph recursively}
@@ -717,7 +717,7 @@ If it has not been visited yet, the \textit{children} list of the node is iterat
 If a \textit{children\textunderscore list} is empty, this means that in a production there are no nonterminal symbols and the production only consists of terminal symbols. If that is the case the node is terminating.\\
 If it is not the case, the node is terminating if all nodes in the \textit{children\textunderscore list} represent a terminating nonterminal symbol.
 To check that, the algorithm is called recursively for all nodes in the \textit{children\textunderscore list}.
-If a nonterminal symbol has multiple rule types, it is represented by multiple nodes. Also, if a nonterminal symbol with multiple rule types is in featured in a production, all nodes representing that nonterminal symbol are in the children list corresponding to this production. Only one of the nodes needs to be terminating in order for the nonterminal symbol to be terminating.
+If a nonterminal symbol has multiple rule types, it is represented by multiple nodes. Also, if a nonterminal symbol with multiple rule types is featured in a production, all nodes representing that nonterminal symbol are in the children list corresponding to this production. Only one of the nodes needs to be terminating in order for the nonterminal symbol to be terminating.
 This is considered in the procedure of checking if a node represents a terminating symbol (line 11), which is described in figure \ref{fig:ImplementationCheckIfValueInTerminating}.
 If every node in the \textit{children\textunderscore list} represents a terminating symbol, the node is added to the known terminating nodes.
 
@@ -839,8 +839,8 @@ The two methods representing these operations are described in the following.
 The method $import\textunderscore tptp\textunderscore syntax\textunderscore from\textunderscore web$ shown in listing \ref{lst:ImplementationInputWeb} is used to get a text file of the \ac{TPTP} syntax from the \ac{TPTP} website. \\
 For opening a \ac{URL}, the library urllib is used. \\ $Urllib.request$ opens a specified \ac{URL} and sends an HTTP request. $Urlopen$ returns a response object for the initiated request. The response is a file-like object that can be read using $read()$. \cite{urllib} \\
 The file can then be converted from html to text format using BeautifulSoup's html parser.
-The header from the file is deleted because it does not belong to the \ac{TPTP} syntax but is appended by urllib. The header is deleted by splitting the text file of the grammar at every new line and joining all lines excluding the first one. \\
-
+The header from the file is deleted because it does not belong to the \ac{TPTP} syntax but is appended by urllib. The header is deleted by splitting the text file of the grammar at every new line and joining all lines excluding the first one.
+\newpage
 \begin{lstlisting}[language=Python, basicstyle=\scriptsize	, caption= Import TPTP syntax from the \ac{TPTP} website, label= lst:ImplementationInputWeb]
 with urllib.request.urlopen("http://www.tptp.org/TPTP/SyntaxBNF.html") as url:
         html_doc = url.read()
@@ -1020,10 +1020,10 @@ Then the created \textit{production\textunderscore string} is returned.
 \end{algorithm}
 
 \subsubsection{\textit{XOR\textunderscore PRODUCTIONS\textunderscore LIST} string representation creation}
-The procedure to create the string representation of the \textit{XOR\textunderscore PRODUCTIONS\textunderscore LIST} class is almost equivalent to the \textit{PRODUCTIONS\textunderscore LIST} process described in algorithm \ref{alg:OutputCreateProductionsListString}. The only difference is, that generated string are enclosed by parentheses.
+The procedure to create the string representation of the \textit{XOR\textunderscore PRODUCTIONS\textunderscore LIST} class is almost equivalent to the \textit{PRODUCTIONS\textunderscore LIST} process described in algorithm \ref{alg:OutputCreateProductionsListString}. The only difference is, that generated strings are enclosed by parentheses.
 \subsubsection{\textit{PRODUCTION\textunderscore ELEMENT} string representation creation}
 
-The \textit{PRODUCTION\textunderscore ELEMENT} data type consists of a textit{SYMBOL} and a \textit{ProductionProperty}, which can be seen in the UML diagram in section \ref{fig:ConceptProductionElementClassDiagram}.
+The \textit{PRODUCTION\textunderscore ELEMENT} data type consists of a \textit{SYMBOL} and a \textit{ProductionProperty}, which can be seen in the UML diagram in section \ref{fig:ConceptProductionElementClassDiagram}.
 The procedure of creating the string representation of a \textit{PRODUCTION\textunderscore ELEMENT} is outlined in the following algorithm \ref{alg:OutputCreateProductionElementString}. The string representation is created similar to the creation of the string representation of a \textit{PRODUCTION}.
 
 \begin{algorithm}[H]
@@ -1089,7 +1089,7 @@ Init TreeView is used for displaying a grammar in the main application window. T
 
 A new tree view is defined using QTreeWidget with the header labels "Nonterminal", "Production Type" and "Production" (line 1 and 2 in listing \ref{lst:ImplementationInitTreeView}).
 All nodes of the nodes dictionary of the GraphBuilder instance are extracted and sorted based on their position in the original \ac{TPTP} syntax file (line 3 and 4 in listing \ref{lst:ImplementationInitTreeView}. 
-The pseudo code in \ref{alg:initTreeView} shows the code used for filling the created treeView. For every node a new QTreeWidgetItem is generated. The item consists of the nodes (node.value) and its rule type. Also a new checkbox is defined that is displayed next to the item whose initial value is unchecked. The background colour to set to grey.
+The pseudo code in \ref{alg:initTreeView} shows the code used for filling the created treeView. For every node a new QTreeWidgetItem is generated. The item consists of the nodes (node.value) and its rule type. Also a new checkbox is defined that is displayed next to the item whose initial value is unchecked. The background colour to set to gray.
 For every production in the nodes production list, a new QTreeWidgetItem and checkbox are created as well. However, the default value of the checkbox is set to unchecked. The generated item is then added as a child to the node item. A potential comment block is added to the treeView and the item is added to the treeView as well.
 
 \begin{lstlisting}[language=Python, basicstyle=\scriptsize	,caption= Init Tree View,label= lst:ImplementationInitTreeView]
@@ -1163,7 +1163,7 @@ The View class attribute $commentStatus$ indicates whether comments are displaye
 \subsubsection{Reduce \ac{TPTP} syntax with selection}\label{sec:ImplementationGUIReduceWithSelection}
 
 The method reduce \ac{TPTP} syntax with selection reduces the syntax and displays the resulting syntax in the GUI. 
-For reducing the \ac{TPTP} syntax based on the user's selection in the GUI, a control file is produced. If no grammar has been imported, no start symbol or multiple start symbol have been selected an error is raised. The error is displayed using a QMessageBox. With the produced control file, the Graphbuilder disables blocked productions, treeView is initialized and the start symbol is checked (see listing \ref{lst:ImplementationGUIReduceTPTPSelection}). 
+For reducing the \ac{TPTP} syntax based on the user's selection in the GUI, a control file is produced. If no grammar has been imported, no start symbol or multiple start symbols have been selected an error is raised. The error is displayed using a QMessageBox. With the produced control file, the Graphbuilder disables blocked productions, treeView is initialized and the start symbol is checked (see listing \ref{lst:ImplementationGUIReduceTPTPSelection}). 
 
 \begin{lstlisting}[language=Python, basicstyle=\scriptsize	,caption= Reduce TPTP syntax with selection,label= lst:ImplementationGUIReduceTPTPSelection]
 control_string, start_symbol = self.produce_control_file()
@@ -1177,7 +1177,7 @@ self.check_start_symbol(start_symbol)
 Figure \ref{fig:ImplementationGUIReduceandSave} shows a flow diagram of the process of reducing and saving a \ac{TPTP} syntax file from a user's selection.
 The input of this method is a boolean value $with\textunderscore comments$ that describes if the syntax should be saved with or without comments for the automatic parser generator (see chapter \ref{sec:ValidationAutomatedParserGeneration}). 
 First, the filename is import using a $QFileDialog$.
-If the import is successful, meaning a filename has been selected, a control file based on user's selection is produced. If the import is not successful, the method terminates. \\
+If the import is successful, meaning a filename has been selected, a control file based on the user's selection is produced. If the import is not successful, the method terminates. \\
 In comparison to \textit{Reduce \ac{TPTP} syntax with selection} the reduced syntax is not displayed in the GUI but only saved to local storage and the GUI displays still the full syntax. If the user wishes to display the reduced syntax in the GUI and save it, he can use the button \textit{Reduce \ac{TPTP} syntax with selection} and then use the button \textit{Reduce and save \ac{TPTP} syntax with selection}.
 Because the full syntax is still displayed, the graphBuilder object storing the syntax cannot be modified. Therefore, the old graphBuilder is copied to a new graphBuilder object. Because the old object should not change, the new object should have copies of all objects that are part of the graphBuilder rather than references.
 To copy the graphBuilder object which is a compound object it is necessary to use $copy.deepcopy$ instead of $copy.copy$. Deepcopy creates a new object and inserts copies of all objects that are part of to be copied object. Copy however, creates a new object and inserts references to the to be copied objects.\\
@@ -1223,7 +1223,7 @@ $create\textunderscore tptp\textunderscore syntax\textunderscore from\textunders
 \subsubsection{Import control file}\label{sec:ImplementationGUIImportControlFile}
 
 If a control file is imported, checkboxes have to be set accordingly. The pseudo code in \ref{alg:importControlfile} shows the process. 
-The name of the control file is read in using a QFileDialog. The file itself is imported using the method $Input.read\textunderscore text\textunderscore from\textunderscore file$ (see chapter \ref{sec:ImplementationInput}). If the file exists and if a tree view exists, meaning a grammar has been imported, all nodes are unchecked and all leaves/productions are checked. The different items representing nodes and leaves can be distinguished by looking for whether an item has parents and if not if it is checkable. The checkboxes are set this way because the default mode is that all nodes are unchecked and all productions are checked.  
+The name of the control file is read in using a QFileDialog. The file itself is imported using the method $Input.read\textunderscore text\textunderscore from\textunderscore file$ (see chapter \ref{sec:ImplementationInput}). If the file exists and if a tree view exists, meaning a grammar has been imported, all nodes are unchecked and all leaves/productions are checked. The different items representing nodes and leaves can be distinguished by looking for whether an item has parents and if not if it is checkable. The checkboxes are set unchecked because the default mode is that all nodes are unchecked and all productions are checked.  
 After setting the checkboxes to the default mode, the first line of the control string is read and the start symbol is set accordingly. If there are multiple start symbols, every start symbol is checked.
 Iterating every line of the control string, the $nt\textunderscore name$ which is the first element of a line is saved and the $rule\textunderscore type$ which is the second element as well. The item that belongs to $nt\textunderscore name$ is then searched and every production whose index is listed in the control file is unchecked.
 
@@ -1327,7 +1327,7 @@ Lines two to five contain the specification of the accepted arguments.
 In addition to the name and short form of the name, the type, a help message, and whether the parameter is optional or not can be specified.
 Default values for arguments can also be specified.
 If no default value is specified and if the argument is not passed it will have the value \textit{None}.
-The $action = 'store_true'$ in line 5 means, that if this argument flag is present in the command-line call, the value of this argument will be set to $True$.
+The $action = 'store\_true'$ in line 5 means, that if this argument flag is present in the command-line call, the value of this argument will be set to $True$.
 If the flag is not present it's value will be set to $False$.
 Argparse automatically checks the given conditions, for example if a required argument is not given and displays an error message if that is the case.
 
